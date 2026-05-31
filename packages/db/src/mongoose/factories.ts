@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker"
-import { UserModel, type IUserDocument } from "./models"
+import { UserModel, type IUserDocument } from "./models/user.model"
 
 export const UserFactory = {
   build: (overrides: Partial<IUserDocument> = {}): Partial<IUserDocument> => {
