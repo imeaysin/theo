@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import type { SessionData } from '@repo/auth';
+import type { SessionData } from '@repo/auth/server';
 import type { Request } from 'express';
 
 /**

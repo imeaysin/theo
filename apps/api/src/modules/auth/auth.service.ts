@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { auth, getSessionFromHeaders } from '@repo/auth/server';
-import type { Session, SessionData } from '@repo/auth';
+import type { Session, SessionData } from '@repo/auth/server';
 import type { IncomingHttpHeaders } from 'http';
 import { nodeHeadersToWebHeaders } from '@repo/utils';
 

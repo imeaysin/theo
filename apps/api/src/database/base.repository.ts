@@ -1,4 +1,9 @@
-import { Document, type Model, type QueryFilter, type UpdateQuery } from 'mongoose';
+import {
+  Document,
+  type Model,
+  type QueryFilter,
+  type UpdateQuery,
+} from 'mongoose';
 
 /**
  * Generic base repository for Mongoose models.

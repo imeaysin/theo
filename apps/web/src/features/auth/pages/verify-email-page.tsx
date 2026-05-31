@@ -12,11 +12,15 @@ export function VerifyEmailPage() {
     >
       <Alert>
         <AlertDescription>
-          Click the link in the email to activate your account. You can close this
-          page after verifying.
+          Click the link in the email to activate your account. You can close
+          this page after verifying.
         </AlertDescription>
       </Alert>
-      <Button render={<Link to={paths.auth.signIn} />} variant="outline" className="w-full">
+      <Button
+        render={<Link to={paths.auth.signIn} />}
+        variant="outline"
+        className="w-full"
+      >
         Back to sign in
       </Button>
     </AuthCard>

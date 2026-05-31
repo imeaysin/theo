@@ -7,10 +7,7 @@ import { FormField } from "@/components/form/form-field"
 import { paths } from "@/config/paths"
 import { AuthCard } from "@/features/auth/components/auth-card"
 import { useForgotPassword } from "@/features/auth/hooks/use-forgot-password"
-import {
-  forgotPasswordSchema,
-  type ForgotPasswordInput,
-} from "@repo/contracts"
+import { forgotPasswordSchema, type ForgotPasswordInput } from "@repo/contracts"
 
 export function ForgotPasswordPage() {
   const forgotPasswordMutation = useForgotPassword()

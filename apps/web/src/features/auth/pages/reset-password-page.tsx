@@ -7,10 +7,7 @@ import { FormField } from "@/components/form/form-field"
 import { paths } from "@/config/paths"
 import { AuthCard } from "@/features/auth/components/auth-card"
 import { useResetPassword } from "@/features/auth/hooks/use-reset-password"
-import {
-  resetPasswordSchema,
-  type ResetPasswordInput,
-} from "@repo/contracts"
+import { resetPasswordSchema, type ResetPasswordInput } from "@repo/contracts"
 
 export function ResetPasswordPage() {
   const [searchParams] = useSearchParams()

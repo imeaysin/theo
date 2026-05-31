@@ -32,7 +32,7 @@ export class HttpClient {
     method: HttpMethod,
     path: string,
     body?: unknown,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Promise<T> {
     const url = `${this.baseUrl}${toPath(path)}`
     const headers = await this.buildHeaders(options?.headers)
@@ -60,7 +60,7 @@ export class HttpClient {
   async get<T>(
     path: string,
     schema: z.ZodType<T>,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Promise<T> {
     const data = await this.request<unknown>("GET", path, undefined, options)
     return parseResponse(schema, data, `GET ${path}`)
@@ -70,7 +70,7 @@ export class HttpClient {
     path: string,
     schema: z.ZodType<T>,
     body: unknown,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Promise<T> {
     const data = await this.request<unknown>("PATCH", path, body, options)
     return parseResponse(schema, data, `PATCH ${path}`)
@@ -80,14 +80,14 @@ export class HttpClient {
     path: string,
     schema: z.ZodType<T>,
     body: unknown,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Promise<T> {
     const data = await this.request<unknown>("POST", path, body, options)
     return parseResponse(schema, data, `POST ${path}`)
   }
 
   private async buildHeaders(
-    extra?: Record<string, string>,
+    extra?: Record<string, string>
   ): Promise<Record<string, string>> {
     const headers: Record<string, string> = {
       "Content-Type": "application/json",

@@ -21,7 +21,10 @@ export class UsersApi {
     return this.http.get("/users/me", UserResponseSchema, options)
   }
 
-  updateMe(data: UpdateProfileInput, options?: RequestOptions): Promise<UserResponse> {
+  updateMe(
+    data: UpdateProfileInput,
+    options?: RequestOptions
+  ): Promise<UserResponse> {
     const body = UpdateProfileSchema.parse(data)
     return this.http.patch("/users/me", UserResponseSchema, body, options)
   }
@@ -37,16 +40,35 @@ export class UsersApi {
   updateRole(
     id: string,
     data: UpdateUserRoleInput,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Promise<UserResponse> {
     const body = UpdateUserRoleSchema.parse(data)
-    return this.http.patch(`/users/${id}/role`, UserResponseSchema, body, options)
+    return this.http.patch(
+      `/users/${id}/role`,
+      UserResponseSchema,
+      body,
+      options
+    )
   }
 
-  ban(id: string, data: BanUserInput, options?: RequestOptions): Promise<UserResponse> {
+  ban(
+    id: string,
+    data: BanUserInput,
+    options?: RequestOptions
+  ): Promise<UserResponse> {
     const body = BanUserSchema.parse(data)
-    return this.http.patch(`/users/${id}/ban`, UserResponseSchema, body, options)
+    return this.http.patch(
+      `/users/${id}/ban`,
+      UserResponseSchema,
+      body,
+      options
+    )
   }
 }
 
-export type { UserResponse, UpdateProfileInput, UpdateUserRoleInput, BanUserInput }
+export type {
+  UserResponse,
+  UpdateProfileInput,
+  UpdateUserRoleInput,
+  BanUserInput,
+}

@@ -8,7 +8,7 @@ export function createApiClient(config: ApiClientConfig): ApiClient {
 
 /** Web-friendly factory using `VITE_API_URL` / `NEXT_PUBLIC_API_URL` when set. */
 export function createDefaultApiClient(
-  config: Partial<ApiClientConfig> = {},
+  config: Partial<ApiClientConfig> = {}
 ): ApiClient {
   return createApiClient({
     baseUrl: resolveApiBaseUrl(config.baseUrl),

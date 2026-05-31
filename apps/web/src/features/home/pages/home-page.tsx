@@ -19,7 +19,9 @@ export function HomePage() {
       </div>
       <div className="flex flex-wrap items-center justify-center gap-3">
         {session ? (
-          <Button render={<Link to={paths.dashboard} />}>Go to dashboard</Button>
+          <Button render={<Link to={paths.dashboard} />}>
+            Go to dashboard
+          </Button>
         ) : (
           <>
             <Button render={<Link to={paths.auth.signIn} />}>Sign in</Button>

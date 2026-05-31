@@ -37,10 +37,18 @@ export class UserRepository extends BaseRepository<IUserDocument> {
     reason: string,
     banExpires?: Date,
   ): Promise<IUserDocument | null> {
-    return this.update(id, { banned: true, banReason: reason, banExpires: banExpires ?? null });
+    return this.update(id, {
+      banned: true,
+      banReason: reason,
+      banExpires: banExpires ?? null,
+    });
   }
 
   async unban(id: string): Promise<IUserDocument | null> {
-    return this.update(id, { banned: false, banReason: null, banExpires: null });
+    return this.update(id, {
+      banned: false,
+      banReason: null,
+      banExpires: null,
+    });
   }
 }

@@ -3,7 +3,7 @@ import {
   ExecutionContext,
   UnauthorizedException,
 } from '@nestjs/common';
-import type { SessionUser } from '@repo/auth';
+import type { SessionUser } from '@repo/auth/server';
 import type { Request } from 'express';
 
 /**

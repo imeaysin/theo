@@ -9,7 +9,7 @@ describe("HttpClient", () => {
       new Response(JSON.stringify({ id: "u1", ok: true }), {
         status: 200,
         headers: { "Content-Type": "application/json" },
-      }),
+      })
     )
 
     const client = new HttpClient({
@@ -27,7 +27,7 @@ describe("HttpClient", () => {
       expect.objectContaining({
         method: "GET",
         credentials: "include",
-      }),
+      })
     )
   })
 
@@ -36,7 +36,7 @@ describe("HttpClient", () => {
       new Response(JSON.stringify({ ok: true }), {
         status: 200,
         headers: { "Content-Type": "application/json" },
-      }),
+      })
     )
 
     const client = new HttpClient({
@@ -59,7 +59,7 @@ describe("HttpClient", () => {
       new Response(JSON.stringify({ statusCode: 403, message: "Forbidden" }), {
         status: 403,
         statusText: "Forbidden",
-      }),
+      })
     )
 
     const client = new HttpClient({
@@ -68,7 +68,7 @@ describe("HttpClient", () => {
     })
 
     await expect(
-      client.get("/users", z.array(z.object({ id: z.string() }))),
+      client.get("/users", z.array(z.object({ id: z.string() })))
     ).rejects.toBeInstanceOf(ApiError)
   })
 })

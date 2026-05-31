@@ -32,7 +32,7 @@ import {
   UpdateUserRoleDto,
   UserResponseDto,
 } from './dto/user.dto';
-import type { SessionUser } from '@repo/auth';
+import type { SessionUser } from '@repo/auth/server';
 import type { IUserDocument } from '@repo/db';
 
 const SESSION_COOKIE = 'codebase-x.session_token';
@@ -49,7 +49,11 @@ export class UserController {
 
   @Get('me')
   @ApiOperation({ summary: 'Get current user profile' })
-  @ApiResponse({ status: 200, description: 'Current user', type: UserResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Current user',
+    type: UserResponseDto,
+  })
   async getMe(@CurrentUser() user: SessionUser): Promise<IUserDocument> {
     const doc = await this.queryBus.execute<GetUserQuery, IUserDocument | null>(
       new GetUserQuery(user.id),
@@ -60,7 +64,11 @@ export class UserController {
 
   @Patch('me')
   @ApiOperation({ summary: 'Update current user profile' })
-  @ApiResponse({ status: 200, description: 'Updated user', type: UserResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Updated user',
+    type: UserResponseDto,
+  })
   async updateMe(
     @CurrentUser() user: SessionUser,
     @Body() body: UpdateProfileDto,
@@ -73,7 +81,12 @@ export class UserController {
   @Get()
   @Roles('admin')
   @ApiOperation({ summary: 'List all users (admin)' })
-  @ApiResponse({ status: 200, description: 'User list', type: UserResponseDto, isArray: true })
+  @ApiResponse({
+    status: 200,
+    description: 'User list',
+    type: UserResponseDto,
+    isArray: true,
+  })
   async findAll(): Promise<IUserDocument[]> {
     return this.queryBus.execute<GetUsersQuery, IUserDocument[]>(
       new GetUsersQuery(),
@@ -107,7 +120,11 @@ export class UserController {
   @UseGuards(PermissionGuard)
   @ApiOperation({ summary: 'Update user role (admin)' })
   @ApiParam({ name: 'id', description: 'User id' })
-  @ApiResponse({ status: 200, description: 'Updated user', type: UserResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Updated user',
+    type: UserResponseDto,
+  })
   async updateRole(
     @Param('id') id: string,
     @Body() body: UpdateUserRoleDto,
@@ -123,7 +140,11 @@ export class UserController {
   @UseGuards(PermissionGuard)
   @ApiOperation({ summary: 'Ban user (admin)' })
   @ApiParam({ name: 'id', description: 'User id' })
-  @ApiResponse({ status: 200, description: 'Updated user', type: UserResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Updated user',
+    type: UserResponseDto,
+  })
   async banUser(
     @Param('id') id: string,
     @Body() body: BanUserDto,

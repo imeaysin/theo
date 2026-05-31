@@ -9,7 +9,10 @@ import { ApiErrorDto } from '@src/dto/api-error.dto';
 
 export function ApiResponses() {
   return applyDecorators(
-    ApiBadRequestResponse({ description: 'Validation failed', type: ApiErrorDto }),
+    ApiBadRequestResponse({
+      description: 'Validation failed',
+      type: ApiErrorDto,
+    }),
     ApiUnauthorizedResponse({
       description: 'Missing or invalid session',
       type: ApiErrorDto,
@@ -18,6 +21,9 @@ export function ApiResponses() {
       description: 'Insufficient permissions',
       type: ApiErrorDto,
     }),
-    ApiNotFoundResponse({ description: 'Resource not found', type: ApiErrorDto }),
+    ApiNotFoundResponse({
+      description: 'Resource not found',
+      type: ApiErrorDto,
+    }),
   );
 }

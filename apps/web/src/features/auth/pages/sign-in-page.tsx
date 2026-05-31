@@ -9,10 +9,7 @@ import { AuthCard } from "@/features/auth/components/auth-card"
 import { AuthDivider } from "@/features/auth/components/auth-divider"
 import { SocialAuthButtons } from "@/features/auth/components/social-auth-buttons"
 import { useSignIn } from "@/features/auth/hooks/use-sign-in"
-import {
-  signInSchema,
-  type SignInInput,
-} from "@repo/contracts"
+import { signInSchema, type SignInInput } from "@repo/contracts"
 
 export function SignInPage() {
   const signInMutation = useSignIn()

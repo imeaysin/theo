@@ -1,11 +1,14 @@
 import { betterAuth } from "better-auth"
 import { toNodeHandler } from "better-auth/node"
+import { admin } from "better-auth/plugins/admin"
+import { openAPI } from "better-auth/plugins"
+import { twoFactor } from "better-auth/plugins/two-factor"
 import { mongodbAdapter } from "better-auth/adapters/mongodb"
 import { MongoClient } from "mongodb"
 import { env } from "@repo/config"
 import { sendVerificationEmail, sendResetPasswordEmail } from "@repo/email"
 import type { IncomingHttpHeaders } from "http"
-import { authServerPlugins } from "./plugins/server"
+import { ac, admin as adminRole, user } from "./permissions"
 
 const client = new MongoClient(env.MONGODB_URI)
 const db = client.db()
@@ -93,7 +96,11 @@ export const auth = betterAuth({
     max: 30,
   },
 
-  plugins: authServerPlugins,
+  plugins: [
+    admin({ ac, roles: { admin: adminRole, user } }),
+    twoFactor(),
+    openAPI(),
+  ],
 })
 
 export { toNodeHandler }
@@ -102,6 +109,10 @@ export { toNodeHandler }
 export const authHandler = toNodeHandler(auth)
 
 export type AuthInstance = typeof auth
+
+export type Session = typeof auth.$Infer.Session
+export type SessionUser = Session["user"]
+export type SessionData = Session["session"]
 
 export async function getSessionFromHeaders(
   nodeHeaders: IncomingHttpHeaders

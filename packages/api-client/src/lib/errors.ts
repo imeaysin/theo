@@ -47,7 +47,7 @@ export class ApiError extends Error {
 function formatApiErrorMessage(body: ApiErrorBody): string {
   if (typeof body.message === "string") return body.message
   const parts = Object.entries(body.message).flatMap(([field, errors]) =>
-    errors.map((msg) => `${field}: ${msg}`),
+    errors.map((msg) => `${field}: ${msg}`)
   )
   return parts.join("; ") || body.error || "Request failed"
 }

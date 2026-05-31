@@ -28,7 +28,11 @@ export function AppLayout() {
               {session?.user.email}
             </span>
           )}
-          <Button variant="outline" size="sm" onClick={() => void handleSignOut()}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => void handleSignOut()}
+          >
             Sign out
           </Button>
         </div>

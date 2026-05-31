@@ -7,10 +7,7 @@ import { FormField } from "@/components/form/form-field"
 import { paths } from "@/config/paths"
 import { AuthCard } from "@/features/auth/components/auth-card"
 import { useVerifyTwoFactor } from "@/features/auth/hooks/use-verify-two-factor"
-import {
-  twoFactorSchema,
-  type TwoFactorInput,
-} from "@repo/contracts"
+import { twoFactorSchema, type TwoFactorInput } from "@repo/contracts"
 
 export function TwoFactorPage() {
   const verifyMutation = useVerifyTwoFactor()

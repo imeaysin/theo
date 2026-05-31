@@ -9,10 +9,7 @@ import { AuthCard } from "@/features/auth/components/auth-card"
 import { AuthDivider } from "@/features/auth/components/auth-divider"
 import { SocialAuthButtons } from "@/features/auth/components/social-auth-buttons"
 import { useSignUp } from "@/features/auth/hooks/use-sign-up"
-import {
-  signUpSchema,
-  type SignUpInput,
-} from "@repo/contracts"
+import { signUpSchema, type SignUpInput } from "@repo/contracts"
 
 export function SignUpPage() {
   const signUpMutation = useSignUp()
@@ -54,7 +51,12 @@ export function SignUpPage() {
           </Alert>
         ) : null}
 
-        <FormField control={form.control} name="name" label="Name" autoComplete="name" />
+        <FormField
+          control={form.control}
+          name="name"
+          label="Name"
+          autoComplete="name"
+        />
         <FormField
           control={form.control}
           name="email"

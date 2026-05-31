@@ -4,11 +4,7 @@ import {
   type FieldPath,
   type FieldValues,
 } from "react-hook-form"
-import {
-  Field,
-  FieldError,
-  FieldLabel,
-} from "@workspace/ui/components/field"
+import { Field, FieldError, FieldLabel } from "@workspace/ui/components/field"
 import { Input, type InputProps } from "@workspace/ui/components/input"
 
 type FormFieldProps<T extends FieldValues> = {

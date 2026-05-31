@@ -9,7 +9,7 @@ export function trimTrailingSlashes(url: string): string {
  */
 export function normalizeApiBaseUrl(
   baseUrl: string,
-  apiPrefix = "/api",
+  apiPrefix = "/api"
 ): string {
   const origin = trimTrailingSlashes(baseUrl)
   const prefix = apiPrefix.startsWith("/") ? apiPrefix : `/${apiPrefix}`

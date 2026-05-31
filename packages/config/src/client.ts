@@ -12,7 +12,7 @@ const defaultApiUrl = "http://localhost:4000"
 const defaultAppName = "CodebaseX"
 
 export function parseClientPublicEnv(
-  source: Record<string, string | undefined>,
+  source: Record<string, string | undefined>
 ): ClientPublicEnv & { apiUrl: string; appName: string } {
   const parsed = clientPublicEnvSchema.parse(source)
   const apiUrl =
@@ -23,7 +23,7 @@ export function parseClientPublicEnv(
 }
 
 export function resolveAuthBaseUrl(
-  source: Record<string, string | undefined>,
+  source: Record<string, string | undefined>
 ): string {
   const { apiUrl } = parseClientPublicEnv(source)
   return `${apiUrl.replace(/\/+$/, "")}/api/auth`

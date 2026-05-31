@@ -11,7 +11,7 @@ describe("parseResponse", () => {
 
   it("throws when response does not match schema", () => {
     expect(() => parseResponse(schema, { id: 1 }, "test")).toThrow(
-      /Invalid test response/,
+      /Invalid test response/
     )
   })
 })

@@ -27,21 +27,24 @@ export const authRoutes: RouteObject[] = [
           {
             path: paths.auth.forgotPassword,
             lazy: async () => {
-              const { ForgotPasswordPage } = await import("./pages/forgot-password-page")
+              const { ForgotPasswordPage } =
+                await import("./pages/forgot-password-page")
               return { Component: ForgotPasswordPage }
             },
           },
           {
             path: paths.auth.resetPassword,
             lazy: async () => {
-              const { ResetPasswordPage } = await import("./pages/reset-password-page")
+              const { ResetPasswordPage } =
+                await import("./pages/reset-password-page")
               return { Component: ResetPasswordPage }
             },
           },
           {
             path: paths.auth.verifyEmail,
             lazy: async () => {
-              const { VerifyEmailPage } = await import("./pages/verify-email-page")
+              const { VerifyEmailPage } =
+                await import("./pages/verify-email-page")
               return { Component: VerifyEmailPage }
             },
           },
