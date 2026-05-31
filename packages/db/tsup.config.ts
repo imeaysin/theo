@@ -1,4 +1,4 @@
-import { defineConfig } from "tsup";
+import { defineConfig } from "tsup"
 
 export default defineConfig((options) => ({
   entry: ["src/index.ts"],
@@ -10,4 +10,4 @@ export default defineConfig((options) => ({
   minify: false,
   treeshake: true,
   external: ["mongodb"],
-}));
+}))

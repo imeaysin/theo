@@ -38,5 +38,5 @@ export const ResetPasswordEmail = ({ url }: { url: string }) => {
         email. This link will expire in 1 hour.
       </p>
     </div>
-  );
-};
+  )
+}

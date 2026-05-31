@@ -1,12 +1,12 @@
-import { Resend } from "resend";
-import { env } from "@repo/config";
-import { WelcomeEmail } from "./templates/welcome";
-import { VerificationEmail } from "./templates/verification-email";
-import { ResetPasswordEmail } from "./templates/reset-password";
+import { Resend } from "resend"
+import { env } from "@repo/config"
+import { WelcomeEmail } from "./templates/welcome"
+import { VerificationEmail } from "./templates/verification-email"
+import { ResetPasswordEmail } from "./templates/reset-password"
 
-export const resend = new Resend(env.RESEND_API_KEY);
+export const resend = new Resend(env.RESEND_API_KEY)
 
-const FROM_ADDRESS = `${env.APP_NAME} <no-reply@yourdomain.com>`;
+const FROM_ADDRESS = `${env.APP_NAME} <no-reply@yourdomain.com>`
 
 export async function sendWelcomeEmail(to: string, name: string) {
   return resend.emails.send({
@@ -14,7 +14,7 @@ export async function sendWelcomeEmail(to: string, name: string) {
     to,
     subject: `Welcome to ${env.APP_NAME}!`,
     react: <WelcomeEmail name={name} />,
-  });
+  })
 }
 
 export async function sendVerificationEmail(to: string, url: string) {
@@ -23,7 +23,7 @@ export async function sendVerificationEmail(to: string, url: string) {
     to,
     subject: "Verify your email",
     react: <VerificationEmail url={url} />,
-  });
+  })
 }
 
 export async function sendResetPasswordEmail(to: string, url: string) {
@@ -32,5 +32,5 @@ export async function sendResetPasswordEmail(to: string, url: string) {
     to,
     subject: "Reset your password",
     react: <ResetPasswordEmail url={url} />,
-  });
+  })
 }

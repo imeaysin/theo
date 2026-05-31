@@ -1,4 +1,4 @@
-import { defineConfig } from "tsup";
+import { defineConfig } from "tsup"
 
 export default defineConfig((options) => ({
   entry: [
@@ -15,4 +15,4 @@ export default defineConfig((options) => ({
   sourcemap: true,
   minify: false,
   external: ["mongodb", "@repo/config", "@repo/db", "@repo/email"],
-}));
+}))

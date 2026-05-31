@@ -1,46 +1,46 @@
-import { betterAuth } from "better-auth";
-import { toNodeHandler } from "better-auth/node";
-import { admin as adminPlugin } from "better-auth/plugins/admin";
-import { twoFactor } from "better-auth/plugins/two-factor";
-import { organization } from "better-auth/plugins/organization";
-import { mongodbAdapter } from "better-auth/adapters/mongodb";
-import { MongoClient } from "mongodb";
-import { env } from "@repo/config";
-import { sendVerificationEmail, sendResetPasswordEmail } from "@repo/email";
-import type { IncomingHttpHeaders } from "http";
-import { ac, admin, user } from "./permissions";
+import { betterAuth } from "better-auth"
+import { toNodeHandler } from "better-auth/node"
+import { admin as adminPlugin } from "better-auth/plugins/admin"
+import { twoFactor } from "better-auth/plugins/two-factor"
+import { organization } from "better-auth/plugins/organization"
+import { mongodbAdapter } from "better-auth/adapters/mongodb"
+import { MongoClient } from "mongodb"
+import { env } from "@repo/config"
+import { sendVerificationEmail, sendResetPasswordEmail } from "@repo/email"
+import type { IncomingHttpHeaders } from "http"
+import { ac, admin, user } from "./permissions"
 
-const client = new MongoClient(env.MONGODB_URI);
-const db = client.db();
+const client = new MongoClient(env.MONGODB_URI)
+const db = client.db()
 
 interface SocialProviderConfig {
-  clientId: string;
-  clientSecret: string;
+  clientId: string
+  clientSecret: string
 }
 
 interface SocialProviders {
-  google?: SocialProviderConfig;
-  github?: SocialProviderConfig;
+  google?: SocialProviderConfig
+  github?: SocialProviderConfig
 }
 
 function buildSocialProviders(): SocialProviders {
-  const providers: SocialProviders = {};
+  const providers: SocialProviders = {}
 
   if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) {
     providers.google = {
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
-    };
+    }
   }
 
   if (env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET) {
     providers.github = {
       clientId: env.GITHUB_CLIENT_ID,
       clientSecret: env.GITHUB_CLIENT_SECRET,
-    };
+    }
   }
 
-  return providers;
+  return providers
 }
 
 export const auth = betterAuth({
@@ -77,14 +77,14 @@ export const auth = betterAuth({
     minPasswordLength: 8,
     maxPasswordLength: 128,
     sendResetPassword: async ({ user: resetUser, url }) => {
-      await sendResetPasswordEmail(resetUser.email, url);
+      await sendResetPasswordEmail(resetUser.email, url)
     },
   },
 
   emailVerification: {
     sendOnSignUp: true,
     sendVerificationEmail: async ({ user: verifyUser, url }) => {
-      await sendVerificationEmail(verifyUser.email, url);
+      await sendVerificationEmail(verifyUser.email, url)
     },
   },
 
@@ -101,18 +101,18 @@ export const auth = betterAuth({
     twoFactor(),
     organization(),
   ],
-});
+})
 
-export { toNodeHandler };
+export { toNodeHandler }
 
-export type AuthInstance = typeof auth;
+export type AuthInstance = typeof auth
 
 export async function getSessionFromHeaders(
-  nodeHeaders: IncomingHttpHeaders,
+  nodeHeaders: IncomingHttpHeaders
 ): Promise<typeof auth.$Infer.Session | null> {
-  const headers = new Headers();
+  const headers = new Headers()
   for (const [key, val] of Object.entries(nodeHeaders)) {
-    if (val) headers.set(key, Array.isArray(val) ? (val[0] ?? "") : val);
+    if (val) headers.set(key, Array.isArray(val) ? (val[0] ?? "") : val)
   }
-  return auth.api.getSession({ headers });
+  return auth.api.getSession({ headers })
 }

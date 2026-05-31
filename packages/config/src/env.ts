@@ -1,51 +1,51 @@
-import { existsSync, readFileSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
-import { z } from "zod";
+import { existsSync, readFileSync } from "node:fs"
+import { dirname, join, resolve } from "node:path"
+import { z } from "zod"
 
 function findWorkspaceEnvFile(startDir: string): string | null {
-  let currentDir = resolve(startDir);
+  let currentDir = resolve(startDir)
 
   while (true) {
-    const envPath = join(currentDir, ".env");
-    if (existsSync(envPath)) return envPath;
+    const envPath = join(currentDir, ".env")
+    if (existsSync(envPath)) return envPath
 
-    const parentDir = dirname(currentDir);
-    if (parentDir === currentDir) return null;
+    const parentDir = dirname(currentDir)
+    if (parentDir === currentDir) return null
 
-    currentDir = parentDir;
+    currentDir = parentDir
   }
 }
 
 function unquoteEnvValue(value: string): string {
-  const trimmed = value.trim();
-  const quote = trimmed[0];
+  const trimmed = value.trim()
+  const quote = trimmed[0]
   const isQuoted =
-    (quote === '"' || quote === "'") && trimmed[trimmed.length - 1] === quote;
+    (quote === '"' || quote === "'") && trimmed[trimmed.length - 1] === quote
 
-  return isQuoted ? trimmed.slice(1, -1) : trimmed;
+  return isQuoted ? trimmed.slice(1, -1) : trimmed
 }
 
 function loadRootEnvFile() {
   const envPath =
-    findWorkspaceEnvFile(process.cwd()) ?? findWorkspaceEnvFile(__dirname);
-  if (!envPath) return;
+    findWorkspaceEnvFile(process.cwd()) ?? findWorkspaceEnvFile(__dirname)
+  if (!envPath) return
 
-  const envFile = readFileSync(envPath, "utf8");
+  const envFile = readFileSync(envPath, "utf8")
   for (const line of envFile.split(/\r?\n/)) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith("#")) continue;
+    const trimmed = line.trim()
+    if (!trimmed || trimmed.startsWith("#")) continue
 
-    const separatorIndex = trimmed.indexOf("=");
-    if (separatorIndex === -1) continue;
+    const separatorIndex = trimmed.indexOf("=")
+    if (separatorIndex === -1) continue
 
-    const key = trimmed.slice(0, separatorIndex).trim();
-    if (!key || process.env[key] !== undefined) continue;
+    const key = trimmed.slice(0, separatorIndex).trim()
+    if (!key || process.env[key] !== undefined) continue
 
-    process.env[key] = unquoteEnvValue(trimmed.slice(separatorIndex + 1));
+    process.env[key] = unquoteEnvValue(trimmed.slice(separatorIndex + 1))
   }
 }
 
-loadRootEnvFile();
+loadRootEnvFile()
 
 const buildDefaults = {
   MONGODB_URI: "mongodb://localhost:27017/dummy",
@@ -57,7 +57,7 @@ const buildDefaults = {
   NEXT_PUBLIC_API_URL: "http://localhost:4000",
   APP_NAME: "CodebaseX",
   NODE_ENV: "development",
-} as const;
+} as const
 
 const envSchema = z.object({
   MONGODB_URI: z.string().min(1),
@@ -74,30 +74,30 @@ const envSchema = z.object({
   NODE_ENV: z
     .enum(["development", "production", "test"])
     .default("development"),
-});
+})
 
-export type Env = z.infer<typeof envSchema>;
+export type Env = z.infer<typeof envSchema>
 
 function validateEnv(): Env {
   const isBuildPhase =
     process.env.NEXT_PHASE === "phase-production-build" ||
-    process.env.SKIP_ENV_VALIDATION === "true";
+    process.env.SKIP_ENV_VALIDATION === "true"
 
   const dataToValidate = isBuildPhase
     ? { ...buildDefaults, ...process.env }
-    : process.env;
+    : process.env
 
-  const result = envSchema.safeParse(dataToValidate);
+  const result = envSchema.safeParse(dataToValidate)
 
   if (!result.success) {
     console.error(
       "❌ Invalid environment variables:",
-      result.error.flatten().fieldErrors,
-    );
-    throw new Error("Invalid environment variables");
+      result.error.flatten().fieldErrors
+    )
+    throw new Error("Invalid environment variables")
   }
 
-  return result.data;
+  return result.data
 }
 
-export const env = validateEnv();
+export const env = validateEnv()

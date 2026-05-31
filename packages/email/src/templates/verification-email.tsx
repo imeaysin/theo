@@ -4,4 +4,4 @@ export const VerificationEmail: React.FC<{ url: string }> = ({ url }) => (
     <p>Click the link below to verify your email address:</p>
     <a href={url}>{url}</a>
   </div>
-);
+)

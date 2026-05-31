@@ -1,21 +1,21 @@
-import { Schema, model, type Document, type Model, type Types } from "mongoose";
+import { Schema, model, type Document, type Model, type Types } from "mongoose"
 
 export interface IUser {
-  _id: Types.ObjectId;
-  name: string;
-  email: string;
-  role: "admin" | "user";
-  banned: boolean;
-  banReason: string | null;
-  banExpires: Date | null;
-  emailVerified: boolean;
-  image: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+  _id: Types.ObjectId
+  name: string
+  email: string
+  role: "admin" | "user"
+  banned: boolean
+  banReason: string | null
+  banExpires: Date | null
+  emailVerified: boolean
+  image: string | null
+  createdAt: Date
+  updatedAt: Date
 }
 
 export interface IUserDocument extends Omit<IUser, "_id">, Document {
-  id: string;
+  id: string
 }
 
 const userSchema = new Schema<IUserDocument>(
@@ -34,10 +34,10 @@ const userSchema = new Schema<IUserDocument>(
     collection: "users",
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  },
-);
+  }
+)
 
 export const UserModel: Model<IUserDocument> = model<IUserDocument>(
   "User",
-  userSchema,
-);
+  userSchema
+)

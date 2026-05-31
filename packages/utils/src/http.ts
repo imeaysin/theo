@@ -1,4 +1,4 @@
-import type { IncomingHttpHeaders } from "node:http";
+import type { IncomingHttpHeaders } from "node:http"
 
 /**
  * Converts Node.js IncomingHttpHeaders to Web Standard Headers.
@@ -6,17 +6,17 @@ import type { IncomingHttpHeaders } from "node:http";
  * libraries that expect Web Headers (like better-auth).
  */
 export function nodeHeadersToWebHeaders(
-  nodeHeaders: IncomingHttpHeaders,
+  nodeHeaders: IncomingHttpHeaders
 ): Headers {
-  const headers = new Headers();
+  const headers = new Headers()
   for (const [key, val] of Object.entries(nodeHeaders)) {
     if (val) {
       if (Array.isArray(val)) {
-        val.forEach((v) => headers.append(key, v));
+        val.forEach((v) => headers.append(key, v))
       } else {
-        headers.set(key, val);
+        headers.set(key, val)
       }
     }
   }
-  return headers;
+  return headers
 }

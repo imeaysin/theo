@@ -1,4 +1,4 @@
-import { defineConfig } from "tsup";
+import { defineConfig } from "tsup"
 
 export default defineConfig((options) => ({
   entry: ["src/index.ts"],
@@ -9,4 +9,4 @@ export default defineConfig((options) => ({
   sourcemap: true,
   minify: false,
   external: ["react", "@repo/config"],
-}));
+}))

@@ -2,6 +2,24 @@
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
   "concurrency": "12",
+  "globalEnv": [
+    "MONGODB_URI",
+    "BETTER_AUTH_SECRET",
+    "BETTER_AUTH_URL",
+    "RESEND_API_KEY",
+    "WEB_URL",
+    "NEXT_PUBLIC_API_URL",
+    "APP_NAME",
+    "GOOGLE_CLIENT_ID",
+    "GOOGLE_CLIENT_SECRET",
+    "GITHUB_CLIENT_ID",
+    "GITHUB_CLIENT_SECRET",
+    "NODE_ENV",
+    "NEXT_PHASE",
+    "SKIP_ENV_VALIDATION",
+    "VITE_API_URL",
+    "PORT"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
@@ -9,13 +27,13 @@
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "dependsOn": []
     },
     "format": {
-      "dependsOn": ["^format"]
+      "dependsOn": []
     },
     "typecheck": {
-      "dependsOn": ["^typecheck"]
+      "dependsOn": []
     },
     "dev": {
       "cache": false,
