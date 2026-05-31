@@ -1,28 +1,54 @@
 # @repo/api-client
 
-A standardized, type-safe API communication layer for the codebase-x monorepo.
+Typed HTTP client for the Nest REST API. Works in **web**, **React Native**, and **Node** (with `fetch`).
 
-## 🚀 Purpose
+Authentication (sign-in, sign-up, session) lives in [`@repo/auth/client`](../auth) (Better Auth). This package covers `/api/users` and future REST resources.
 
-This package provides a consistent way to interact with the backend API. It abstracts away the complexity of headers, base URLs, and response parsing, ensuring that all requests follow the same standard.
+## Layout
 
-## 🛠️ Features
+```
+src/
+  client/          # ApiClient + factories
+  http/            # fetch wrapper + config types
+  lib/             # config, errors, response parsing
+  resources/       # per-domain APIs (users, …)
+test/              # mirrors src layout
+```
 
-- **Typed Requests**: Fully integrated with `@repo/contracts` for Zod-validated request/response types.
-- **Cross-Platform Support**: Works in browser (Web), Node.js (API/Main process), and Electron (Renderer).
-- **Interceptors**: Pre-configured for authentication header injection and error handling.
-- **Lightweight**: Minimal dependencies, optimized for both client and server usage.
-
-## 🏗️ Usage
+## Web (Vite / Next)
 
 ```typescript
-import { createApiClient } from "@repo/api-client";
+import { createDefaultApiClient } from "@repo/api-client"
 
-const client = createApiClient({
-  baseUrl: "http://localhost:4000",
-  getToken: () => "your-token",
-});
+export const api = createDefaultApiClient()
 
-// Fully typed request
-const data = await client.get("/users/profile");
+const me = await api.users.getMe()
+```
+
+Set `VITE_API_URL=http://localhost:4000` in the root `.env`.
+
+## Mobile (React Native / Expo)
+
+```typescript
+import { createApiClient } from "@repo/api-client"
+
+export const api = createApiClient({
+  baseUrl: process.env.EXPO_PUBLIC_API_URL!,
+  credentials: "omit",
+  getCookieHeader: () => secureStore.get("session_cookie"),
+})
+```
+
+## Errors
+
+```typescript
+import { ApiError } from "@repo/api-client"
+
+try {
+  await api.users.getMe()
+} catch (e) {
+  if (e instanceof ApiError && e.isUnauthorized) {
+    // redirect to sign-in
+  }
+}
 ```

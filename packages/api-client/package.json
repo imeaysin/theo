@@ -23,7 +23,9 @@
     "dev": "tsup --watch",
     "lint": "eslint . --max-warnings 0",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@repo/contracts": "workspace:*",
@@ -34,6 +36,7 @@
     "@workspace/typescript-config": "workspace:*",
     "eslint": "^9.17.0",
     "tsup": "^8.5.1",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "vitest": "^4.1.6"
   }
 }
