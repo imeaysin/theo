@@ -1,13 +1,9 @@
 # @repo/auth
 
-The centralized authentication package for **codebase-x**, powered by **Better-Auth**.
+| Import | Use |
+|--------|-----|
+| `@repo/auth/server` | Nest — `auth`, `authHandler`, `getSessionFromHeaders` |
+| `@repo/auth/client` | `createAppAuthClient(baseURL)` — see `apps/web/src/lib/auth.ts` |
+| `@repo/auth` | Types — `Session`, `SessionUser`, `SessionData` |
 
-## 🚀 Features
-
-- **Standardized Client**: Pre-configured auth client for Next.js and NestJS.
-- **Provider Support**: Ready for email/password and OAuth providers.
-- **Session Management**: Secure, type-safe session handling.
-
----
-
-Part of the [codebase-x](https://github.com/your-username/codebase-x) starter template.
+Form schemas: `@repo/contracts`. Browser env: `@repo/config/client`.

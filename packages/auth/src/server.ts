@@ -1,12 +1,11 @@
 import { betterAuth } from "better-auth"
 import { toNodeHandler } from "better-auth/node"
-import { admin as adminPlugin, twoFactor, openAPI } from "better-auth/plugins"
 import { mongodbAdapter } from "better-auth/adapters/mongodb"
 import { MongoClient } from "mongodb"
 import { env } from "@repo/config"
 import { sendVerificationEmail, sendResetPasswordEmail } from "@repo/email"
 import type { IncomingHttpHeaders } from "http"
-import { ac, admin, user } from "./permissions"
+import { authServerPlugins } from "./plugins/server"
 
 const client = new MongoClient(env.MONGODB_URI)
 const db = client.db()
@@ -94,11 +93,7 @@ export const auth = betterAuth({
     max: 30,
   },
 
-  plugins: [
-    adminPlugin({ ac, roles: { admin, user } }),
-    twoFactor(),
-    openAPI(),
-  ],
+  plugins: authServerPlugins,
 })
 
 export { toNodeHandler }
