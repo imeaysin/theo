@@ -17,7 +17,11 @@ async function bootstrap() {
       contentSecurityPolicy: {
         directives: {
           ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-          'script-src': ["'self'", "'unsafe-inline'"],
+          'script-src': [
+            "'self'",
+            "'unsafe-inline'",
+            'https://cdn.jsdelivr.net',
+          ],
           'style-src': ["'self'", "'unsafe-inline'"],
           'img-src': ["'self'", 'data:', 'validator.swagger.io'],
         },
@@ -32,7 +36,6 @@ async function bootstrap() {
   });
   app.setGlobalPrefix('api');
 
-  // Swagger Configuration
   const config = new DocumentBuilder()
     .setTitle('Next Monorepo API')
     .setDescription('The API specification for the NestJS backend services')
@@ -44,6 +47,11 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document, {
     useGlobalPrefix: true,
     swaggerOptions: {
+      urls: [
+        { url: 'docs-json', name: 'API' },
+        { url: 'auth/open-api/generate-schema', name: 'Better Auth' },
+      ],
+      'urls.primaryName': 'API',
       persistAuthorization: true,
     },
   });
@@ -51,7 +59,7 @@ async function bootstrap() {
   const port = process.env.PORT ?? 4000;
   await app.listen(port);
   logger.log(`Application is running on: http://localhost:${port}/api`);
-  logger.log(`Swagger UI is available on: http://localhost:${port}/api/docs`);
+  logger.log(`Swagger UI: http://localhost:${port}/api/docs`);
 }
 
 bootstrap().catch((err) => {

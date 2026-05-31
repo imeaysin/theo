@@ -1,7 +1,6 @@
 import { createAuthClient } from "better-auth/client"
 import { adminClient } from "better-auth/client/plugins"
 import { twoFactorClient } from "better-auth/client/plugins"
-import { organizationClient } from "better-auth/client/plugins"
 import { ac, admin, user } from "./permissions"
 
 function resolveBaseURL(): string {
@@ -21,6 +20,5 @@ export const authClient = createAuthClient({
   plugins: [
     adminClient({ ac, roles: { admin, user } }),
     twoFactorClient(),
-    organizationClient(),
   ],
 })

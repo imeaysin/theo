@@ -1,8 +1,6 @@
 import { betterAuth } from "better-auth"
 import { toNodeHandler } from "better-auth/node"
-import { admin as adminPlugin } from "better-auth/plugins/admin"
-import { twoFactor } from "better-auth/plugins/two-factor"
-import { organization } from "better-auth/plugins/organization"
+import { admin as adminPlugin, twoFactor, openAPI } from "better-auth/plugins"
 import { mongodbAdapter } from "better-auth/adapters/mongodb"
 import { MongoClient } from "mongodb"
 import { env } from "@repo/config"
@@ -99,11 +97,14 @@ export const auth = betterAuth({
   plugins: [
     adminPlugin({ ac, roles: { admin, user } }),
     twoFactor(),
-    organization(),
+    openAPI(),
   ],
 })
 
 export { toNodeHandler }
+
+/** Express/Nest route handler for `/api/auth/*` (see create-auth-skill). */
+export const authHandler = toNodeHandler(auth)
 
 export type AuthInstance = typeof auth
 
