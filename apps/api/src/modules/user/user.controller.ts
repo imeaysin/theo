@@ -20,7 +20,7 @@ import { PermissionGuard } from '@src/guards/permission.guard';
 import { RequirePermission } from '@src/decorators/require-permission.decorator';
 import { Roles } from '@src/decorators/roles.decorator';
 import { CurrentUser } from '@src/decorators/current-user.decorator';
-import { ApiCommonResponses } from '@src/common/decorators/api-common-responses.decorator';
+import { ApiResponses } from '@src/decorators/api-responses.decorator';
 import { GetUsersQuery } from './queries/impl/get-users.query';
 import { GetUserQuery } from './queries/impl/get-user.query';
 import { UpdateUserRoleCommand } from './commands/impl/update-user-role.command';
@@ -39,7 +39,7 @@ const SESSION_COOKIE = 'codebase-x.session_token';
 
 @ApiTags('Users')
 @ApiCookieAuth(SESSION_COOKIE)
-@ApiCommonResponses()
+@ApiResponses()
 @Controller('users')
 export class UserController {
   constructor(

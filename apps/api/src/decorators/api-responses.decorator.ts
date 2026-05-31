@@ -5,9 +5,9 @@ import {
   ApiNotFoundResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { ApiErrorDto } from '@src/common/dto/api-error.dto';
+import { ApiErrorDto } from '@src/dto/api-error.dto';
 
-export function ApiCommonResponses() {
+export function ApiResponses() {
   return applyDecorators(
     ApiBadRequestResponse({ description: 'Validation failed', type: ApiErrorDto }),
     ApiUnauthorizedResponse({
