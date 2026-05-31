@@ -9,6 +9,8 @@
     "lint": "eslint .",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -25,6 +27,8 @@
     "@vitejs/plugin-react": "^6.0.1",
     "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
+    "@workspace/vitest-config": "workspace:*",
+    "vitest": "^4.1.6",
     "eslint": "^9",
     "eslint-plugin-react-refresh": "^0.5.2",
     "typescript": "^5",

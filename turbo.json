@@ -35,6 +35,9 @@
     "typecheck": {
       "dependsOn": []
     },
+    "test": {
+      "dependsOn": []
+    },
     "dev": {
       "cache": false,
       "persistent": true

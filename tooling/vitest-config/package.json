@@ -1,0 +1,22 @@
+{
+  "name": "@workspace/vitest-config",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "exports": {
+    "./node": "./node.ts",
+    "./react": "./react.ts"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^6.0.1",
+    "jsdom": "^27.0.0"
+  },
+  "peerDependencies": {
+    "vitest": "^4.0.0"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "vitest": "^4.1.6"
+  }
+}
