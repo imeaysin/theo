@@ -6,8 +6,8 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import type { Request } from 'express';
-import { ROLES_KEY } from '@/decorators/roles.decorator';
-import { IS_PUBLIC_KEY } from '@/decorators/public.decorator';
+import { ROLES_KEY } from '@src/decorators/roles.decorator';
+import { IS_PUBLIC_KEY } from '@src/decorators/public.decorator';
 
 /**
  * Enforces role-based access control.

@@ -1,7 +1,7 @@
 import { All, Controller, Req, Res } from '@nestjs/common';
 import { auth, toNodeHandler } from '@repo/auth/server';
 import type { Request, Response } from 'express';
-import { Public } from '@/decorators/public.decorator';
+import { Public } from '@src/decorators/public.decorator';
 
 /**
  * Proxies all /api/auth/* requests to the Better Auth node handler.

@@ -9,16 +9,16 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { PermissionGuard } from '@/guards/permission.guard';
-import { RequirePermission } from '@/decorators/require-permission.decorator';
-import { Roles } from '@/decorators/roles.decorator';
-import { CurrentUser } from '@/decorators/current-user.decorator';
+import { PermissionGuard } from '@src/guards/permission.guard';
+import { RequirePermission } from '@src/decorators/require-permission.decorator';
+import { Roles } from '@src/decorators/roles.decorator';
+import { CurrentUser } from '@src/decorators/current-user.decorator';
 import { GetUsersQuery } from './queries/impl/get-users.query';
 import { GetUserQuery } from './queries/impl/get-user.query';
 import { UpdateUserRoleCommand } from './commands/impl/update-user-role.command';
 import { BanUserCommand } from './commands/impl/ban-user.command';
 import { UpdateMeCommand } from './commands/impl/update-me.command';
-import { parseBody } from '@/utils/parse-body';
+import { parseBody } from '@src/utils/parse-body';
 import {
   BanUserSchema,
   UpdateUserRoleSchema,

@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import type { Request } from 'express';
-import { IS_PUBLIC_KEY } from '@/decorators/public.decorator';
+import { IS_PUBLIC_KEY } from '@src/decorators/public.decorator';
 
 /**
  * Rejects requests from users who haven't verified their email.

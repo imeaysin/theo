@@ -7,7 +7,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { getSessionFromHeaders } from '@repo/auth/server';
 import type { Request } from 'express';
-import { IS_PUBLIC_KEY } from '@/decorators/public.decorator';
+import { IS_PUBLIC_KEY } from '@src/decorators/public.decorator';
 
 /**
  * Global authentication guard.
