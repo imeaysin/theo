@@ -60,6 +60,7 @@ async function bootstrap() {
   await app.listen(port);
   logger.log(`Application is running on: http://localhost:${port}/api`);
   logger.log(`Swagger UI: http://localhost:${port}/api/docs`);
+  logger.log(`Better Auth reference: http://localhost:${port}/api/auth/reference`);
 }
 
 bootstrap().catch((err) => {
