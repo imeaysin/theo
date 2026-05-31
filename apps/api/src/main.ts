@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { Logger, ValidationPipe } from '@nestjs/common';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { connectDb } from '@repo/db';
@@ -11,7 +12,18 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
 
-  app.use(helmet());
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+          'script-src': ["'self'", "'unsafe-inline'"],
+          'style-src': ["'self'", "'unsafe-inline'"],
+          'img-src': ["'self'", 'data:', 'validator.swagger.io'],
+        },
+      },
+    }),
+  );
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   app.enableCors({
     origin: env.WEB_URL,
@@ -21,9 +33,26 @@ async function bootstrap() {
   });
   app.setGlobalPrefix('api');
 
+  // Swagger Configuration
+  const config = new DocumentBuilder()
+    .setTitle('Next Monorepo API')
+    .setDescription('The API specification for the NestJS backend services')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, document, {
+    useGlobalPrefix: true,
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  });
+
   const port = process.env.PORT ?? 4000;
   await app.listen(port);
   logger.log(`Application is running on: http://localhost:${port}/api`);
+  logger.log(`Swagger UI is available on: http://localhost:${port}/api/docs`);
 }
 
 bootstrap().catch((err) => {
