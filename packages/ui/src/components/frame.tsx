@@ -1,5 +1,5 @@
-import type * as React from "react";
-import { cn } from "@workspace/ui/lib/utils";
+import type * as React from "react"
+import { cn } from "@workspace/ui/lib/utils"
 
 export function Frame({
   className,
@@ -10,12 +10,12 @@ export function Frame({
       className={cn(
         "relative flex flex-col rounded-2xl bg-muted/72 p-1",
         "*:[[data-slot=frame-panel]+[data-slot=frame-panel]]:mt-1",
-        className,
+        className
       )}
       data-slot="frame"
       {...props}
     />
-  );
+  )
 }
 
 export function FramePanel({
@@ -26,12 +26,12 @@ export function FramePanel({
     <div
       className={cn(
         "relative rounded-xl border bg-background bg-clip-padding p-5 shadow-xs/5 before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-xl)-1px)] before:shadow-[0_1px_--theme(--color-black/4%)] dark:before:shadow-[0_-1px_--theme(--color-white/6%)]",
-        className,
+        className
       )}
       data-slot="frame-panel"
       {...props}
     />
-  );
+  )
 }
 
 export function FrameHeader({
@@ -44,7 +44,7 @@ export function FrameHeader({
       data-slot="frame-panel-header"
       {...props}
     />
-  );
+  )
 }
 
 export function FrameTitle({
@@ -53,11 +53,11 @@ export function FrameTitle({
 }: React.ComponentProps<"div">): React.ReactElement {
   return (
     <div
-      className={cn("font-semibold text-sm", className)}
+      className={cn("text-sm font-semibold", className)}
       data-slot="frame-panel-title"
       {...props}
     />
-  );
+  )
 }
 
 export function FrameDescription({
@@ -66,11 +66,11 @@ export function FrameDescription({
 }: React.ComponentProps<"div">): React.ReactElement {
   return (
     <div
-      className={cn("text-muted-foreground text-sm", className)}
+      className={cn("text-sm text-muted-foreground", className)}
       data-slot="frame-panel-description"
       {...props}
     />
-  );
+  )
 }
 
 export function FrameFooter({
@@ -83,5 +83,5 @@ export function FrameFooter({
       data-slot="frame-panel-footer"
       {...props}
     />
-  );
+  )
 }

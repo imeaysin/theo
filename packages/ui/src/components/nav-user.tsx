@@ -10,7 +10,11 @@ import {
   User,
 } from "lucide-react"
 
-import { Avatar, AvatarFallback, AvatarImage } from "@workspace/ui/components/avatar"
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@workspace/ui/components/avatar"
 import {
   Menu,
   MenuItem,
