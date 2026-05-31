@@ -8,25 +8,38 @@ import {
   ForbiddenException,
   NotFoundException,
 } from '@nestjs/common';
+import {
+  ApiCookieAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { PermissionGuard } from '@src/guards/permission.guard';
 import { RequirePermission } from '@src/decorators/require-permission.decorator';
 import { Roles } from '@src/decorators/roles.decorator';
 import { CurrentUser } from '@src/decorators/current-user.decorator';
+import { ApiCommonResponses } from '@src/common/decorators/api-common-responses.decorator';
 import { GetUsersQuery } from './queries/impl/get-users.query';
 import { GetUserQuery } from './queries/impl/get-user.query';
 import { UpdateUserRoleCommand } from './commands/impl/update-user-role.command';
 import { BanUserCommand } from './commands/impl/ban-user.command';
 import { UpdateMeCommand } from './commands/impl/update-me.command';
-import { parseBody } from '@src/utils/parse-body';
 import {
-  BanUserSchema,
-  UpdateUserRoleSchema,
-  UpdateProfileSchema,
-} from '@repo/contracts';
+  BanUserDto,
+  UpdateProfileDto,
+  UpdateUserRoleDto,
+  UserResponseDto,
+} from './dto/user.dto';
 import type { SessionUser } from '@repo/auth';
 import type { IUserDocument } from '@repo/db';
 
+const SESSION_COOKIE = 'codebase-x.session_token';
+
+@ApiTags('Users')
+@ApiCookieAuth(SESSION_COOKIE)
+@ApiCommonResponses()
 @Controller('users')
 export class UserController {
   constructor(
@@ -35,6 +48,8 @@ export class UserController {
   ) {}
 
   @Get('me')
+  @ApiOperation({ summary: 'Get current user profile' })
+  @ApiResponse({ status: 200, description: 'Current user', type: UserResponseDto })
   async getMe(@CurrentUser() user: SessionUser): Promise<IUserDocument> {
     const doc = await this.queryBus.execute<GetUserQuery, IUserDocument | null>(
       new GetUserQuery(user.id),
@@ -44,18 +59,21 @@ export class UserController {
   }
 
   @Patch('me')
+  @ApiOperation({ summary: 'Update current user profile' })
+  @ApiResponse({ status: 200, description: 'Updated user', type: UserResponseDto })
   async updateMe(
     @CurrentUser() user: SessionUser,
-    @Body() body: unknown,
+    @Body() body: UpdateProfileDto,
   ): Promise<IUserDocument | null> {
-    const data = parseBody(UpdateProfileSchema, body);
     return this.commandBus.execute<UpdateMeCommand, IUserDocument | null>(
-      new UpdateMeCommand(user.id, data),
+      new UpdateMeCommand(user.id, body),
     );
   }
 
   @Get()
   @Roles('admin')
+  @ApiOperation({ summary: 'List all users (admin)' })
+  @ApiResponse({ status: 200, description: 'User list', type: UserResponseDto, isArray: true })
   async findAll(): Promise<IUserDocument[]> {
     return this.queryBus.execute<GetUsersQuery, IUserDocument[]>(
       new GetUsersQuery(),
@@ -63,6 +81,9 @@ export class UserController {
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get user by id' })
+  @ApiParam({ name: 'id', description: 'User id' })
+  @ApiResponse({ status: 200, description: 'User', type: UserResponseDto })
   async findOne(
     @Param('id') id: string,
     @CurrentUser() user: SessionUser,
@@ -84,13 +105,15 @@ export class UserController {
   @Roles('admin')
   @RequirePermission('user', 'update')
   @UseGuards(PermissionGuard)
+  @ApiOperation({ summary: 'Update user role (admin)' })
+  @ApiParam({ name: 'id', description: 'User id' })
+  @ApiResponse({ status: 200, description: 'Updated user', type: UserResponseDto })
   async updateRole(
     @Param('id') id: string,
-    @Body() body: unknown,
+    @Body() body: UpdateUserRoleDto,
   ): Promise<IUserDocument | null> {
-    const { role } = parseBody(UpdateUserRoleSchema, body);
     return this.commandBus.execute<UpdateUserRoleCommand, IUserDocument | null>(
-      new UpdateUserRoleCommand(id, role),
+      new UpdateUserRoleCommand(id, body.role),
     );
   }
 
@@ -98,13 +121,15 @@ export class UserController {
   @Roles('admin')
   @RequirePermission('user', 'update')
   @UseGuards(PermissionGuard)
+  @ApiOperation({ summary: 'Ban user (admin)' })
+  @ApiParam({ name: 'id', description: 'User id' })
+  @ApiResponse({ status: 200, description: 'Updated user', type: UserResponseDto })
   async banUser(
     @Param('id') id: string,
-    @Body() body: unknown,
+    @Body() body: BanUserDto,
   ): Promise<IUserDocument | null> {
-    const { reason } = parseBody(BanUserSchema, body);
     return this.commandBus.execute<BanUserCommand, IUserDocument | null>(
-      new BanUserCommand(id, reason),
+      new BanUserCommand(id, body.reason),
     );
   }
 }

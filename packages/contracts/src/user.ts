@@ -11,8 +11,8 @@ export const UserResponseSchema = z.object({
   banned: z.boolean(),
   banReason: z.string().nullable(),
   emailVerified: z.boolean(),
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
 })
 
 export const UpdateUserRoleSchema = z.object({
@@ -27,9 +27,9 @@ export const BanUserSchema = z.object({
 export const SessionSchema = z.object({
   id: z.string(),
   token: z.string(),
-  expiresAt: z.coerce.date(),
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date(),
+  expiresAt: z.string(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
   userId: z.string(),
 })
 

@@ -1,10 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { cleanupOpenApiDoc } from 'nestjs-zod';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { connectDb } from '@repo/db';
 import { env } from '@repo/config';
+
+const SESSION_COOKIE = 'codebase-x.session_token';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
@@ -38,13 +41,25 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Next Monorepo API')
-    .setDescription('The API specification for the NestJS backend services')
+    .setDescription(
+      'REST API for user management. Authentication endpoints are documented under the Better Auth spec.',
+    )
     .setVersion('1.0')
-    .addBearerAuth()
+    .addServer(env.NEXT_PUBLIC_API_URL, 'API')
+    .addCookieAuth(SESSION_COOKIE, {
+      type: 'apiKey',
+      in: 'cookie',
+      name: SESSION_COOKIE,
+      description: 'Better Auth session cookie (set after sign-in)',
+    })
+    .addTag('Users', 'Authenticated user profile and admin user management')
     .build();
 
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document, {
+  const openApiDoc = cleanupOpenApiDoc(
+    SwaggerModule.createDocument(app, config),
+  );
+
+  SwaggerModule.setup('docs', app, openApiDoc, {
     useGlobalPrefix: true,
     swaggerOptions: {
       urls: [
@@ -60,7 +75,6 @@ async function bootstrap() {
   await app.listen(port);
   logger.log(`Application is running on: http://localhost:${port}/api`);
   logger.log(`Swagger UI: http://localhost:${port}/api/docs`);
-  logger.log(`Better Auth reference: http://localhost:${port}/api/auth/reference`);
 }
 
 bootstrap().catch((err) => {

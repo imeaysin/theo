@@ -33,6 +33,7 @@
     "@repo/db": "workspace:*",
     "@repo/utils": "workspace:*",
     "helmet": "^8.2.0",
+    "nestjs-zod": "^5.4.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "zod": "^4.4.3"
