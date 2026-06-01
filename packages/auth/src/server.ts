@@ -20,27 +20,19 @@ interface SocialProviderConfig {
 
 interface SocialProviders {
   google?: SocialProviderConfig
-  github?: SocialProviderConfig
 }
 
 function buildSocialProviders(): SocialProviders {
-  const providers: SocialProviders = {}
+  if (!env.GOOGLE_CLIENT_ID || !env.GOOGLE_CLIENT_SECRET) {
+    return {}
+  }
 
-  if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) {
-    providers.google = {
+  return {
+    google: {
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
-    }
+    },
   }
-
-  if (env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET) {
-    providers.github = {
-      clientId: env.GITHUB_CLIENT_ID,
-      clientSecret: env.GITHUB_CLIENT_SECRET,
-    }
-  }
-
-  return providers
 }
 
 export const auth = betterAuth({
@@ -60,6 +52,9 @@ export const auth = betterAuth({
       enabled: false,
     },
     useSecureCookies: env.NODE_ENV === "production",
+    ipAddress: {
+      ipAddressHeaders: ["x-forwarded-for", "x-real-ip"],
+    },
   },
 
   session: {

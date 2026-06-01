@@ -7,7 +7,7 @@ import { FormField } from "@/components/form/form-field"
 import { paths } from "@/config/paths"
 import { AuthCard } from "@/features/auth/components/auth-card"
 import { AuthDivider } from "@/features/auth/components/auth-divider"
-import { SocialAuthButtons } from "@/features/auth/components/social-auth-buttons"
+import { GoogleAuthButton } from "@/features/auth/components/google-auth-button"
 import { useSignUp } from "@/features/auth/hooks/use-sign-up"
 import { signUpSchema, type SignUpInput } from "@repo/contracts"
 
@@ -85,7 +85,7 @@ export function SignUpPage() {
       </form>
 
       <AuthDivider />
-      <SocialAuthButtons />
+      <GoogleAuthButton />
     </AuthCard>
   )
 }
