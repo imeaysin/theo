@@ -14,7 +14,4 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ["better-auth"],
   },
-  server: {
-    port: 3000,
-  },
 })
