@@ -1,8 +1,7 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Link } from "react-router-dom"
-import { Alert, AlertDescription } from "@workspace/ui/components/alert"
-import { Button } from "@workspace/ui/components/button"
+import { Alert, Button } from "@workspace/hero-ui"
 import { FormField } from "@/components/form/form-field"
 import { paths } from "@/config/paths"
 import { AuthCard } from "@/features/auth/components/auth-card"
@@ -36,8 +35,13 @@ export function TwoFactorPage() {
         noValidate
       >
         {verifyMutation.error ? (
-          <Alert variant="error">
-            <AlertDescription>{verifyMutation.error.message}</AlertDescription>
+          <Alert status="danger">
+            <Alert.Indicator />
+            <Alert.Content>
+              <Alert.Description>
+                {verifyMutation.error.message}
+              </Alert.Description>
+            </Alert.Content>
           </Alert>
         ) : null}
 
@@ -45,12 +49,10 @@ export function TwoFactorPage() {
           control={form.control}
           name="code"
           label="Authentication code"
-          inputMode="numeric"
           autoComplete="one-time-code"
-          maxLength={6}
         />
 
-        <Button type="submit" disabled={verifyMutation.isPending}>
+        <Button type="submit" isPending={verifyMutation.isPending}>
           {verifyMutation.isPending ? "Verifying…" : "Verify"}
         </Button>
       </form>

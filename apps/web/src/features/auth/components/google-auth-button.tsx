@@ -1,5 +1,5 @@
 import { signIn } from "@/lib/auth"
-import { Button } from "@workspace/ui/components/button"
+import { Button } from "@workspace/hero-ui"
 import { paths } from "@/config/paths"
 
 export function GoogleAuthButton() {
@@ -13,9 +13,9 @@ export function GoogleAuthButton() {
   return (
     <Button
       type="button"
-      variant="outline"
-      className="w-full"
-      onClick={() => void handleGoogleSignIn()}
+      variant="tertiary"
+      fullWidth
+      onPress={() => void handleGoogleSignIn()}
     >
       Continue with Google
     </Button>

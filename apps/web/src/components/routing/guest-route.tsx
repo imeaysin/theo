@@ -1,6 +1,6 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom"
 import { useSession } from "@/lib/auth"
-import { Spinner } from "@workspace/ui/components/spinner"
+import { Spinner } from "@workspace/hero-ui"
 import { paths } from "@/config/paths"
 
 export function GuestRoute() {
@@ -10,7 +10,7 @@ export function GuestRoute() {
   if (isPending) {
     return (
       <div className="flex min-h-svh items-center justify-center">
-        <Spinner className="size-6" />
+        <Spinner size="lg" />
       </div>
     )
   }

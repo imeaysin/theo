@@ -1,7 +1,6 @@
 import { Link, Outlet, useNavigate } from "react-router-dom"
 import { signOut, useSession } from "@/lib/auth"
-import { Button } from "@workspace/ui/components/button"
-import { Spinner } from "@workspace/ui/components/spinner"
+import { Button, Spinner } from "@workspace/hero-ui"
 import { env } from "@/config/env"
 import { paths } from "@/config/paths"
 
@@ -22,7 +21,7 @@ export function AppLayout() {
         </Link>
         <div className="flex items-center gap-3">
           {isPending ? (
-            <Spinner className="size-4" />
+            <Spinner size="sm" />
           ) : (
             <span className="text-sm text-muted-foreground">
               {session?.user.email}
@@ -31,7 +30,7 @@ export function AppLayout() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => void handleSignOut()}
+            onPress={() => void handleSignOut()}
           >
             Sign out
           </Button>

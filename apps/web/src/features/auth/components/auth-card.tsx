@@ -1,11 +1,5 @@
 import type { ReactNode } from "react"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@workspace/ui/components/card"
+import { Card } from "@workspace/hero-ui"
 
 type AuthCardProps = {
   title: string
@@ -22,11 +16,13 @@ export function AuthCard({
 }: AuthCardProps) {
   return (
     <Card className="w-full max-w-md border-border/80 shadow-sm">
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        {description ? <CardDescription>{description}</CardDescription> : null}
-      </CardHeader>
-      <CardContent className="flex flex-col gap-4">{children}</CardContent>
+      <Card.Header>
+        <Card.Title>{title}</Card.Title>
+        {description ? (
+          <Card.Description>{description}</Card.Description>
+        ) : null}
+      </Card.Header>
+      <Card.Content className="flex flex-col gap-4">{children}</Card.Content>
       {footer ? (
         <div className="border-t border-border px-6 py-4 text-center text-sm text-muted-foreground">
           {footer}

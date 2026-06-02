@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import { useSession } from "@/lib/auth"
-import { Button } from "@workspace/ui/components/button"
+import { Button } from "@workspace/hero-ui"
 import { paths } from "@/config/paths"
 import { env } from "@/config/env"
 
@@ -19,15 +19,17 @@ export function HomePage() {
       </div>
       <div className="flex flex-wrap items-center justify-center gap-3">
         {session ? (
-          <Button render={<Link to={paths.dashboard} />}>
-            Go to dashboard
-          </Button>
+          <Link to={paths.dashboard}>
+            <Button>Go to dashboard</Button>
+          </Link>
         ) : (
           <>
-            <Button render={<Link to={paths.auth.signIn} />}>Sign in</Button>
-            <Button render={<Link to={paths.auth.signUp} />} variant="outline">
-              Sign up
-            </Button>
+            <Link to={paths.auth.signIn}>
+              <Button>Sign in</Button>
+            </Link>
+            <Link to={paths.auth.signUp}>
+              <Button variant="outline">Sign up</Button>
+            </Link>
           </>
         )}
       </div>

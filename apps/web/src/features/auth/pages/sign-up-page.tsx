@@ -1,8 +1,7 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Link } from "react-router-dom"
-import { Alert, AlertDescription } from "@workspace/ui/components/alert"
-import { Button } from "@workspace/ui/components/button"
+import { Alert, Button } from "@workspace/hero-ui"
 import { FormField } from "@/components/form/form-field"
 import { paths } from "@/config/paths"
 import { AuthCard } from "@/features/auth/components/auth-card"
@@ -46,8 +45,13 @@ export function SignUpPage() {
         noValidate
       >
         {signUpMutation.error ? (
-          <Alert variant="error">
-            <AlertDescription>{signUpMutation.error.message}</AlertDescription>
+          <Alert status="danger">
+            <Alert.Indicator />
+            <Alert.Content>
+              <Alert.Description>
+                {signUpMutation.error.message}
+              </Alert.Description>
+            </Alert.Content>
           </Alert>
         ) : null}
 
@@ -79,7 +83,7 @@ export function SignUpPage() {
           autoComplete="new-password"
         />
 
-        <Button type="submit" disabled={signUpMutation.isPending}>
+        <Button type="submit" isPending={signUpMutation.isPending}>
           {signUpMutation.isPending ? "Creating account…" : "Sign up"}
         </Button>
       </form>

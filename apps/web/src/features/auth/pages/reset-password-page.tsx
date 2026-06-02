@@ -1,8 +1,7 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Link, useSearchParams } from "react-router-dom"
-import { Alert, AlertDescription } from "@workspace/ui/components/alert"
-import { Button } from "@workspace/ui/components/button"
+import { Alert, Button } from "@workspace/hero-ui"
 import { FormField } from "@/components/form/form-field"
 import { paths } from "@/config/paths"
 import { AuthCard } from "@/features/auth/components/auth-card"
@@ -36,10 +35,13 @@ export function ResetPasswordPage() {
           </Link>
         }
       >
-        <Alert variant="error">
-          <AlertDescription>
-            Open the link from your email, or request a new reset email.
-          </AlertDescription>
+        <Alert status="danger">
+          <Alert.Indicator />
+          <Alert.Content>
+            <Alert.Description>
+              Open the link from your email, or request a new reset email.
+            </Alert.Description>
+          </Alert.Content>
         </Alert>
       </AuthCard>
     )
@@ -61,10 +63,13 @@ export function ResetPasswordPage() {
         noValidate
       >
         {resetPasswordMutation.error ? (
-          <Alert variant="error">
-            <AlertDescription>
-              {resetPasswordMutation.error.message}
-            </AlertDescription>
+          <Alert status="danger">
+            <Alert.Indicator />
+            <Alert.Content>
+              <Alert.Description>
+                {resetPasswordMutation.error.message}
+              </Alert.Description>
+            </Alert.Content>
           </Alert>
         ) : null}
 
@@ -83,7 +88,7 @@ export function ResetPasswordPage() {
           autoComplete="new-password"
         />
 
-        <Button type="submit" disabled={resetPasswordMutation.isPending}>
+        <Button type="submit" isPending={resetPasswordMutation.isPending}>
           {resetPasswordMutation.isPending ? "Updating…" : "Update password"}
         </Button>
       </form>

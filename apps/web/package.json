@@ -19,7 +19,7 @@
     "@repo/config": "workspace:*",
     "@repo/contracts": "workspace:*",
     "@tanstack/react-query": "^5.90.21",
-    "@workspace/ui": "workspace:*",
+    "@workspace/hero-ui": "workspace:*",
     "react": "catalog:",
     "react-dom": "catalog:",
     "react-hook-form": "^7.71.2",

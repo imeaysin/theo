@@ -1,8 +1,7 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Link } from "react-router-dom"
-import { Alert, AlertDescription } from "@workspace/ui/components/alert"
-import { Button } from "@workspace/ui/components/button"
+import { Alert, Button } from "@workspace/hero-ui"
 import { FormField } from "@/components/form/form-field"
 import { paths } from "@/config/paths"
 import { AuthCard } from "@/features/auth/components/auth-card"
@@ -41,8 +40,13 @@ export function SignInPage() {
         noValidate
       >
         {signInMutation.error ? (
-          <Alert variant="error">
-            <AlertDescription>{signInMutation.error.message}</AlertDescription>
+          <Alert status="danger">
+            <Alert.Indicator />
+            <Alert.Content>
+              <Alert.Description>
+                {signInMutation.error.message}
+              </Alert.Description>
+            </Alert.Content>
           </Alert>
         ) : null}
 
@@ -70,7 +74,7 @@ export function SignInPage() {
           </Link>
         </div>
 
-        <Button type="submit" disabled={signInMutation.isPending}>
+        <Button type="submit" isPending={signInMutation.isPending}>
           {signInMutation.isPending ? "Signing in…" : "Sign in"}
         </Button>
       </form>
