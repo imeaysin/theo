@@ -3,20 +3,6 @@ import { themePlugin } from "@better-auth-ui/heroui/plugins"
 import { AuthProvider, type AuthProviderProps } from "@better-auth-ui/react"
 import { useTheme } from "@heroui/react"
 
-export interface BetterAuthProviderProps extends AuthProviderProps {}
-
-export const BetterAuthProvider = ({
-  children,
-  plugins = [],
-  ...props
-}: BetterAuthProviderProps) => {
-  return (
-    <AuthProvider plugins={[themePlugin({ useTheme }), ...plugins]} {...props}>
-      {children}
-    </AuthProvider>
-  )
-}
-
 export {
   // Queries
   useSession,
@@ -53,6 +39,9 @@ export {
 } from "@better-auth-ui/react"
 
 export {
+  // Providers
+  AuthProvider,
+
   // User
   UserAvatar,
   UserButton,
