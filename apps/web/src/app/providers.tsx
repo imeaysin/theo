@@ -4,7 +4,6 @@ import { RouterProvider } from "react-router-dom"
 import { useState, type ReactNode } from "react"
 import { createQueryClient } from "@/lib/query-client"
 import { router } from "@/app/router"
-import { env } from "@repo/config"
 
 interface AppProvidersProps {
   children?: ReactNode
@@ -16,7 +15,7 @@ export function AppProviders({ children }: AppProvidersProps) {
   return (
     <QueryClientProvider client={queryClient}>
       {children ?? <RouterProvider router={router} />}
-      {env.NODE_ENV === "development" ? (
+      {import.meta.env.DEV ? (
         <ReactQueryDevtools
           initialIsOpen={false}
           buttonPosition="bottom-left"

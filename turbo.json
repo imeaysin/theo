@@ -18,7 +18,8 @@
     "NEXT_PHASE",
     "SKIP_ENV_VALIDATION",
     "VITE_API_URL",
-    "PORT"
+    "PORT",
+    "DEV"
   ],
   "tasks": {
     "build": {
