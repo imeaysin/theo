@@ -35,7 +35,7 @@ import {
 import type { SessionUser } from '@repo/auth/server';
 import type { IUserDocument } from '@repo/db';
 
-const SESSION_COOKIE = 'codebase-x.session_token';
+const SESSION_COOKIE = 'theo.session_token';
 
 @ApiTags('Users')
 @ApiCookieAuth(SESSION_COOKIE)

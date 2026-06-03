@@ -51,8 +51,7 @@
     "./lib/*": "./src/lib/*.ts",
     "./hooks/*": "./src/hooks/*.ts",
     "./components/*": "./src/components/*.tsx",
-    "./components/better-auth-ui": "./src/components/better-auth-ui/index.ts",
-    "./better-auth-ui": "./src/components/better-auth-ui/index.ts"
+    "./better-auth-ui": "./src/better-auth-ui/index.ts"
   },
   "files": [
     "dist",

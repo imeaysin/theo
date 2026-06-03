@@ -9,7 +9,7 @@ const clientPublicEnvSchema = z.object({
 export type ClientPublicEnv = z.infer<typeof clientPublicEnvSchema>
 
 const defaultApiUrl = "http://localhost:4000"
-const defaultAppName = "CodebaseX"
+const defaultAppName = "Theo"
 
 export function parseClientPublicEnv(
   source: Record<string, string | undefined>

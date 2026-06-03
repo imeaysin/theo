@@ -55,7 +55,7 @@ const buildDefaults = {
   RESEND_API_KEY: "re_123456789",
   WEB_URL: "http://localhost:3000",
   NEXT_PUBLIC_API_URL: "http://localhost:4000",
-  APP_NAME: "CodebaseX",
+  APP_NAME: "Theo",
   NODE_ENV: "development",
 } as const
 
@@ -66,7 +66,7 @@ const envSchema = z.object({
   RESEND_API_KEY: z.string().min(1),
   WEB_URL: z.string().url(),
   NEXT_PUBLIC_API_URL: z.string().url(),
-  APP_NAME: z.string().min(1).default("CodebaseX"),
+  APP_NAME: z.string().min(1).default("Theo"),
   GOOGLE_CLIENT_ID: z.string().default(""),
   GOOGLE_CLIENT_SECRET: z.string().default(""),
   GITHUB_CLIENT_ID: z.string().default(""),

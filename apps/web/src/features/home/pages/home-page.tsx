@@ -8,7 +8,7 @@ export function HomePage() {
   const { data: session } = useSession()
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center gap-6 px-6 text-center">
+    <div className="flex flex-col items-center justify-center gap-6 px-6 text-center">
       <div className="flex max-w-lg flex-col gap-3">
         <h1 className="text-2xl font-semibold tracking-tight">{env.appName}</h1>
         <p className="text-sm text-muted-foreground">

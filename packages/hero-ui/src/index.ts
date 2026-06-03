@@ -5,8 +5,8 @@
  * This package serves as a wrapper for the monorepo
  */
 
-// Export all HeroUI components and hooks (includes useTheme)
-export * from "@heroui/react"
+// Export all HeroUI components and hooks (includes useTheme and custom components)
+export * from "./components"
 
 // Export utilities
 export { cn } from "./lib/utils"

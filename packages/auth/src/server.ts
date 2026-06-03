@@ -47,7 +47,7 @@ export const auth = betterAuth({
   }),
 
   advanced: {
-    cookiePrefix: "codebase-x",
+    cookiePrefix: "theo",
     crossSubDomainCookies: {
       enabled: false,
     },

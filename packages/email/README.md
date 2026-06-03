@@ -1,7 +1,7 @@
 # @repo/email
 
-Email templates and distribution logic for **codebase-x**.
+Email templates and distribution logic for **theo**.
 
 ---
 
-Part of the [codebase-x](https://github.com/your-username/codebase-x) starter template.
+Part of the [theo](https://github.com/your-username/theo) starter template.

@@ -1,6 +1,6 @@
 # @repo/dates
 
-Centralized date utility library for **codebase-x**, powered by **date-fns**.
+Centralized date utility library for **theo**, powered by **date-fns**.
 
 ## 🚀 Features
 
@@ -29,4 +29,4 @@ const text = relativeTime("2026-05-10"); // "5 days ago"
 
 ---
 
-Part of the [codebase-x](https://github.com/your-username/codebase-x) starter template.
+Part of the [theo](https://github.com/your-username/theo) starter template.

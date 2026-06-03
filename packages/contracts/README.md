@@ -1,6 +1,6 @@
 # @repo/contracts
 
-Shared API contracts and schemas for **codebase-x**, powered by **Zod**.
+Shared API contracts and schemas for **theo**, powered by **Zod**.
 
 ## 🚀 Features
 
@@ -9,4 +9,4 @@ Shared API contracts and schemas for **codebase-x**, powered by **Zod**.
 
 ---
 
-Part of the [codebase-x](https://github.com/your-username/codebase-x) starter template.
+Part of the [theo](https://github.com/your-username/theo) starter template.

@@ -7,7 +7,7 @@ import { AppModule } from './app.module';
 import { connectDb } from '@repo/db';
 import { env } from '@repo/config';
 
-const SESSION_COOKIE = 'codebase-x.session_token';
+const SESSION_COOKIE = 'theo.session_token';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');

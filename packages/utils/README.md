@@ -1,6 +1,6 @@
 # @repo/utils
 
-Centralized utility library for **codebase-x**.
+Centralized utility library for **theo**.
 
 ## 🚀 Features
 
@@ -20,4 +20,4 @@ const headers = nodeHeadersToWebHeaders(nodeIncomingHeaders);
 
 ---
 
-Part of the [codebase-x](https://github.com/your-username/codebase-x) starter template.
+Part of the [theo](https://github.com/your-username/theo) starter template.

@@ -43,14 +43,14 @@ describe("HttpClient", () => {
       baseUrl: "http://localhost:4000/api",
       fetch: fetchMock,
       credentials: "omit",
-      getCookieHeader: () => "codebase-x.session_token=abc",
+      getCookieHeader: () => "theo.session_token=abc",
     })
 
     await client.get("/users/me", z.object({ ok: z.boolean() }))
 
     const [, init] = fetchMock.mock.calls[0] as [string, RequestInit]
     expect(init.headers).toMatchObject({
-      Cookie: "codebase-x.session_token=abc",
+      Cookie: "theo.session_token=abc",
     })
   })
 

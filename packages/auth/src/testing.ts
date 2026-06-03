@@ -63,7 +63,7 @@ export async function createTestSession(userOverrides: TestUserOverrides = {}) {
 
 export function mockAuthHeaders(sessionToken: string): Record<string, string> {
   return {
-    Cookie: `codebase-x.session_token=${sessionToken}`,
+    Cookie: `theo.session_token=${sessionToken}`,
   }
 }
 

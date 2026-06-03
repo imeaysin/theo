@@ -9,6 +9,7 @@ export function RootLayout() {
     <AuthProvider
       authClient={authClient}
       navigate={({ to, replace }) => navigate(to, { replace })}
+      socialProviders={["google"]}
     >
       <Outlet />
     </AuthProvider>
