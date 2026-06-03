@@ -45,7 +45,7 @@ export default function MyComponent() {
 ### Better Auth UI Components
 
 ```tsx
-import { AuthProvider, SignIn } from "@workspace/hero-ui";
+import { AuthProvider, SignIn } from "@workspace/hero-ui/better-auth-ui";
 
 export default function AuthPage() {
   return (
@@ -59,7 +59,7 @@ export default function AuthPage() {
 ### Better Auth UI Hooks
 
 ```tsx
-import { useSession, useSignOut } from "@workspace/hero-ui";
+import { useSession, useSignOut } from "@workspace/hero-ui/better-auth-ui";
 
 export default function UserProfile() {
   const { data: session } = useSession();
