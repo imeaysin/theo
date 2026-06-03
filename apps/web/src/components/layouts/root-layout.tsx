@@ -1,17 +1,19 @@
 import { Outlet, useNavigate } from "react-router-dom"
-import { AuthProvider } from "@workspace/hero-ui/better-auth-ui"
 import { authClient } from "@/lib/auth"
+import { BetterAuthProvider } from "@workspace/hero-ui/better-auth-ui"
 
 export function RootLayout() {
   const navigate = useNavigate()
 
   return (
-    <AuthProvider
+    <BetterAuthProvider
       authClient={authClient}
-      navigate={({ to, replace }) => navigate(to, { replace })}
+      navigate={({ to, replace }: { to: string; replace?: boolean }) =>
+        navigate(to, { replace })
+      }
       socialProviders={["google"]}
     >
       <Outlet />
-    </AuthProvider>
+    </BetterAuthProvider>
   )
 }

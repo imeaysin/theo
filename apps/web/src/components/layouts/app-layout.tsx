@@ -1,19 +1,7 @@
-import { Link, Outlet, useNavigate } from "react-router-dom"
-import { signOut, useSession } from "@/lib/auth"
-import { Button, Spinner } from "@workspace/hero-ui"
-import { env } from "@/config/env"
-import { paths } from "@/config/paths"
+import { Outlet } from "react-router-dom"
 import { Navbar } from "../navbar"
 
 export function AppLayout() {
-  const navigate = useNavigate()
-  const { data: session, isPending } = useSession()
-
-  async function handleSignOut() {
-    await signOut()
-    navigate(paths.auth.signIn, { replace: true })
-  }
-
   return (
     <div className="relative flex h-screen flex-col">
       <Navbar />
