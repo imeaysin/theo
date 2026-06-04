@@ -31,12 +31,33 @@ async function bootstrap() {
       },
     }),
   );
+
+  // CORS configuration - parse allowed origins from environment
+  const allowedOrigins: string[] = String(env.ALLOWED_ORIGINS)
+    .split(',')
+    .map((origin) => origin.trim());
+
   app.enableCors({
-    origin: env.WEB_URL,
+    origin: (
+      origin: string | undefined,
+      callback: (err: Error | null, allow?: boolean) => void,
+    ) => {
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Origin ${origin} not allowed by CORS`));
+      }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
   });
+
   app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()
@@ -45,7 +66,7 @@ async function bootstrap() {
       'REST API for user management. Authentication endpoints are documented under the Better Auth spec.',
     )
     .setVersion('1.0')
-    .addServer(env.NEXT_PUBLIC_API_URL, 'API')
+    .addServer(String(env.API_URL), 'API')
     .addCookieAuth(SESSION_COOKIE, {
       type: 'apiKey',
       in: 'cookie',
