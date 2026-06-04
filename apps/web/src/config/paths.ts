@@ -7,12 +7,12 @@ export const paths = {
     security: "/settings/security",
   },
   auth: {
-    signIn: "/sign-in",
-    signUp: "/sign-up",
-    forgotPassword: "/forgot-password",
-    resetPassword: "/reset-password",
-    verifyEmail: "/verify-email",
-    twoFactor: "/two-factor",
+    signIn: "/auth/sign-in",
+    signUp: "/auth/sign-up",
+    forgotPassword: "/auth/forgot-password",
+    resetPassword: "/auth/reset-password",
+    verifyEmail: "/auth/verify-email",
+    twoFactor: "/auth/two-factor",
     signOut: "/auth/sign-out",
   },
 } as const
