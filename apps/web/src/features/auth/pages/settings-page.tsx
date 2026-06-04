@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { Settings } from "@workspace/hero-ui/better-auth-ui"
 
 /**
@@ -10,9 +10,13 @@ import { Settings } from "@workspace/hero-ui/better-auth-ui"
  *
  * Uses better-auth-ui's <Settings /> component which includes
  * all account and security management features.
+ *
+ * The `:tab` route param extracts just the path segment (e.g. "account", "security")
+ * so the Settings component can match it against its view segments.
  */
 export function SettingsPage() {
-  const location = useLocation()
+  const { tab } = useParams<{ tab?: string }>()
+  const view = tab || "account"
 
   return (
     <div className="container mx-auto py-8">
@@ -23,7 +27,7 @@ export function SettingsPage() {
         </p>
       </div>
 
-      <Settings path={location.pathname} />
+      <Settings path={view} />
     </div>
   )
 }
