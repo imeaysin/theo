@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom"
-import { useSession } from "@/lib/auth"
 import { Button } from "@workspace/hero-ui"
 import { paths } from "@/config/paths"
 import { env } from "@/config/env"
+import { useAuthSession } from "@/features/auth/hooks"
 
 export function HomePage() {
-  const { data: session } = useSession()
+  const { session } = useAuthSession()
 
   return (
     <div className="flex flex-col items-center justify-center gap-6 px-6 text-center">

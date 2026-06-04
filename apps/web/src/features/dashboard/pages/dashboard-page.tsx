@@ -1,8 +1,8 @@
-import { useSession } from "@/lib/auth"
+import { useAuthSession } from "@/features/auth/hooks"
 import { Card } from "@workspace/hero-ui"
 
 export function DashboardPage() {
-  const { data: session } = useSession()
+  const { session } = useAuthSession()
   const user = session?.user
 
   return (

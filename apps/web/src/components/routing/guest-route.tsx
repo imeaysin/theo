@@ -1,11 +1,11 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom"
-import { useSession } from "@/lib/auth"
 import { Spinner } from "@workspace/hero-ui"
 import { paths } from "@/config/paths"
+import { useAuthSession } from "@/features/auth/hooks"
 
 export function GuestRoute() {
   const location = useLocation()
-  const { data: session, isPending } = useSession()
+  const { session, isPending } = useAuthSession()
 
   if (isPending) {
     return (
