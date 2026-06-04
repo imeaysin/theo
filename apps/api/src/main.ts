@@ -42,6 +42,7 @@ async function bootstrap() {
       origin: string | undefined,
       callback: (err: Error | null, allow?: boolean) => void,
     ) => {
+      // Allow requests with no origin (mobile apps, Postman, curl, etc.)
       if (!origin) {
         callback(null, true);
         return;
@@ -56,6 +57,7 @@ async function bootstrap() {
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
+    exposedHeaders: ['Set-Cookie'],
   });
 
   app.setGlobalPrefix('api');

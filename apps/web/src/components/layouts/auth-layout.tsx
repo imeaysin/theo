@@ -1,19 +1,13 @@
-import { Link, Outlet } from "react-router-dom"
-import { env } from "@/config/env"
-import { paths } from "@/config/paths"
+import { AppLogo } from "@workspace/hero-ui"
+import { Outlet } from "react-router-dom"
 
 export function AuthLayout() {
   return (
-    <div className="flex min-h-svh flex-col bg-muted/30">
-      <header className="flex items-center justify-between px-6 py-4">
-        <Link
-          to={paths.home}
-          className="text-sm font-medium text-foreground hover:underline"
-        >
-          {env.appName}
-        </Link>
+    <div className="flex min-h-svh flex-col justify-center">
+      <header className="flex w-full items-center justify-center">
+        <AppLogo />
       </header>
-      <main className="flex flex-1 items-center justify-center px-6 py-10">
+      <main className="flex items-center justify-center px-6 py-10">
         <Outlet />
       </main>
     </div>

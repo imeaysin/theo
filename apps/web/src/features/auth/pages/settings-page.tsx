@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom"
 import { Settings } from "@workspace/hero-ui/better-auth-ui"
 
 /**
@@ -11,6 +12,8 @@ import { Settings } from "@workspace/hero-ui/better-auth-ui"
  * all account and security management features.
  */
 export function SettingsPage() {
+  const location = useLocation()
+
   return (
     <div className="container mx-auto max-w-4xl py-8">
       <div className="mb-8">
@@ -20,7 +23,7 @@ export function SettingsPage() {
         </p>
       </div>
 
-      <Settings />
+      <Settings path={location.pathname} />
     </div>
   )
 }

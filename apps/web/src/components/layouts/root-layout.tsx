@@ -2,6 +2,7 @@ import { Outlet, useNavigate } from "react-router-dom"
 import { authClient } from "@/lib/auth"
 import { AuthProvider } from "@workspace/hero-ui/better-auth-ui"
 import { ThemeProvider } from "@/providers/theme-provider"
+import { paths } from "@/config/paths"
 
 export function RootLayout() {
   const navigate = useNavigate()
@@ -14,6 +15,7 @@ export function RootLayout() {
           navigate(to, { replace })
         }
         socialProviders={["google"]}
+        redirectTo={paths.dashboard}
       >
         <Outlet />
       </AuthProvider>

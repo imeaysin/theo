@@ -52,8 +52,24 @@ export const auth = betterAuth({
       enabled: false,
     },
     useSecureCookies: env.NODE_ENV === "production",
+    defaultCookieAttributes: {
+      sameSite: "lax",
+      secure: env.NODE_ENV === "production",
+      httpOnly: true,
+      path: "/",
+    },
     ipAddress: {
       ipAddressHeaders: ["x-forwarded-for", "x-real-ip"],
+      getIpAddress: (headers: Headers) => {
+        const forwarded = headers.get("x-forwarded-for")
+        if (forwarded) return forwarded.split(",")[0]?.trim()
+
+        const realIp = headers.get("x-real-ip")
+        if (realIp) return realIp
+
+        // Fallback for local development
+        return "127.0.0.1"
+      },
     },
   },
 
@@ -86,7 +102,7 @@ export const auth = betterAuth({
   socialProviders: buildSocialProviders(),
 
   rateLimit: {
-    enabled: true,
+    enabled: env.NODE_ENV === "production",
     window: 60,
     max: 30,
   },

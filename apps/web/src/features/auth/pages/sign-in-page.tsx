@@ -1,5 +1,5 @@
 import { SignIn } from "@workspace/hero-ui/better-auth-ui"
 
 export function SignInPage() {
-  return <SignIn />
+  return <SignIn variant="transparent" />
 }

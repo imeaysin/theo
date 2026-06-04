@@ -59,4 +59,11 @@ export const authRoutes: RouteObject[] = [
       return { Component: TwoFactorPage }
     },
   },
+  {
+    path: paths.auth.signOut,
+    lazy: async () => {
+      const { SignOutPage } = await import("./pages/sign-out-page")
+      return { Component: SignOutPage }
+    },
+  },
 ]

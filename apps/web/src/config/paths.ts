@@ -13,5 +13,6 @@ export const paths = {
     resetPassword: "/reset-password",
     verifyEmail: "/verify-email",
     twoFactor: "/two-factor",
+    signOut: "/auth/sign-out",
   },
 } as const
