@@ -6,11 +6,11 @@ import {
   Link,
   TextField,
   InputGroup,
-  Logo,
   SearchIcon,
   TwitterIcon,
   DiscordIcon,
   GithubIcon,
+  AppLogo,
 } from "@workspace/hero-ui"
 import { appConfig } from "@repo/config/app"
 import clsx from "clsx"
@@ -47,10 +47,7 @@ export const Navbar = () => {
     <nav className="border-separator sticky top-0 z-40 w-full border-b bg-background/70 backdrop-blur-lg">
       <header className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-6">
         <div className="flex items-center gap-4">
-          <a className="flex items-center gap-1" href="/">
-            <Logo />
-            <p className="font-bold text-inherit">ACME</p>
-          </a>
+          <AppLogo />
           <ul className="ml-2 hidden gap-4 lg:flex">
             {siteConfig.navItems.map((item) => (
               <li key={item.href}>
