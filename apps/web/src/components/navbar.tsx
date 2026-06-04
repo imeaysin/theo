@@ -13,11 +13,15 @@ import {
   GithubIcon,
 } from "@workspace/hero-ui"
 import { appConfig } from "@repo/config/app"
-
 import clsx from "clsx"
 
 import { siteConfig } from "@/config/site"
 import { ThemeSwitch } from "@/components/theme-switch"
+import {
+  NavbarAuth,
+  NavbarAuthMobile,
+  MobileMenuAuth,
+} from "@/features/auth/components"
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -91,6 +95,9 @@ export const Navbar = () => {
           </Link>
           <ThemeSwitch />
           <div className="hidden lg:flex">{searchInput}</div>
+
+          {/* Auth UI */}
+          <NavbarAuth />
         </div>
 
         <div className="flex items-center gap-2 sm:hidden">
@@ -103,6 +110,10 @@ export const Navbar = () => {
             <GithubIcon className="text-muted" />
           </Link>
           <ThemeSwitch />
+
+          {/* Mobile Auth UI */}
+          <NavbarAuthMobile />
+
           <button
             aria-expanded={isMenuOpen}
             aria-label="Toggle menu"
@@ -156,6 +167,11 @@ export const Navbar = () => {
                 </Link>
               </li>
             ))}
+
+            {/* Mobile Auth Links */}
+            <li>
+              <MobileMenuAuth />
+            </li>
           </ul>
         </div>
       )}
