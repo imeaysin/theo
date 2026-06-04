@@ -39,7 +39,7 @@ export const auth = betterAuth({
   secret: env.BETTER_AUTH_SECRET,
   baseURL: env.BETTER_AUTH_URL,
   basePath: "/api/auth",
-  trustedOrigins: [env.WEB_URL],
+  trustedOrigins: env.ALLOWED_ORIGINS.split(",").map((origin) => origin.trim()),
 
   database: mongodbAdapter(db, {
     client,
