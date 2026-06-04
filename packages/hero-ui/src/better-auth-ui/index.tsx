@@ -1,7 +1,4 @@
-import * as React from "react"
-import { themePlugin } from "@better-auth-ui/heroui/plugins"
-import { AuthProvider, type AuthProviderProps } from "@better-auth-ui/react"
-import { useTheme } from "@heroui/react"
+export { themePlugin } from "@better-auth-ui/heroui/plugins"
 
 export {
   // Queries

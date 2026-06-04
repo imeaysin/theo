@@ -1,7 +1,10 @@
 import { Outlet, useNavigate } from "react-router-dom"
 import { authClient } from "@/lib/auth"
-import { AuthProvider } from "@workspace/hero-ui/better-auth-ui"
-import { ThemeProvider } from "@/providers/theme-provider"
+import {
+  AuthProvider,
+  themePlugin,
+} from "@workspace/hero-ui/better-auth-ui"
+import { ThemeProvider, useTheme } from "@/providers/theme-provider"
 import { paths } from "@/config/paths"
 
 export function RootLayout() {
@@ -16,6 +19,14 @@ export function RootLayout() {
         }
         socialProviders={["google"]}
         redirectTo={`${window.location.origin}${paths.dashboard}`}
+        plugins={[
+          themePlugin({
+            useTheme: () => {
+              const { theme, setTheme } = useTheme()
+              return { theme, setTheme }
+            },
+          }),
+        ]}
       >
         <Outlet />
       </AuthProvider>

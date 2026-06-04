@@ -2,7 +2,7 @@ import { betterAuth } from "better-auth"
 import { toNodeHandler } from "better-auth/node"
 import { admin } from "better-auth/plugins/admin"
 import { openAPI } from "better-auth/plugins"
-import { twoFactor } from "better-auth/plugins/two-factor"
+
 import { mongodbAdapter } from "better-auth/adapters/mongodb"
 import { MongoClient } from "mongodb"
 import { env } from "@repo/config"
@@ -116,7 +116,6 @@ export const auth = betterAuth({
 
   plugins: [
     admin({ ac, roles: { admin: adminRole, user } }),
-    twoFactor(),
     openAPI(),
   ],
 })

@@ -12,7 +12,7 @@ export const paths = {
     forgotPassword: "/auth/forgot-password",
     resetPassword: "/auth/reset-password",
     verifyEmail: "/auth/verify-email",
-    twoFactor: "/auth/two-factor",
+
     signOut: "/auth/sign-out",
   },
 } as const

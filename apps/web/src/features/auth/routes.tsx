@@ -48,16 +48,10 @@ export const authRoutes: RouteObject[] = [
               return { Component: VerifyEmailPage }
             },
           },
+
         ],
       },
     ],
-  },
-  {
-    path: paths.auth.twoFactor,
-    lazy: async () => {
-      const { TwoFactorPage } = await import("./pages/two-factor-page")
-      return { Component: TwoFactorPage }
-    },
   },
   {
     path: paths.auth.signOut,
