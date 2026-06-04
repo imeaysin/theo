@@ -29,6 +29,11 @@ export function NavbarAuth() {
             href: paths.dashboard,
             visibility: "authenticated",
           },
+          {
+            label: "Settings",
+            href: paths.settings.root,
+            visibility: "authenticated",
+          },
         ]}
       />
     )

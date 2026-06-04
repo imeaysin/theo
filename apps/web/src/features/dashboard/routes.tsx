@@ -17,6 +17,30 @@ export const dashboardRoutes: RouteObject[] = [
               return { Component: DashboardPage }
             },
           },
+          {
+            path: paths.settings.root,
+            lazy: async () => {
+              const { SettingsPage } =
+                await import("@/features/auth/pages/settings-page")
+              return { Component: SettingsPage }
+            },
+          },
+          {
+            path: paths.settings.account,
+            lazy: async () => {
+              const { AccountSettingsPage } =
+                await import("@/features/auth/pages/account-settings-page")
+              return { Component: AccountSettingsPage }
+            },
+          },
+          {
+            path: paths.settings.security,
+            lazy: async () => {
+              const { SecuritySettingsPage } =
+                await import("@/features/auth/pages/security-settings-page")
+              return { Component: SecuritySettingsPage }
+            },
+          },
         ],
       },
     ],
