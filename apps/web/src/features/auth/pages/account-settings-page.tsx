@@ -11,7 +11,7 @@ import { AccountSettings } from "@workspace/hero-ui/better-auth-ui"
  */
 export function AccountSettingsPage() {
   return (
-    <div className="container mx-auto max-w-2xl py-8">
+    <div className="container mx-auto py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Account Settings</h1>
         <p className="mt-2 text-muted">

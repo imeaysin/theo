@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom"
 import { Navbar } from "../navbar"
+import { appConfig } from "@repo/config/app"
 
 export function AppLayout() {
   return (
@@ -16,7 +17,7 @@ export function AppLayout() {
           target="_blank"
         >
           <span className="text-muted">Powered by</span>
-          <p className="text-accent">HeroUI</p>
+          <p className="text-accent">{appConfig.name}</p>
         </a>
       </footer>
     </div>
