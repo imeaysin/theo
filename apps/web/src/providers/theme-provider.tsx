@@ -16,7 +16,7 @@ type Theme = "light" | "dark" | "system"
 
 interface ThemeContextValue {
   theme: Theme
-  setTheme: (theme: string) => void
+  setTheme: (theme: Theme) => void
   resolvedTheme: "light" | "dark"
 }
 
