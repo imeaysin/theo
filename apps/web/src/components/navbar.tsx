@@ -6,7 +6,6 @@ import {
   Link,
   TextField,
   InputGroup,
-  ThemeSwitch,
   Logo,
   SearchIcon,
   TwitterIcon,
@@ -18,6 +17,7 @@ import { appConfig } from "@repo/config/app"
 import clsx from "clsx"
 
 import { siteConfig } from "@/config/site"
+import { ThemeSwitch } from "@/components/theme-switch"
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
