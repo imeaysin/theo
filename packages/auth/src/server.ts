@@ -41,6 +41,13 @@ export const auth = betterAuth({
   basePath: "/api/auth",
   trustedOrigins: env.ALLOWED_ORIGINS.split(",").map((origin) => origin.trim()),
 
+  account: {
+    accountLinking: {
+      enabled: true,
+      trustedProviders: ["google"],
+    },
+  },
+
   database: mongodbAdapter(db, {
     client,
     usePlural: true,

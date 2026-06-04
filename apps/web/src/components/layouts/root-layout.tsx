@@ -15,7 +15,7 @@ export function RootLayout() {
           navigate(to, { replace })
         }
         socialProviders={["google"]}
-        redirectTo={paths.dashboard}
+        redirectTo={`${window.location.origin}${paths.dashboard}`}
       >
         <Outlet />
       </AuthProvider>
