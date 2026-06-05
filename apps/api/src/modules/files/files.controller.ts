@@ -12,6 +12,13 @@ import { ApiOperation, ApiTags, ApiBody, ApiConsumes } from '@nestjs/swagger';
 import { STORAGE } from '@src/modules/storage/storage.module';
 import type { StorageProvider } from '@repo/storage';
 
+interface MulterFile {
+  originalname: string;
+  mimetype: string;
+  size: number;
+  buffer: Buffer;
+}
+
 const ALLOWED_MIME_TYPES = [
   'image/jpeg',
   'image/png',
@@ -42,7 +49,7 @@ export class FilesController {
       },
     },
   })
-  async uploadFile(@UploadedFile() file: Express.Multer.File) {
+  async uploadFile(@UploadedFile() file: MulterFile | undefined) {
     if (!file) {
       throw new BadRequestException('File is required');
     }
