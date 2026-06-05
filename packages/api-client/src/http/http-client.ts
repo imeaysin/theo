@@ -50,9 +50,7 @@ export class HttpClient {
       throw new ApiError(response.status, response.statusText, errorBody)
     }
 
-    if (response.status === 204) {
-      return undefined as T
-    }
+    if (response.status === 204) return undefined as T
 
     return readJsonSafe(response) as Promise<T>
   }
