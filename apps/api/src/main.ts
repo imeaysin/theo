@@ -3,7 +3,7 @@ import { Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { cleanupOpenApiDoc } from 'nestjs-zod';
 import helmet from 'helmet';
-import { static as expressStatic } from 'express';
+import { json, static as expressStatic } from 'express';
 import { AppModule } from './app.module';
 import { connectDb } from '@repo/db';
 import { env } from '@repo/config';
@@ -14,7 +14,10 @@ async function bootstrap() {
   const logger = new Logger('Bootstrap');
   await connectDb(env.MONGODB_URI);
 
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bodyParser: false,
+  });
+  app.use(json({ limit: '10mb' }));
 
   app.use(
     helmet({
