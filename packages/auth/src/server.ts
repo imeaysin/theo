@@ -1,5 +1,6 @@
 import { betterAuth } from "better-auth"
 import { toNodeHandler } from "better-auth/node"
+import { bearer } from "better-auth/plugins"
 import { admin } from "better-auth/plugins/admin"
 import { openAPI } from "better-auth/plugins"
 
@@ -83,10 +84,6 @@ export const auth = betterAuth({
   session: {
     expiresIn: 60 * 60 * 24 * 7,
     updateAge: 60 * 60 * 24,
-    cookieCache: {
-      enabled: true,
-      maxAge: 60 * 5,
-    },
   },
 
   emailAndPassword: {
@@ -115,6 +112,7 @@ export const auth = betterAuth({
   },
 
   plugins: [
+    bearer(),
     admin({ ac, roles: { admin: adminRole, user } }),
     openAPI(),
   ],

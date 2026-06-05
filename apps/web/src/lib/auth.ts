@@ -1,5 +1,4 @@
 import { createAppAuthClient } from "@repo/auth/client"
-import { resolveAuthBaseUrl } from "@repo/config/client"
 
 /**
  * Auth Client Instance
@@ -9,6 +8,4 @@ import { resolveAuthBaseUrl } from "@repo/config/client"
  *
  * This client is only imported by feature-level hooks to configure better-auth-ui.
  */
-export const authClient = createAppAuthClient(
-  resolveAuthBaseUrl(import.meta.env)
-)
+export const authClient = createAppAuthClient(import.meta.env)
