@@ -111,7 +111,7 @@ export class S3StorageProvider implements StorageProvider {
 
   async copy(input: StorageCopyInput): Promise<StorageCopyResult> {
     try {
-      const { CopyObjectResult } = await this.client.send(
+      await this.client.send(
         new CopyObjectCommand({
           Bucket: this.bucket,
           Key: input.destinationPath,

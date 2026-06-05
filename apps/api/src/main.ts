@@ -3,6 +3,7 @@ import { Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { cleanupOpenApiDoc } from 'nestjs-zod';
 import helmet from 'helmet';
+import { static as expressStatic } from 'express';
 import { AppModule } from './app.module';
 import { connectDb } from '@repo/db';
 import { env } from '@repo/config';
@@ -59,6 +60,10 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
     exposedHeaders: ['Set-Cookie'],
   });
+
+  if (env.STORAGE_PROVIDER === 'local') {
+    app.use('/uploads', expressStatic(env.STORAGE_LOCAL_PATH));
+  }
 
   app.setGlobalPrefix('api');
 

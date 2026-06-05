@@ -58,6 +58,15 @@ const buildDefaults = {
   API_URL: "http://localhost:4000",
   APP_NAME: "Theo",
   NODE_ENV: "development",
+  STORAGE_PROVIDER: "local",
+  STORAGE_LOCAL_PATH: "./uploads",
+  STORAGE_LOCAL_URL: "http://localhost:4000/uploads",
+  STORAGE_S3_BUCKET: "",
+  STORAGE_S3_REGION: "",
+  STORAGE_S3_ENDPOINT: "",
+  STORAGE_S3_ACCESS_KEY_ID: "",
+  STORAGE_S3_SECRET_ACCESS_KEY: "",
+  STORAGE_S3_BASE_URL: "",
 } as const
 
 const envSchema = z.object({
@@ -73,6 +82,15 @@ const envSchema = z.object({
   GOOGLE_CLIENT_SECRET: z.string().default(""),
   GITHUB_CLIENT_ID: z.string().default(""),
   GITHUB_CLIENT_SECRET: z.string().default(""),
+  STORAGE_PROVIDER: z.enum(["local", "s3"]).default("local"),
+  STORAGE_LOCAL_PATH: z.string().default("./uploads"),
+  STORAGE_LOCAL_URL: z.string().default("http://localhost:4000/uploads"),
+  STORAGE_S3_BUCKET: z.string().default(""),
+  STORAGE_S3_REGION: z.string().default(""),
+  STORAGE_S3_ENDPOINT: z.string().default(""),
+  STORAGE_S3_ACCESS_KEY_ID: z.string().default(""),
+  STORAGE_S3_SECRET_ACCESS_KEY: z.string().default(""),
+  STORAGE_S3_BASE_URL: z.string().default(""),
   NODE_ENV: z
     .enum(["development", "production", "test"])
     .default("development"),
