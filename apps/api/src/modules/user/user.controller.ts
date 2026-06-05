@@ -9,7 +9,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import {
-  ApiCookieAuth,
+  ApiBearerAuth,
   ApiOperation,
   ApiParam,
   ApiResponse,
@@ -35,10 +35,8 @@ import {
 import type { SessionUser } from '@repo/auth/server';
 import type { IUserDocument } from '@repo/db';
 
-const SESSION_COOKIE = 'theo.session_token';
-
 @ApiTags('Users')
-@ApiCookieAuth(SESSION_COOKIE)
+@ApiBearerAuth()
 @ApiResponses()
 @Controller('users')
 export class UserController {

@@ -12,7 +12,7 @@ export function HomePage() {
       <div className="flex max-w-lg flex-col gap-3">
         <h1 className="text-2xl font-semibold tracking-tight">{env.appName}</h1>
         <p className="text-sm text-muted-foreground">
-          {session
+          {session?.user
             ? `Signed in as ${session.user.email}.`
             : "Sign in to access your dashboard."}
         </p>

@@ -8,8 +8,6 @@ import { AppModule } from './app.module';
 import { connectDb } from '@repo/db';
 import { env } from '@repo/config';
 
-const SESSION_COOKIE = 'theo.session_token';
-
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
   await connectDb(env.MONGODB_URI);
@@ -61,7 +59,7 @@ async function bootstrap() {
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
-    exposedHeaders: ['Set-Cookie'],
+    exposedHeaders: ['Set-Cookie', 'set-auth-token'],
   });
 
   if (env.STORAGE_PROVIDER === 'local') {
@@ -77,11 +75,12 @@ async function bootstrap() {
     )
     .setVersion('1.0')
     .addServer(String(env.API_URL), 'API')
-    .addCookieAuth(SESSION_COOKIE, {
-      type: 'apiKey',
-      in: 'cookie',
-      name: SESSION_COOKIE,
-      description: 'Better Auth session cookie (set after sign-in)',
+    .addBearerAuth({
+      type: 'http',
+      scheme: 'Bearer',
+      bearerFormat: 'Session Token',
+      description:
+        'Bearer token from set-auth-token response header. Alternative to cookie auth.',
     })
     .addTag('Users', 'Authenticated user profile and admin user management')
     .build();

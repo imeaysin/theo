@@ -55,17 +55,6 @@ export const auth = betterAuth({
   }),
 
   advanced: {
-    cookiePrefix: "theo",
-    crossSubDomainCookies: {
-      enabled: false,
-    },
-    useSecureCookies: env.NODE_ENV === "production",
-    defaultCookieAttributes: {
-      sameSite: "lax",
-      secure: env.NODE_ENV === "production",
-      httpOnly: true,
-      path: "/",
-    },
     ipAddress: {
       ipAddressHeaders: ["x-forwarded-for", "x-real-ip"],
       getIpAddress: (headers: Headers) => {
@@ -75,7 +64,6 @@ export const auth = betterAuth({
         const realIp = headers.get("x-real-ip")
         if (realIp) return realIp
 
-        // Fallback for local development
         return "127.0.0.1"
       },
     },

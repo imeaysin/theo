@@ -58,12 +58,19 @@ export async function createTestSession(userOverrides: TestUserOverrides = {}) {
     session: sessionData,
     sessionToken: token,
     authHeaders: mockAuthHeaders(token),
+    bearerHeaders: mockBearerHeaders(token),
   }
 }
 
 export function mockAuthHeaders(sessionToken: string): Record<string, string> {
   return {
-    Cookie: `theo.session_token=${sessionToken}`,
+    Cookie: `better-auth.session_token=${sessionToken}`,
+  }
+}
+
+export function mockBearerHeaders(sessionToken: string): Record<string, string> {
+  return {
+    Authorization: `Bearer ${sessionToken}`,
   }
 }
 
