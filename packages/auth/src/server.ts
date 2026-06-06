@@ -11,6 +11,7 @@ import { sendVerificationEmail, sendResetPasswordEmail } from "@repo/email"
 import type { IncomingHttpHeaders } from "http"
 import { ac, admin as adminRole, user } from "./permissions"
 import { nodeHeadersToWebHeaders } from "@repo/utils"
+import { autoAdminHook } from "./bootstrap-admin"
 
 const client = new MongoClient(env.MONGODB_URI)
 const db = client.db()
@@ -77,7 +78,7 @@ export const auth = betterAuth({
 
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: env.NODE_ENV !== "test",
+    requireEmailVerification: env.NODE_ENV === "production",
     minPasswordLength: 8,
     maxPasswordLength: 128,
     sendResetPassword: async ({ user: resetUser, url }) => {
@@ -100,6 +101,10 @@ export const auth = betterAuth({
     enabled: env.NODE_ENV === "production",
     window: 60,
     max: 30,
+  },
+
+  hooks: {
+    after: autoAdminHook,
   },
 
   plugins: [
