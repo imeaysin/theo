@@ -14,4 +14,12 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ["better-auth"],
   },
+  server: {
+    proxy: {
+      "/api/auth": {
+        target: "http://localhost:4000",
+        changeOrigin: true,
+      },
+    },
+  },
 })

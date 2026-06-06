@@ -51,7 +51,7 @@ const buildDefaults = {
   MONGODB_URI: "mongodb://localhost:27017/dummy",
   BETTER_AUTH_SECRET:
     "j6K#v9$e8f7037b453c8a6b455a6fe9cc7e5d1438af032e3bf8731affcea1e9967481d7!z8*Nq5&W3tY7uB9xCcE1",
-  BETTER_AUTH_URL: "http://localhost:4000",
+  BETTER_AUTH_URL: "http://localhost:5173",
   RESEND_API_KEY: "re_123456789",
   CLIENT_URL: "http://localhost:5173",
   ALLOWED_ORIGINS: "http://localhost:3000,http://localhost:5173",

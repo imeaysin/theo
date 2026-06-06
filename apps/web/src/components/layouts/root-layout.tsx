@@ -20,6 +20,11 @@ export function RootLayout() {
         emailAndPassword={{
           requireEmailVerification: true,
         }}
+        localization={{
+          auth: {
+            verifyYourEmail: "Check your email for the verification link",
+          },
+        }}
       >
         <Outlet />
       </AuthProvider>

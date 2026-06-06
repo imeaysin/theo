@@ -6,7 +6,7 @@ import { ResetPasswordEmail } from "./templates/reset-password"
 
 export const resend = new Resend(env.RESEND_API_KEY)
 
-const FROM_ADDRESS = `${env.APP_NAME} <no-reply@yourdomain.com>`
+const FROM_ADDRESS = `${env.APP_NAME} <no-reply@${new URL(env.CLIENT_URL).hostname}>`
 
 export async function sendWelcomeEmail(to: string, name: string) {
   return resend.emails.send({
