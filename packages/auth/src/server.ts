@@ -10,6 +10,7 @@ import { env } from "@repo/config"
 import { sendVerificationEmail, sendResetPasswordEmail } from "@repo/email"
 import type { IncomingHttpHeaders } from "http"
 import { ac, admin as adminRole, user } from "./permissions"
+import { nodeHeadersToWebHeaders } from "@repo/utils"
 
 const client = new MongoClient(env.MONGODB_URI)
 const db = client.db()
@@ -120,9 +121,5 @@ export type SessionData = Session["session"]
 export async function getSessionFromHeaders(
   nodeHeaders: IncomingHttpHeaders
 ): Promise<typeof auth.$Infer.Session | null> {
-  const headers = new Headers()
-  for (const [key, val] of Object.entries(nodeHeaders)) {
-    if (val) headers.set(key, Array.isArray(val) ? (val[0] ?? "") : val)
-  }
-  return auth.api.getSession({ headers })
+  return auth.api.getSession({ headers: nodeHeadersToWebHeaders(nodeHeaders) })
 }

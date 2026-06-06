@@ -32,6 +32,7 @@
     "@repo/config": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/email": "workspace:*",
+    "@repo/utils": "workspace:*",
     "better-auth": "^1.6.13",
     "mongodb": "^7.2.0",
     "zod": "^4.4.3"

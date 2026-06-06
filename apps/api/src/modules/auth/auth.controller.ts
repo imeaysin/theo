@@ -10,6 +10,7 @@ import { Public } from '@src/decorators/public.decorator';
 export class AuthController {
   @All('*path')
   handleAuth(@Req() req: Request, @Res() res: Response): Promise<void> {
+    req.url = req.originalUrl;
     return new Promise((resolve, reject) => {
       res.once('finish', resolve);
       res.once('error', reject);

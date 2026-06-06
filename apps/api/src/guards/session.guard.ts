@@ -9,13 +9,8 @@ import { getSessionFromHeaders } from '@repo/auth/server';
 import type { Request } from 'express';
 import { IS_PUBLIC_KEY } from '@src/decorators/public.decorator';
 
-/**
- * Global authentication guard.
- * Validates the session via better-auth and populates req.user / req.session.
- * Routes decorated with @Public() bypass this guard.
- */
 @Injectable()
-export class BetterAuthGuard implements CanActivate {
+export class SessionGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   async canActivate(ctx: ExecutionContext): Promise<boolean> {
@@ -24,9 +19,7 @@ export class BetterAuthGuard implements CanActivate {
       ctx.getClass(),
     ]);
 
-    if (isPublic) {
-      return true;
-    }
+    if (isPublic) return true;
 
     const req = ctx.switchToHttp().getRequest<Request>();
     const session = await getSessionFromHeaders(req.headers);

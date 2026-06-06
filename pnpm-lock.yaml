@@ -303,37 +303,6 @@ importers:
         specifier: ^4.1.6
         version: 4.1.7(@types/node@20.19.41)(jsdom@27.4.0(@noble/hashes@2.2.0))(msw@2.14.6(@types/node@20.19.41)(typescript@5.9.3))(vite@8.0.14(@types/node@20.19.41)(esbuild@0.27.7)(jiti@2.7.0)(terser@5.48.0))
 
-  packages/api-client:
-    dependencies:
-      '@repo/contracts':
-        specifier: workspace:*
-        version: link:../contracts
-      zod:
-        specifier: ^4.4.3
-        version: 4.4.3
-    devDependencies:
-      '@workspace/eslint-config':
-        specifier: workspace:*
-        version: link:../../tooling/eslint-config
-      '@workspace/typescript-config':
-        specifier: workspace:*
-        version: link:../../tooling/typescript-config
-      '@workspace/vitest-config':
-        specifier: workspace:*
-        version: link:../../tooling/vitest-config
-      eslint:
-        specifier: ^9.17.0
-        version: 9.39.4(jiti@2.7.0)
-      tsup:
-        specifier: ^8.5.1
-        version: 8.5.1(jiti@2.7.0)(postcss@8.5.15)(typescript@5.9.3)
-      typescript:
-        specifier: 5.9.3
-        version: 5.9.3
-      vitest:
-        specifier: ^4.1.6
-        version: 4.1.7(@types/node@25.9.1)(jsdom@27.4.0(@noble/hashes@2.2.0))(msw@2.14.6(@types/node@25.9.1)(typescript@5.9.3))(vite@8.0.14(@types/node@25.9.1)(esbuild@0.27.7)(jiti@2.7.0)(terser@5.48.0))
-
   packages/auth:
     dependencies:
       '@repo/config':
@@ -345,6 +314,9 @@ importers:
       '@repo/email':
         specifier: workspace:*
         version: link:../email
+      '@repo/utils':
+        specifier: workspace:*
+        version: link:../utils
       better-auth:
         specifier: ^1.6.13
         version: 1.6.13(mongodb@7.2.0)(next@16.2.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vitest@4.1.7(@types/node@25.9.1)(jsdom@27.4.0(@noble/hashes@2.2.0))(msw@2.14.6(@types/node@25.9.1)(typescript@5.9.3))(vite@8.0.14(@types/node@25.9.1)(esbuild@0.27.7)(jiti@2.7.0)(terser@5.48.0)))
@@ -567,6 +539,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      lucide-react:
+        specifier: ^1.17.0
+        version: 1.17.0(react@19.2.7)
       react:
         specifier: 'catalog:'
         version: 19.2.7
