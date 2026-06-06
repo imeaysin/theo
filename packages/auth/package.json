@@ -17,6 +17,10 @@
     "./client": {
       "types": "./src/client.ts",
       "default": "./src/client.ts"
+    },
+    "./expo-client": {
+      "types": "./src/expo-client.ts",
+      "default": "./src/expo-client.ts"
     }
   },
   "scripts": {
@@ -29,19 +33,20 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@better-auth/expo": "^1.6.14",
     "@repo/config": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/email": "workspace:*",
     "@repo/utils": "workspace:*",
-    "better-auth": "^1.6.13",
+    "better-auth": "^1.6.14",
     "mongodb": "^7.2.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@types/node": "^25.9.1",
     "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
     "@workspace/vitest-config": "workspace:*",
-    "@types/node": "^25.9.1",
     "eslint": "^9.17.0",
     "tsup": "^8.5.1",
     "typescript": "5.9.3",

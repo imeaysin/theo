@@ -1,8 +1,8 @@
 import { betterAuth } from "better-auth"
 import { toNodeHandler } from "better-auth/node"
-import { bearer } from "better-auth/plugins"
 import { admin } from "better-auth/plugins/admin"
 import { openAPI } from "better-auth/plugins"
+import { expo } from "@better-auth/expo"
 
 import { mongodbAdapter } from "better-auth/adapters/mongodb"
 import { MongoClient } from "mongodb"
@@ -41,7 +41,7 @@ export const auth = betterAuth({
   secret: env.BETTER_AUTH_SECRET,
   baseURL: env.BETTER_AUTH_URL,
   basePath: "/api/auth",
-  trustedOrigins: env.ALLOWED_ORIGINS.split(",").map((origin) => origin.trim()),
+  trustedOrigins: env.ALLOWED_ORIGINS.split(",").map((origin) => origin.trim()).concat(["acme://"]),
 
   account: {
     accountLinking: {
@@ -103,9 +103,9 @@ export const auth = betterAuth({
   },
 
   plugins: [
-    bearer(),
     admin({ ac, roles: { admin: adminRole, user }, defaultRole: "user" }),
     openAPI(),
+    expo(),
   ],
 })
 

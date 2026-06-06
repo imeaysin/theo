@@ -2,8 +2,10 @@
 
 | Import              | Use                                                                      |
 | ------------------- | ------------------------------------------------------------------------ |
+| `@repo/auth`        | Main export: `auth`, `authClient`                                      |
 | `@repo/auth/server` | Nest — `auth`, `authHandler`, `getSessionFromHeaders`, **session types** |
-| `@repo/auth/client` | `createAppAuthClient(baseURL)` — web/mobile                              |
+| `@repo/auth/client` | Web — `createAppAuthClient(baseURL)`                             |
+| `@repo/auth/expo-client` | Mobile — `createExpoAuthClient(baseURL)`                      |
 | `@repo/auth`        | Permissions (`ac`, `admin`, `user`) + re-exported session types          |
 
 ## Types (Better Auth)

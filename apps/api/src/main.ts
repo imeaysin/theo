@@ -59,7 +59,7 @@ async function bootstrap() {
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
-    exposedHeaders: ['Set-Cookie', 'set-auth-token'],
+    exposedHeaders: ['Set-Cookie'],
   });
 
   if (env.STORAGE_PROVIDER === 'local') {
@@ -75,13 +75,6 @@ async function bootstrap() {
     )
     .setVersion('1.0')
     .addServer(String(env.API_URL), 'API')
-    .addBearerAuth({
-      type: 'http',
-      scheme: 'Bearer',
-      bearerFormat: 'Session Token',
-      description:
-        'Bearer token from set-auth-token response header. Alternative to cookie auth.',
-    })
     .addTag('Users', 'Authenticated user profile and admin user management')
     .build();
 
