@@ -11,10 +11,10 @@ export default defineConfig((options) => ({
   minify: false,
   external: [
     "mongodb",
-    "@repo/permission-manager",
-    "@repo/config",
-    "@repo/db",
-    "@repo/email",
+    "@workspace/permission-manager",
+    "@workspace/config",
+    "@workspace/db",
+    "@workspace/email",
     "better-auth",
   ],
 }))

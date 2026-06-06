@@ -1,5 +1,5 @@
 import { Resend } from "resend"
-import { env } from "@repo/config"
+import { env } from "@workspace/config"
 import { WelcomeEmail } from "./templates/welcome"
 import { VerificationEmail } from "./templates/verification-email"
 import { ResetPasswordEmail } from "./templates/reset-password"

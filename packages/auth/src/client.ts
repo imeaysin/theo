@@ -1,5 +1,5 @@
 import { createAuthClient } from "better-auth/react"
-import { parseClientPublicEnv } from "@repo/config/client"
+import { parseClientPublicEnv } from "@workspace/config/client"
 import { authClientPlugins } from "./plugins/client"
 
 export function createAppAuthClient(

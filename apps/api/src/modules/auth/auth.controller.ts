@@ -1,6 +1,6 @@
 import { All, Controller, Req, Res } from '@nestjs/common';
 import { ApiExcludeController } from '@nestjs/swagger';
-import { authHandler } from '@repo/auth/server';
+import { authHandler } from '@workspace/auth/server';
 import type { Request, Response } from 'express';
 import { Public } from '@src/decorators/public.decorator';
 

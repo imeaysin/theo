@@ -1,5 +1,5 @@
-import { getPermissions, getHierarchy } from "./config.js"
-import type { Permission } from "./types.js"
+import { getPermissions, getHierarchy } from "./config"
+import type { Permission } from "./types"
 
 type ResourceMap = Record<string, string[]>
 

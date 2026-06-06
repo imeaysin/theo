@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { getSessionFromHeaders } from '@repo/auth/server';
+import { getSessionFromHeaders } from '@workspace/auth/server';
 import type { Request } from 'express';
 import { IS_PUBLIC_KEY } from '@src/decorators/public.decorator';
 

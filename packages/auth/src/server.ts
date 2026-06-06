@@ -6,11 +6,11 @@ import { expo } from "@better-auth/expo"
 
 import { mongodbAdapter } from "better-auth/adapters/mongodb"
 import { MongoClient } from "mongodb"
-import { env } from "@repo/config"
-import { sendVerificationEmail, sendResetPasswordEmail } from "@repo/email"
+import { env } from "@workspace/config"
+import { sendVerificationEmail, sendResetPasswordEmail } from "@workspace/email"
 import type { IncomingHttpHeaders } from "http"
 import { ac, admin as adminRole, user } from "./authorization"
-import { nodeHeadersToWebHeaders } from "@repo/utils"
+import { nodeHeadersToWebHeaders } from "@workspace/utils"
 import { autoAdminHook } from "./bootstrap-admin"
 
 const client = new MongoClient(env.MONGODB_URI)

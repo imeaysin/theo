@@ -1,5 +1,5 @@
 {
-  "name": "@repo/storage",
+  "name": "@workspace/storage",
   "version": "0.0.0",
   "type": "module",
   "private": true,

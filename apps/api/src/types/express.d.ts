@@ -1,4 +1,4 @@
-import type { SessionUser, SessionData } from '@repo/auth/server';
+import type { SessionUser, SessionData } from '@workspace/auth/server';
 
 declare global {
   namespace Express {

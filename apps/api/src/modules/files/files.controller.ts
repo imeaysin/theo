@@ -10,7 +10,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiTags, ApiBody, ApiConsumes } from '@nestjs/swagger';
 import { STORAGE } from '@src/modules/storage/storage.module';
-import type { StorageProvider } from '@repo/storage';
+import type { StorageProvider } from '@workspace/storage';
 
 const ALLOWED_MIME_TYPES = [
   'image/jpeg',

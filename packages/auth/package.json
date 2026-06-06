@@ -1,5 +1,5 @@
 {
-  "name": "@repo/auth",
+  "name": "@workspace/auth",
   "version": "0.0.0",
   "type": "module",
   "private": true,
@@ -34,11 +34,11 @@
   },
   "dependencies": {
     "@better-auth/expo": "^1.6.14",
-    "@repo/permission-manager": "workspace:*",
-    "@repo/config": "workspace:*",
-    "@repo/db": "workspace:*",
-    "@repo/email": "workspace:*",
-    "@repo/utils": "workspace:*",
+    "@workspace/permission-manager": "workspace:*",
+    "@workspace/config": "workspace:*",
+    "@workspace/db": "workspace:*",
+    "@workspace/email": "workspace:*",
+    "@workspace/utils": "workspace:*",
     "better-auth": "^1.6.14",
     "mongodb": "^7.2.0",
     "zod": "^4.4.3"

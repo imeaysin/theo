@@ -5,8 +5,8 @@ import { cleanupOpenApiDoc } from 'nestjs-zod';
 import helmet from 'helmet';
 import { json, static as expressStatic } from 'express';
 import { AppModule } from './app.module';
-import { connectDb } from '@repo/db';
-import { env } from '@repo/config';
+import { connectDb } from '@workspace/db';
+import { env } from '@workspace/config';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');

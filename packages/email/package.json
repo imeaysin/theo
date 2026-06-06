@@ -1,5 +1,5 @@
 {
-  "name": "@repo/email",
+  "name": "@workspace/email",
   "version": "0.0.0",
   "type": "module",
   "private": true,
@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@react-email/render": "^2.0.8",
-    "@repo/config": "workspace:*",
+    "@workspace/config": "workspace:*",
     "react": "catalog:",
     "resend": "^6.12.3"
   },

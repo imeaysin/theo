@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom"
 import { Navbar } from "../navbar"
-import { appConfig } from "@repo/config/app"
+import { appConfig } from "@workspace/config/app"
 
 export function AppLayout() {
   return (

@@ -1,6 +1,6 @@
 import { Card } from "@workspace/hero-ui"
 import { useAuthSession } from "@/features/auth/hooks"
-import { useCan } from "@repo/permission-manager/react"
+import { useCan } from "@workspace/permission-manager/react"
 
 export function AdminDashboardPage() {
   const { session } = useAuthSession()

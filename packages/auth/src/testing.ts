@@ -1,5 +1,5 @@
 import { auth } from "./server"
-import { UserModel, type IUserDocument } from "@repo/db"
+import { UserModel, type IUserDocument } from "@workspace/db"
 
 export interface TestUserOverrides extends Partial<IUserDocument> {
   password?: string

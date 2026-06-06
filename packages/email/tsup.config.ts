@@ -8,5 +8,5 @@ export default defineConfig((options) => ({
   splitting: false,
   sourcemap: true,
   minify: false,
-  external: ["react", "@repo/config"],
+  external: ["react", "@workspace/config"],
 }))

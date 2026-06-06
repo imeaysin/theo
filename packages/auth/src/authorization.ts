@@ -1,5 +1,5 @@
 import { createAccessControl } from "better-auth/plugins/access"
-import { statement, rolePermissions } from "@repo/permission-manager"
+import { statement, rolePermissions } from "@workspace/permission-manager"
 
 const ac = createAccessControl(statement)
 

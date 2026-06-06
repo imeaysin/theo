@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom"
 import { paths } from "@/config/paths"
 import { useAuthSession } from "@/features/auth/hooks"
-import { useCan } from "@repo/permission-manager/react"
+import { useCan } from "@workspace/permission-manager/react"
 
 export function AdminLayout() {
   const { session } = useAuthSession()

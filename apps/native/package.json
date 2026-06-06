@@ -4,8 +4,8 @@
   "main": "expo-router/entry",
   "dependencies": {
     "@better-auth/expo": "^1.6.14",
-    "@repo/auth": "workspace:*",
-    "@repo/config": "workspace:*",
+    "@workspace/auth": "workspace:*",
+    "@workspace/config": "workspace:*",
     "better-auth": "^1.6.14",
     "expo": "^56.0.4",
     "expo-network": "^56.0.5",

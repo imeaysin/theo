@@ -1,6 +1,6 @@
 import { createAuthMiddleware } from "better-auth/api"
 import type { UserWithRole } from "better-auth/plugins/admin"
-import { env } from "@repo/config"
+import { env } from "@workspace/config"
 
 export const autoAdminHook = createAuthMiddleware(async (ctx) => {
   if (ctx.path !== "/sign-up/email") return

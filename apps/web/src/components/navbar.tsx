@@ -12,7 +12,7 @@ import {
   GithubIcon,
   AppLogo,
 } from "@workspace/hero-ui"
-import { appConfig } from "@repo/config/app"
+import { appConfig } from "@workspace/config/app"
 import clsx from "clsx"
 
 import { siteConfig } from "@/config/site"

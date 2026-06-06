@@ -1,4 +1,4 @@
-import type { Policy, PolicyContext, PolicyResult } from "./policy.js"
+import type { Policy, PolicyContext, PolicyResult } from "./policy"
 
 export class PolicyGroup {
   constructor(

@@ -1,7 +1,7 @@
 import { Global, Module } from '@nestjs/common';
-import { createStorage } from '@repo/storage';
-import { env } from '@repo/config';
-import type { StorageProvider, StorageConfig } from '@repo/storage';
+import { createStorage } from '@workspace/storage';
+import { env } from '@workspace/config';
+import type { StorageProvider, StorageConfig } from '@workspace/storage';
 
 export const STORAGE = 'STORAGE';
 

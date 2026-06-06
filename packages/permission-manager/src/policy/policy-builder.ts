@@ -1,5 +1,5 @@
-import type { Policy } from "./policy.js"
-import { PolicyGroup } from "./policy-group.js"
+import type { Policy } from "./policy"
+import { PolicyGroup } from "./policy-group"
 
 export class PolicyBuilder {
   private readonly policies: Policy[] = []

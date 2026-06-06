@@ -2,7 +2,7 @@ import { Navigate, Outlet, useLocation } from "react-router-dom"
 import { Spinner } from "@workspace/hero-ui"
 import { paths } from "@/config/paths"
 import { useAuthSession } from "@/features/auth/hooks"
-import { useCan } from "@repo/permission-manager/react"
+import { useCan } from "@workspace/permission-manager/react"
 
 export function AdminRoute() {
   const location = useLocation()

@@ -1,1 +1,1 @@
-export { useCan } from "./use-can.js"
+export { useCan } from "./use-can"

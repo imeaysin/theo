@@ -2,13 +2,13 @@ export {
   statement,
   rolePermissions,
   roleHierarchy,
-} from "./permissions/config.js"
-export type { PermissionStatement } from "./permissions/config.js"
-export type { Permission } from "./permissions/types.js"
-export { hasPermission } from "./permissions/has-permission.js"
-export { PermissionManager } from "./permissions/permission-manager.js"
+} from "./permissions/config"
+export type { PermissionStatement } from "./permissions/config"
+export type { Permission } from "./permissions/types"
+export { hasPermission } from "./permissions/has-permission"
+export { PermissionManager } from "./permissions/permission-manager"
 
-export { Policy } from "./policy/policy.js"
-export type { PolicyContext, PolicyResult } from "./policy/policy.js"
-export { PolicyGroup } from "./policy/policy-group.js"
-export { PolicyBuilder } from "./policy/policy-builder.js"
+export { Policy } from "./policy/policy"
+export type { PolicyContext, PolicyResult } from "./policy/policy"
+export { PolicyGroup } from "./policy/policy-group"
+export { PolicyBuilder } from "./policy/policy-builder"

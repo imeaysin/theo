@@ -1,4 +1,4 @@
-import { Policy, PolicyContext, PolicyResult } from "../policy.js"
+import { Policy, PolicyContext, PolicyResult } from "../policy"
 
 export class BlockedEmailPolicy extends Policy {
   constructor() {

@@ -5,9 +5,9 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { PERMISSIONS_KEY } from '@repo/permission-manager/nestjs';
-import { hasPermission } from '@repo/permission-manager';
-import type { Permission } from '@repo/permission-manager/nestjs';
+import { PERMISSIONS_KEY } from '@workspace/permission-manager/nestjs';
+import { hasPermission } from '@workspace/permission-manager';
+import type { Permission } from '@workspace/permission-manager/nestjs';
 import type { Request } from 'express';
 
 @Injectable()

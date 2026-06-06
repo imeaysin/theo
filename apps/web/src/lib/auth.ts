@@ -1,4 +1,4 @@
-import { createAppAuthClient } from "@repo/auth/client"
+import { createAppAuthClient } from "@workspace/auth/client"
 
 /**
  * Auth Client Instance
