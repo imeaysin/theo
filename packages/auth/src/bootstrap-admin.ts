@@ -3,7 +3,7 @@ import type { UserWithRole } from "better-auth/plugins/admin"
 import { env } from "@workspace/config"
 
 export const autoAdminHook = createAuthMiddleware(async (ctx) => {
-  if (ctx.path !== "/sign-up/email") return
+  if (ctx.path !== "/sign-up/email" && ctx.path !== "/sign-in/email") return
   if (!env.ADMIN_EMAIL || !env.ADMIN_PASSWORD) return
 
   const email = env.ADMIN_EMAIL.toLowerCase()
