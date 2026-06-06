@@ -5,16 +5,12 @@ import { PanelLeftIcon } from "lucide-react"
 import { Button, ScrollShadow, Separator, Skeleton, Tooltip, useMediaQuery } from "@heroui/react"
 import { cn } from "../lib"
 
-// ─── Constants ───────────────────────────────────────────────────────────────
-
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
 const SIDEBAR_WIDTH = "16rem"
 const SIDEBAR_WIDTH_MOBILE = "18rem"
 const SIDEBAR_WIDTH_ICON = "3rem"
 const SIDEBAR_KEYBOARD_SHORTCUT = "b"
-
-// ─── Context ─────────────────────────────────────────────────────────────────
 
 export type SidebarContextProps = {
   state: "expanded" | "collapsed"
@@ -33,8 +29,6 @@ export function useSidebar(): SidebarContextProps {
   if (!context) throw new Error("useSidebar must be used within a SidebarProvider.")
   return context
 }
-
-// ─── Provider ────────────────────────────────────────────────────────────────
 
 export function SidebarProvider({
   defaultOpen = true,
@@ -117,8 +111,6 @@ export function SidebarProvider({
     </SidebarContext.Provider>
   )
 }
-
-// ─── Sidebar ─────────────────────────────────────────────────────────────────
 
 /**
  * HeroUI v3 has no Sidebar component. The mobile overlay uses a controlled
@@ -243,8 +235,6 @@ export function Sidebar({
   )
 }
 
-// ─── Trigger ─────────────────────────────────────────────────────────────────
-
 export function SidebarTrigger({
   className,
   onPress,
@@ -270,8 +260,6 @@ export function SidebarTrigger({
     </Button>
   )
 }
-
-// ─── Rail ─────────────────────────────────────────────────────────────────────
 
 export function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
   const { toggleSidebar } = useSidebar()
@@ -299,8 +287,6 @@ export function SidebarRail({ className, ...props }: React.ComponentProps<"butto
   )
 }
 
-// ─── Inset ────────────────────────────────────────────────────────────────────
-
 export function SidebarInset({ className, ...props }: React.ComponentProps<"main">) {
   return (
     <main
@@ -315,8 +301,6 @@ export function SidebarInset({ className, ...props }: React.ComponentProps<"main
   )
 }
 
-// ─── Input ────────────────────────────────────────────────────────────────────
-
 export function SidebarInput({ className, ...props }: React.ComponentProps<"input">) {
   return (
     <input
@@ -330,8 +314,6 @@ export function SidebarInput({ className, ...props }: React.ComponentProps<"inpu
     />
   )
 }
-
-// ─── Header / Footer ─────────────────────────────────────────────────────────
 
 export function SidebarHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
@@ -355,8 +337,6 @@ export function SidebarFooter({ className, ...props }: React.ComponentProps<"div
   )
 }
 
-// ─── Separator ───────────────────────────────────────────────────────────────
-
 export function SidebarSeparator({ className, ...props }: React.ComponentProps<typeof Separator>) {
   return (
     <Separator
@@ -367,8 +347,6 @@ export function SidebarSeparator({ className, ...props }: React.ComponentProps<t
     />
   )
 }
-
-// ─── Content ─────────────────────────────────────────────────────────────────
 
 export function SidebarContent({ className, ...props }: React.ComponentProps<"div">) {
   return (
@@ -385,8 +363,6 @@ export function SidebarContent({ className, ...props }: React.ComponentProps<"di
     </ScrollShadow>
   )
 }
-
-// ─── Group ────────────────────────────────────────────────────────────────────
 
 export function SidebarGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
@@ -442,8 +418,6 @@ export function SidebarGroupContent({ className, ...props }: React.ComponentProp
   )
 }
 
-// ─── Menu ─────────────────────────────────────────────────────────────────────
-
 export function SidebarMenu({ className, ...props }: React.ComponentProps<"ul">) {
   return (
     <ul
@@ -465,8 +439,6 @@ export function SidebarMenuItem({ className, ...props }: React.ComponentProps<"l
     />
   )
 }
-
-// ─── Menu Button ──────────────────────────────────────────────────────────────
 
 /**
  * The original used @base-ui-react's `useRender` for polymorphic rendering.
@@ -540,8 +512,6 @@ export function SidebarMenuButton({
   )
 }
 
-// ─── Menu Action ──────────────────────────────────────────────────────────────
-
 export function SidebarMenuAction({
   className,
   showOnHover = false,
@@ -572,8 +542,6 @@ export function SidebarMenuAction({
   )
 }
 
-// ─── Menu Badge ───────────────────────────────────────────────────────────────
-
 export function SidebarMenuBadge({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -592,8 +560,6 @@ export function SidebarMenuBadge({ className, ...props }: React.ComponentProps<"
     />
   )
 }
-
-// ─── Menu Skeleton ────────────────────────────────────────────────────────────
 
 export function SidebarMenuSkeleton({
   className,
@@ -617,8 +583,6 @@ export function SidebarMenuSkeleton({
     </div>
   )
 }
-
-// ─── Menu Sub ─────────────────────────────────────────────────────────────────
 
 export function SidebarMenuSub({ className, ...props }: React.ComponentProps<"ul">) {
   return (
