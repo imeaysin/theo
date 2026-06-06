@@ -15,4 +15,9 @@ export const paths = {
 
     signOut: "/auth/sign-out",
   },
+  admin: {
+    dashboard: "/admin",
+    users: "/admin/users",
+    settings: "/admin/settings",
+  },
 } as const

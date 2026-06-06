@@ -16,6 +16,7 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@repo/auth": "workspace:*",
+    "@repo/permission-manager": "workspace:*",
     "@repo/config": "workspace:*",
     "@repo/contracts": "workspace:*",
     "@tanstack/react-query": "^5.90.21",

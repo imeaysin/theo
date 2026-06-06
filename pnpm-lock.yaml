@@ -65,6 +65,9 @@ importers:
       '@repo/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@repo/permission-manager':
+        specifier: workspace:*
+        version: link:../../packages/permission-manager
       '@repo/storage':
         specifier: workspace:*
         version: link:../../packages/storage
@@ -293,6 +296,9 @@ importers:
       '@repo/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
+      '@repo/permission-manager':
+        specifier: workspace:*
+        version: link:../../packages/permission-manager
       '@tanstack/react-query':
         specifier: ^5.90.21
         version: 5.100.14(react@19.2.7)
@@ -378,6 +384,9 @@ importers:
       '@repo/email':
         specifier: workspace:*
         version: link:../email
+      '@repo/permission-manager':
+        specifier: workspace:*
+        version: link:../permission-manager
       '@repo/utils':
         specifier: workspace:*
         version: link:../utils
@@ -639,6 +648,28 @@ importers:
         version: 9.39.4(jiti@2.7.0)
       typescript:
         specifier: ^5
+        version: 5.9.3
+
+  packages/permission-manager:
+    dependencies:
+      '@nestjs/common':
+        specifier: ^11.0.0
+        version: 11.1.24(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      react:
+        specifier: ^19.0.0
+        version: 19.2.3
+    devDependencies:
+      '@workspace/eslint-config':
+        specifier: workspace:*
+        version: link:../../tooling/eslint-config
+      '@workspace/typescript-config':
+        specifier: workspace:*
+        version: link:../../tooling/typescript-config
+      eslint:
+        specifier: ^9.17.0
+        version: 9.39.4(jiti@2.7.0)
+      typescript:
+        specifier: 5.9.3
         version: 5.9.3
 
   packages/storage:

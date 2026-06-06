@@ -9,7 +9,7 @@ import { MongoClient } from "mongodb"
 import { env } from "@repo/config"
 import { sendVerificationEmail, sendResetPasswordEmail } from "@repo/email"
 import type { IncomingHttpHeaders } from "http"
-import { ac, admin as adminRole, user } from "./permissions"
+import { ac, admin as adminRole, user } from "./authorization"
 import { nodeHeadersToWebHeaders } from "@repo/utils"
 import { autoAdminHook } from "./bootstrap-admin"
 

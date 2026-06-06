@@ -1,0 +1,44 @@
+{
+  "name": "@repo/permission-manager",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./react": {
+      "types": "./src/integrations/react/index.ts",
+      "default": "./src/integrations/react/index.ts"
+    },
+    "./nestjs": {
+      "types": "./src/integrations/nestjs/index.ts",
+      "default": "./src/integrations/nestjs/index.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --max-warnings 0",
+    "format": "prettier --write \"**/*.{ts,tsx}\""
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
+    "eslint": "^9.17.0",
+    "typescript": "5.9.3"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^11.0.0",
+    "react": "^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@nestjs/common": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    }
+  }
+}
