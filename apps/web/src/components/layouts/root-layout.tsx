@@ -1,6 +1,7 @@
 import { Outlet, useNavigate } from "react-router-dom"
 import { authClient } from "@/lib/auth"
 import { AuthProvider } from "@workspace/hero-ui/better-auth-ui"
+import { Toast } from "@workspace/hero-ui"
 import { ThemeProvider } from "@/providers/theme-provider"
 import { paths } from "@/config/paths"
 
@@ -16,9 +17,14 @@ export function RootLayout() {
         }
         socialProviders={["google"]}
         redirectTo={paths.dashboard}
+        emailAndPassword={{
+          requireEmailVerification: true,
+        }}
       >
         <Outlet />
       </AuthProvider>
+
+      <Toast.Provider />
     </ThemeProvider>
   )
 }
