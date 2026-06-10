@@ -42,7 +42,9 @@ export const auth = betterAuth({
   secret: env.BETTER_AUTH_SECRET,
   baseURL: env.BETTER_AUTH_URL,
   basePath: "/api/auth",
-  trustedOrigins: env.ALLOWED_ORIGINS.split(",").map((origin) => origin.trim()).concat(["acme://"]),
+  trustedOrigins: env.ALLOWED_ORIGINS.split(",")
+    .map((origin) => origin.trim())
+    .concat(["acme://"]),
 
   account: {
     accountLinking: {

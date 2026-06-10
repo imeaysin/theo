@@ -1,8 +1,4 @@
-export {
-  statement,
-  rolePermissions,
-  roleHierarchy,
-} from "./permissions/config"
+export { statement, rolePermissions, roleHierarchy } from "./permissions/config"
 export type { PermissionStatement } from "./permissions/config"
 export type { Permission } from "./permissions/types"
 export { hasPermission } from "./permissions/has-permission"

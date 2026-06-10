@@ -21,7 +21,7 @@ export class FreeTrialPolicy extends Policy {
 
     if (trialEnd < new Date()) {
       const days = Math.floor(
-        (Date.now() - trialEnd.getTime()) / (1000 * 60 * 60 * 24),
+        (Date.now() - trialEnd.getTime()) / (1000 * 60 * 60 * 24)
       )
       return this.denied(`Free trial expired ${days} days ago`)
     }

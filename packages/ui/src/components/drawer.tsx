@@ -491,7 +491,7 @@ export function DrawerMenuTrigger({
   return (
     <DrawerTrigger
       className={cn(
-        "flex min-h-9 w-full cursor-default items-center gap-2 rounded-sm px-2 py-1 text-base text-foreground outline-none select-none hover:bg-accent hover:text-accent-foreground sm:min-h-8 sm:text-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4",
+        "flex min-h-9 w-full cursor-default items-center gap-2 rounded-sm px-2 py-1 text-base text-foreground outline-none select-none hover:bg-accent hover:text-accent-foreground sm:min-h-8 sm:text-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not(:last-child)]:-mx-0.5 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4",
         className
       )}
       data-slot="drawer-menu-trigger"

@@ -48,7 +48,6 @@ export const authRoutes: RouteObject[] = [
               return { Component: VerifyEmailPage }
             },
           },
-
         ],
       },
     ],

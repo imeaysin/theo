@@ -21,5 +21,3 @@ export function parseClientPublicEnv(
 
   return { ...parsed, apiUrl, appName }
 }
-
-

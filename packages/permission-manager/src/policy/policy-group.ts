@@ -3,7 +3,7 @@ import type { Policy, PolicyContext, PolicyResult } from "./policy"
 export class PolicyGroup {
   constructor(
     private readonly name: string,
-    private readonly policies: Policy[],
+    private readonly policies: Policy[]
   ) {}
 
   async can(context: PolicyContext): Promise<PolicyResult> {

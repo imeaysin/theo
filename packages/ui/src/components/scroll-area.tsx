@@ -10,11 +10,13 @@ export function ScrollArea({
   scrollFade = false,
   scrollbarGutter = false,
   fill = false,
+  clampContentMinWidth = true,
   ...props
 }: ScrollAreaPrimitive.Root.Props & {
   scrollFade?: boolean
   scrollbarGutter?: boolean
   fill?: boolean
+  clampContentMinWidth?: boolean
 }): React.ReactElement {
   return (
     <ScrollAreaPrimitive.Root
@@ -34,6 +36,7 @@ export function ScrollArea({
         <ScrollAreaPrimitive.Content
           className={cn(fill && "size-full")}
           data-slot="scroll-area-content"
+          style={clampContentMinWidth ? { minWidth: 0 } : undefined}
         >
           {children}
         </ScrollAreaPrimitive.Content>

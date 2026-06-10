@@ -58,7 +58,7 @@ export class S3StorageProvider implements StorageProvider {
           ContentLength: input.contentLength,
           CacheControl: input.cacheControl,
           Metadata: input.metadata,
-        }),
+        })
       )
 
       return {
@@ -68,7 +68,11 @@ export class S3StorageProvider implements StorageProvider {
         contentLength: input.contentLength,
       }
     } catch (cause) {
-      throw new StorageError(`Upload failed: ${input.path}`, "UPLOAD_FAILED", cause)
+      throw new StorageError(
+        `Upload failed: ${input.path}`,
+        "UPLOAD_FAILED",
+        cause
+      )
     }
   }
 
@@ -78,10 +82,14 @@ export class S3StorageProvider implements StorageProvider {
         new DeleteObjectCommand({
           Bucket: this.bucket,
           Key: input.path,
-        }),
+        })
       )
     } catch (cause) {
-      throw new StorageError(`Delete failed: ${input.path}`, "DELETE_FAILED", cause)
+      throw new StorageError(
+        `Delete failed: ${input.path}`,
+        "DELETE_FAILED",
+        cause
+      )
     }
   }
 
@@ -99,13 +107,17 @@ export class S3StorageProvider implements StorageProvider {
         new HeadObjectCommand({
           Bucket: this.bucket,
           Key: path,
-        }),
+        })
       )
       return true
     } catch (cause) {
       const err = cause as { name?: string }
       if (err.name === "NotFound") return false
-      throw new StorageError(`Exists check failed: ${path}`, "PROVIDER_ERROR", cause)
+      throw new StorageError(
+        `Exists check failed: ${path}`,
+        "PROVIDER_ERROR",
+        cause
+      )
     }
   }
 
@@ -116,7 +128,7 @@ export class S3StorageProvider implements StorageProvider {
           Bucket: this.bucket,
           Key: input.destinationPath,
           CopySource: `/${this.bucket}/${input.sourcePath}`,
-        }),
+        })
       )
 
       return {
@@ -127,7 +139,7 @@ export class S3StorageProvider implements StorageProvider {
       throw new StorageError(
         `Copy failed: ${input.sourcePath} -> ${input.destinationPath}`,
         "COPY_FAILED",
-        cause,
+        cause
       )
     }
   }
@@ -154,7 +166,7 @@ export class S3StorageProvider implements StorageProvider {
           Prefix: input?.prefix,
           Delimiter: input?.delimiter,
           MaxKeys: input?.maxKeys,
-        }),
+        })
       )
 
       const files: StorageListEntry[] = (response.Contents ?? [])
@@ -179,7 +191,7 @@ export class S3StorageProvider implements StorageProvider {
       throw new StorageError(
         `List failed: ${input?.prefix || "/"}`,
         "LIST_FAILED",
-        cause,
+        cause
       )
     }
   }
@@ -190,7 +202,7 @@ export class S3StorageProvider implements StorageProvider {
         new HeadObjectCommand({
           Bucket: this.bucket,
           Key: path,
-        }),
+        })
       )
 
       return {
@@ -206,12 +218,15 @@ export class S3StorageProvider implements StorageProvider {
       throw new StorageError(
         `Metadata retrieval failed: ${path}`,
         "PROVIDER_ERROR",
-        cause,
+        cause
       )
     }
   }
 
-  async getSignedDownloadUrl(path: string, options?: SignedUrlOptions): Promise<string> {
+  async getSignedDownloadUrl(
+    path: string,
+    options?: SignedUrlOptions
+  ): Promise<string> {
     try {
       const command = new GetObjectCommand({
         Bucket: this.bucket,
@@ -226,12 +241,15 @@ export class S3StorageProvider implements StorageProvider {
       throw new StorageError(
         `Signed download URL generation failed: ${path}`,
         "PROVIDER_ERROR",
-        cause,
+        cause
       )
     }
   }
 
-  async getSignedUploadUrl(path: string, options?: SignedUrlOptions): Promise<string> {
+  async getSignedUploadUrl(
+    path: string,
+    options?: SignedUrlOptions
+  ): Promise<string> {
     try {
       const command = new PutObjectCommand({
         Bucket: this.bucket,
@@ -246,7 +264,7 @@ export class S3StorageProvider implements StorageProvider {
       throw new StorageError(
         `Signed upload URL generation failed: ${path}`,
         "PROVIDER_ERROR",
-        cause,
+        cause
       )
     }
   }

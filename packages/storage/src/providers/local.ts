@@ -1,4 +1,13 @@
-import { mkdir, writeFile, unlink, access, stat, readdir, copyFile, rename } from "node:fs/promises"
+import {
+  mkdir,
+  writeFile,
+  unlink,
+  access,
+  stat,
+  readdir,
+  copyFile,
+  rename,
+} from "node:fs/promises"
 import { join, dirname } from "node:path"
 import type {
   StorageProvider,
@@ -45,7 +54,11 @@ export class LocalStorageProvider implements StorageProvider {
     try {
       await writeFile(fullPath, input.body)
     } catch (cause) {
-      throw new StorageError(`Upload failed: ${input.path}`, "UPLOAD_FAILED", cause)
+      throw new StorageError(
+        `Upload failed: ${input.path}`,
+        "UPLOAD_FAILED",
+        cause
+      )
     }
 
     return {
@@ -62,9 +75,17 @@ export class LocalStorageProvider implements StorageProvider {
     } catch (cause) {
       const nodeErr = cause as NodeJS.ErrnoException
       if (nodeErr.code === "ENOENT") {
-        throw new StorageError(`File not found: ${input.path}`, "FILE_NOT_FOUND", cause)
+        throw new StorageError(
+          `File not found: ${input.path}`,
+          "FILE_NOT_FOUND",
+          cause
+        )
       }
-      throw new StorageError(`Delete failed: ${input.path}`, "DELETE_FAILED", cause)
+      throw new StorageError(
+        `Delete failed: ${input.path}`,
+        "DELETE_FAILED",
+        cause
+      )
     }
   }
 
@@ -91,9 +112,17 @@ export class LocalStorageProvider implements StorageProvider {
     } catch (cause) {
       const nodeErr = cause as NodeJS.ErrnoException
       if (nodeErr.code === "ENOENT") {
-        throw new StorageError(`Source file not found: ${input.sourcePath}`, "FILE_NOT_FOUND", cause)
+        throw new StorageError(
+          `Source file not found: ${input.sourcePath}`,
+          "FILE_NOT_FOUND",
+          cause
+        )
       }
-      throw new StorageError(`Copy failed: ${input.sourcePath} -> ${input.destinationPath}`, "COPY_FAILED", cause)
+      throw new StorageError(
+        `Copy failed: ${input.sourcePath} -> ${input.destinationPath}`,
+        "COPY_FAILED",
+        cause
+      )
     }
 
     return {
@@ -112,9 +141,17 @@ export class LocalStorageProvider implements StorageProvider {
     } catch (cause) {
       const nodeErr = cause as NodeJS.ErrnoException
       if (nodeErr.code === "ENOENT") {
-        throw new StorageError(`Source file not found: ${input.sourcePath}`, "FILE_NOT_FOUND", cause)
+        throw new StorageError(
+          `Source file not found: ${input.sourcePath}`,
+          "FILE_NOT_FOUND",
+          cause
+        )
       }
-      throw new StorageError(`Move failed: ${input.sourcePath} -> ${input.destinationPath}`, "MOVE_FAILED", cause)
+      throw new StorageError(
+        `Move failed: ${input.sourcePath} -> ${input.destinationPath}`,
+        "MOVE_FAILED",
+        cause
+      )
     }
 
     return {
@@ -131,7 +168,11 @@ export class LocalStorageProvider implements StorageProvider {
     try {
       entries = await readdir(dirPath, { withFileTypes: true })
     } catch (cause) {
-      throw new StorageError(`List failed: ${dirRelative || "/"}`, "LIST_FAILED", cause)
+      throw new StorageError(
+        `List failed: ${dirRelative || "/"}`,
+        "LIST_FAILED",
+        cause
+      )
     }
 
     const files: StorageListEntry[] = []
@@ -142,7 +183,9 @@ export class LocalStorageProvider implements StorageProvider {
     for (const entry of entries) {
       if (count >= maxKeys) break
 
-      const entryPath = dirRelative ? `${dirRelative}/${entry.name}` : entry.name
+      const entryPath = dirRelative
+        ? `${dirRelative}/${entry.name}`
+        : entry.name
 
       if (entry.isDirectory()) {
         prefixes.push(`${entryPath}/`)
@@ -177,18 +220,28 @@ export class LocalStorageProvider implements StorageProvider {
     } catch (cause) {
       const nodeErr = cause as NodeJS.ErrnoException
       if (nodeErr.code === "ENOENT") return null
-      throw new StorageError(`Metadata retrieval failed: ${path}`, "PROVIDER_ERROR", cause)
+      throw new StorageError(
+        `Metadata retrieval failed: ${path}`,
+        "PROVIDER_ERROR",
+        cause
+      )
     }
   }
 
-  async getSignedDownloadUrl(path: string, _options?: SignedUrlOptions): Promise<string> {
+  async getSignedDownloadUrl(
+    path: string,
+    _options?: SignedUrlOptions
+  ): Promise<string> {
     return this.getUrl(path)
   }
 
-  async getSignedUploadUrl(_path: string, _options?: SignedUrlOptions): Promise<string> {
+  async getSignedUploadUrl(
+    _path: string,
+    _options?: SignedUrlOptions
+  ): Promise<string> {
     throw new StorageError(
       "Local storage does not support signed upload URLs",
-      "UNSUPPORTED_OPERATION",
+      "UNSUPPORTED_OPERATION"
     )
   }
 }

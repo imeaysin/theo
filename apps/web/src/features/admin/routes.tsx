@@ -13,27 +13,24 @@ export const adminRoutes: RouteObject[] = [
           {
             path: paths.admin.dashboard,
             lazy: async () => {
-              const { AdminDashboardPage } = await import(
-                "./pages/admin-dashboard-page"
-              )
+              const { AdminDashboardPage } =
+                await import("./pages/admin-dashboard-page")
               return { Component: AdminDashboardPage }
             },
           },
           {
             path: paths.admin.users,
             lazy: async () => {
-              const { AdminUsersPage } = await import(
-                "./pages/admin-users-page"
-              )
+              const { AdminUsersPage } =
+                await import("./pages/admin-users-page")
               return { Component: AdminUsersPage }
             },
           },
           {
             path: paths.admin.settings,
             lazy: async () => {
-              const { AdminSettingsPage } = await import(
-                "./pages/admin-settings-page"
-              )
+              const { AdminSettingsPage } =
+                await import("./pages/admin-settings-page")
               return { Component: AdminSettingsPage }
             },
           },

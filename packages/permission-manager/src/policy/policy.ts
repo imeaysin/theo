@@ -13,7 +13,7 @@ export interface PolicyResult {
 export abstract class Policy {
   constructor(
     public readonly name: string,
-    public readonly description: string,
+    public readonly description: string
   ) {}
 
   abstract can(context: PolicyContext): PolicyResult | Promise<PolicyResult>

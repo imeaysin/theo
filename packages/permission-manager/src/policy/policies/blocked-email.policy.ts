@@ -2,7 +2,10 @@ import { Policy, PolicyContext, PolicyResult } from "../policy"
 
 export class BlockedEmailPolicy extends Policy {
   constructor() {
-    super("BlockedEmailPolicy", "Deny registration from blocked emails or domains")
+    super(
+      "BlockedEmailPolicy",
+      "Deny registration from blocked emails or domains"
+    )
   }
 
   async can(context: PolicyContext): Promise<PolicyResult> {

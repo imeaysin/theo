@@ -2,7 +2,7 @@ export class StorageError extends Error {
   constructor(
     message: string,
     public readonly code: StorageErrorCode,
-    public readonly details?: unknown,
+    public readonly details?: unknown
   ) {
     super(message)
     this.name = "StorageError"
@@ -115,7 +115,10 @@ export interface StorageProvider {
   move(input: StorageMoveInput): Promise<StorageMoveResult>
   list(input?: StorageListInput): Promise<StorageListResult>
   metadata(path: string): Promise<StorageFileMetadata | null>
-  getSignedDownloadUrl(path: string, options?: SignedUrlOptions): Promise<string>
+  getSignedDownloadUrl(
+    path: string,
+    options?: SignedUrlOptions
+  ): Promise<string>
   getSignedUploadUrl(path: string, options?: SignedUrlOptions): Promise<string>
 }
 
