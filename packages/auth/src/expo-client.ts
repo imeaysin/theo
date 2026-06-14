@@ -6,7 +6,10 @@ interface ExpoAuthClientOptions {
   /** The app's URL scheme (must match the "scheme" in app.json) */
   scheme: string
   /** SecureStore module from expo-secure-store */
-  storage: any
+  storage: {
+    setItem: (key: string, value: string) => unknown
+    getItem: (key: string) => string | null
+  }
   /** Optional prefix for stored keys (defaults to scheme value) */
   storagePrefix?: string
 }
