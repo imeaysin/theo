@@ -11,3 +11,7 @@ allowBuilds:
   sharp: true
   unrs-resolver: true
   msw: false
+  '@nestjs/core': false
+  '@scarf/scarf': false
+  esbuild: true
+  msgpackr-extract: false
