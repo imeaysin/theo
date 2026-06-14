@@ -1,6 +1,5 @@
 import { useTheme } from "@/providers/theme-provider"
-import { SunFilledIcon, MoonFilledIcon } from "@workspace/hero-ui"
-import clsx from "clsx"
+import { SunFilledIcon, MoonFilledIcon, cn } from "@workspace/hero-ui"
 
 export interface ThemeSwitchProps {
   className?: string
@@ -31,7 +30,7 @@ export function ThemeSwitch({ className }: ThemeSwitchProps) {
   return (
     <button
       aria-label={`Switch to ${isLight ? "dark" : "light"} mode`}
-      className={clsx(
+      className={cn(
         "cursor-pointer px-px transition-opacity hover:opacity-80",
         "inline-flex items-center justify-center",
         "h-auto w-auto rounded-lg border-none bg-transparent",

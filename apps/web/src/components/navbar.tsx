@@ -11,9 +11,9 @@ import {
   DiscordIcon,
   GithubIcon,
   AppLogo,
+  cn,
 } from "@workspace/hero-ui"
 import { appConfig } from "@workspace/config/app"
-import clsx from "clsx"
 
 import { siteConfig } from "@/config/site"
 import { ThemeSwitch } from "@/components/theme-switch"
@@ -52,7 +52,7 @@ export const Navbar = () => {
             {siteConfig.navItems.map((item) => (
               <li key={item.href}>
                 <a
-                  className={clsx(
+                  className={cn(
                     "text-foreground transition-colors hover:text-accent",
                     "data-[active=true]:font-medium data-[active=true]:text-accent"
                   )}
@@ -150,7 +150,7 @@ export const Navbar = () => {
             {siteConfig.navMenuItems.map((item, index) => (
               <li key={`${item.label}-${index}`}>
                 <Link
-                  className={clsx(
+                  className={cn(
                     "block py-2 text-lg no-underline",
                     index === 2
                       ? "text-accent"
