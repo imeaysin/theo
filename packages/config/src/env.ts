@@ -80,8 +80,6 @@ const envSchema = z.object({
   APP_NAME: z.string().min(1).default("Theo"),
   GOOGLE_CLIENT_ID: z.string().default(""),
   GOOGLE_CLIENT_SECRET: z.string().default(""),
-  GITHUB_CLIENT_ID: z.string().default(""),
-  GITHUB_CLIENT_SECRET: z.string().default(""),
   STORAGE_PROVIDER: z.enum(["local", "s3"]).default("local"),
   STORAGE_LOCAL_PATH: z.string().default("./uploads"),
   STORAGE_LOCAL_URL: z.string().default("http://localhost:4000/uploads"),

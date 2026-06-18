@@ -1,8 +1,13 @@
 import { defineConfig } from "tsup"
 
-/** Only bundle Node/server code. React & vanilla clients are consumed as source by Vite/apps. */
+/** Bundle server-side auth code. Client sources are consumed directly by Vite/Expo. */
 export default defineConfig((options) => ({
-  entry: ["src/index.ts", "src/server.ts"],
+  entry: {
+    index: "src/index.ts",
+    "server/index": "src/server/index.ts",
+    "access-control/index": "src/access-control/index.ts",
+    "testing/index": "src/testing/index.ts",
+  },
   format: ["esm", "cjs"],
   dts: true,
   clean: !options.watch,
@@ -11,10 +16,11 @@ export default defineConfig((options) => ({
   minify: false,
   external: [
     "mongodb",
-    "@workspace/permission-manager",
     "@workspace/config",
-    "@workspace/db",
     "@workspace/email",
+    "@workspace/utils",
     "better-auth",
+    "@better-auth/expo",
+    "jose",
   ],
 }))

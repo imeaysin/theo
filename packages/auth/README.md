@@ -1,26 +1,43 @@
-# @repo/auth
+# @workspace/auth
 
-| Import              | Use                                                                      |
-| ------------------- | ------------------------------------------------------------------------ |
-| `@repo/auth`        | Main export: `auth`, `authClient`                                      |
-| `@repo/auth/server` | Nest — `auth`, `authHandler`, `getSessionFromHeaders`, **session types** |
-| `@repo/auth/client` | Web — `createAppAuthClient(baseURL)`                             |
-| `@repo/auth/expo-client` | Mobile — `createExpoAuthClient(baseURL)`                      |
-| `@repo/auth`        | Permissions (`ac`, `admin`, `user`) + re-exported session types          |
+Better Auth configuration for the monorepo — Bearer + JWT (no cookie sessions).
 
-## Types (Better Auth)
+## Exports
 
-Export from the same file as `betterAuth()` — plugins must be **inline** so inference includes admin fields (`role`, `banned`, …):
+| Import | Use |
+| --- | --- |
+| `@workspace/auth` | Shared types (`Session`, `SessionUser`, …) |
+| `@workspace/auth/server` | `auth`, `authHandler`, `authFetchHandler`, `getAuthFromHeaders` |
+| `@workspace/auth/access-control` | RBAC `statement`, `hasPermission`, `Permission` type |
+| `@workspace/auth/client` | Web client — `createAppAuthClient`, token storage, `refreshAccessToken` |
+| `@workspace/auth/expo-client` | Mobile client — `createExpoAuthClient` |
+| `@workspace/auth/testing` | Test helpers (sign-up, JWT headers, collection cleanup) |
 
-```ts
-export type Session = typeof auth.$Infer.Session
-export type SessionUser = Session["user"]
+NestJS guards and React hooks live in the apps that use them (`apps/api`, `apps/web`), not in this package.
+
+Permission checks use `@workspace/auth/access-control` (formerly `@workspace/permission-manager`, which has been removed).
+
+## JWT / JWKS
+
+The `jwt` plugin stores signing keys in MongoDB (`jwks` collection). Keys are created automatically on first use — no separate migration step is required with the MongoDB adapter.
+
+## Layout
+
+```
+src/
+  access-control/   # RBAC statements and hasPermission
+  authorization/    # Better Auth createAccessControl roles
+  client/           # Web + Expo clients, token storage
+  server/           # betterAuth instance, handlers, getAuthFromHeaders
+  testing/          # Integration test utilities
+  verify/           # JWT verification via JWKS
 ```
 
-Nest/API code should import session types from `@repo/auth/server`.
+## Plugins (server)
 
-## Plugins
-
-Server: `admin`, `twoFactor` from dedicated paths; `openAPI` from `better-auth/plugins` (no subpath export).
-
-Client plugins: `plugins/client.ts` — paired with server config.
+- `bearer` — Authorization header transport
+- `jwt` — Access tokens + JWKS for stateless API auth
+- `admin` — RBAC user management
+- `haveIBeenPwned` — Password breach checks
+- `openAPI` — Schema generation
+- `expo` — Native OAuth deep links

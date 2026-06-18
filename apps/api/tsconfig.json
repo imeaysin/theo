@@ -6,5 +6,6 @@
       "@src/*": ["./src/*"]
     },
     "types": ["node", "multer"]
-  }
+  },
+  "exclude": ["node_modules", "dist", "test"]
 }

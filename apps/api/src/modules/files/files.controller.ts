@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiTags, ApiBody, ApiConsumes } from '@nestjs/swagger';
+import { RequirePermission } from '@src/decorators/require-permission.decorator';
 import { STORAGE } from '@src/modules/storage/storage.module';
 import type { StorageProvider } from '@workspace/storage';
 
@@ -27,6 +28,7 @@ export class FilesController {
   constructor(@Inject(STORAGE) private readonly storage: StorageProvider) {}
 
   @Post('upload')
+  @RequirePermission({ profile: ['update'] })
   @UseInterceptors(
     FileInterceptor('file', { limits: { fileSize: 10 * 1024 * 1024 } }),
   )

@@ -16,9 +16,7 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@workspace/auth": "workspace:*",
-    "@workspace/permission-manager": "workspace:*",
     "@workspace/config": "workspace:*",
-    "@workspace/contracts": "workspace:*",
     "@tanstack/react-query": "^5.90.21",
     "@workspace/hero-ui": "workspace:*",
     "react": "catalog:",

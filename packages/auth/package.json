@@ -10,17 +10,27 @@
       "require": "./dist/index.cjs"
     },
     "./server": {
-      "types": "./dist/server.d.ts",
-      "import": "./dist/server.js",
-      "require": "./dist/server.cjs"
+      "types": "./dist/server/index.d.ts",
+      "import": "./dist/server/index.js",
+      "require": "./dist/server/index.cjs"
+    },
+    "./access-control": {
+      "types": "./dist/access-control/index.d.ts",
+      "import": "./dist/access-control/index.js",
+      "require": "./dist/access-control/index.cjs"
     },
     "./client": {
-      "types": "./src/client.ts",
-      "default": "./src/client.ts"
+      "types": "./src/client/index.ts",
+      "default": "./src/client/index.ts"
     },
     "./expo-client": {
-      "types": "./src/expo-client.ts",
-      "default": "./src/expo-client.ts"
+      "types": "./src/client/expo-client.ts",
+      "default": "./src/client/expo-client.ts"
+    },
+    "./testing": {
+      "types": "./dist/testing/index.d.ts",
+      "import": "./dist/testing/index.js",
+      "require": "./dist/testing/index.cjs"
     }
   },
   "scripts": {
@@ -34,14 +44,12 @@
   },
   "dependencies": {
     "@better-auth/expo": "^1.6.14",
-    "@workspace/permission-manager": "workspace:*",
     "@workspace/config": "workspace:*",
-    "@workspace/db": "workspace:*",
     "@workspace/email": "workspace:*",
     "@workspace/utils": "workspace:*",
     "better-auth": "^1.6.14",
-    "mongodb": "^7.2.0",
-    "zod": "^4.4.3"
+    "jose": "^6.1.0",
+    "mongodb": "^7.2.0"
   },
   "devDependencies": {
     "@types/node": "^25.9.1",

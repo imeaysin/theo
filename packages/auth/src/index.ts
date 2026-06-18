@@ -1,1 +1,6 @@
-export type { Session, SessionUser, SessionData, AuthInstance } from "./server"
+export type {
+  AuthInstance,
+  Session,
+  SessionData,
+  SessionUser,
+} from "./server/create-auth"
