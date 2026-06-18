@@ -53,6 +53,7 @@ export const auth = betterAuth({
       enabled: true,
       trustedProviders: ["google"],
     },
+    storeStateStrategy: "cookie",
   },
 
   database: mongodbAdapter(db, {

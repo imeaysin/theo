@@ -8,10 +8,7 @@ export function createAppAuthClient(
   tokenStorage: TokenStorage
 ) {
   const { apiUrl } = parseClientPublicEnv(source)
-  const baseURL =
-    typeof window !== "undefined"
-      ? "/api/auth"
-      : `${apiUrl.replace(/\/+$/, "")}/api/auth`
+  const baseURL = `${apiUrl.replace(/\/+$/, "")}/api/auth`
 
   return createAuthClient({
     baseURL,

@@ -11,6 +11,7 @@ export function RootLayout() {
   return (
     <ThemeProvider>
       <AuthProvider
+        baseURL={window.location.origin}
         authClient={authClient}
         navigate={({ to, replace }: { to: string; replace?: boolean }) =>
           navigate(to, { replace })
