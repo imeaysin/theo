@@ -23,9 +23,7 @@ interface SocialProviders {
 }
 
 function buildSocialProviders(): SocialProviders {
-  if (!env.GOOGLE_CLIENT_ID || !env.GOOGLE_CLIENT_SECRET) {
-    return {}
-  }
+  if (!env.GOOGLE_CLIENT_ID || !env.GOOGLE_CLIENT_SECRET) return {}
 
   return {
     google: {

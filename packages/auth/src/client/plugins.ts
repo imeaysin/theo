@@ -15,14 +15,10 @@ export function createBearerFetchOptions(tokenStorage: TokenStorage) {
     },
     onSuccess: (ctx: { response: Response }) => {
       const bearerToken = ctx.response.headers.get("set-auth-token")
-      if (bearerToken) {
-        tokenStorage.setBearerToken(bearerToken)
-      }
+      if (bearerToken) tokenStorage.setBearerToken(bearerToken)
 
       const accessToken = ctx.response.headers.get("set-auth-jwt")
-      if (accessToken) {
-        tokenStorage.setAccessToken(accessToken)
-      }
+      if (accessToken) tokenStorage.setAccessToken(accessToken)
     },
   }
 }
