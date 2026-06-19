@@ -27,6 +27,10 @@
       "types": "./src/client/expo-client.ts",
       "default": "./src/client/expo-client.ts"
     },
+    "./react": {
+      "types": "./src/react/index.ts",
+      "default": "./src/react/index.ts"
+    },
     "./testing": {
       "types": "./dist/testing/index.d.ts",
       "import": "./dist/testing/index.js",
@@ -43,6 +47,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@better-auth-ui/react": "^1.6.15",
     "@better-auth/expo": "^1.6.14",
     "@workspace/config": "workspace:*",
     "@workspace/email": "workspace:*",
