@@ -43,7 +43,10 @@ const BEARER_KEY = "theo.auth.bearer"
 const ACCESS_KEY = "theo.auth.access"
 
 export function createWebTokenStorage(
-  storage: Pick<Storage, "getItem" | "setItem" | "removeItem"> = globalThis.localStorage
+  storage: Pick<
+    Storage,
+    "getItem" | "setItem" | "removeItem"
+  > = globalThis.localStorage
 ): TokenStorage {
   return {
     getBearerToken: () => storage.getItem(BEARER_KEY),
@@ -96,8 +99,7 @@ export function getAuthorizationHeader(
 ): Record<string, string> {
   const access = tokenStorage.getAccessToken()
   const bearer = tokenStorage.getBearerToken()
-  const token =
-    prefer === "access" ? (access ?? bearer) : (bearer ?? access)
+  const token = prefer === "access" ? (access ?? bearer) : (bearer ?? access)
 
   if (!token) return {}
   return { Authorization: `Bearer ${token}` }

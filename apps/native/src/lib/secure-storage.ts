@@ -26,7 +26,7 @@ export function createSyncSecureStore(initialKeys: readonly string[] = []) {
           if (value !== null) {
             memory.set(key, value)
           }
-        }),
+        })
       )
     },
   }

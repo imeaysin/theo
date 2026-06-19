@@ -9,10 +9,7 @@ export type {
   SessionUser,
 } from "./create-auth"
 export type { AuthenticatedUser, AccessTokenClaims } from "../verify/claims"
-export {
-  getAuthFromHeaders,
-  type AuthContext,
-} from "./get-auth-from-headers"
+export { getAuthFromHeaders, type AuthContext } from "./get-auth-from-headers"
 
 export { toNodeHandler }
 

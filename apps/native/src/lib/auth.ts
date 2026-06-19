@@ -27,7 +27,7 @@ export const authClient = createExpoAuthClient(
     storage: expoStorage,
     tokenStorage,
     storagePrefix: "acme",
-  },
+  }
 )
 
 export { tokenStorage, secureStore }

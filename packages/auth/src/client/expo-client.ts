@@ -1,12 +1,12 @@
 import { createAuthClient } from "better-auth/react"
 import { expoClient } from "@better-auth/expo/client"
 import { authClientPlugins, createBearerFetchOptions } from "./plugins"
-import {
+import { type TokenStorage } from "./token-storage"
+
+export {
   createSecureStoreTokenStorage,
   type TokenStorage,
 } from "./token-storage"
-
-export { createSecureStoreTokenStorage, type TokenStorage } from "./token-storage"
 export { refreshAccessToken } from "./refresh-access-token"
 export { getAuthorizationHeader } from "./token-storage"
 

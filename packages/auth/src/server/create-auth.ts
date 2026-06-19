@@ -1,11 +1,6 @@
 import { betterAuth } from "better-auth"
 import { admin } from "better-auth/plugins/admin"
-import {
-  bearer,
-  haveIBeenPwned,
-  jwt,
-  openAPI,
-} from "better-auth/plugins"
+import { bearer, haveIBeenPwned, jwt, openAPI } from "better-auth/plugins"
 import { expo } from "@better-auth/expo"
 import { mongodbAdapter } from "better-auth/adapters/mongodb"
 import { MongoClient } from "mongodb"
