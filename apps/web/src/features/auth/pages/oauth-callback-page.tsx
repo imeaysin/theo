@@ -29,19 +29,14 @@ export function OAuthCallbackPage() {
     hasRun.current = true
 
     async function exchangeSession() {
-      // Clear any old tokens to force getSession to use the newly minted cookie!
       tokenStorage.clearAll()
 
       const { data, error } = await authClient.getSession()
 
       if (error || !data?.session) {
-        // Session exchange failed — redirect to sign in
         navigate(paths.auth.signIn, { replace: true })
         return
       }
-
-      // At this point, the global onSuccess in createBearerFetchOptions has
-      // already stored the bearer and access tokens from the response headers.
 
       navigate(paths.dashboard, { replace: true })
     }

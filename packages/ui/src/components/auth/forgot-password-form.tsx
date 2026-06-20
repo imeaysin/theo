@@ -6,9 +6,20 @@ import { Input } from "@workspace/ui/components/input"
 import { Field, FieldLabel, FieldError } from "@workspace/ui/components/field"
 import { Form } from "@workspace/ui/components/form"
 import { Alert, AlertDescription } from "@workspace/ui/components/alert"
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardPanel,
+  CardFooter,
+} from "@workspace/ui/components/card"
 import { cn } from "@workspace/ui/lib/utils"
 
-export interface ForgotPasswordFormProps extends Omit<React.ComponentProps<"div">, "onSubmit"> {
+export interface ForgotPasswordFormProps extends Omit<
+  React.ComponentProps<"div">,
+  "onSubmit"
+> {
   /** Called when form is submitted with the email address */
   onSubmit: (values: { email: string }) => Promise<void> | void
   /** Whether the submission is in progress */
@@ -38,56 +49,62 @@ export function ForgotPasswordForm({
   }
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <div className="flex flex-col items-center gap-2 text-center">
-
-        <h1 className="text-xl font-bold">Forgot password?</h1>
-        <div className="text-sm text-muted-foreground">
+    <Card className={cn("w-full max-w-sm sm:max-w-md", className)} {...props}>
+      <CardHeader className="text-center">
+        <CardTitle>Forgot password?</CardTitle>
+        <CardDescription>
           Enter your email and we&apos;ll send you a reset link
-        </div>
-      </div>
+        </CardDescription>
+      </CardHeader>
 
-      {successMessage ? (
-        <Alert variant="success">
-          <AlertDescription>{successMessage}</AlertDescription>
-        </Alert>
-      ) : (
-        <Form onSubmit={handleSubmit} className="flex w-full flex-col gap-6">
-          {error && (
-            <Alert variant="error">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
+      <CardPanel>
+        {successMessage ? (
+          <Alert variant="success">
+            <AlertDescription>{successMessage}</AlertDescription>
+          </Alert>
+        ) : (
+          <Form onSubmit={handleSubmit} className="flex w-full flex-col gap-6">
+            {error && (
+              <Alert variant="error">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
 
-          <div className="flex flex-col gap-4">
-            <Field>
-              <FieldLabel>Email</FieldLabel>
-              <Input
-                type="email"
-                autoComplete="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                disabled={isPending}
-                required
-              />
-              <FieldError />
-            </Field>
+            <div className="flex flex-col gap-4">
+              <Field>
+                <FieldLabel>Email</FieldLabel>
+                <Input
+                  type="email"
+                  autoComplete="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={isPending}
+                  required
+                />
+                <FieldError />
+              </Field>
 
-            <Button type="submit" loading={isPending} className="w-full">
-              Send reset link
-            </Button>
-          </div>
-        </Form>
-      )}
+              <Button type="submit" loading={isPending} className="w-full">
+                Send reset link
+              </Button>
+            </div>
+          </Form>
+        )}
+      </CardPanel>
 
       {signInHref && (
-        <div className="text-center text-sm text-muted-foreground">
-          <a href={signInHref} className="hover:text-foreground hover:underline">
-            Back to sign in
-          </a>
-        </div>
+        <CardFooter className="justify-center">
+          <div className="text-sm text-muted-foreground">
+            <a
+              href={signInHref}
+              className="hover:text-foreground hover:underline"
+            >
+              Back to sign in
+            </a>
+          </div>
+        </CardFooter>
       )}
-    </div>
+    </Card>
   )
 }
