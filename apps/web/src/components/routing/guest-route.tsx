@@ -10,7 +10,7 @@ export function GuestRoute() {
   if (isPending) {
     return (
       <div className="flex min-h-svh items-center justify-center">
-        <Spinner size="lg" />
+        <Spinner className="size-8 text-muted-foreground" />
       </div>
     )
   }
