@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { useSession } from "@workspace/hero-ui/better-auth-ui"
+import { useSession } from "@workspace/auth/react"
 import { refreshAccessToken } from "@workspace/auth/client"
 import { authClient, tokenStorage } from "@/lib/auth"
 

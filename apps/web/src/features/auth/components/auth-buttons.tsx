@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { Button } from "@workspace/hero-ui"
+import { Button } from "@workspace/ui/components/button"
 import { paths } from "@/config/paths"
 
 /**
@@ -17,7 +17,7 @@ export function AuthButtons() {
         </Button>
       </Link>
       <Link to={paths.auth.signUp}>
-        <Button variant="primary" size="sm">
+        <Button variant="default" size="sm">
           Sign Up
         </Button>
       </Link>
@@ -37,7 +37,7 @@ export function AuthButtonsMobile() {
         </Button>
       </Link>
       <Link to={paths.auth.signUp} className="w-full">
-        <Button variant="primary" className="w-full">
+        <Button variant="default" className="w-full">
           Sign Up
         </Button>
       </Link>

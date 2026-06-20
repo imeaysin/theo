@@ -1,4 +1,4 @@
-import { Card } from "@workspace/hero-ui"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@workspace/ui/components/card"
 import { useAuthSession } from "@/features/auth/hooks"
 import { useCan } from "@/features/auth/hooks/use-can"
 
@@ -18,18 +18,18 @@ export function AdminDashboardPage() {
       </div>
 
       <Card>
-        <Card.Header>
-          <Card.Title>Admin Access</Card.Title>
-          <Card.Description>
+        <CardHeader>
+          <CardTitle>Admin Access</CardTitle>
+          <CardDescription>
             You are logged in with admin privileges.
-          </Card.Description>
-        </Card.Header>
-        <Card.Content className="space-y-2 text-sm">
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-2 text-sm">
           <p>
             <span className="text-muted-foreground">Role:</span>{" "}
             {session?.user?.role}
           </p>
-        </Card.Content>
+        </CardContent>
       </Card>
     </div>
   )

@@ -18,7 +18,7 @@
     "@workspace/auth": "workspace:*",
     "@workspace/config": "workspace:*",
     "@tanstack/react-query": "^5.90.21",
-    "@workspace/hero-ui": "workspace:*",
+    "@workspace/ui": "workspace:*",
     "react": "catalog:",
     "react-dom": "catalog:",
     "react-hook-form": "^7.71.2",

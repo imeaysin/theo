@@ -1,5 +1,5 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom"
-import { Spinner } from "@workspace/hero-ui"
+import { Spinner } from "@workspace/ui/components/spinner"
 import { paths } from "@/config/paths"
 import { useAuthSession } from "@/features/auth/hooks"
 import { useCan } from "@/features/auth/hooks/use-can"

@@ -11,7 +11,7 @@ import {
   useLinkSocial,
   useUnlinkAccount,
   useRevokeSession,
-} from "@workspace/hero-ui/better-auth-ui"
+} from "@workspace/auth/react"
 import { authClient } from "@/lib/auth"
 
 /**

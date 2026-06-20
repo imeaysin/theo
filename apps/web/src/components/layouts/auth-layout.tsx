@@ -1,4 +1,4 @@
-import { AppLogo } from "@workspace/hero-ui"
+import { AppLogo } from "@workspace/ui/components/app-logo"
 import { Outlet } from "react-router-dom"
 
 export function AuthLayout() {
