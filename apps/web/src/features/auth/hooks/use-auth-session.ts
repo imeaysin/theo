@@ -1,7 +1,5 @@
-import { useEffect } from "react"
 import { useSession } from "@workspace/auth/react"
-import { refreshAccessToken } from "@workspace/auth/client"
-import { authClient, tokenStorage } from "@/lib/auth"
+import { authClient } from "@/lib/auth"
 
 /**
  * Hook to access the current authentication session
@@ -12,11 +10,6 @@ import { authClient, tokenStorage } from "@/lib/auth"
  */
 export function useAuthSession() {
   const { data: session, isPending, isError, error } = useSession(authClient)
-
-  useEffect(() => {
-    if (!session?.user) return
-    void refreshAccessToken(authClient, tokenStorage).catch(() => {})
-  }, [session?.user?.id])
 
   return {
     session,

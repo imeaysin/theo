@@ -14,6 +14,7 @@ export const paths = {
     verifyEmail: "/auth/verify-email",
 
     signOut: "/auth/sign-out",
+    oauthCallback: "/auth/oauth-callback",
   },
   admin: {
     dashboard: "/admin",

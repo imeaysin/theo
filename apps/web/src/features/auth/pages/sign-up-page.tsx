@@ -21,7 +21,7 @@ export function SignUpPage() {
       onSocialSignUp={async (provider) => {
         await authClient.signIn.social({
           provider,
-          callbackURL: window.location.origin + paths.dashboard,
+          callbackURL: window.location.origin + paths.auth.oauthCallback,
         })
       }}
       isPending={isPending}

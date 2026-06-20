@@ -59,4 +59,11 @@ export const authRoutes: RouteObject[] = [
       return { Component: SignOutPage }
     },
   },
+  {
+    path: paths.auth.oauthCallback,
+    lazy: async () => {
+      const { OAuthCallbackPage } = await import("./pages/oauth-callback-page")
+      return { Component: OAuthCallbackPage }
+    },
+  },
 ]
