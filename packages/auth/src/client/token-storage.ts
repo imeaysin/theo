@@ -48,12 +48,21 @@ export function createWebTokenStorage(
     "getItem" | "setItem" | "removeItem"
   > = globalThis.localStorage
 ): TokenStorage {
+  const sanitize = (val: string | null) =>
+    val === "null" || val === "undefined" || val === "" ? null : val
+
   return {
-    getBearerToken: () => storage.getItem(BEARER_KEY),
-    setBearerToken: (token) => storage.setItem(BEARER_KEY, token),
+    getBearerToken: () => sanitize(storage.getItem(BEARER_KEY)),
+    setBearerToken: (token) => {
+      if (!sanitize(token)) storage.removeItem(BEARER_KEY)
+      else storage.setItem(BEARER_KEY, token)
+    },
     clearBearerToken: () => storage.removeItem(BEARER_KEY),
-    getAccessToken: () => storage.getItem(ACCESS_KEY),
-    setAccessToken: (token) => storage.setItem(ACCESS_KEY, token),
+    getAccessToken: () => sanitize(storage.getItem(ACCESS_KEY)),
+    setAccessToken: (token) => {
+      if (!sanitize(token)) storage.removeItem(ACCESS_KEY)
+      else storage.setItem(ACCESS_KEY, token)
+    },
     clearAccessToken: () => storage.removeItem(ACCESS_KEY),
     clearAll: () => {
       storage.removeItem(BEARER_KEY)

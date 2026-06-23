@@ -284,9 +284,12 @@ importers:
       '@workspace/config':
         specifier: workspace:*
         version: link:../../packages/config
-      '@workspace/hero-ui':
+      '@workspace/ui':
         specifier: workspace:*
-        version: link:../../packages/hero-ui
+        version: link:../../packages/ui
+      lucide-react:
+        specifier: ^1.17.0
+        version: 1.17.0(react@19.2.7)
       react:
         specifier: 'catalog:'
         version: 19.2.7

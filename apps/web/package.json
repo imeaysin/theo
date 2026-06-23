@@ -15,10 +15,11 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@tanstack/react-query": "^5.90.21",
     "@workspace/auth": "workspace:*",
     "@workspace/config": "workspace:*",
-    "@tanstack/react-query": "^5.90.21",
-    "@workspace/hero-ui": "workspace:*",
+    "@workspace/ui": "workspace:*",
+    "lucide-react": "^1.17.0",
     "react": "catalog:",
     "react-dom": "catalog:",
     "react-hook-form": "^7.71.2",
@@ -28,8 +29,8 @@
     "zustand": "^5.0.12"
   },
   "devDependencies": {
-    "@tanstack/react-query-devtools": "^5.91.3",
     "@tailwindcss/vite": "^4.3.0",
+    "@tanstack/react-query-devtools": "^5.91.3",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -37,10 +38,10 @@
     "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
     "@workspace/vitest-config": "workspace:*",
-    "vitest": "^4.1.6",
     "eslint": "^9",
     "eslint-plugin-react-refresh": "^0.5.2",
     "typescript": "^5",
-    "vite": "^8.0.12"
+    "vite": "^8.0.12",
+    "vitest": "^4.1.6"
   }
 }

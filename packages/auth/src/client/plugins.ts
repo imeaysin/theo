@@ -11,7 +11,7 @@ export function createBearerFetchOptions(tokenStorage: TokenStorage) {
   return {
     auth: {
       type: "Bearer" as const,
-      token: () => tokenStorage.getBearerToken() ?? "",
+      token: () => tokenStorage.getBearerToken() || undefined,
     },
     onSuccess: (ctx: { response: Response }) => {
       const bearerToken = ctx.response.headers.get("set-auth-token")

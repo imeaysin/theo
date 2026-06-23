@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { Button } from "@workspace/hero-ui"
+import { Button } from "@workspace/ui/components/button"
 import { paths } from "@/config/paths"
 import { env } from "@/config/env"
 import { useAuthSession } from "@/features/auth/hooks"

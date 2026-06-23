@@ -1,5 +1,5 @@
 import { useAuthSession } from "@/features/auth/hooks"
-import { Card } from "@workspace/hero-ui"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@workspace/ui/components/card"
 
 export function DashboardPage() {
   const { session } = useAuthSession()
@@ -15,11 +15,11 @@ export function DashboardPage() {
       </div>
 
       <Card>
-        <Card.Header>
-          <Card.Title>Session</Card.Title>
-          <Card.Description>Current user from Better Auth.</Card.Description>
-        </Card.Header>
-        <Card.Content className="space-y-2 text-sm">
+        <CardHeader>
+          <CardTitle>Session</CardTitle>
+          <CardDescription>Current user from Better Auth.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-2 text-sm">
           <p>
             <span className="text-muted-foreground">Name:</span> {user?.name}
           </p>
@@ -30,7 +30,7 @@ export function DashboardPage() {
             <span className="text-muted-foreground">Verified:</span>{" "}
             {user?.emailVerified ? "Yes" : "No"}
           </p>
-        </Card.Content>
+        </CardContent>
       </Card>
     </div>
   )

@@ -1,7 +1,7 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom"
-import { Spinner } from "@workspace/hero-ui"
 import { paths } from "@/config/paths"
 import { useAuthSession } from "@/features/auth/hooks"
+import { Spinner } from "@workspace/ui/components/spinner"
 
 export function GuestRoute() {
   const location = useLocation()
@@ -10,7 +10,7 @@ export function GuestRoute() {
   if (isPending) {
     return (
       <div className="flex min-h-svh items-center justify-center">
-        <Spinner size="lg" />
+        <Spinner className="size-8 text-muted-foreground" />
       </div>
     )
   }
