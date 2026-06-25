@@ -1,14 +1,35 @@
-import { Test, TestingModule } from "@nestjs/testing"
+jest.mock("@workspace/auth", () => ({
+  auth: {},
+}))
+
+jest.mock("@thallesp/nestjs-better-auth", () => ({
+  AuthModule: {
+    forRootAsync: () => ({
+      module: class AuthModuleStub {},
+    }),
+  },
+}))
+
+jest.mock("@workspace/auth/nestjs", () => ({
+  Public: () => () => undefined,
+  JwksGuard: class JwksGuard {
+    canActivate() {
+      return true
+    }
+  },
+}))
+
 import { INestApplication } from "@nestjs/common"
+import { Test, TestingModule } from "@nestjs/testing"
 import request from "supertest"
 import { App } from "supertest/types"
-import { AppModule } from "./../src/app.module"
-import { configureApp } from "./../src/common/configure-app"
+import { AppModule } from "../src/app.module"
+import { configureApp } from "../src/common/configure-app"
 
 describe("AppController (e2e)", () => {
   let app: INestApplication<App>
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile()
@@ -18,11 +39,11 @@ describe("AppController (e2e)", () => {
     await app.init()
   })
 
-  afterEach(async () => {
+  afterAll(async () => {
     await app.close()
   })
 
-  it("/ (GET)", () => {
+  it("GET /", () => {
     return request(app.getHttpServer())
       .get("/")
       .expect(200)
@@ -35,13 +56,12 @@ describe("AppController (e2e)", () => {
       })
   })
 
-  it("/v1/health (GET)", () => {
+  it("GET /v1/health", () => {
     return request(app.getHttpServer())
       .get("/v1/health")
       .expect(200)
       .expect((res) => {
-        expect(res.body).toHaveProperty("status")
-        expect(res.body).toHaveProperty("db")
+        expect(res.body).toMatchObject({ status: "ok", db: "up" })
       })
   })
 })
