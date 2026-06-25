@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/inter";
+@import "geist";
 
 @custom-variant dark (&:is(.dark *));
 @source "../../../apps/**/*.{ts,tsx}";
@@ -215,5 +216,5 @@
   code, kbd, samp, pre {
     font-family: var(--font-mono);}
   html {
-    @apply font-sans font-mono;}
+    @apply font-sans;}
 }

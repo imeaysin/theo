@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import "@workspace/ui/globals.css"
-import { ThemeProvider } from "@workspace/ui/components/theme-provider"
+import { AppProviders } from "@workspace/ui/providers/app-providers"
 
 export const metadata: Metadata = {
   title: "Marketing",
@@ -13,9 +13,9 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="h-full antialiased" suppressHydrationWarning>
-      <body className="flex min-h-full flex-col">
-        <ThemeProvider>{children}</ThemeProvider>
+    <html lang="en" className="isolate h-full antialiased" suppressHydrationWarning>
+      <body className="relative flex min-h-full flex-col">
+        <AppProviders>{children}</AppProviders>
       </body>
     </html>
   )
