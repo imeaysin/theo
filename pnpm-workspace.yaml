@@ -20,4 +20,4 @@ allowBuilds:
   '@scarf/scarf': false
   esbuild: true
   msgpackr-extract: false
-  '@swc/core': set this to true or false
+  '@swc/core': true
