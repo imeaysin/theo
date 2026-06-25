@@ -26,9 +26,9 @@ import { MeModule } from "./modules/me/me.module"
     AuthModule.forRootAsync({
       imports: [DatabaseModule],
       inject: [DATABASE_READY],
+      disableGlobalAuthGuard: true,
       useFactory: () => ({
         auth,
-        disableGlobalAuthGuard: true,
         bodyParser: {
           json: { limit: "2mb" },
           urlencoded: { limit: "2mb", extended: true },

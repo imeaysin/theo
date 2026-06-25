@@ -80,6 +80,8 @@ const mongoDb = mongoClient.db()
 export function createAuth() {
   return betterAuth({
   appName: env.APP_NAME,
+  baseURL: env.BETTER_AUTH_URL,
+  secret: env.BETTER_AUTH_SECRET,
   trustedOrigins: env.ALLOWED_ORIGINS.split(",").map((origin) => origin.trim()),
 
   database: mongodbAdapter(mongoDb, { client: mongoClient }),
