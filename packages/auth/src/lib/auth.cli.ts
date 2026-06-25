@@ -1,7 +1,1 @@
-import { connectDb } from "@workspace/db"
-import { env } from "@workspace/config"
-import { createAuth } from "./auth"
-
-await connectDb(env.MONGODB_URI)
-
-export const auth = createAuth()
+export { auth } from "./auth"

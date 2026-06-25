@@ -1,13 +1,11 @@
 {
   "extends": "@workspace/typescript-config/nestjs.json",
   "compilerOptions": {
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "outDir": "./dist",
     "baseUrl": "./",
-    "incremental": true,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false,
-    "forceConsistentCasingInFileNames": true
+    "incremental": true
   },
   "include": ["src", "test"],
   "exclude": ["node_modules", "dist"]

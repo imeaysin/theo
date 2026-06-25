@@ -1,54 +1,64 @@
 {
   "name": "@workspace/auth",
   "version": "0.0.0",
-  "private": true,
   "type": "module",
+  "private": true,
   "main": "./dist/auth.cjs",
   "module": "./dist/auth.js",
   "types": "./dist/auth.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/auth.d.ts",
-      "import": "./dist/auth.js",
-      "require": "./dist/auth.cjs"
+      "import": {
+        "types": "./dist/auth.d.ts",
+        "default": "./dist/auth.js"
+      },
+      "require": {
+        "types": "./dist/auth.d.cts",
+        "default": "./dist/auth.cjs"
+      }
     },
     "./client": {
-      "types": "./src/lib/auth-client.ts",
+      "types": "./dist/auth-client.d.ts",
       "import": "./dist/auth-client.js",
       "require": "./dist/auth-client.cjs"
     },
     "./permissions": {
-      "types": "./src/permissions/platform.ts",
+      "types": "./dist/permissions/platform.d.ts",
       "import": "./dist/permissions/platform.js",
       "require": "./dist/permissions/platform.cjs"
     },
     "./permissions/organization": {
-      "types": "./src/permissions/organization.ts",
+      "types": "./dist/permissions/organization.d.ts",
       "import": "./dist/permissions/organization.js",
       "require": "./dist/permissions/organization.cjs"
     },
     "./types": {
-      "types": "./src/types/auth.types.ts",
+      "types": "./dist/types/auth.types.d.ts",
       "import": "./dist/types/auth.types.js",
       "require": "./dist/types/auth.types.cjs"
     },
     "./nextjs": {
-      "types": "./src/adapters/nextjs/index.ts",
+      "types": "./dist/adapters/nextjs/index.d.ts",
       "import": "./dist/adapters/nextjs/index.js",
       "require": "./dist/adapters/nextjs/index.cjs"
     },
+    "./nextjs/server": {
+      "types": "./dist/adapters/nextjs/server.d.ts",
+      "import": "./dist/adapters/nextjs/server.js",
+      "require": "./dist/adapters/nextjs/server.cjs"
+    },
     "./mobile": {
-      "types": "./src/adapters/mobile/expo-client.ts",
+      "types": "./dist/adapters/mobile/expo-client.d.ts",
       "import": "./dist/adapters/mobile/expo-client.js",
       "require": "./dist/adapters/mobile/expo-client.cjs"
     },
     "./nestjs": {
-      "types": "./src/adapters/nestjs/index.ts",
+      "types": "./dist/adapters/nestjs/index.d.ts",
       "import": "./dist/adapters/nestjs/index.js",
       "require": "./dist/adapters/nestjs/index.cjs"
     },
     "./hono": {
-      "types": "./src/adapters/hono/bearer.middleware.ts",
+      "types": "./dist/adapters/hono/bearer.middleware.d.ts",
       "import": "./dist/adapters/hono/bearer.middleware.js",
       "require": "./dist/adapters/hono/bearer.middleware.cjs"
     }
@@ -64,10 +74,10 @@
   "dependencies": {
     "@better-auth/passkey": "^1.6.20",
     "@workspace/config": "workspace:*",
-    "@workspace/db": "workspace:*",
     "@workspace/email": "workspace:*",
     "better-auth": "^1.6.20",
     "jose": "^6.1.3",
+    "mongodb": "^7.2.0",
     "zod": "^4.4.3"
   },
   "peerDependencies": {

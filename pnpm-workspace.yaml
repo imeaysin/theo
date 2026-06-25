@@ -7,6 +7,11 @@ catalog:
   react: 19.2.7
   react-dom: 19.2.7
 
+overrides:
+  "@nestjs/common": "^11.0.1"
+  "@nestjs/core": "^11.0.1"
+  "@nestjs/platform-express": "^11.0.1"
+
 allowBuilds:
   sharp: true
   unrs-resolver: true

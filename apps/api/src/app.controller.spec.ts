@@ -15,8 +15,14 @@ describe("AppController", () => {
   })
 
   describe("root", () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe("Hello World!")
+    it("returns API metadata", () => {
+      const result = appController.getRoot()
+      expect(result).toMatchObject({
+        status: "ok",
+        auth: "/api/auth",
+        health: "/v1/health",
+      })
+      expect(result.name).toBeDefined()
     })
   })
 })

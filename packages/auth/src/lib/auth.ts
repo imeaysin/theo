@@ -9,7 +9,7 @@ import { emailOTP } from "better-auth/plugins/email-otp"
 import { organization } from "better-auth/plugins/organization"
 import { passkey } from "@better-auth/passkey"
 import { nextCookies } from "better-auth/next-js"
-import { getDb, connectDb } from "@workspace/db"
+import { MongoClient } from "mongodb"
 import { env } from "@workspace/config"
 import {
   sendVerificationEmail,
@@ -74,14 +74,15 @@ function socialProviders() {
   return providers
 }
 
+const mongoClient = new MongoClient(env.MONGODB_URI)
+const mongoDb = mongoClient.db()
+
 export function createAuth() {
   return betterAuth({
   appName: env.APP_NAME,
   trustedOrigins: env.ALLOWED_ORIGINS.split(",").map((origin) => origin.trim()),
 
-  database: mongodbAdapter(getDb(), {
-    transaction: false,
-  }),
+  database: mongodbAdapter(mongoDb, { client: mongoClient }),
 
   emailAndPassword: {
     enabled: true,
@@ -178,18 +179,7 @@ export function createAuth() {
   })
 }
 
-let authInstance: ReturnType<typeof createAuth> | null = null
-
-/**
- * Returns a singleton auth instance, connecting to MongoDB on first call.
- * Use in Next.js routes and server code outside NestJS.
- */
-export async function getAuth() {
-  if (!authInstance) {
-    await connectDb(env.MONGODB_URI)
-    authInstance = createAuth()
-  }
-  return authInstance
-}
+/** Better Auth singleton — use this in Next.js routes and server code. */
+export const auth = createAuth()
 
 export type Auth = ReturnType<typeof createAuth>

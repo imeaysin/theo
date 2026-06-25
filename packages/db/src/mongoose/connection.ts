@@ -46,3 +46,7 @@ export async function disconnectDb() {
   await mongoose.disconnect()
   isConnected = false
 }
+
+export function isDbConnected(): boolean {
+  return isConnected && mongoose.connection.readyState === 1
+}
