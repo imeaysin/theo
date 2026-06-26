@@ -2,16 +2,15 @@ import { FileQuestionIcon } from "lucide-react"
 import type * as React from "react"
 import { Button } from "@workspace/ui/components/button"
 import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@workspace/ui/components/empty"
+  PageState,
+  PageStateActions,
+  PageStateDescription,
+  PageStateIcon,
+  PageStateTitle,
+} from "@workspace/ui/components/page-state"
 import { cn } from "@workspace/ui/lib/utils"
 
-export interface PageNotFoundProps extends React.ComponentProps<typeof Empty> {
+export interface PageNotFoundProps extends React.ComponentProps<typeof PageState> {
   title?: string
   description?: string
   homeHref?: string
@@ -29,17 +28,26 @@ export function PageNotFound({
   ...props
 }: PageNotFoundProps) {
   return (
-    <Empty className={cn("min-h-[50vh] flex-1", className)} {...props}>
-      <EmptyHeader>
-        <EmptyMedia variant="icon">
-          <FileQuestionIcon />
-        </EmptyMedia>
-        <EmptyTitle>{title}</EmptyTitle>
-        <EmptyDescription>{description}</EmptyDescription>
-      </EmptyHeader>
-      <EmptyContent>
-        {action ?? <Button render={<a href={homeHref} />}>{homeLabel}</Button>}
-      </EmptyContent>
-    </Empty>
+    <PageState className={cn(className)} {...props}>
+      <PageStateIcon aria-hidden>
+        <FileQuestionIcon />
+      </PageStateIcon>
+      <div className="space-y-2">
+        <PageStateTitle>{title}</PageStateTitle>
+        <PageStateDescription>{description}</PageStateDescription>
+      </div>
+      <PageStateActions>
+        {action ?? (
+          <Button
+            className="px-6"
+            render={<a href={homeHref} />}
+            size="xl"
+            variant="inverse"
+          >
+            {homeLabel}
+          </Button>
+        )}
+      </PageStateActions>
+    </PageState>
   )
 }

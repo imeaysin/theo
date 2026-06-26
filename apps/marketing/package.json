@@ -14,7 +14,10 @@
   },
   "dependencies": {
     "@workspace/auth": "workspace:*",
+    "@workspace/config": "workspace:*",
     "@workspace/ui": "workspace:*",
+    "motion": "^12.38.0",
+    "hls.js": "^1.6.15",
     "next": "16.2.9",
     "postcss": "^8.5.15",
     "react": "catalog:",

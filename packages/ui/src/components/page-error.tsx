@@ -4,16 +4,15 @@ import { CircleAlertIcon } from "lucide-react"
 import type * as React from "react"
 import { Button } from "@workspace/ui/components/button"
 import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@workspace/ui/components/empty"
+  PageState,
+  PageStateActions,
+  PageStateDescription,
+  PageStateIcon,
+  PageStateTitle,
+} from "@workspace/ui/components/page-state"
 import { cn } from "@workspace/ui/lib/utils"
 
-export interface PageErrorProps extends React.ComponentProps<typeof Empty> {
+export interface PageErrorProps extends React.ComponentProps<typeof PageState> {
   title?: string
   description?: string
   homeHref?: string
@@ -33,26 +32,34 @@ export function PageError({
   ...props
 }: PageErrorProps) {
   return (
-    <Empty className={cn("min-h-[50vh] flex-1", className)} {...props}>
-      <EmptyHeader>
-        <EmptyMedia variant="icon">
-          <CircleAlertIcon />
-        </EmptyMedia>
-        <EmptyTitle>{title}</EmptyTitle>
-        <EmptyDescription>{description}</EmptyDescription>
-      </EmptyHeader>
-      <EmptyContent>
-        <div className="flex gap-2">
-          {onRetry ? (
-            <Button onClick={onRetry} size="sm">
-              {retryLabel}
-            </Button>
-          ) : null}
-          <Button render={<a href={homeHref} />} size="sm" variant="outline">
-            {homeLabel}
+    <PageState className={cn(className)} {...props}>
+      <PageStateIcon aria-hidden>
+        <CircleAlertIcon />
+      </PageStateIcon>
+      <div className="space-y-2">
+        <PageStateTitle>{title}</PageStateTitle>
+        <PageStateDescription>{description}</PageStateDescription>
+      </div>
+      <PageStateActions>
+        {onRetry ? (
+          <Button
+            className="px-6"
+            onClick={onRetry}
+            size="xl"
+            variant="inverse"
+          >
+            {retryLabel}
           </Button>
-        </div>
-      </EmptyContent>
-    </Empty>
+        ) : null}
+        <Button
+          className="px-6"
+          render={<a href={homeHref} />}
+          size="xl"
+          variant="outline"
+        >
+          {homeLabel}
+        </Button>
+      </PageStateActions>
+    </PageState>
   )
 }

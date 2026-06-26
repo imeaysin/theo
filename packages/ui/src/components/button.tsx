@@ -43,6 +43,8 @@ export const buttonVariants = cva(
           "border-input bg-popover text-foreground shadow-xs/5 not-dark:bg-clip-padding not-disabled:not-active:not-data-pressed:before:shadow-[0_1px_--theme(--color-black/4%)] hover:bg-accent/50 data-pressed:bg-accent/50 *:data-[slot=button-loading-indicator]:text-foreground dark:bg-input/32 dark:not-disabled:before:shadow-[0_-1px_--theme(--color-white/2%)] dark:not-disabled:not-active:not-data-pressed:before:shadow-[0_-1px_--theme(--color-white/6%)] dark:hover:bg-input/64 dark:data-pressed:bg-input/64 [:disabled,:active,[data-pressed]]:shadow-none",
         secondary:
           "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/90 data-pressed:bg-secondary/90 *:data-[slot=button-loading-indicator]:text-secondary-foreground [:active,[data-pressed]]:bg-secondary/80",
+        inverse:
+          "rounded-none border-transparent bg-foreground text-background shadow-none before:rounded-none hover:bg-foreground/90 data-pressed:bg-foreground/90 *:data-[slot=button-loading-indicator]:text-background [:disabled,:active,[data-pressed]]:shadow-none",
       },
     },
   }
@@ -64,7 +66,7 @@ export function Button({
   disabled: disabledProp,
   ...props
 }: ButtonProps): React.ReactElement {
-  const isDisabled: boolean = Boolean(loading || disabledProp)
+  const isDisabled = Boolean(loading || disabledProp)
   const typeValue: React.ButtonHTMLAttributes<HTMLButtonElement>["type"] =
     render ? undefined : "button"
 
