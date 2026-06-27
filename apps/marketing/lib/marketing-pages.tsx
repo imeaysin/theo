@@ -114,6 +114,7 @@ function buildStaticPages(): Record<string, StaticPageEntry> {
         }
         description={`${siteConfig.name} exists because founders shouldn't spend weekends on admin. We're building the business stack that replaces the tools you've outgrown — invoicing, reconciliation, time tracking, and exports in one calm workspace.`}
         title="Our story"
+        variant="story"
       />
     ),
   }

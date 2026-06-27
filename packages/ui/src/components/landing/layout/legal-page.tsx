@@ -126,21 +126,27 @@ interface PlaceholderPageProps {
   description: string
   action?: ReactNode
   className?: string
+  variant?: "default" | "story"
 }
+
+const placeholderTitleVariants = {
+  default: "font-serif text-3xl text-foreground sm:text-4xl",
+  story:
+    "font-serif text-3xl leading-tight text-foreground lg:text-3xl lg:leading-tight xl:text-3xl xl:leading-[1.3] 2xl:text-3xl 3xl:text-4xl",
+} as const
 
 export function PlaceholderPage({
   title,
   description,
   action,
   className,
+  variant = "default",
 }: PlaceholderPageProps) {
   return (
     <div className={cn("min-h-[60vh] pt-12 pb-16 sm:pt-16", className)}>
       <LandingContainer size="narrow">
         <div className="space-y-4 pt-12 text-center sm:pt-16">
-          <h1 className="font-serif text-2xl text-foreground sm:text-3xl">
-            {title}
-          </h1>
+          <h1 className={placeholderTitleVariants[variant]}>{title}</h1>
           <p className="font-sans text-base leading-relaxed text-muted-foreground">
             {description}
           </p>

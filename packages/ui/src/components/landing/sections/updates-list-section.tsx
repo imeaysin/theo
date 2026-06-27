@@ -22,10 +22,12 @@ export function UpdatesListSection({
   items,
 }: UpdatesListSectionProps) {
   return (
-    <div className="bg-background pb-16 pt-24 sm:pt-32">
+    <div className="bg-background pb-24 pt-32">
       <LandingContainer size="narrow">
         <div className="mb-12 space-y-4">
-          <h1 className="font-serif text-3xl text-foreground sm:text-4xl">{title}</h1>
+          <h1 className="mb-4 font-serif text-3xl text-foreground lg:text-4xl">
+            {title}
+          </h1>
           <p className="font-sans text-base text-muted-foreground">{subtitle}</p>
         </div>
         <div className="divide-y divide-border border border-border">

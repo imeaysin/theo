@@ -1,7 +1,10 @@
 "use client"
 
 import type { ReactNode } from "react"
-import type { FooterLink, FooterLinkGroup } from "@workspace/ui/components/landing/types"
+import type {
+  FooterLink,
+  FooterLinkGroup,
+} from "@workspace/ui/components/landing/types"
 import { FooterWordmark } from "@workspace/ui/components/landing/chrome/footer-wordmark"
 import { cn } from "@workspace/ui/lib/utils"
 
@@ -67,10 +70,10 @@ export function SiteFooter({
   className,
 }: SiteFooterProps) {
   return (
-    <footer className={cn("relative bg-background", className)}>
+    <footer className={cn("relative overflow-hidden bg-background", className)}>
       <div className="h-px w-full border-t border-border" />
 
-      <div className="mx-auto max-w-[1400px] px-4 py-16 sm:px-8">
+      <div className="mx-auto max-w-[1400px] px-4 py-16 sm:px-8 sm:pb-80">
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-16">
           <div className="grid grid-cols-2 gap-x-8 gap-y-8 sm:grid-cols-3 sm:gap-x-8 sm:gap-y-12 md:grid-cols-5 lg:col-span-1">
             {linkGroups.map((group) => (
@@ -107,9 +110,7 @@ export function SiteFooter({
         </div>
       </div>
 
-      <div className="relative h-[clamp(5rem,14vw,11rem)] overflow-hidden border-t border-border bg-background">
-        <FooterWordmark text={wordmark} />
-      </div>
+      <FooterWordmark text={wordmark} />
     </footer>
   )
 }

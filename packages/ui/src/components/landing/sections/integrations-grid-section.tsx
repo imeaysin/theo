@@ -2,7 +2,6 @@
 
 import {
   LandingContainer,
-  LandingSection,
 } from "@workspace/ui/components/landing/layout/page-container"
 import { SectionHeading } from "@workspace/ui/components/landing/layout/section-heading"
 import { IntegrationLogo } from "@workspace/ui/components/landing/primitives/integration-logo"
@@ -28,9 +27,9 @@ export function IntegrationsGridSection({
   items,
 }: IntegrationsGridSectionProps) {
   return (
-    <LandingSection>
+    <div className="bg-background pb-24 pt-32">
       <LandingContainer>
-        <SectionHeading title={title} subtitle={subtitle} />
+        <SectionHeading title={title} subtitle={subtitle} variant="page" />
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((item) => (
             <a
@@ -51,6 +50,6 @@ export function IntegrationsGridSection({
           ))}
         </div>
       </LandingContainer>
-    </LandingSection>
+    </div>
   )
 }

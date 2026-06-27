@@ -30,22 +30,26 @@ export function IntegrationDetailSection({
   backHref = "/integrations",
 }: IntegrationDetailProps) {
   return (
-    <div className="bg-background pb-16 pt-24 sm:pt-32">
-      <LandingContainer size="narrow">
-        <a
-          href={backHref}
-          className="mb-8 inline-block font-sans text-sm text-muted-foreground transition-colors hover:text-foreground"
-        >
-          ← All integrations
-        </a>
+    <div className="bg-background pb-24 pt-32">
+      <LandingContainer>
+        <nav className="mb-8">
+          <a
+            href={backHref}
+            className="font-sans text-sm text-muted-foreground transition-colors hover:text-foreground"
+          >
+            ← All integrations
+          </a>
+        </nav>
 
         <div className="space-y-8">
-          <div className="flex items-start gap-4">
-            <div className="size-14 shrink-0 border border-border bg-secondary p-3">
+          <div className="flex items-start gap-6">
+            <div className="flex size-16 shrink-0 items-center justify-center border border-border bg-secondary p-3">
               <IntegrationLogo id={id} logoUrl={logoUrl} />
             </div>
             <div className="space-y-2">
-              <h1 className="font-serif text-3xl text-foreground">{name}</h1>
+              <h1 className="font-serif text-3xl text-foreground lg:text-4xl">
+                {name}
+              </h1>
               <p className="font-sans text-base text-muted-foreground">
                 {shortDescription}
               </p>

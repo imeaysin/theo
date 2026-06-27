@@ -427,7 +427,7 @@ export function StartPage() {
             <div className="relative overflow-hidden">
               {/* Poster image with fade and blur effect */}
               <div
-                className={`absolute inset-0 z-[1] h-full w-full transition-all duration-1000 ease-in-out ${
+                className={`absolute inset-0 z-1 h-full w-full transition-all duration-1000 ease-in-out ${
                   isVideoLoaded
                     ? "pointer-events-none opacity-0"
                     : "opacity-100"
@@ -471,14 +471,14 @@ export function StartPage() {
               </video>
 
               {/* Dashboard overlay - different styles for mobile vs desktop */}
-              <div className="absolute inset-0 z-[2] flex items-center justify-center p-0 lg:p-4">
+              <div className="absolute inset-0 z-2 flex items-center justify-center p-0 lg:p-4">
                 <div className="relative scale-[0.95] md:scale-100 lg:static lg:flex lg:h-full lg:scale-100 lg:flex-col lg:items-center lg:justify-center">
                   <Image
                     src="/images/dashboard-light.svg"
                     alt="Dashboard illustration"
                     width={1600}
                     height={1200}
-                    className="h-auto w-full transition-all duration-700 ease-out md:!scale-[0.85] lg:max-w-[85%] lg:!scale-100 lg:[transform:rotate(-2deg)_skewY(1deg)] lg:object-contain lg:[filter:drop-shadow(0_30px_60px_rgba(0,0,0,0.6))] 2xl:max-w-[75%] dark:hidden"
+                    className="h-auto w-full transition-all duration-700 ease-out md:scale-[0.85]! lg:max-w-[85%] lg:scale-100! lg:transform-[rotate(-2deg)_skewY(1deg)] lg:object-contain lg:filter-[drop-shadow(0_30px_60px_rgba(0,0,0,0.6))] 2xl:max-w-[75%] dark:hidden"
                     style={{
                       filter: isDashboardLightLoaded
                         ? "blur(0px) drop-shadow(0 30px 60px rgba(0,0,0,0.6))"
@@ -496,7 +496,7 @@ export function StartPage() {
                     alt="Dashboard illustration"
                     width={1600}
                     height={1200}
-                    className="hidden h-auto w-full transition-all duration-700 ease-out md:!scale-[0.85] lg:max-w-[85%] lg:!scale-100 lg:[transform:rotate(-2deg)_skewY(1deg)] lg:object-contain lg:[filter:drop-shadow(0_30px_60px_rgba(0,0,0,0.6))] 2xl:max-w-[75%] dark:block"
+                    className="hidden h-auto w-full transition-all duration-700 ease-out md:scale-[0.85]! lg:max-w-[85%] lg:scale-100! lg:transform-[rotate(-2deg)_skewY(1deg)] lg:object-contain lg:filter-[drop-shadow(0_30px_60px_rgba(0,0,0,0.6))] 2xl:max-w-[75%] dark:block"
                     style={{
                       filter: isDashboardDarkLoaded
                         ? "blur(0px) drop-shadow(0 30px 60px rgba(0,0,0,0.6))"
@@ -519,7 +519,7 @@ export function StartPage() {
                   setIsVideoModalOpen(true)
                   setActiveVideoId("overview")
                 }}
-                className={`pointer-events-none absolute inset-0 z-[4] flex hidden items-center justify-center transition-opacity delay-300 duration-500 ${
+                className={`pointer-events-none absolute inset-0 z-4 flex items-center justify-center transition-opacity delay-300 duration-500 ${
                   isDashboardLightLoaded || isDashboardDarkLoaded
                     ? "opacity-100"
                     : "opacity-0"
@@ -538,7 +538,7 @@ export function StartPage() {
       {/* Video Modal */}
       {isVideoModalOpen && (
         <div
-          className="fixed inset-0 z-[9999] flex items-center justify-center"
+          className="fixed inset-0 z-9999 flex items-center justify-center"
           style={{
             position: "fixed",
             top: 0,
@@ -560,7 +560,7 @@ export function StartPage() {
             }}
           />
           <div
-            className="relative z-[10000] flex max-h-[90vh] max-w-4xl flex-col overflow-hidden border border-border bg-background"
+            className="relative z-10000 flex max-h-[90vh] max-w-4xl flex-col overflow-hidden border border-border bg-background"
             style={{
               animation: "fadeIn 200ms ease-out 50ms both",
             }}
@@ -668,7 +668,7 @@ export function StartPage() {
                             }
                           }}
                           data-video-index={index}
-                          className={`relative flex w-[100px] flex-shrink-0 flex-col items-start gap-1 bg-background pt-1 pb-3 text-left text-muted-foreground transition-colors hover:text-foreground sm:w-[140px] md:w-[310px] md:gap-2 md:pt-2 md:pb-5 ${index > 0 ? "pl-2" : ""}`}
+                          className={`relative flex w-[100px] shrink-0 flex-col items-start gap-1 bg-background pt-1 pb-3 text-left text-muted-foreground transition-colors hover:text-foreground sm:w-[140px] md:w-[310px] md:gap-2 md:pt-2 md:pb-5 ${index > 0 ? "pl-2" : ""}`}
                         >
                           <span
                             className={`text-left font-sans text-sm leading-tight md:text-base ${activeVideoId === video.id ? "text-primary" : ""}`}
@@ -758,7 +758,7 @@ export function StartPage() {
           <div className="hidden grid-cols-1 gap-8 lg:grid lg:h-[740px] lg:grid-cols-2 lg:gap-16">
             <div className="flex gap-6">
               {/* Timeline */}
-              <div className="relative flex flex-shrink-0 flex-col items-center justify-center">
+              <div className="relative flex shrink-0 flex-col items-center justify-center">
                 <div className="mt-2 flex flex-col justify-center space-y-5 lg:mt-3 lg:space-y-6">
                   <div
                     className="relative mb-4 flex items-center justify-center lg:mb-6"

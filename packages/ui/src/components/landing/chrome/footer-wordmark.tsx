@@ -10,14 +10,13 @@ export function FooterWordmark({ text, className }: FooterWordmarkProps) {
     <div
       aria-hidden
       className={cn(
-        "pointer-events-none absolute inset-0 flex items-end justify-center overflow-hidden",
+        "pointer-events-none absolute bottom-0 left-0 translate-y-[25%] overflow-hidden bg-background sm:left-1/2 sm:-translate-x-1/2 sm:translate-y-[40%]",
         className
       )}
     >
       <p
         className={cn(
-          "w-full max-w-full translate-y-[42%] select-none text-center font-sans leading-none text-secondary",
-          "text-[clamp(4.5rem,22vw,18rem)]",
+          "select-none font-sans text-[200px] leading-none text-secondary sm:text-[508px]",
           "[WebkitTextStroke:1px_hsl(var(--muted-foreground))]"
         )}
         style={{

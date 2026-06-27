@@ -97,4 +97,5 @@ export interface LandingSectionHeadingProps {
   subtitle?: string
   className?: string
   children?: ReactNode
+  variant?: "section" | "page"
 }
