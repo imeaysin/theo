@@ -1,15 +1,23 @@
-"use client";
+"use client"
 
-import { LogEvents, track } from "@/lib/track";
+import { LogEvents, track } from "@/lib/track"
 import { cn } from "@workspace/ui/lib/utils"
 import { Icons } from "@workspace/ui/components/icons"
-import { marketingEnv } from "@/config/env";
-import { motion } from "motion/react";
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { siteConfig } from "@/config/site";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { marketingEnv } from "@/config/env"
+import {
+  appPrefetchRoutes,
+  featurePrefetchRoutes,
+  headerFeatureLinks,
+  headerResourceLinksCol1,
+  headerResourceLinksCol2,
+  headerResourceLinks,
+} from "@/config/navigation"
+import { motion } from "motion/react"
+import Image from "next/image"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { siteConfig } from "@/config/site"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { HeaderIntegrationsPreview } from "@/components/layout/header-integrations-preview"
 import type { Testimonial } from "@/components/sections/testimonials-section"
 import { defaultTestimonials } from "@/components/sections/testimonials-section"
@@ -70,35 +78,18 @@ const headerTestimonials: Testimonial[] = [
     fullContent:
       "Company\nCogniStream is an AI-moderated qualitative research platform. We have natural voice conversations with customers, analyse not just what they say but how they feel when they say it, and help businesses make confident decisions faster. I'm Ciarán Harris, CEO and Co-Founder, a two-time founder with over 25 years of research experience for global giants.\n\nChallenge\nI tried using Xero. It couldn't connect to my bank account reliably, the interface felt like it hadn't been updated in a decade, and just getting up and running was painful. It never worked out of the box. The real kicker? My accountant also used Xero, but he preferred I send him everything as a CSV anyway. That completely negated the point. As a founder, you need financial admin to just work so you can focus on building the business. It wasn't working.\n\nImpact\nFinancial admin stopped being a source of friction. Midday actually works the way you'd expect modern software to work. I check in every few days to keep on top of things, and every few weeks I'll do a more involved session to get through receipt scanning and matching ahead of VAT returns. It removed the single biggest pain point from my week-to-week financial admin, and everything else it does is a genuinely useful bonus on top of that.\n\nFavorite features\nReceipt scanning and matching, without question. That's the feature that removes the most friction from running the business day to day. Before, receipts were scattered and matching them to transactions was tedious. Now it's handled. That one feature alone justified the switch. The AI assistant is a nice bonus too, being able to ask a natural language question about your finances and get detailed results is genuinely useful.",
   },
-];
+]
 
 interface HeaderProps {
-  transparent?: boolean;
-  hideMenuItems?: boolean;
+  transparent?: boolean
+  hideMenuItems?: boolean
 }
 
 // Feature pages to prefetch on hover
-const FEATURE_ROUTES = [
-  "/assistant",
-  "/insights",
-  "/transactions",
-  "/inbox",
-  "/time-tracking",
-  "/invoicing",
-  "/customers",
-  "/file-storage",
-  "/pre-accounting",
-];
+const FEATURE_ROUTES = featurePrefetchRoutes
 
 // App pages to prefetch on hover
-const APP_ROUTES = [
-  "/integrations",
-  "/download",
-  "/docs",
-  "/agents",
-  "/computer",
-  "/mcp",
-];
+const APP_ROUTES = appPrefetchRoutes
 
 const HEADER_INTEGRATIONS = [
   { src: "/images/gmail.svg", alt: "Gmail" },
@@ -108,210 +99,208 @@ const HEADER_INTEGRATIONS = [
   { src: "/images/outlook.svg", alt: "Outlook" },
   { src: "/images/whatsapp.svg", alt: "WhatsApp" },
   { src: "/images/dropbox.svg", alt: "Dropbox" },
-];
+]
 
 export function Header({
   transparent = false,
   hideMenuItems = false,
 }: HeaderProps) {
-  const router = useRouter();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isFeaturesOpen, setIsFeaturesOpen] = useState(false);
-  const [isAppsOpen, setIsAppsOpen] = useState(false);
-  const [isMobileFeaturesOpen, setIsMobileFeaturesOpen] = useState(false);
-  const [isMobileAppsOpen, setIsMobileAppsOpen] = useState(false);
+  const router = useRouter()
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isFeaturesOpen, setIsFeaturesOpen] = useState(false)
+  const [isAppsOpen, setIsAppsOpen] = useState(false)
+  const [isMobileFeaturesOpen, setIsMobileFeaturesOpen] = useState(false)
+  const [isMobileAppsOpen, setIsMobileAppsOpen] = useState(false)
   const [visibleIntegrations, setVisibleIntegrations] = useState<
     { id: number; key: string }[]
-  >([]);
+  >([])
   const [featuresDropdownHeight, setFeaturesDropdownHeight] = useState<
     number | null
-  >(null);
-  const featuresTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const appsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const integrationKeyCounterRef = useRef(0);
-  const featuresListRef = useRef<HTMLDivElement>(null);
-  const preAccountingRef = useRef<HTMLAnchorElement>(null);
-  const appsListRef = useRef<HTMLDivElement>(null);
-  const macAppRef = useRef<HTMLAnchorElement>(null);
-  const integrationsAppRef = useRef<HTMLAnchorElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
-  const featuresPrefetched = useRef(false);
-  const appsPrefetched = useRef(false);
-  const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
+  >(null)
+  const featuresTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const appsTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const integrationKeyCounterRef = useRef(0)
+  const featuresListRef = useRef<HTMLDivElement>(null)
+  const preAccountingRef = useRef<HTMLAnchorElement>(null)
+  const appsListRef = useRef<HTMLDivElement>(null)
+  const macAppRef = useRef<HTMLAnchorElement>(null)
+  const integrationsAppRef = useRef<HTMLAnchorElement>(null)
+  const headerRef = useRef<HTMLDivElement>(null)
+  const featuresPrefetched = useRef(false)
+  const appsPrefetched = useRef(false)
+  const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0)
 
   // Prefetch feature pages on hover (only once)
   const prefetchFeatures = useCallback(() => {
-    if (featuresPrefetched.current) return;
-    featuresPrefetched.current = true;
+    if (featuresPrefetched.current) return
+    featuresPrefetched.current = true
     for (const route of FEATURE_ROUTES) {
-      router.prefetch(route);
+      router.prefetch(route)
     }
-  }, [router]);
+  }, [router])
 
   // Prefetch app pages on hover (only once)
   const prefetchApps = useCallback(() => {
-    if (appsPrefetched.current) return;
-    appsPrefetched.current = true;
+    if (appsPrefetched.current) return
+    appsPrefetched.current = true
     for (const route of APP_ROUTES) {
-      router.prefetch(route);
+      router.prefetch(route)
     }
-  }, [router]);
+  }, [router])
 
   // Initialize with 4 random integrations
   useEffect(() => {
     if (isAppsOpen && visibleIntegrations.length === 0) {
       const shuffled = [...HEADER_INTEGRATIONS.keys()].sort(
-        () => Math.random() - 0.5,
-      );
+        () => Math.random() - 0.5
+      )
       setVisibleIntegrations(
         shuffled.slice(0, 4).map((idx) => ({
           id: idx,
           key: `init-${integrationKeyCounterRef.current++}`,
-        })),
-      );
+        }))
+      )
     }
-  }, [isAppsOpen, visibleIntegrations.length]);
+  }, [isAppsOpen, visibleIntegrations.length])
 
   // Randomly fade in/out individual logos
   useEffect(() => {
-    if (!isAppsOpen || visibleIntegrations.length === 0) return;
+    if (!isAppsOpen || visibleIntegrations.length === 0) return
 
     const interval = setInterval(
       () => {
         setVisibleIntegrations((current) => {
           // Randomly decide to replace one logo (70% chance)
           if (Math.random() < 0.7 && current.length === 4) {
-            const indexToReplace = Math.floor(Math.random() * 4);
-            const availableIndices = HEADER_INTEGRATIONS.map((_, i) => i).filter(
-              (i) => !current.some((item) => item.id === i),
-            );
+            const indexToReplace = Math.floor(Math.random() * 4)
+            const availableIndices = HEADER_INTEGRATIONS.map(
+              (_, i) => i
+            ).filter((i) => !current.some((item) => item.id === i))
 
             if (availableIndices.length > 0) {
               const newIndex =
                 availableIndices[
                   Math.floor(Math.random() * availableIndices.length)
-                ];
-              const newVisible = [...current];
+                ]
+              const newVisible = [...current]
               newVisible[indexToReplace] = {
                 id: newIndex ?? 0,
                 key: `change-${integrationKeyCounterRef.current++}`,
-              };
-              return newVisible;
+              }
+              return newVisible
             }
           }
-          return current;
-        });
+          return current
+        })
       },
-      1500 + Math.random() * 1000,
-    ); // Random interval between 1.5-2.5 seconds
+      1500 + Math.random() * 1000
+    ) // Random interval between 1.5-2.5 seconds
 
-    return () => clearInterval(interval);
-  }, [isAppsOpen, visibleIntegrations.length]);
+    return () => clearInterval(interval)
+  }, [isAppsOpen, visibleIntegrations.length])
 
   // Match Pre-accounting container height to features list and store height for apps dropdown
   useEffect(() => {
     if (isFeaturesOpen && featuresListRef.current) {
       // Get the full dropdown height including padding
       const featuresDropdown = featuresListRef.current.closest(
-        "[data-features-dropdown]",
-      ) as HTMLElement;
+        "[data-features-dropdown]"
+      ) as HTMLElement
       const featuresHeight = featuresDropdown
         ? featuresDropdown.offsetHeight
-        : featuresListRef.current.offsetHeight;
-      setFeaturesDropdownHeight(featuresHeight);
+        : featuresListRef.current.offsetHeight
+      setFeaturesDropdownHeight(featuresHeight)
     }
-  }, [isFeaturesOpen]);
+  }, [isFeaturesOpen])
 
   // Apps dropdown height matches Features dropdown (image containers are fixed at 442x277)
 
   useEffect(() => {
     return () => {
       if (featuresTimeoutRef.current) {
-        clearTimeout(featuresTimeoutRef.current);
+        clearTimeout(featuresTimeoutRef.current)
       }
       if (appsTimeoutRef.current) {
-        clearTimeout(appsTimeoutRef.current);
+        clearTimeout(appsTimeoutRef.current)
       }
-    };
-  }, []);
+    }
+  }, [])
 
   return (
     <>
       {/* Dark Overlay */}
       <div
-        className={`fixed left-0 right-0 bottom-0 z-40 transition-opacity duration-150 ${
+        className={`fixed right-0 bottom-0 left-0 z-40 transition-opacity duration-150 ${
           isFeaturesOpen || isAppsOpen
-            ? "opacity-100 visible bg-black/40"
-            : "opacity-0 invisible pointer-events-none"
+            ? "visible bg-black/40 opacity-100"
+            : "pointer-events-none invisible opacity-0"
         }`}
         style={{ top: "108px" }}
       />
 
       {/* Navigation Bar */}
-      <nav className="fixed top-9 left-0 right-0 z-50 w-full">
+      <nav className="fixed top-9 right-0 left-0 z-50 w-full">
         <div
           ref={headerRef}
           className={cn(
-            "relative py-3 xl:py-4 px-4 sm:px-4 md:px-4 lg:px-4 xl:px-6 2xl:px-8 flex items-center justify-between xl:gap-6",
+            "relative flex items-center justify-between px-4 py-3 sm:px-4 md:px-4 lg:px-4 xl:gap-6 xl:px-6 xl:py-4 2xl:px-8",
             isMenuOpen && "border-b border-border",
-            !transparent && "backdrop-blur-md bg-background-semi-transparent",
-            !transparent &&
-              (isFeaturesOpen || isAppsOpen) &&
-              "xl:bg-background",
+            !transparent && "bg-background-semi-transparent backdrop-blur-md",
+            !transparent && (isFeaturesOpen || isAppsOpen) && "xl:bg-background"
           )}
         >
           {/* Logo and Brand */}
           <Link
             href="/"
-            className="flex items-center gap-2 hover:opacity-80 active:opacity-80 transition-opacity duration-200 touch-manipulation"
+            className="flex touch-manipulation items-center gap-2 transition-opacity duration-200 hover:opacity-80 active:opacity-80"
             onClick={() => setIsMenuOpen(false)}
             style={{ WebkitTapHighlightColor: "transparent" }}
             aria-label={`${siteConfig.name} - Go to homepage`}
           >
-            <div className="w-6 h-6">
-              <Icons.LogoSmall className="w-full h-full text-foreground" />
+            <div className="h-6 w-6">
+              <Icons.LogoSmall className="h-full w-full text-foreground" />
             </div>
-            <span className="font-sans text-base xl:hidden text-foreground">
+            <span className="font-sans text-base text-foreground xl:hidden">
               {siteConfig.name.toLowerCase()}
             </span>
           </Link>
 
           {/* Desktop Navigation Links */}
           {!hideMenuItems && (
-            <div className="hidden xl:flex items-center gap-6">
+            <div className="hidden items-center gap-6 xl:flex">
               {/* Features with Dropdown */}
               <div
                 className="relative -mx-3 -my-2"
                 onMouseEnter={() => {
                   if (featuresTimeoutRef.current) {
-                    clearTimeout(featuresTimeoutRef.current);
+                    clearTimeout(featuresTimeoutRef.current)
                   }
-                  prefetchFeatures();
+                  prefetchFeatures()
                   // Rotate to next testimonial
                   setCurrentTestimonialIndex(
-                    (prev) => (prev + 1) % headerTestimonials.length,
-                  );
-                  setIsFeaturesOpen(true);
+                    (prev) => (prev + 1) % headerTestimonials.length
+                  )
+                  setIsFeaturesOpen(true)
                 }}
                 onMouseLeave={() => {
                   featuresTimeoutRef.current = setTimeout(() => {
-                    setIsFeaturesOpen(false);
-                  }, 200);
+                    setIsFeaturesOpen(false)
+                  }, 200)
                 }}
               >
                 <button
                   type="button"
-                  className="text-sm transition-colors text-muted-foreground hover:text-foreground px-3 py-2 flex items-center gap-1"
+                  className="flex items-center gap-1 px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
                 >
                   Features
                   <Icons.ArrowDropDown
-                    className={`w-4 h-4 transition-transform duration-200 ${isFeaturesOpen ? "rotate-180" : ""}`}
+                    className={`h-4 w-4 transition-transform duration-200 ${isFeaturesOpen ? "rotate-180" : ""}`}
                   />
                 </button>
                 {/* Invisible bridge to dropdown */}
                 {isFeaturesOpen && (
                   <div
-                    className="absolute left-0 right-0 h-4"
+                    className="absolute right-0 left-0 h-4"
                     style={{ top: "100%" }}
                   />
                 )}
@@ -320,11 +309,11 @@ export function Header({
                 {isFeaturesOpen && (
                   <div
                     data-features-dropdown
-                    className="fixed left-0 right-0 bg-background border-t border-b border-border shadow-lg z-50 overflow-hidden opacity-0 animate-dropdown-fade"
+                    className="fixed right-0 left-0 z-50 animate-dropdown-fade overflow-hidden border-t border-b border-border bg-background opacity-0 shadow-lg"
                     style={{ top: "100%" }}
                   >
                     <div className="p-6 xl:p-8 2xl:p-10">
-                      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 items-start">
+                      <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-4">
                         {/* Column 1 & 2 - Features List (2 columns) */}
                         <div
                           className="lg:col-span-2 xl:max-w-xl 2xl:max-w-xl"
@@ -333,166 +322,130 @@ export function Header({
                           <div className="grid grid-cols-2 gap-x-4">
                             {/* Column 1 */}
                             <div>
-                              {[
-                                {
-                                  href: "/invoicing",
-                                  title: "Invoicing",
-                                  desc: "Get paid faster",
-                                },
-                                {
-                                  href: "/transactions",
-                                  title: "Transactions",
-                                  desc: "All transactions together",
-                                },
-                                {
-                                  href: "/inbox",
-                                  title: "Inbox",
-                                  desc: "Receipts handled automatically",
-                                },
-                                {
-                                  href: "/time-tracking",
-                                  title: "Time tracking",
-                                  desc: "See where time goes",
-                                },
-                              ].map((item, index) => (
-                                <div
-                                  key={item.href}
-                                  className="opacity-0 animate-dropdown-slide"
-                                  style={{ animationDelay: `${index * 30}ms` }}
-                                >
-                                  <Link
-                                    href={item.href}
-                                    className="flex items-center py-3 group hover:bg-secondary transition-colors duration-200"
-                                    onClick={() => setIsFeaturesOpen(false)}
+                              {headerFeatureLinks
+                                .slice(0, 4)
+                                .map((item, index) => (
+                                  <div
+                                    key={item.href}
+                                    className="animate-dropdown-slide opacity-0"
+                                    style={{
+                                      animationDelay: `${index * 30}ms`,
+                                    }}
                                   >
-                                    <div className="flex flex-col pl-2">
-                                      <span className="font-sans text-base text-foreground mb-1">
-                                        {item.title}
-                                      </span>
-                                      <span className="font-sans text-xs text-muted-foreground group-hover:text-foreground transition-colors duration-200">
-                                        {item.desc}
-                                      </span>
-                                    </div>
-                                  </Link>
-                                </div>
-                              ))}
+                                    <Link
+                                      href={item.href}
+                                      className="group flex items-center py-3 transition-colors duration-200 hover:bg-secondary"
+                                      onClick={() => setIsFeaturesOpen(false)}
+                                    >
+                                      <div className="flex flex-col pl-2">
+                                        <span className="mb-1 font-sans text-base text-foreground">
+                                          {item.title}
+                                        </span>
+                                        <span className="font-sans text-xs text-muted-foreground transition-colors duration-200 group-hover:text-foreground">
+                                          {item.description}
+                                        </span>
+                                      </div>
+                                    </Link>
+                                  </div>
+                                ))}
                             </div>
                             {/* Column 2 */}
                             <div>
-                              {[
-                                {
-                                  href: "/customers",
-                                  title: "Customers",
-                                  desc: "Know your customers",
-                                },
-                                {
-                                  href: "/file-storage",
-                                  title: "Files",
-                                  desc: "Everything in one place",
-                                },
-                                {
-                                  href: "/pre-accounting",
-                                  title: "Exports",
-                                  desc: "Accounting ready",
-                                },
-                                {
-                                  href: "/assistant",
-                                  title: "Assistant",
-                                  desc: "Ask anything, get things done",
-                                },
-                              ].map((item, index) => (
-                                <div
-                                  key={item.href}
-                                  className="opacity-0 animate-dropdown-slide"
-                                  style={{
-                                    animationDelay: `${(index + 4) * 30}ms`,
-                                  }}
-                                >
-                                  <Link
-                                    href={item.href}
-                                    className="flex items-center py-3 group hover:bg-secondary transition-colors duration-200"
-                                    onClick={() => setIsFeaturesOpen(false)}
+                              {headerFeatureLinks
+                                .slice(4)
+                                .map((item, index) => (
+                                  <div
+                                    key={item.href}
+                                    className="animate-dropdown-slide opacity-0"
+                                    style={{
+                                      animationDelay: `${(index + 4) * 30}ms`,
+                                    }}
                                   >
-                                    <div className="flex flex-col pl-2">
-                                      <span className="font-sans text-base text-foreground mb-1">
-                                        {item.title}
-                                      </span>
-                                      <span className="font-sans text-xs text-muted-foreground group-hover:text-foreground transition-colors duration-200">
-                                        {item.desc}
-                                      </span>
-                                    </div>
-                                  </Link>
-                                </div>
-                              ))}
+                                    <Link
+                                      href={item.href}
+                                      className="group flex items-center py-3 transition-colors duration-200 hover:bg-secondary"
+                                      onClick={() => setIsFeaturesOpen(false)}
+                                    >
+                                      <div className="flex flex-col pl-2">
+                                        <span className="mb-1 font-sans text-base text-foreground">
+                                          {item.title}
+                                        </span>
+                                        <span className="font-sans text-xs text-muted-foreground transition-colors duration-200 group-hover:text-foreground">
+                                          {item.description}
+                                        </span>
+                                      </div>
+                                    </Link>
+                                  </div>
+                                ))}
                             </div>
                           </div>
                         </div>
 
                         {/* Column 3 & 4 - Preview Cards */}
-                        <div className="lg:col-span-2 flex items-start justify-end gap-4 flex-nowrap">
+                        <div className="flex flex-nowrap items-start justify-end gap-4 lg:col-span-2">
                           {/* Pre-accounting Preview */}
                           <Link
                             ref={preAccountingRef}
                             href="/pre-accounting"
                             onClick={() => setIsFeaturesOpen(false)}
-                            className="w-full max-w-[320px] lg:w-[320px] lg:max-w-none xl:w-[350px] 2xl:w-[400px] h-[277px] border border-border overflow-hidden cursor-pointer hover:opacity-90 hover:border-foreground/20 hover:scale-[1.02] transition-all duration-200 flex flex-col flex-shrink-0"
+                            className="flex h-[277px] w-full max-w-[320px] shrink-0 cursor-pointer flex-col overflow-hidden border border-border transition-all duration-200 hover:scale-[1.02] hover:border-foreground/20 hover:opacity-90 lg:w-[320px] lg:max-w-none xl:w-[350px] 2xl:w-[400px]"
                           >
-                            <div className="h-[214px] flex items-center justify-center bg-background p-4">
+                            <div className="flex h-[214px] items-center justify-center bg-background p-4">
                               <Image
                                 src="/images/accounting-light.png"
                                 alt="Pre-accounting"
                                 width={112}
                                 height={400}
-                                className="h-auto w-auto max-h-[80px] object-contain dark:hidden"
+                                className="h-auto max-h-[80px] w-auto object-contain dark:hidden"
                               />
                               <Image
                                 src="/images/accounting-dark.png"
                                 alt="Pre-accounting"
                                 width={112}
                                 height={400}
-                                className="h-auto w-auto max-h-[80px] object-contain hidden dark:block"
+                                className="hidden h-auto max-h-[80px] w-auto object-contain dark:block"
                               />
                             </div>
-                            <div className="bg-background border-t border-border p-2.5 flex items-center justify-between gap-4">
+                            <div className="flex items-center justify-between gap-4 border-t border-border bg-background p-2.5">
                               <div className="flex-1">
-                                <span className="font-sans text-xs text-foreground block">
+                                <span className="block font-sans text-xs text-foreground">
                                   Pre-accounting
                                 </span>
-                                <span className="font-sans text-xs text-muted-foreground group-hover:text-foreground transition-colors duration-200">
+                                <span className="font-sans text-xs text-muted-foreground transition-colors duration-200 group-hover:text-foreground">
                                   Clean records ready for your accountant
                                 </span>
                               </div>
-                              <div className="flex items-center gap-1.5 flex-shrink-0">
-                                <div className="w-6 h-6 border border-border flex items-center justify-center bg-background">
+                              <div className="flex shrink-0 items-center gap-1.5">
+                                <div className="flex h-6 w-6 items-center justify-center border border-border bg-background">
                                   <Image
                                     src="/images/xero.svg"
                                     alt="Xero"
                                     width={14}
                                     height={14}
                                     unoptimized
-                                    className="h-auto w-auto max-h-[14px] max-w-[14px] object-contain opacity-70"
+                                    className="h-auto max-h-[14px] w-auto max-w-[14px] object-contain opacity-70"
                                     style={{ width: "auto", height: "auto" }}
                                   />
                                 </div>
-                                <div className="w-6 h-6 border border-border flex items-center justify-center bg-background">
+                                <div className="flex h-6 w-6 items-center justify-center border border-border bg-background">
                                   <Image
                                     src="/images/quickbooks.svg"
                                     alt="QuickBooks"
                                     width={14}
                                     height={14}
                                     unoptimized
-                                    className="h-auto w-auto max-h-[14px] max-w-[14px] object-contain opacity-70"
+                                    className="h-auto max-h-[14px] w-auto max-w-[14px] object-contain opacity-70"
                                     style={{ width: "auto", height: "auto" }}
                                   />
                                 </div>
-                                <div className="w-6 h-6 border border-border flex items-center justify-center bg-background">
+                                <div className="flex h-6 w-6 items-center justify-center border border-border bg-background">
                                   <Image
                                     src="/images/fortnox.svg"
                                     alt="Fortnox"
                                     width={14}
                                     height={14}
                                     unoptimized
-                                    className="h-auto w-auto max-h-[14px] max-w-[14px] object-contain opacity-70"
+                                    className="h-auto max-h-[14px] w-auto max-w-[14px] object-contain opacity-70"
                                     style={{ width: "auto", height: "auto" }}
                                   />
                                 </div>
@@ -504,60 +457,60 @@ export function Header({
                           <Link
                             href="/testimonials"
                             onClick={() => setIsFeaturesOpen(false)}
-                            className="w-full max-w-[320px] lg:w-[320px] lg:max-w-none xl:w-[350px] 2xl:w-[400px] h-[277px] border border-border overflow-visible cursor-pointer hover:opacity-90 hover:border-foreground/20 hover:scale-[1.02] transition-all duration-200 flex flex-col flex-shrink-0"
+                            className="flex h-[277px] w-full max-w-[320px] shrink-0 cursor-pointer flex-col overflow-visible border border-border transition-all duration-200 hover:scale-[1.02] hover:border-foreground/20 hover:opacity-90 lg:w-[320px] lg:max-w-none xl:w-[350px] 2xl:w-[400px]"
                           >
-                            <div className="flex-1 flex items-center justify-center bg-background p-4 relative overflow-visible">
-                              <span className="absolute top-[89%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-[20rem] xl:text-[22rem] 2xl:text-[24rem] text-muted-foreground opacity-10 pointer-events-none select-none z-0 whitespace-nowrap leading-none font-serif">
+                            <div className="relative flex flex-1 items-center justify-center overflow-visible bg-background p-4">
+                              <span className="pointer-events-none absolute top-[89%] left-1/2 z-0 -translate-x-1/2 -translate-y-1/2 font-serif text-[20rem] leading-none whitespace-nowrap text-muted-foreground opacity-10 select-none xl:text-[22rem] 2xl:text-[24rem]">
                                 &rdquo;
                               </span>
                               {(() => {
                                 const testimonial =
-                                  headerTestimonials[currentTestimonialIndex];
-                                if (!testimonial) return null;
+                                  headerTestimonials[currentTestimonialIndex]
+                                if (!testimonial) return null
                                 const firstSentenceEnd =
-                                  testimonial.content.match(/[.!?]\s/);
+                                  testimonial.content.match(/[.!?]\s/)
                                 const firstSentence = firstSentenceEnd
                                   ? testimonial.content.substring(
                                       0,
-                                      firstSentenceEnd.index! + 1,
+                                      firstSentenceEnd.index! + 1
                                     )
-                                  : testimonial.content;
+                                  : testimonial.content
                                 return (
-                                  <div className="relative font-serif text-sm xl:text-base 2xl:text-lg leading-tight text-center px-2 line-clamp-3 w-full z-10">
+                                  <div className="relative z-10 line-clamp-3 w-full px-2 text-center font-serif text-sm leading-tight xl:text-base 2xl:text-lg">
                                     <span className="text-primary">
                                       &ldquo;{firstSentence}&rdquo;
                                     </span>
                                   </div>
-                                );
+                                )
                               })()}
                             </div>
-                            <div className="bg-background border-t border-border p-2.5 flex items-center justify-between gap-4">
+                            <div className="flex items-center justify-between gap-4 border-t border-border bg-background p-2.5">
                               <div className="flex-1">
-                                <span className="font-sans text-xs text-foreground block">
+                                <span className="block font-sans text-xs text-foreground">
                                   Customer Stories
                                 </span>
-                                <span className="font-sans text-xs text-muted-foreground group-hover:text-foreground transition-colors duration-200">
+                                <span className="font-sans text-xs text-muted-foreground transition-colors duration-200 group-hover:text-foreground">
                                   See how founders use Midday
                                 </span>
                               </div>
                               {(() => {
                                 const testimonial =
-                                  headerTestimonials[currentTestimonialIndex];
-                                if (!testimonial?.image) return null;
+                                  headerTestimonials[currentTestimonialIndex]
+                                if (!testimonial?.image) return null
                                 return (
-                                  <div className="flex items-center gap-1.5 flex-shrink-0">
-                                    <div className="w-6 h-6 flex items-center justify-center bg-background overflow-hidden">
+                                  <div className="flex shrink-0 items-center gap-1.5">
+                                    <div className="flex h-6 w-6 items-center justify-center overflow-hidden bg-background">
                                       <Image
                                         src={testimonial.image}
                                         alt={testimonial.name}
                                         width={24}
                                         height={24}
-                                        className="w-full h-full object-cover opacity-70"
+                                        className="h-full w-full object-cover opacity-70"
                                         style={{ filter: "grayscale(100%)" }}
                                       />
                                     </div>
                                   </div>
-                                );
+                                )
                               })()}
                             </div>
                           </Link>
@@ -570,13 +523,13 @@ export function Header({
 
               <Link
                 href="/story"
-                className="text-sm transition-colors text-muted-foreground hover:text-foreground"
+                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
                 Story
               </Link>
               <Link
                 href="/download"
-                className="text-sm transition-colors text-muted-foreground hover:text-foreground"
+                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
                 Download
               </Link>
@@ -586,30 +539,30 @@ export function Header({
                 className="relative -mx-3 -my-2"
                 onMouseEnter={() => {
                   if (appsTimeoutRef.current) {
-                    clearTimeout(appsTimeoutRef.current);
+                    clearTimeout(appsTimeoutRef.current)
                   }
-                  prefetchApps();
-                  setIsAppsOpen(true);
+                  prefetchApps()
+                  setIsAppsOpen(true)
                 }}
                 onMouseLeave={() => {
                   appsTimeoutRef.current = setTimeout(() => {
-                    setIsAppsOpen(false);
-                  }, 200);
+                    setIsAppsOpen(false)
+                  }, 200)
                 }}
               >
                 <button
                   type="button"
-                  className="text-sm transition-colors text-muted-foreground hover:text-foreground px-3 py-2 flex items-center gap-1"
+                  className="flex items-center gap-1 px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
                 >
                   Resources
                   <Icons.ArrowDropDown
-                    className={`w-4 h-4 transition-transform duration-200 ${isAppsOpen ? "rotate-180" : ""}`}
+                    className={`h-4 w-4 transition-transform duration-200 ${isAppsOpen ? "rotate-180" : ""}`}
                   />
                 </button>
                 {/* Invisible bridge to dropdown */}
                 {isAppsOpen && (
                   <div
-                    className="absolute left-0 right-0 h-4"
+                    className="absolute right-0 left-0 h-4"
                     style={{ top: "100%" }}
                   />
                 )}
@@ -617,7 +570,7 @@ export function Header({
                 {/* Resources Dropdown - Full Width */}
                 {isAppsOpen && (
                   <div
-                    className="fixed left-0 right-0 bg-background border-t border-b border-border shadow-lg z-50 overflow-hidden opacity-0 animate-dropdown-fade"
+                    className="fixed right-0 left-0 z-50 animate-dropdown-fade overflow-hidden border-t border-b border-border bg-background opacity-0 shadow-lg"
                     style={{
                       top: "100%",
                       height:
@@ -626,8 +579,8 @@ export function Header({
                           : "auto",
                     }}
                   >
-                    <div className="p-6 xl:p-8 2xl:p-10 h-full">
-                      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 xl:gap-6 items-start h-full">
+                    <div className="h-full p-6 xl:p-8 2xl:p-10">
+                      <div className="grid h-full grid-cols-1 items-start gap-4 lg:grid-cols-4 xl:gap-6">
                         {/* Column 1 & 2 - Apps List (2 columns) */}
                         <div
                           ref={appsListRef}
@@ -636,48 +589,23 @@ export function Header({
                           <div className="grid grid-cols-2 gap-x-4">
                             {/* Column 1 */}
                             <div>
-                              {[
-                                {
-                                  href: "/integrations",
-                                  title: "Integrations",
-                                  desc: "Connect your existing tools.",
-                                  external: false,
-                                },
-                                {
-                                  href: "/docs",
-                                  title: "Documentation",
-                                  desc: "Learn how to use Midday.",
-                                  external: false,
-                                },
-                                {
-                                  href: "/agents",
-                                  title: "CLI",
-                                  desc: "Agent-native CLI and MCP workflows.",
-                                  external: false,
-                                },
-                                {
-                                  href: "/mcp",
-                                  title: "AI Integrations",
-                                  desc: "Connect AI tools to your business data.",
-                                  external: false,
-                                },
-                              ].map((item, index) => (
+                              {headerResourceLinksCol1.map((item, index) => (
                                 <div
                                   key={item.href}
-                                  className="opacity-0 animate-dropdown-slide"
+                                  className="animate-dropdown-slide opacity-0"
                                   style={{ animationDelay: `${index * 30}ms` }}
                                 >
                                   <Link
                                     href={item.href}
-                                    className="flex items-center py-3 group hover:bg-secondary transition-colors duration-200"
+                                    className="group flex items-center py-3 transition-colors duration-200 hover:bg-secondary"
                                     onClick={() => setIsAppsOpen(false)}
                                   >
                                     <div className="flex flex-col pl-2">
-                                      <span className="font-sans text-base text-foreground mb-1">
+                                      <span className="mb-1 font-sans text-base text-foreground">
                                         {item.title}
                                       </span>
-                                      <span className="font-sans text-xs text-muted-foreground group-hover:text-foreground transition-colors duration-200">
-                                        {item.desc}
+                                      <span className="font-sans text-xs text-muted-foreground transition-colors duration-200 group-hover:text-foreground">
+                                        {item.description}
                                       </span>
                                     </div>
                                   </Link>
@@ -686,35 +614,10 @@ export function Header({
                             </div>
                             {/* Column 2 */}
                             <div>
-                              {[
-                                {
-                                  href: "https://api.midday.ai",
-                                  title: "Developer & API",
-                                  desc: "Programmatic access to Midday.",
-                                  external: true,
-                                },
-                                {
-                                  href: "/sdks",
-                                  title: "SDKs",
-                                  desc: "Typed SDKs to build faster.",
-                                  external: false,
-                                },
-                                {
-                                  href: "/chat",
-                                  title: "Chat",
-                                  desc: "Run your business from any chat app.",
-                                  external: false,
-                                },
-                                {
-                                  href: "/computer",
-                                  title: "Computer",
-                                  desc: "Autonomous agents for your business.",
-                                  external: false,
-                                },
-                              ].map((item, index) => (
+                              {headerResourceLinksCol2.map((item, index) => (
                                 <div
                                   key={`${item.href}-${item.title}`}
-                                  className="opacity-0 animate-dropdown-slide"
+                                  className="animate-dropdown-slide opacity-0"
                                   style={{
                                     animationDelay: `${(index + 2) * 30}ms`,
                                   }}
@@ -722,30 +625,30 @@ export function Header({
                                   {item.external ? (
                                     <a
                                       href={item.href}
-                                      className="flex items-center py-3 group hover:bg-secondary transition-colors duration-200"
+                                      className="group flex items-center py-3 transition-colors duration-200 hover:bg-secondary"
                                       onClick={() => setIsAppsOpen(false)}
                                     >
                                       <div className="flex flex-col pl-2">
-                                        <span className="font-sans text-base text-foreground mb-1">
+                                        <span className="mb-1 font-sans text-base text-foreground">
                                           {item.title}
                                         </span>
-                                        <span className="font-sans text-xs text-muted-foreground group-hover:text-foreground transition-colors duration-200">
-                                          {item.desc}
+                                        <span className="font-sans text-xs text-muted-foreground transition-colors duration-200 group-hover:text-foreground">
+                                          {item.description}
                                         </span>
                                       </div>
                                     </a>
                                   ) : (
                                     <Link
                                       href={item.href}
-                                      className="flex items-center py-3 group hover:bg-secondary transition-colors duration-200"
+                                      className="group flex items-center py-3 transition-colors duration-200 hover:bg-secondary"
                                       onClick={() => setIsAppsOpen(false)}
                                     >
                                       <div className="flex flex-col pl-2">
-                                        <span className="font-sans text-base text-foreground mb-1">
+                                        <span className="mb-1 font-sans text-base text-foreground">
                                           {item.title}
                                         </span>
-                                        <span className="font-sans text-xs text-muted-foreground group-hover:text-foreground transition-colors duration-200">
-                                          {item.desc}
+                                        <span className="font-sans text-xs text-muted-foreground transition-colors duration-200 group-hover:text-foreground">
+                                          {item.description}
                                         </span>
                                       </div>
                                     </Link>
@@ -757,39 +660,43 @@ export function Header({
                         </div>
 
                         {/* Columns 3 & 4 - Image Previews Container */}
-                        <div className="lg:col-span-2 flex items-start justify-end gap-4 flex-nowrap">
+                        <div className="flex flex-nowrap items-start justify-end gap-4 lg:col-span-2">
                           {/* Integrations Preview */}
                           <Link
                             ref={integrationsAppRef}
                             href="/integrations"
                             onClick={() => setIsAppsOpen(false)}
-                            className="w-full max-w-[320px] lg:w-[320px] lg:max-w-none xl:w-[350px] 2xl:w-[400px] h-[277px] border border-border overflow-hidden cursor-pointer hover:opacity-90 hover:border-foreground/20 hover:scale-[1.02] transition-all duration-200 flex flex-col flex-shrink-0"
+                            className="flex h-[277px] w-full max-w-[320px] shrink-0 cursor-pointer flex-col overflow-hidden border border-border transition-all duration-200 hover:scale-[1.02] hover:border-foreground/20 hover:opacity-90 lg:w-[320px] lg:max-w-none xl:w-[350px] 2xl:w-[400px]"
                           >
                             <div className="flex-1">
                               <HeaderIntegrationsPreview />
                             </div>
-                            <div className="bg-background border-t border-border p-2.5 flex items-center justify-between gap-4">
+                            <div className="flex items-center justify-between gap-4 border-t border-border bg-background p-2.5">
                               <div className="flex-1">
-                                <span className="font-sans text-xs text-foreground block">
+                                <span className="block font-sans text-xs text-foreground">
                                   Integrations
                                 </span>
-                                <span className="font-sans text-xs text-muted-foreground group-hover:text-foreground transition-colors duration-200">
+                                <span className="font-sans text-xs text-muted-foreground transition-colors duration-200 group-hover:text-foreground">
                                   Connect your existing tools.
                                 </span>
                               </div>
-                              <div className="flex items-center gap-1.5 flex-shrink-0 relative h-6">
+                              <div className="relative flex h-6 shrink-0 items-center gap-1.5">
                                 {visibleIntegrations.map((item) => (
                                   <div
                                     key={item.key}
-                                    className="w-6 h-6 border border-border flex items-center justify-center bg-background transition-all duration-300"
+                                    className="flex h-6 w-6 items-center justify-center border border-border bg-background transition-all duration-300"
                                   >
                                     <Image
-                                      src={HEADER_INTEGRATIONS[item.id]?.src ?? ""}
-                                      alt={HEADER_INTEGRATIONS[item.id]?.alt ?? ""}
+                                      src={
+                                        HEADER_INTEGRATIONS[item.id]?.src ?? ""
+                                      }
+                                      alt={
+                                        HEADER_INTEGRATIONS[item.id]?.alt ?? ""
+                                      }
                                       width={14}
                                       height={14}
                                       unoptimized
-                                      className="h-auto w-auto max-h-[14px] max-w-[14px] object-contain opacity-70"
+                                      className="h-auto max-h-[14px] w-auto max-w-[14px] object-contain opacity-70"
                                       style={{ width: "auto", height: "auto" }}
                                     />
                                   </div>
@@ -803,29 +710,29 @@ export function Header({
                             ref={macAppRef}
                             href="/download"
                             onClick={() => setIsAppsOpen(false)}
-                            className="w-full max-w-[320px] lg:w-[320px] lg:max-w-none xl:w-[350px] 2xl:w-[400px] h-[277px] border border-border overflow-hidden cursor-pointer hover:opacity-90 hover:border-foreground/20 hover:scale-[1.02] transition-all duration-200 flex flex-col flex-shrink-0"
+                            className="flex h-[277px] w-full max-w-[320px] shrink-0 cursor-pointer flex-col overflow-hidden border border-border transition-all duration-200 hover:scale-[1.02] hover:border-foreground/20 hover:opacity-90 lg:w-[320px] lg:max-w-none xl:w-[350px] 2xl:w-[400px]"
                           >
-                            <div className="flex-1 flex items-center justify-center bg-background p-4">
+                            <div className="flex flex-1 items-center justify-center bg-background p-4">
                               <Image
                                 src="/images/header-dock-light.png"
                                 alt="Mac Dock"
                                 width={1200}
                                 height={300}
-                                className="w-3/4 h-auto object-contain dark:hidden"
+                                className="h-auto w-3/4 object-contain dark:hidden"
                               />
                               <Image
                                 src="/images/header-dock-dark.png"
                                 alt="Mac Dock"
                                 width={1200}
                                 height={300}
-                                className="w-3/4 h-auto object-contain hidden dark:block"
+                                className="hidden h-auto w-3/4 object-contain dark:block"
                               />
                             </div>
-                            <div className="bg-background border-t border-border p-2.5">
-                              <span className="font-sans text-xs text-foreground block">
+                            <div className="border-t border-border bg-background p-2.5">
+                              <span className="block font-sans text-xs text-foreground">
                                 Mac app
                               </span>
-                              <span className="font-sans text-xs text-muted-foreground group-hover:text-foreground transition-colors duration-200">
+                              <span className="font-sans text-xs text-muted-foreground transition-colors duration-200 group-hover:text-foreground">
                                 Your business, always one click away.
                               </span>
                             </div>
@@ -841,7 +748,7 @@ export function Header({
               <div className="border-l border-border pl-4">
                 <Link
                   href={marketingEnv.appUrl}
-                  className="text-sm transition-colors text-primary hover:text-primary/80"
+                  className="text-sm text-primary transition-colors hover:text-primary/80"
                   onClick={() =>
                     track({
                       event: LogEvents.CTA.name,
@@ -858,19 +765,19 @@ export function Header({
           )}
 
           {/* Mobile & Tablet Hamburger Menu */}
-          <div className="xl:hidden flex items-center">
+          <div className="flex items-center xl:hidden">
             <button
               type="button"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="relative transition-colors flex items-center justify-end p-2 min-w-[44px] min-h-[44px] text-primary hover:text-primary/80 xl:active:text-primary focus:outline-none focus-visible:outline-none touch-manipulation"
+              className="relative flex min-h-[44px] min-w-[44px] touch-manipulation items-center justify-end p-2 text-primary transition-colors hover:text-primary/80 focus:outline-none focus-visible:outline-none xl:active:text-primary"
               style={{
                 WebkitTapHighlightColor: "transparent",
               }}
               aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             >
-              <div className="relative size-5 flex flex-col justify-center items-center">
+              <div className="relative flex size-5 flex-col items-center justify-center">
                 <motion.span
-                  className="absolute w-4 h-[1.5px] bg-current rounded-none"
+                  className="absolute h-[1.5px] w-4 rounded-none bg-current"
                   animate={{
                     rotate: isMenuOpen ? 45 : 0,
                     y: isMenuOpen ? 0 : -4.5,
@@ -878,7 +785,7 @@ export function Header({
                   transition={{ type: "spring", stiffness: 300, damping: 25 }}
                 />
                 <motion.span
-                  className="absolute w-4 h-[1.5px] bg-current rounded-none"
+                  className="absolute h-[1.5px] w-4 rounded-none bg-current"
                   animate={{
                     opacity: isMenuOpen ? 0 : 1,
                     scaleX: isMenuOpen ? 0 : 1,
@@ -886,7 +793,7 @@ export function Header({
                   transition={{ type: "spring", stiffness: 300, damping: 25 }}
                 />
                 <motion.span
-                  className="absolute w-4 h-[1.5px] bg-current rounded-none"
+                  className="absolute h-[1.5px] w-4 rounded-none bg-current"
                   animate={{
                     rotate: isMenuOpen ? -45 : 0,
                     y: isMenuOpen ? 0 : 4.5,
@@ -901,55 +808,46 @@ export function Header({
 
       {/* Mobile & Tablet Menu Overlay */}
       {isMenuOpen && (
-        <div className="fixed inset-0 z-40 xl:hidden bg-background">
-          <div className="pt-28 px-6">
+        <div className="fixed inset-0 z-40 bg-background xl:hidden">
+          <div className="px-6 pt-28">
             <div className="flex flex-col space-y-6 text-left">
               {/* Features Expandable Section */}
               <div className="flex flex-col">
                 <button
                   type="button"
                   onClick={(e) => {
-                    setIsMobileFeaturesOpen(!isMobileFeaturesOpen);
-                    e.currentTarget.blur();
+                    setIsMobileFeaturesOpen(!isMobileFeaturesOpen)
+                    e.currentTarget.blur()
                   }}
                   onTouchEnd={(e) => {
-                    e.currentTarget.blur();
+                    e.currentTarget.blur()
                   }}
-                  className="text-2xl font-sans transition-colors py-2 text-primary hover:text-primary xl:active:text-primary focus:outline-none focus-visible:outline-none touch-manipulation flex items-center justify-between"
+                  className="flex touch-manipulation items-center justify-between py-2 font-sans text-2xl text-primary transition-colors hover:text-primary focus:outline-none focus-visible:outline-none xl:active:text-primary"
                   style={{
                     WebkitTapHighlightColor: "transparent",
                   }}
                 >
                   <span>Features</span>
                   <Icons.ArrowDropDown
-                    className={`w-6 h-6 transition-transform duration-200 ${
+                    className={`h-6 w-6 transition-transform duration-200 ${
                       isMobileFeaturesOpen ? "rotate-180" : ""
                     }`}
                   />
                 </button>
                 {isMobileFeaturesOpen && (
                   <>
-                    <div className="h-px w-full border-t border-border my-2" />
-                    <div className="overflow-hidden opacity-0 animate-mobile-slide">
+                    <div className="my-2 h-px w-full border-t border-border" />
+                    <div className="animate-mobile-slide overflow-hidden opacity-0">
                       <div className="flex flex-col space-y-4 pt-2">
-                        {[
-                          { href: "/invoicing", label: "Invoicing" },
-                          { href: "/transactions", label: "Transactions" },
-                          { href: "/inbox", label: "Inbox" },
-                          { href: "/time-tracking", label: "Time tracking" },
-                          { href: "/customers", label: "Customers" },
-                          { href: "/file-storage", label: "Files" },
-                          { href: "/pre-accounting", label: "Exports" },
-                          { href: "/assistant", label: "Assistant" },
-                        ].map((item) => (
+                        {headerFeatureLinks.map((item) => (
                           <Link
                             key={item.href}
                             href={item.href}
                             onClick={() => {
-                              setIsMenuOpen(false);
-                              setIsMobileFeaturesOpen(false);
+                              setIsMenuOpen(false)
+                              setIsMobileFeaturesOpen(false)
                             }}
-                            className="text-lg font-sans text-left text-muted-foreground hover:text-muted-foreground xl:active:text-muted-foreground focus:outline-none focus-visible:outline-none touch-manipulation transition-colors"
+                            className="touch-manipulation text-left font-sans text-lg text-muted-foreground transition-colors hover:text-muted-foreground focus:outline-none focus-visible:outline-none xl:active:text-muted-foreground"
                             style={{ WebkitTapHighlightColor: "transparent" }}
                           >
                             {item.label}
@@ -963,17 +861,17 @@ export function Header({
               <Link
                 href="/story"
                 onTouchEnd={(e) => {
-                  const target = e.currentTarget;
+                  const target = e.currentTarget
                   if (target) {
-                    target.blur();
+                    target.blur()
                     setTimeout(() => {
                       if (target) {
-                        target.blur();
+                        target.blur()
                       }
-                    }, 100);
+                    }, 100)
                   }
                 }}
-                className="no-touch-active text-2xl font-sans transition-colors py-2 text-primary hover:text-primary xl:active:text-primary focus:outline-none focus-visible:outline-none touch-manipulation"
+                className="no-touch-active touch-manipulation py-2 font-sans text-2xl text-primary transition-colors hover:text-primary focus:outline-none focus-visible:outline-none xl:active:text-primary"
                 onClick={() => setIsMenuOpen(false)}
                 style={{ WebkitTapHighlightColor: "transparent" }}
               >
@@ -982,17 +880,17 @@ export function Header({
               <Link
                 href="/download"
                 onTouchEnd={(e) => {
-                  const target = e.currentTarget;
+                  const target = e.currentTarget
                   if (target) {
-                    target.blur();
+                    target.blur()
                     setTimeout(() => {
                       if (target) {
-                        target.blur();
+                        target.blur()
                       }
-                    }, 100);
+                    }, 100)
                   }
                 }}
-                className="no-touch-active text-2xl font-sans transition-colors py-2 text-primary hover:text-primary xl:active:text-primary focus:outline-none focus-visible:outline-none touch-manipulation"
+                className="no-touch-active touch-manipulation py-2 font-sans text-2xl text-primary transition-colors hover:text-primary focus:outline-none focus-visible:outline-none xl:active:text-primary"
                 onClick={() => setIsMenuOpen(false)}
                 style={{ WebkitTapHighlightColor: "transparent" }}
               >
@@ -1004,117 +902,58 @@ export function Header({
                 <button
                   type="button"
                   onClick={(e) => {
-                    setIsMobileAppsOpen(!isMobileAppsOpen);
-                    e.currentTarget.blur();
+                    setIsMobileAppsOpen(!isMobileAppsOpen)
+                    e.currentTarget.blur()
                   }}
                   onTouchEnd={(e) => {
-                    e.currentTarget.blur();
+                    e.currentTarget.blur()
                   }}
-                  className="text-2xl font-sans transition-colors py-2 text-primary hover:text-primary xl:active:text-primary focus:outline-none focus-visible:outline-none touch-manipulation flex items-center justify-between"
+                  className="flex touch-manipulation items-center justify-between py-2 font-sans text-2xl text-primary transition-colors hover:text-primary focus:outline-none focus-visible:outline-none xl:active:text-primary"
                   style={{
                     WebkitTapHighlightColor: "transparent",
                   }}
                 >
                   <span>Resources</span>
                   <Icons.ArrowDropDown
-                    className={`w-6 h-6 transition-transform duration-200 ${
+                    className={`h-6 w-6 transition-transform duration-200 ${
                       isMobileAppsOpen ? "rotate-180" : ""
                     }`}
                   />
                 </button>
                 {isMobileAppsOpen && (
                   <>
-                    <div className="h-px w-full border-t border-border my-2" />
-                    <div className="overflow-hidden opacity-0 animate-mobile-slide">
+                    <div className="my-2 h-px w-full border-t border-border" />
+                    <div className="animate-mobile-slide overflow-hidden opacity-0">
                       <div className="flex flex-col space-y-4 pt-2">
-                        <Link
-                          href="/integrations"
-                          onClick={() => {
-                            setIsMenuOpen(false);
-                            setIsMobileAppsOpen(false);
-                          }}
-                          className="text-lg font-sans text-left text-muted-foreground hover:text-muted-foreground xl:active:text-muted-foreground focus:outline-none focus-visible:outline-none touch-manipulation transition-colors"
-                          style={{ WebkitTapHighlightColor: "transparent" }}
-                        >
-                          Integrations
-                        </Link>
-                        <Link
-                          href="/docs"
-                          onClick={() => {
-                            setIsMenuOpen(false);
-                            setIsMobileAppsOpen(false);
-                          }}
-                          className="text-lg font-sans text-left text-muted-foreground hover:text-muted-foreground xl:active:text-muted-foreground focus:outline-none focus-visible:outline-none touch-manipulation transition-colors"
-                          style={{ WebkitTapHighlightColor: "transparent" }}
-                        >
-                          Documentation
-                        </Link>
-                        <Link
-                          href="/agents"
-                          onClick={() => {
-                            setIsMenuOpen(false);
-                            setIsMobileAppsOpen(false);
-                          }}
-                          className="text-lg font-sans text-left text-muted-foreground hover:text-muted-foreground xl:active:text-muted-foreground focus:outline-none focus-visible:outline-none touch-manipulation transition-colors"
-                          style={{ WebkitTapHighlightColor: "transparent" }}
-                        >
-                          CLI
-                        </Link>
-                        <Link
-                          href="/computer"
-                          onClick={() => {
-                            setIsMenuOpen(false);
-                            setIsMobileAppsOpen(false);
-                          }}
-                          className="text-lg font-sans text-left text-muted-foreground hover:text-muted-foreground xl:active:text-muted-foreground focus:outline-none focus-visible:outline-none touch-manipulation transition-colors"
-                          style={{ WebkitTapHighlightColor: "transparent" }}
-                        >
-                          Computer
-                        </Link>
-                        <Link
-                          href="/mcp"
-                          onClick={() => {
-                            setIsMenuOpen(false);
-                            setIsMobileAppsOpen(false);
-                          }}
-                          className="text-lg font-sans text-left text-muted-foreground hover:text-muted-foreground xl:active:text-muted-foreground focus:outline-none focus-visible:outline-none touch-manipulation transition-colors"
-                          style={{ WebkitTapHighlightColor: "transparent" }}
-                        >
-                          AI Integrations
-                        </Link>
-                        <a
-                          href="https://api.midday.ai"
-                          onClick={() => {
-                            setIsMenuOpen(false);
-                            setIsMobileAppsOpen(false);
-                          }}
-                          className="text-lg font-sans text-left text-muted-foreground hover:text-muted-foreground xl:active:text-muted-foreground focus:outline-none focus-visible:outline-none touch-manipulation transition-colors"
-                          style={{ WebkitTapHighlightColor: "transparent" }}
-                        >
-                          Developer & API
-                        </a>
-                        <Link
-                          href="/sdks"
-                          onClick={() => {
-                            setIsMenuOpen(false);
-                            setIsMobileAppsOpen(false);
-                          }}
-                          className="text-lg font-sans text-left text-muted-foreground hover:text-muted-foreground xl:active:text-muted-foreground focus:outline-none focus-visible:outline-none touch-manipulation transition-colors"
-                          style={{ WebkitTapHighlightColor: "transparent" }}
-                        >
-                          SDKs
-                        </Link>
-                        <Link
-                          href="/chat"
-                          onClick={() => {
-                            setIsMenuOpen(false);
-                            setIsMobileAppsOpen(false);
-                          }}
-                          className="text-lg font-sans text-left text-muted-foreground hover:text-muted-foreground xl:active:text-muted-foreground focus:outline-none focus-visible:outline-none touch-manipulation transition-colors"
-                          style={{ WebkitTapHighlightColor: "transparent" }}
-                        >
-                          Chat
-                        </Link>
+                        {headerResourceLinks.map((item) =>
+                          item.external ? (
+                            <a
+                              key={item.href}
+                              href={item.href}
+                              onClick={() => {
+                                setIsMenuOpen(false)
+                                setIsMobileAppsOpen(false)
+                              }}
+                              className="touch-manipulation text-left font-sans text-lg text-muted-foreground transition-colors hover:text-muted-foreground focus:outline-none focus-visible:outline-none xl:active:text-muted-foreground"
+                              style={{ WebkitTapHighlightColor: "transparent" }}
+                            >
+                              {item.title}
+                            </a>
+                          ) : (
+                            <Link
+                              key={item.href}
+                              href={item.href}
+                              onClick={() => {
+                                setIsMenuOpen(false)
+                                setIsMobileAppsOpen(false)
+                              }}
+                              className="touch-manipulation text-left font-sans text-lg text-muted-foreground transition-colors hover:text-muted-foreground focus:outline-none focus-visible:outline-none xl:active:text-muted-foreground"
+                              style={{ WebkitTapHighlightColor: "transparent" }}
+                            >
+                              {item.title}
+                            </Link>
+                          )
+                        )}
                       </div>
                     </div>
                   </>
@@ -1122,29 +961,29 @@ export function Header({
               </div>
 
               {/* Sign in */}
-              <div className="border-t border-border pt-8 mt-8">
+              <div className="mt-8 border-t border-border pt-8">
                 <Link
                   href={marketingEnv.appUrl}
                   onTouchEnd={(e) => {
-                    const target = e.currentTarget;
+                    const target = e.currentTarget
                     if (target) {
-                      target.blur();
+                      target.blur()
                       setTimeout(() => {
                         if (target) {
-                          target.blur();
+                          target.blur()
                         }
-                      }, 100);
+                      }, 100)
                     }
                   }}
-                  className="text-2xl font-sans transition-colors py-2 text-primary hover:text-primary xl:active:text-primary focus:outline-none focus-visible:outline-none touch-manipulation"
+                  className="touch-manipulation py-2 font-sans text-2xl text-primary transition-colors hover:text-primary focus:outline-none focus-visible:outline-none xl:active:text-primary"
                   onClick={() => {
-                    setIsMenuOpen(false);
+                    setIsMenuOpen(false)
                     track({
                       event: LogEvents.CTA.name,
                       channel: LogEvents.CTA.channel,
                       label: "Sign in",
                       position: "header_mobile",
-                    });
+                    })
                   }}
                   style={{ WebkitTapHighlightColor: "transparent" }}
                 >
@@ -1156,5 +995,5 @@ export function Header({
         </div>
       )}
     </>
-  );
+  )
 }

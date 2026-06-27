@@ -5,19 +5,25 @@ import { FeaturePageTemplate } from "@/components/templates/feature-page-templat
 import { TestimonialsSection } from "@/components/sections/testimonials-section"
 import { siteConfig } from "@/config/site"
 import { marketingEnv } from "@/config/env"
-import { apps } from "@/data/apps"
+import { apps, integrationCategories } from "@/data/apps"
 import { defaultFaqItems } from "@/data/faq"
 import { featurePages, featurePageSlugs } from "@/data/feature-pages"
 import { privacyDocument, termsDocument } from "@/data/legal"
+import {
+  mcpCapabilities,
+  mcpClients,
+  mcpSampleQuestions,
+} from "@/data/mcp-clients"
 import { placeholderPages } from "@/data/placeholder-pages"
 import { updatesItems } from "@/data/updates"
 import { createMarketingMetadata } from "@/lib/metadata"
 import {
   CtaSection,
-  FaqSection,
   IntegrationsGridSection,
   LegalPage,
+  McpHubSection,
   PlaceholderPage,
+  ResourcePageShell,
   UpdatesListSection,
 } from "@workspace/ui/components/landing"
 
@@ -45,6 +51,18 @@ function ctaBlock(title: string, description?: string) {
   )
 }
 
+function integrationGridItems() {
+  return apps.map((app) => ({
+    id: app.id,
+    name: app.name,
+    slug: app.slug,
+    shortDescription: app.short_description,
+    logoUrl: app.logoUrl,
+    href: `/integrations/${app.slug}`,
+    beta: app.beta,
+  }))
+}
+
 function buildStaticPages(): Record<string, StaticPageEntry> {
   const pages: Record<string, StaticPageEntry> = {}
 
@@ -60,21 +78,17 @@ function buildStaticPages(): Record<string, StaticPageEntry> {
   pages.integrations = {
     meta: {
       title: "Apps & integrations",
-      description: "Connect banks, email, payments, and accounting tools to Theo.",
+      description:
+        "Connect banks, email, payments, and accounting tools to Theo.",
       path: "/integrations",
       og: { title: "Integrations", description: "Connect your stack" },
     },
     render: () => (
       <>
         <IntegrationsGridSection
-          items={apps.map((app) => ({
-            id: app.id,
-            name: app.name,
-            slug: app.slug,
-            shortDescription: app.short_description,
-            logoUrl: app.logoUrl,
-            href: `/integrations/${app.slug}`,
-          }))}
+          activeCategory="all"
+          categories={[...integrationCategories]}
+          items={integrationGridItems()}
         />
         {ctaBlock("Connect your tools")}
       </>
@@ -153,6 +167,38 @@ function buildStaticPages(): Record<string, StaticPageEntry> {
     render: () => <LegalPage document={privacyDocument} />,
   }
 
+  pages.mcp = {
+    meta: {
+      title: "AI Integrations via MCP — Claude, ChatGPT, Cursor & More",
+      description:
+        "Run your business from any AI tool via Model Context Protocol (MCP). Create invoices, export to your accountant, track time, and manage transactions from Cursor, Claude, ChatGPT, Raycast, or Zapier.",
+      path: "/mcp",
+      og: {
+        title: "AI Integrations",
+        description: "Run your business from any AI tool via MCP",
+      },
+      keywords: [
+        "MCP",
+        "Model Context Protocol",
+        "AI integration",
+        "Claude MCP",
+        "Cursor MCP",
+        "business automation",
+      ],
+    },
+    render: () => (
+      <>
+        <McpHubSection
+          capabilities={mcpCapabilities}
+          clients={mcpClients}
+          productName={siteConfig.name}
+          sampleQuestions={mcpSampleQuestions}
+        />
+        {ctaBlock("Connect your AI tools")}
+      </>
+    ),
+  }
+
   for (const [slug, content] of Object.entries(placeholderPages)) {
     pages[slug] = {
       meta: {
@@ -161,14 +207,13 @@ function buildStaticPages(): Record<string, StaticPageEntry> {
         path: `/${slug}`,
       },
       render: () => (
-        <>
-          <PlaceholderPage
-            description={content.description}
-            title={content.title}
-          />
-          <FaqSection items={defaultFaqItems} />
-          {ctaBlock(`Get started with ${siteConfig.name}`)}
-        </>
+        <ResourcePageShell
+          ctaHref={marketingEnv.appUrl}
+          ctaTitle={`Get started with ${siteConfig.name}`}
+          description={content.description}
+          faqItems={defaultFaqItems}
+          title={content.title}
+        />
       ),
     }
   }

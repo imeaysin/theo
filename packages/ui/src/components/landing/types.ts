@@ -99,3 +99,33 @@ export interface LandingSectionHeadingProps {
   children?: ReactNode
   variant?: "section" | "page"
 }
+
+export interface IntegrationCategory {
+  id: string
+  name: string
+}
+
+export interface McpClientItem {
+  id: string
+  name: string
+  description: string
+  href: string
+}
+
+export interface ChatPlatformStep {
+  title: string
+  description: string
+  href?: string
+}
+
+export interface ChatPlatformPageConfig {
+  name: string
+  slug: string
+  description: string
+  steps: ChatPlatformStep[]
+  notifications: string[]
+  capabilities: string[]
+  settingsPath: string
+  icon: ReactNode
+  productName: string
+}

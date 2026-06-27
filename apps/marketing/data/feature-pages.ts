@@ -145,7 +145,7 @@ export const defaultFeatureGridItems: LandingFeatureItem[] = [
   { href: "/customers", icon: "scatter_plot", title: "Customers", description: "Customer performance" },
   { href: "/file-storage", icon: "folder_zip", title: "Files", description: "Document storage" },
   { href: "/pre-accounting", icon: "arrow_outward", title: "Exports", description: "Accounting ready" },
-  { href: "/assistant", icon: "widgets", title: "AI integrations", description: "Connect your tools" },
+  { href: "/mcp", icon: "widgets", title: "AI integrations", description: "Connect your tools" },
 ]
 
 export const featurePageSlugs = Object.keys(featurePages)

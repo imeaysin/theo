@@ -139,3 +139,27 @@ export const apps: WebsiteApp[] = [
 ]
 
 export const landingIntegrations = toLandingIntegrations(apps)
+
+export const integrationCategories = [
+  { id: "all", name: "All" },
+  { id: "capture", name: "Capture" },
+  { id: "accounting", name: "Accounting" },
+  { id: "payments", name: "Payments" },
+  { id: "apps", name: "Apps" },
+] as const
+
+export type IntegrationCategoryId = (typeof integrationCategories)[number]["id"]
+
+export function getAppsByCategory(category: string): WebsiteApp[] {
+  if (category === "all") return apps
+  return apps.filter((app) => app.category === category)
+}
+
+export function getCategoryName(categoryId: string): string {
+  const category = integrationCategories.find((item) => item.id === categoryId)
+  return category?.name ?? categoryId
+}
+
+export const integrationCategorySlugs = integrationCategories
+  .filter((category) => category.id !== "all")
+  .map((category) => category.id) as Exclude<IntegrationCategoryId, "all">[]

@@ -7,11 +7,6 @@ export const placeholderPages: Record<
     description:
       "Desktop apps for macOS, Windows, and Linux are coming soon. Use Theo in your browser today.",
   },
-  chat: {
-    title: "Chat",
-    description:
-      "Talk to your business on Slack, WhatsApp, Telegram, and iMessage. Coming soon.",
-  },
   docs: {
     title: "Documentation",
     description:
@@ -31,11 +26,6 @@ export const placeholderPages: Record<
     title: "SDKs",
     description:
       "Client libraries for TypeScript, Python, and more. SDK documentation is on the way.",
-  },
-  mcp: {
-    title: "MCP",
-    description:
-      "Connect Theo to Claude, Cursor, ChatGPT, and other AI tools via Model Context Protocol.",
   },
   support: {
     title: "Support",
