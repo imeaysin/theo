@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Hedvig_Letters_Sans, Hedvig_Letters_Serif } from "next/font/google"
+import { Geist_Mono, Hedvig_Letters_Serif, Inter } from "next/font/google"
 import "@/styles/globals.css"
 import { Footer } from "@/components/layout/footer"
 import { Header } from "@/components/layout/header"
@@ -8,21 +8,26 @@ import { siteConfig } from "@/config/site"
 import { ThemeProvider } from "@workspace/ui/components/theme-provider"
 import { cn } from "@workspace/ui/lib/utils"
 
-const hedvigSans = Hedvig_Letters_Sans({
-  weight: "400",
+const fontSans = Inter({
   subsets: ["latin"],
-  display: "optional",
-  variable: "--font-hedvig-sans",
-  preload: true,
-  adjustFontFallback: true,
-  fallback: ["system-ui", "arial"],
+  variable: "--font-sans",
+})
+
+const fontHeading = Inter({
+  subsets: ["latin"],
+  variable: "--font-heading",
+})
+
+const fontMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
 })
 
 const hedvigSerif = Hedvig_Letters_Serif({
   weight: "400",
   subsets: ["latin"],
   display: "optional",
-  variable: "--font-hedvig-serif",
+  variable: "--font-serif",
   preload: true,
   adjustFontFallback: true,
   fallback: ["Georgia", "Times New Roman", "serif"],
@@ -49,23 +54,28 @@ export default function RootLayout({
       </head>
       <body
         className={cn(
-          `${hedvigSans.variable} ${hedvigSerif.variable} font-sans`,
-          "overflow-x-hidden bg-background font-sans antialiased"
+          fontSans.variable,
+          fontHeading.variable,
+          fontMono.variable,
+          hedvigSerif.variable,
+          "relative overflow-x-hidden bg-background font-sans antialiased"
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          disableTransitionOnChange
-          enableSystem
-        >
-          <SunsetBanner />
-          <Header />
-          <main className="container mx-auto overflow-hidden px-4 pt-9 md:overflow-visible">
-            {children}
-          </main>
-          <Footer />
-        </ThemeProvider>
+        <div className="relative isolate flex min-h-svh flex-col">
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            disableTransitionOnChange
+            enableSystem
+          >
+            <SunsetBanner />
+            <Header />
+            <main className="container mx-auto overflow-hidden px-4 pt-9 md:overflow-visible">
+              {children}
+            </main>
+            <Footer />
+          </ThemeProvider>
+        </div>
       </body>
     </html>
   )

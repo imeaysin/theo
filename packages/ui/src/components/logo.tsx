@@ -1,10 +1,6 @@
 import type { IconSvgProps } from "../types"
 
-export function Logo({
-  size = 36,
-  height,
-  ...props
-}: IconSvgProps) {
+export function Logo({ size = 36, height, ...props }: IconSvgProps) {
   return (
     <svg
       fill="none"

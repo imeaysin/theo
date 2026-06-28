@@ -268,9 +268,9 @@ export function StartPage() {
       <div className="relative min-h-screen overflow-visible bg-background lg:overflow-hidden">
         <div className="relative flex min-h-screen flex-col overflow-hidden pt-32 pb-12 sm:py-32 md:pt-24 lg:pt-0">
           {/* Header content - centered on mobile, side-by-side on desktop */}
-          <div className="z-20 flex flex-1 flex-col items-center justify-center space-y-8 px-3 sm:px-4 md:justify-start md:pt-16 lg:mx-auto lg:mb-12 lg:w-full lg:max-w-[1400px] lg:flex-none lg:space-y-0 lg:px-0 lg:pt-48 xl:mb-12 2xl:mb-12 3xl:mb-16">
+          <div className="3xl:mb-16 z-20 flex flex-1 flex-col items-center justify-center space-y-8 px-3 sm:px-4 md:justify-start md:pt-16 lg:mx-auto lg:mb-12 lg:w-full lg:max-w-[1400px] lg:flex-none lg:space-y-0 lg:px-0 lg:pt-48 xl:mb-12 2xl:mb-12">
             <div className="flex w-full flex-col items-center space-y-6 text-center lg:space-y-8">
-              <div className="mx-auto max-w-3xl space-y-5 px-2 lg:space-y-6 lg:px-0 3xl:max-w-5xl">
+              <div className="3xl:max-w-5xl mx-auto max-w-3xl space-y-5 px-2 lg:space-y-6 lg:px-0">
                 <Link
                   href="#features"
                   className="inline-flex items-center gap-2 rounded-full border border-border px-3.5 py-1.5 font-sans text-xs text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground"
@@ -279,7 +279,7 @@ export function StartPage() {
                   <span aria-hidden="true">&rarr;</span>
                 </Link>
 
-                <h1 className="font-serif text-3xl leading-[1.1] tracking-tight text-foreground sm:text-3xl md:text-4xl lg:text-6xl xl:text-7xl 2xl:text-7xl 3xl:text-8xl">
+                <h1 className="3xl:text-8xl font-serif text-3xl leading-[1.1] tracking-tight text-foreground sm:text-3xl md:text-4xl lg:text-6xl xl:text-7xl 2xl:text-7xl">
                   The business stack for{" "}
                   <em className="text-muted-foreground/80 not-italic">
                     modern
@@ -420,7 +420,7 @@ export function StartPage() {
 
           {/* Video section */}
           <div
-            className="mt-8 mb-8 overflow-visible md:mt-12 lg:mt-0 lg:mb-4 lg:w-full 3xl:mb-20"
+            className="3xl:mb-20 mt-8 mb-8 overflow-visible md:mt-12 lg:mt-0 lg:mb-4 lg:w-full"
             ref={videoContainerRef}
           >
             <div className="relative overflow-hidden">
@@ -454,7 +454,7 @@ export function StartPage() {
 
               <video
                 ref={videoRef}
-                className={`h-[420px] w-full object-cover transition-opacity duration-1000 ease-in-out sm:h-[520px] md:h-[600px] lg:h-[800px] xl:h-[900px] 3xl:h-[1000px] ${
+                className={`3xl:h-[1000px] h-[420px] w-full object-cover transition-opacity duration-1000 ease-in-out sm:h-[520px] md:h-[600px] lg:h-[800px] xl:h-[900px] ${
                   isVideoLoaded ? "opacity-100" : "opacity-0"
                 }`}
                 autoPlay
@@ -705,7 +705,7 @@ export function StartPage() {
       )}
 
       {/* Features 2-Column Layout Section */}
-      <section className="bg-background pt-12 pb-20 sm:pt-2 lg:pt-6 lg:pb-24 xl:pt-8 2xl:pt-12 3xl:pt-32">
+      <section className="3xl:pt-32 bg-background pt-12 pb-20 sm:pt-2 lg:pt-6 lg:pb-24 xl:pt-8 2xl:pt-12">
         <div className="mx-auto max-w-[1400px]">
           {/* Mobile: Stacked features */}
           <div className="grid grid-cols-1 gap-12 sm:gap-16 lg:hidden">

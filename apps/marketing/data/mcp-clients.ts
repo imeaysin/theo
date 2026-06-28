@@ -6,21 +6,96 @@ export interface McpClient {
 }
 
 export const mcpClients: McpClient[] = [
-  { id: "cursor", name: "Cursor", description: "Track time for clients while you code", href: "/mcp/cursor" },
-  { id: "claude", name: "Claude", description: "Analyze trends and get insights", href: "/mcp/claude" },
-  { id: "perplexity", name: "Perplexity", description: "AI search with your real data", href: "/mcp/perplexity" },
-  { id: "raycast", name: "Raycast", description: "Quick answers, one shortcut away", href: "/mcp/raycast" },
-  { id: "chatgpt", name: "ChatGPT", description: "Build custom integrations", href: "/mcp/chatgpt" },
-  { id: "gemini", name: "Gemini", description: "Financial data from your terminal", href: "/mcp/gemini" },
-  { id: "windsurf", name: "Windsurf", description: "Financial data in your AI IDE", href: "/mcp/windsurf" },
-  { id: "cline", name: "Cline", description: "Financial data in VS Code", href: "/mcp/cline" },
-  { id: "zed", name: "Zed", description: "Financial data in the fastest editor", href: "/mcp/zed" },
-  { id: "opencode", name: "OpenCode", description: "Track time for clients from your terminal", href: "/mcp/opencode" },
-  { id: "zapier", name: "Zapier", description: "Automate workflows with 7,000+ apps", href: "/mcp/zapier" },
-  { id: "copilot", name: "Microsoft Copilot", description: "Query data from Microsoft 365", href: "/mcp/copilot" },
-  { id: "n8n", name: "n8n", description: "Automate workflows with AI agents", href: "/mcp/n8n" },
-  { id: "make", name: "Make", description: "Visual automations with 1,500+ apps", href: "/mcp/make" },
-  { id: "manus", name: "Manus", description: "Automate workflows with AI agents", href: "/mcp/manus" },
+  {
+    id: "cursor",
+    name: "Cursor",
+    description: "Track time for clients while you code",
+    href: "/mcp/cursor",
+  },
+  {
+    id: "claude",
+    name: "Claude",
+    description: "Analyze trends and get insights",
+    href: "/mcp/claude",
+  },
+  {
+    id: "perplexity",
+    name: "Perplexity",
+    description: "AI search with your real data",
+    href: "/mcp/perplexity",
+  },
+  {
+    id: "raycast",
+    name: "Raycast",
+    description: "Quick answers, one shortcut away",
+    href: "/mcp/raycast",
+  },
+  {
+    id: "chatgpt",
+    name: "ChatGPT",
+    description: "Build custom integrations",
+    href: "/mcp/chatgpt",
+  },
+  {
+    id: "gemini",
+    name: "Gemini",
+    description: "Financial data from your terminal",
+    href: "/mcp/gemini",
+  },
+  {
+    id: "windsurf",
+    name: "Windsurf",
+    description: "Financial data in your AI IDE",
+    href: "/mcp/windsurf",
+  },
+  {
+    id: "cline",
+    name: "Cline",
+    description: "Financial data in VS Code",
+    href: "/mcp/cline",
+  },
+  {
+    id: "zed",
+    name: "Zed",
+    description: "Financial data in the fastest editor",
+    href: "/mcp/zed",
+  },
+  {
+    id: "opencode",
+    name: "OpenCode",
+    description: "Track time for clients from your terminal",
+    href: "/mcp/opencode",
+  },
+  {
+    id: "zapier",
+    name: "Zapier",
+    description: "Automate workflows with 7,000+ apps",
+    href: "/mcp/zapier",
+  },
+  {
+    id: "copilot",
+    name: "Microsoft Copilot",
+    description: "Query data from Microsoft 365",
+    href: "/mcp/copilot",
+  },
+  {
+    id: "n8n",
+    name: "n8n",
+    description: "Automate workflows with AI agents",
+    href: "/mcp/n8n",
+  },
+  {
+    id: "make",
+    name: "Make",
+    description: "Visual automations with 1,500+ apps",
+    href: "/mcp/make",
+  },
+  {
+    id: "manus",
+    name: "Manus",
+    description: "Automate workflows with AI agents",
+    href: "/mcp/manus",
+  },
 ]
 
 export const mcpSampleQuestions = [

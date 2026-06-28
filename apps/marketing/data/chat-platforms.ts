@@ -15,7 +15,12 @@ export interface ChatPlatformConfig {
   settingsPath: string
 }
 
-export const chatPlatformSlugs = ["imessage", "slack", "whatsapp", "telegram"] as const
+export const chatPlatformSlugs = [
+  "imessage",
+  "slack",
+  "whatsapp",
+  "telegram",
+] as const
 
 export type ChatPlatformSlug = (typeof chatPlatformSlugs)[number]
 
@@ -29,15 +34,18 @@ export const chatPlatforms: Record<ChatPlatformSlug, ChatPlatformConfig> = {
     steps: [
       {
         title: "Open Apps in Theo",
-        description: "Go to the Apps section in your Theo dashboard and find iMessage.",
+        description:
+          "Go to the Apps section in your Theo dashboard and find iMessage.",
       },
       {
         title: "Connect iMessage",
-        description: "Follow the setup flow on your Mac to link your iMessage account.",
+        description:
+          "Follow the setup flow on your Mac to link your iMessage account.",
       },
       {
         title: "Start chatting",
-        description: 'Send your first message — try forwarding a receipt or asking "What did I spend this week?"',
+        description:
+          'Send your first message — try forwarding a receipt or asking "What did I spend this week?"',
       },
     ],
     notifications: [
@@ -64,15 +72,18 @@ export const chatPlatforms: Record<ChatPlatformSlug, ChatPlatformConfig> = {
     steps: [
       {
         title: "Open Apps in Theo",
-        description: "Go to the Apps section in your Theo dashboard and find Slack.",
+        description:
+          "Go to the Apps section in your Theo dashboard and find Slack.",
       },
       {
         title: "Install the Slack app",
-        description: "Authorize Theo in your Slack workspace with the permissions you need.",
+        description:
+          "Authorize Theo in your Slack workspace with the permissions you need.",
       },
       {
         title: "Start chatting",
-        description: "Message Theo in Slack — try asking about overdue invoices or recent spend.",
+        description:
+          "Message Theo in Slack — try asking about overdue invoices or recent spend.",
       },
     ],
     notifications: [
@@ -99,15 +110,18 @@ export const chatPlatforms: Record<ChatPlatformSlug, ChatPlatformConfig> = {
     steps: [
       {
         title: "Open Apps in Theo",
-        description: "Go to the Apps section in your Theo dashboard and find WhatsApp.",
+        description:
+          "Go to the Apps section in your Theo dashboard and find WhatsApp.",
       },
       {
         title: "Connect WhatsApp",
-        description: "Scan the QR code or copy the connection link to start a chat with the Theo WhatsApp number.",
+        description:
+          "Scan the QR code or copy the connection link to start a chat with the Theo WhatsApp number.",
       },
       {
         title: "Start chatting",
-        description: 'Send your first message — try forwarding a receipt or asking "What did I spend this week?"',
+        description:
+          'Send your first message — try forwarding a receipt or asking "What did I spend this week?"',
       },
     ],
     notifications: [
@@ -134,15 +148,18 @@ export const chatPlatforms: Record<ChatPlatformSlug, ChatPlatformConfig> = {
     steps: [
       {
         title: "Open Apps in Theo",
-        description: "Go to the Apps section in your Theo dashboard and find Telegram.",
+        description:
+          "Go to the Apps section in your Theo dashboard and find Telegram.",
       },
       {
         title: "Connect Telegram",
-        description: "Start a chat with the Theo bot using the link from your dashboard.",
+        description:
+          "Start a chat with the Theo bot using the link from your dashboard.",
       },
       {
         title: "Start chatting",
-        description: "Send your first message — try asking about this week's expenses or overdue invoices.",
+        description:
+          "Send your first message — try asking about this week's expenses or overdue invoices.",
       },
     ],
     notifications: [

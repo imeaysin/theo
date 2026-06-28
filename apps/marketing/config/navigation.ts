@@ -7,28 +7,109 @@ export interface NavLink {
 }
 
 export const headerFeatureLinks: NavLink[] = [
-  { href: "/invoicing", label: "Invoicing", title: "Invoicing", description: "Get paid faster" },
-  { href: "/transactions", label: "Transactions", title: "Transactions", description: "All transactions together" },
-  { href: "/inbox", label: "Inbox", title: "Inbox", description: "Receipts handled automatically" },
-  { href: "/time-tracking", label: "Time tracking", title: "Time tracking", description: "See where time goes" },
-  { href: "/customers", label: "Customers", title: "Customers", description: "Know your customers" },
-  { href: "/file-storage", label: "Files", title: "Files", description: "Everything in one place" },
-  { href: "/pre-accounting", label: "Exports", title: "Exports", description: "Accounting ready" },
-  { href: "/assistant", label: "Assistant", title: "Assistant", description: "Ask anything, get things done" },
+  {
+    href: "/invoicing",
+    label: "Invoicing",
+    title: "Invoicing",
+    description: "Get paid faster",
+  },
+  {
+    href: "/transactions",
+    label: "Transactions",
+    title: "Transactions",
+    description: "All transactions together",
+  },
+  {
+    href: "/inbox",
+    label: "Inbox",
+    title: "Inbox",
+    description: "Receipts handled automatically",
+  },
+  {
+    href: "/time-tracking",
+    label: "Time tracking",
+    title: "Time tracking",
+    description: "See where time goes",
+  },
+  {
+    href: "/customers",
+    label: "Customers",
+    title: "Customers",
+    description: "Know your customers",
+  },
+  {
+    href: "/file-storage",
+    label: "Files",
+    title: "Files",
+    description: "Everything in one place",
+  },
+  {
+    href: "/pre-accounting",
+    label: "Exports",
+    title: "Exports",
+    description: "Accounting ready",
+  },
+  {
+    href: "/assistant",
+    label: "Assistant",
+    title: "Assistant",
+    description: "Ask anything, get things done",
+  },
 ]
 
 export const headerResourceLinksCol1: NavLink[] = [
-  { href: "/integrations", label: "Integrations", title: "Integrations", description: "Connect your existing tools." },
-  { href: "/docs", label: "Documentation", title: "Documentation", description: "Learn how to use Theo." },
-  { href: "/agents", label: "CLI", title: "CLI", description: "Agent-native CLI and MCP workflows." },
-  { href: "/mcp", label: "AI Integrations", title: "AI Integrations", description: "Connect AI tools to your business data." },
+  {
+    href: "/integrations",
+    label: "Integrations",
+    title: "Integrations",
+    description: "Connect your existing tools.",
+  },
+  {
+    href: "/docs",
+    label: "Documentation",
+    title: "Documentation",
+    description: "Learn how to use Theo.",
+  },
+  {
+    href: "/agents",
+    label: "CLI",
+    title: "CLI",
+    description: "Agent-native CLI and MCP workflows.",
+  },
+  {
+    href: "/mcp",
+    label: "AI Integrations",
+    title: "AI Integrations",
+    description: "Connect AI tools to your business data.",
+  },
 ]
 
 export const headerResourceLinksCol2: NavLink[] = [
-  { href: "https://api.midday.ai", label: "Developer & API", title: "Developer & API", description: "Programmatic access to Theo.", external: true },
-  { href: "/sdks", label: "SDKs", title: "SDKs", description: "Typed SDKs to build faster." },
-  { href: "/chat", label: "Chat", title: "Chat", description: "Run your business from any chat app." },
-  { href: "/computer", label: "Computer", title: "Computer", description: "Autonomous agents for your business." },
+  {
+    href: "https://api.midday.ai",
+    label: "Developer & API",
+    title: "Developer & API",
+    description: "Programmatic access to Theo.",
+    external: true,
+  },
+  {
+    href: "/sdks",
+    label: "SDKs",
+    title: "SDKs",
+    description: "Typed SDKs to build faster.",
+  },
+  {
+    href: "/chat",
+    label: "Chat",
+    title: "Chat",
+    description: "Run your business from any chat app.",
+  },
+  {
+    href: "/computer",
+    label: "Computer",
+    title: "Computer",
+    description: "Autonomous agents for your business.",
+  },
 ]
 
 export const headerResourceLinks = [

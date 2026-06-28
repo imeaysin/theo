@@ -309,7 +309,7 @@ export function Header({
                 {isFeaturesOpen && (
                   <div
                     data-features-dropdown
-                    className="fixed right-0 left-0 z-50 animate-dropdown-fade overflow-hidden border-t border-b border-border bg-background opacity-0 shadow-lg"
+                    className="animate-dropdown-fade fixed right-0 left-0 z-50 overflow-hidden border-t border-b border-border bg-background opacity-0 shadow-lg"
                     style={{ top: "100%" }}
                   >
                     <div className="p-6 xl:p-8 2xl:p-10">
@@ -570,7 +570,7 @@ export function Header({
                 {/* Resources Dropdown - Full Width */}
                 {isAppsOpen && (
                   <div
-                    className="fixed right-0 left-0 z-50 animate-dropdown-fade overflow-hidden border-t border-b border-border bg-background opacity-0 shadow-lg"
+                    className="animate-dropdown-fade fixed right-0 left-0 z-50 overflow-hidden border-t border-b border-border bg-background opacity-0 shadow-lg"
                     style={{
                       top: "100%",
                       height:

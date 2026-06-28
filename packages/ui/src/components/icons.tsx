@@ -1,8 +1,8 @@
-import type { ReactNode } from "react";
-import { ArchiveIcon } from "@radix-ui/react-icons";
-import { FiGithub } from "react-icons/fi";
-import type { IconType as BaseIconType } from "react-icons/lib";
-import type { IconSvgProps } from "../types";
+import type { ReactNode } from "react"
+import { ArchiveIcon } from "@radix-ui/react-icons"
+import { FiGithub } from "react-icons/fi"
+import type { IconType as BaseIconType } from "react-icons/lib"
+import type { IconSvgProps } from "../types"
 import {
   MdArrowBack,
   MdArrowDownward,
@@ -108,20 +108,20 @@ import {
   MdStop,
   MdTrendingDown,
   MdTrendingUp,
-} from "react-icons/md";
-import { PiDiscordLogo } from "react-icons/pi";
+} from "react-icons/md"
+import { PiDiscordLogo } from "react-icons/pi"
 
 interface SVGIconProps {
-  size?: number;
-  stroke?: string;
-  fill?: string;
-  strokeWidth?: number;
-  className?: string;
-  children?: ReactNode;
-  viewBox?: string;
+  size?: number
+  stroke?: string
+  fill?: string
+  strokeWidth?: number
+  className?: string
+  children?: ReactNode
+  viewBox?: string
 }
 
-export type IconType = BaseIconType;
+export type IconType = BaseIconType
 
 function SVGIcon({
   size = 20,
@@ -132,8 +132,8 @@ function SVGIcon({
   children,
   viewBox,
 }: SVGIconProps) {
-  const intrinsicContentDimension = 20;
-  const defaultViewBox = `0 0 ${intrinsicContentDimension} ${intrinsicContentDimension}`;
+  const intrinsicContentDimension = 20
+  const defaultViewBox = `0 0 ${intrinsicContentDimension} ${intrinsicContentDimension}`
 
   return (
     <svg
@@ -150,7 +150,7 @@ function SVGIcon({
     >
       {children}
     </svg>
-  );
+  )
 }
 
 export const Icons = {
@@ -882,4 +882,4 @@ export const Icons = {
       />
     </svg>
   ),
-};
+}

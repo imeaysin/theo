@@ -14,9 +14,7 @@ export interface WebsiteApp {
   logoUrl?: string
 }
 
-export function toLandingIntegrations(
-  items: WebsiteApp[]
-): LogoLinkItem[] {
+export function toLandingIntegrations(items: WebsiteApp[]): LogoLinkItem[] {
   return items.map((app) => ({
     id: app.id,
     name: app.name,

@@ -103,6 +103,31 @@ export function MenuItem({
   )
 }
 
+export function MenuLinkItem({
+  className,
+  inset,
+  variant = "default",
+  closeOnClick = true,
+  ...props
+}: MenuPrimitive.LinkItem.Props & {
+  inset?: boolean
+  variant?: "default" | "destructive"
+}): React.ReactElement {
+  return (
+    <MenuPrimitive.LinkItem
+      className={cn(
+        "flex min-h-8 cursor-default items-center gap-2 rounded-sm px-2 py-1 text-base text-foreground outline-none select-none data-highlighted:bg-accent data-highlighted:text-accent-foreground data-inset:ps-8 data-[variant=destructive]:text-destructive-foreground sm:min-h-7 sm:text-sm data-disabled:pointer-events-none data-disabled:opacity-64 [&>svg]:pointer-events-none [&>svg]:-mx-0.5 [&>svg]:shrink-0 [&>svg:not([class*='opacity-'])]:opacity-80 [&>svg:not([class*='size-'])]:size-4.5 sm:[&>svg:not([class*='size-'])]:size-4",
+        className
+      )}
+      closeOnClick={closeOnClick}
+      data-inset={inset}
+      data-slot="menu-link-item"
+      data-variant={variant}
+      {...props}
+    />
+  )
+}
+
 export function MenuCheckboxItem({
   className,
   children,

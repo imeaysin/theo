@@ -1,13 +1,13 @@
-"use client";
+"use client"
 
 import { cn } from "@workspace/ui/lib/utils"
 
 export function HeaderIntegrationsPreview() {
   return (
-    <div className="w-full h-full flex items-center justify-center p-4 bg-background">
+    <div className="flex h-full w-full items-center justify-center bg-background p-4">
       {/* Container with border and dotted pattern */}
       <div
-        className="w-full h-full border border-border relative"
+        className="relative h-full w-full border border-border"
         style={{
           backgroundImage:
             "radial-gradient(circle at 1px 1px, hsl(var(--border)) 0.5px, transparent 0)",
@@ -22,7 +22,7 @@ export function HeaderIntegrationsPreview() {
               "text-secondary",
               "text-3xl sm:text-4xl md:text-4xl lg:text-2xl xl:text-5xl 2xl:text-6xl",
               "[WebkitTextStroke:1px_hsl(var(--muted-foreground))]",
-              "[textStroke:1px_hsl(var(--muted-foreground))]",
+              "[textStroke:1px_hsl(var(--muted-foreground))]"
             )}
             style={{
               WebkitTextStroke: "1px hsl(var(--muted-foreground))",
@@ -34,5 +34,5 @@ export function HeaderIntegrationsPreview() {
         </div>
       </div>
     </div>
-  );
+  )
 }

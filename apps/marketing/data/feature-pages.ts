@@ -21,8 +21,7 @@ export const featurePages: Record<string, FeaturePageConfig> = {
     title: "Get paid faster",
     description:
       "Create invoices, send them to customers, and track payments while every update flows directly into your overview.",
-    mobileDescription:
-      "Create and send invoices and track their status.",
+    mobileDescription: "Create and send invoices and track their status.",
     meta: {
       title: "Online invoicing for small business",
       description:
@@ -138,14 +137,54 @@ export const featurePages: Record<string, FeaturePageConfig> = {
 }
 
 export const defaultFeatureGridItems: FeatureItem[] = [
-  { href: "/invoicing", icon: "description", title: "Invoicing", description: "Invoice management" },
-  { href: "/transactions", icon: "list_alt", title: "Transactions", description: "Money movement" },
-  { href: "/inbox", icon: "inbox", title: "Inbox", description: "Receipt matching" },
-  { href: "/time-tracking", icon: "timer", title: "Time tracking", description: "Project hours" },
-  { href: "/customers", icon: "scatter_plot", title: "Customers", description: "Customer performance" },
-  { href: "/file-storage", icon: "folder_zip", title: "Files", description: "Document storage" },
-  { href: "/pre-accounting", icon: "arrow_outward", title: "Exports", description: "Accounting ready" },
-  { href: "/mcp", icon: "widgets", title: "AI integrations", description: "Connect your tools" },
+  {
+    href: "/invoicing",
+    icon: "description",
+    title: "Invoicing",
+    description: "Invoice management",
+  },
+  {
+    href: "/transactions",
+    icon: "list_alt",
+    title: "Transactions",
+    description: "Money movement",
+  },
+  {
+    href: "/inbox",
+    icon: "inbox",
+    title: "Inbox",
+    description: "Receipt matching",
+  },
+  {
+    href: "/time-tracking",
+    icon: "timer",
+    title: "Time tracking",
+    description: "Project hours",
+  },
+  {
+    href: "/customers",
+    icon: "scatter_plot",
+    title: "Customers",
+    description: "Customer performance",
+  },
+  {
+    href: "/file-storage",
+    icon: "folder_zip",
+    title: "Files",
+    description: "Document storage",
+  },
+  {
+    href: "/pre-accounting",
+    icon: "arrow_outward",
+    title: "Exports",
+    description: "Accounting ready",
+  },
+  {
+    href: "/mcp",
+    icon: "widgets",
+    title: "AI integrations",
+    description: "Connect your tools",
+  },
 ]
 
 export const featurePageSlugs = Object.keys(featurePages)

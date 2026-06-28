@@ -11,8 +11,8 @@ export function HomePage() {
         Shared UI, auth, and routing for the web application.
       </p>
       <div className="flex gap-3">
-        <Button render={<Link to={paths.dashboard} />}>Go to dashboard</Button>
-        <Button render={<Link to={paths.auth.signIn} />} variant="outline">
+        <Button variant="outline">
+          <Link to={paths.auth.signIn}>Sign in</Link>
           Sign in
         </Button>
       </div>
