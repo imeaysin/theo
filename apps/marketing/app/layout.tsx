@@ -68,7 +68,7 @@ export default function RootLayout({
             disableTransitionOnChange
             enableSystem
           >
-            <SunsetBanner />
+            {/* <SunsetBanner /> */}
             <Header />
             <main className="container mx-auto overflow-hidden px-4 pt-9 md:overflow-visible">
               {children}
