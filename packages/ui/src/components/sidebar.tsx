@@ -27,9 +27,11 @@ import {
 
 const SIDEBAR_COOKIE_NAME: string = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE: number = 60 * 60 * 24 * 7
-const SIDEBAR_WIDTH: string = "16rem"
+/** Keep in sync with `--sidebar-width` in globals.css */
+const SIDEBAR_WIDTH: string = "18rem"
 const SIDEBAR_WIDTH_MOBILE: string = "18rem"
-const SIDEBAR_WIDTH_ICON: string = "3rem"
+/** Keep in sync with `--sidebar-width-icon` in globals.css (Cal.com tablet icon rail: w-14) */
+const SIDEBAR_WIDTH_ICON: string = "3.5rem"
 const SIDEBAR_KEYBOARD_SHORTCUT: string = "b"
 
 const sidebarMenuButtonVariants = cva(

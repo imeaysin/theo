@@ -5,6 +5,7 @@ import {
   CardPanel,
   CardTitle,
 } from "@workspace/ui/components/card"
+import { ShellMain } from "@workspace/ui/components/shell"
 import { useAuthSession } from "@/features/auth/hooks/use-auth-session"
 
 const stats = [
@@ -17,15 +18,12 @@ export function DashboardPage() {
   const { data: session } = useAuthSession()
 
   return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="font-heading text-2xl font-semibold tracking-tight">
-          Overview
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          Welcome back{session?.user.name ? `, ${session.user.name}` : ""}.
-        </p>
-      </div>
+    <ShellMain
+      heading="Overview"
+      subtitle={`Welcome back${
+        session?.user.name ? `, ${session.user.name}` : ""
+      }.`}
+    >
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {stats.map((stat) => (
           <Card key={stat.label}>
@@ -39,6 +37,6 @@ export function DashboardPage() {
           </Card>
         ))}
       </div>
-    </div>
+    </ShellMain>
   )
 }
