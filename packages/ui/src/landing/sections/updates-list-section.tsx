@@ -1,4 +1,6 @@
 import { LandingContainer } from "../layout/page-container"
+import { LandingLinkCard } from "../primitives/landing-link-card"
+import { SectionHeading } from "../layout/section-heading"
 
 export interface UpdateItem {
   slug: string
@@ -22,31 +24,21 @@ export function UpdatesListSection({
   return (
     <div className="bg-background pt-32 pb-24">
       <LandingContainer size="narrow">
-        <div className="mb-12 space-y-4">
-          <h1 className="mb-4 font-serif text-3xl text-foreground lg:text-4xl">
-            {title}
-          </h1>
-          <p className="font-sans text-base text-muted-foreground">
-            {subtitle}
-          </p>
-        </div>
+        <SectionHeading subtitle={subtitle} title={title} variant="page" />
         <div className="divide-y divide-border border border-border">
           {items.map((item) => (
-            <a
+            <LandingLinkCard
               key={item.slug}
+              className="rounded-none border-0 shadow-none before:hidden hover:bg-secondary/40"
               href={item.href}
-              className="block space-y-2 bg-background p-6 transition-colors hover:bg-secondary/40"
+              panelClassName="space-y-2 p-6"
             >
-              <p className="font-sans text-xs text-muted-foreground">
-                {item.date}
-              </p>
-              <h2 className="font-sans text-base text-foreground">
-                {item.title}
-              </h2>
-              <p className="font-sans text-sm leading-relaxed text-muted-foreground">
+              <p className="text-xs text-muted-foreground">{item.date}</p>
+              <h2 className="text-base text-foreground">{item.title}</h2>
+              <p className="text-sm leading-relaxed text-muted-foreground">
                 {item.summary}
               </p>
-            </a>
+            </LandingLinkCard>
           ))}
         </div>
       </LandingContainer>

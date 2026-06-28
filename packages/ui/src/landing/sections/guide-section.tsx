@@ -1,7 +1,11 @@
 "use client"
 
 import type { ReactNode } from "react"
+import { Badge } from "@workspace/ui/components/badge"
+import { Button } from "@workspace/ui/components/button"
+import { Card, CardPanel } from "@workspace/ui/components/card"
 import { Icons } from "@workspace/ui/components/icons"
+import { LandingLink } from "../primitives/landing-link"
 
 export interface GuideStep {
   title: string
@@ -33,13 +37,14 @@ export function GuideSection({ page }: { page: GuidePageData }) {
       <div className="bg-background">
         <div className="px-4 pt-32 pb-16 sm:px-6 sm:pt-40 sm:pb-20 md:pt-48">
           <div className="mx-auto max-w-2xl">
-            <a
-              href={page.backLink.href}
-              className="mb-8 inline-flex items-center gap-2 font-sans text-sm text-muted-foreground transition-colors hover:text-foreground"
+            <Button
+              className="mb-8 h-auto gap-2 p-0 text-sm text-muted-foreground hover:text-foreground"
+              render={<a href={page.backLink.href} />}
+              variant="link"
             >
               <Icons.ArrowBack size={16} />
               {page.backLink.label}
-            </a>
+            </Button>
 
             <div className="mb-6 flex items-center gap-4">
               <div className="flex size-14 items-center justify-center text-muted-foreground">
@@ -50,7 +55,7 @@ export function GuideSection({ page }: { page: GuidePageData }) {
               </h1>
             </div>
 
-            <p className="mb-12 font-sans text-base leading-relaxed text-muted-foreground">
+            <p className="mb-12 text-base leading-relaxed text-muted-foreground">
               {page.description}
             </p>
 
@@ -62,24 +67,29 @@ export function GuideSection({ page }: { page: GuidePageData }) {
                 <ol className="space-y-6">
                   {page.steps.map((step, index) => (
                     <li key={step.title} className="flex gap-4">
-                      <span className="flex size-7 shrink-0 items-center justify-center rounded-full border border-border font-sans text-xs text-muted-foreground">
+                      <Badge
+                        className="size-7 shrink-0 rounded-full"
+                        variant="outline"
+                      >
                         {index + 1}
-                      </span>
+                      </Badge>
                       <div>
-                        <p className="font-sans text-sm font-medium text-foreground">
+                        <p className="text-sm font-medium text-foreground">
                           {step.title}
                         </p>
-                        <p className="mt-1 font-sans text-sm leading-relaxed text-muted-foreground">
+                        <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
                           {step.description}
                           {step.linkHref ? (
                             <>
                               {" "}
-                              <a
+                              <LandingLink
+                                className="inline h-auto p-0 text-foreground"
                                 href={step.linkHref}
-                                className="text-foreground underline underline-offset-4 transition-colors hover:text-foreground/80"
+                                size="sm"
+                                variant="link"
                               >
                                 {step.linkLabel ?? "Learn more"}
-                              </a>
+                              </LandingLink>
                             </>
                           ) : null}
                         </p>
@@ -95,7 +105,7 @@ export function GuideSection({ page }: { page: GuidePageData }) {
                     {section.title}
                   </h2>
                   {section.intro ? (
-                    <p className="font-sans text-sm leading-relaxed text-muted-foreground">
+                    <p className="text-sm leading-relaxed text-muted-foreground">
                       {section.intro}
                     </p>
                   ) : null}
@@ -103,7 +113,7 @@ export function GuideSection({ page }: { page: GuidePageData }) {
                     {section.items.map((item) => (
                       <li
                         key={item}
-                        className="flex items-start gap-2 font-sans text-sm text-muted-foreground"
+                        className="flex items-start gap-2 text-sm text-muted-foreground"
                       >
                         <Icons.Check className="mt-0.5 size-3.5 text-foreground" />
                         {item}
@@ -111,7 +121,7 @@ export function GuideSection({ page }: { page: GuidePageData }) {
                     ))}
                   </ul>
                   {section.footer ? (
-                    <div className="font-sans text-sm leading-relaxed text-muted-foreground">
+                    <div className="text-sm leading-relaxed text-muted-foreground">
                       {section.footer}
                     </div>
                   ) : null}

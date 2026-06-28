@@ -1,7 +1,10 @@
 "use client"
 
 import type { ReactNode } from "react"
+import { Separator } from "@workspace/ui/components/separator"
 import { FooterWordmark } from "./footer-wordmark"
+import { LandingContainer } from "../layout/page-container"
+import { LandingLink } from "../primitives/landing-link"
 import { cn } from "@workspace/ui/lib/utils"
 
 export interface FooterLink {
@@ -27,14 +30,15 @@ interface SiteFooterProps {
 
 function FooterLinkItem({ link }: { link: FooterLink }) {
   return (
-    <a
+    <LandingLink
+      className="h-auto justify-start p-0 text-sm text-muted-foreground hover:text-foreground"
+      external={link.external}
       href={link.href}
-      target={link.external ? "_blank" : undefined}
-      rel={link.external ? "noopener noreferrer" : undefined}
-      className="block font-sans text-sm text-muted-foreground transition-colors hover:text-foreground"
+      size="sm"
+      variant="link"
     >
       {link.label}
-    </a>
+    </LandingLink>
   )
 }
 
@@ -44,26 +48,19 @@ function StatusIndicator({
   status: FooterLink & { value: string }
 }) {
   return (
-    <a
+    <LandingLink
+      className="inline-flex h-auto items-center gap-2 p-0 no-underline hover:opacity-80 hover:no-underline"
+      external
       href={status.href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex items-center gap-2 transition-opacity hover:opacity-80"
+      variant="ghost"
     >
-      <span className="font-sans text-sm text-muted-foreground">
-        {status.label}
+      <span className="text-sm text-muted-foreground">{status.label}</span>
+      <span className="text-sm text-foreground">{status.value}</span>
+      <span className="relative flex size-2 shrink-0 items-center justify-center">
+        <span className="relative z-10 block size-2 rounded-full bg-success" />
+        <span className="absolute inset-0 animate-pulse-glow rounded-full bg-success" />
       </span>
-      <span className="font-sans text-sm text-foreground">{status.value}</span>
-      <span className="relative flex h-2 w-2 shrink-0 items-center justify-center">
-        <span className="relative z-10 block h-2 w-2 rounded-full bg-green-500" />
-        <span
-          className="absolute inset-0 rounded-full bg-green-500"
-          style={{
-            animation: "pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-          }}
-        />
-      </span>
-    </a>
+    </LandingLink>
   )
 }
 
@@ -78,16 +75,14 @@ export function SiteFooter({
 }: SiteFooterProps) {
   return (
     <footer className={cn("relative overflow-hidden bg-background", className)}>
-      <div className="h-px w-full border-t border-border" />
+      <Separator />
 
-      <div className="mx-auto max-w-[1400px] px-4 py-16 sm:px-8 sm:pb-80">
+      <LandingContainer className="py-16 sm:pb-80">
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-16">
           <div className="grid grid-cols-2 gap-x-8 gap-y-8 sm:grid-cols-3 sm:gap-x-8 sm:gap-y-12 md:grid-cols-5 lg:col-span-1">
             {linkGroups.map((group) => (
               <div key={group.title} className="space-y-3">
-                <h3 className="mb-4 font-sans text-sm text-foreground">
-                  {group.title}
-                </h3>
+                <h3 className="mb-4 text-sm text-foreground">{group.title}</h3>
                 <div className="space-y-2.5">
                   {group.links.map((link) => (
                     <FooterLinkItem key={link.href + link.label} link={link} />
@@ -98,14 +93,14 @@ export function SiteFooter({
           </div>
 
           <div className="flex flex-col items-start gap-6 lg:items-end lg:gap-10">
-            <p className="text-left font-sans text-base text-foreground sm:text-xl lg:text-right">
+            <p className="text-left text-base text-foreground sm:text-xl lg:text-right">
               {tagline}
             </p>
             {sidebar}
           </div>
         </div>
 
-        <div className="my-12 border-t border-border sm:my-16" />
+        <Separator className="my-12 sm:my-16" />
 
         <div className="relative z-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           {status ? (
@@ -113,9 +108,9 @@ export function SiteFooter({
               <StatusIndicator status={status} />
             </div>
           ) : null}
-          <p className="font-sans text-sm text-muted-foreground">{copyright}</p>
+          <p className="text-sm text-muted-foreground">{copyright}</p>
         </div>
-      </div>
+      </LandingContainer>
 
       <FooterWordmark text={wordmark} />
     </footer>

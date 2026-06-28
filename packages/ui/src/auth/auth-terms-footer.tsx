@@ -1,4 +1,5 @@
 import type { ReactNode } from "react"
+import { Button } from "@workspace/ui/components/button"
 
 export interface AuthTermsFooterProps {
   termsHref?: string
@@ -11,24 +12,26 @@ export function AuthTermsFooter({
   privacyHref = "/policy",
   renderTermsLink,
 }: AuthTermsFooterProps) {
-  const linkClassName =
-    "text-muted-foreground underline underline-offset-2 transition-colors hover:text-foreground"
-
   function renderLink(href: string, label: string) {
     if (renderTermsLink) {
       return renderTermsLink(href, label)
     }
 
     return (
-      <a className={linkClassName} href={href}>
+      <Button
+        className="inline h-auto p-0 text-xs text-muted-foreground"
+        render={<a href={href} />}
+        size="xs"
+        variant="link"
+      >
         {label}
-      </a>
+      </Button>
     )
   }
 
   return (
     <div className="mt-auto text-center">
-      <p className="font-sans text-xs text-muted-foreground">
+      <p className="text-xs text-muted-foreground">
         By signing in you agree to our{" "}
         {renderLink(termsHref, "Terms of service")} &amp;{" "}
         {renderLink(privacyHref, "Privacy policy")}

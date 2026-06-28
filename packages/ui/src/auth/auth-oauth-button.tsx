@@ -1,6 +1,7 @@
 "use client"
 
 import type { ReactNode } from "react"
+import { Badge } from "@workspace/ui/components/badge"
 import { Icons } from "@workspace/ui/components/icons"
 import { Button } from "@workspace/ui/components/button"
 import { cn } from "@workspace/ui/lib/utils"
@@ -55,11 +56,13 @@ export function AuthOAuthButton({
         Continue with {config.label}
       </Button>
       {showLastUsed && !loading ? (
-        <div className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2">
-          <span className="font-sans text-[10px] text-muted-foreground">
-            Last used
-          </span>
-        </div>
+        <Badge
+          className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2"
+          size="sm"
+          variant="secondary"
+        >
+          Last used
+        </Badge>
       ) : null}
     </div>
   )

@@ -1,7 +1,11 @@
 "use client"
 
+import { Avatar, AvatarFallback } from "@workspace/ui/components/avatar"
+import { Badge } from "@workspace/ui/components/badge"
 import { Icons } from "@workspace/ui/components/icons"
 import { LandingContainer } from "../layout/page-container"
+import { LandingLinkCard } from "../primitives/landing-link-card"
+import { LandingPageHero } from "../primitives/landing-page-hero"
 import { SectionHeading } from "../layout/section-heading"
 
 export interface HubCardItem {
@@ -26,9 +30,9 @@ export interface HubSectionProps {
 
 function ItemBadge({ name }: { name: string }) {
   return (
-    <div className="flex size-10 items-center justify-center border border-border bg-secondary font-sans text-xs font-medium text-foreground">
-      {name.slice(0, 2).toUpperCase()}
-    </div>
+    <Avatar className="size-10 rounded-none border border-border bg-secondary text-xs font-medium text-foreground">
+      <AvatarFallback>{name.slice(0, 2).toUpperCase()}</AvatarFallback>
+    </Avatar>
   )
 }
 
@@ -42,21 +46,22 @@ function ItemGrid({
   return (
     <div className={className}>
       {items.map((item) => (
-        <a
+        <LandingLinkCard
           key={item.id}
+          className="group"
           href={item.href}
-          className="group flex flex-col items-start border border-border bg-background p-4 transition-all duration-200 hover:border-foreground/20 sm:p-5"
+          panelClassName="flex flex-col items-start p-4 sm:p-5"
         >
           <div className="mb-2 sm:mb-3">
             <ItemBadge name={item.name} />
           </div>
-          <h3 className="mb-0.5 font-sans text-xs font-medium text-foreground sm:mb-1 sm:text-sm">
+          <h3 className="mb-0.5 text-xs font-medium text-foreground sm:mb-1 sm:text-sm">
             {item.name}
           </h3>
-          <p className="line-clamp-2 font-sans text-[10px] text-muted-foreground sm:text-xs">
+          <p className="line-clamp-2 text-xs text-muted-foreground sm:text-xs">
             {item.description}
           </p>
-        </a>
+        </LandingLinkCard>
       ))}
     </div>
   )
@@ -79,21 +84,16 @@ export function HubSection({
   return (
     <div className="min-h-screen bg-background">
       <div className="relative overflow-visible bg-background lg:min-h-screen lg:overflow-hidden">
-        <div className="pointer-events-none absolute inset-0 z-0 hidden bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-size-[4rem_4rem] opacity-20 lg:block" />
+        <div className="landing-grid-bg pointer-events-none absolute inset-0 z-0 hidden opacity-20 lg:block" />
 
         <div className="relative flex flex-col overflow-hidden pt-32 pb-16 sm:pt-40 sm:pb-20 md:pt-48 lg:hidden">
           <div className="z-20 flex flex-col items-center justify-start px-4 sm:px-6">
-            <div className="w-full max-w-xl space-y-4 text-center">
-              <p className="font-sans text-xs tracking-wider text-muted-foreground uppercase">
-                {eyebrow}
-              </p>
-              <h1 className="font-serif text-3xl leading-tight text-foreground sm:text-4xl md:text-5xl">
-                {title}
-              </h1>
-              <p className="mx-auto text-center font-sans text-base leading-normal text-muted-foreground">
-                {description}
-              </p>
-            </div>
+            <LandingPageHero
+              className="w-full max-w-xl"
+              description={description}
+              eyebrow={eyebrow}
+              title={title}
+            />
             <ItemGrid
               className="mt-12 grid w-full max-w-4xl grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-5"
               items={items}
@@ -103,17 +103,13 @@ export function HubSection({
 
         <div className="relative hidden min-h-screen flex-col overflow-hidden pt-40 lg:flex">
           <div className="z-20 flex flex-1 flex-col items-center justify-center px-4 pb-32">
-            <div className="mb-16 w-full space-y-4 text-center">
-              <p className="font-sans text-xs tracking-wider text-muted-foreground uppercase">
-                {eyebrow}
-              </p>
-              <h1 className="font-serif text-6xl leading-tight text-foreground xl:text-7xl 2xl:text-8xl">
-                {title}
-              </h1>
-              <p className="mx-auto max-w-2xl text-center font-sans text-sm leading-normal text-muted-foreground xl:text-base">
-                {description}
-              </p>
-            </div>
+            <LandingPageHero
+              className="mb-16 w-full"
+              description={description}
+              eyebrow={eyebrow}
+              title={title}
+              titleClassName="text-6xl xl:text-7xl 2xl:text-8xl"
+            />
             <ItemGrid
               className="grid max-w-5xl grid-cols-5 gap-5"
               items={items}
@@ -136,20 +132,17 @@ export function HubSection({
                       : ""
 
                 return (
-                  <div
+                  <Badge
                     key={prompt}
-                    className={`rounded-tl-full rounded-tr-full rounded-bl-full bg-secondary px-3 py-1.5 ${visibilityClass}`}
+                    className={`rounded-tl-full rounded-tr-full rounded-bl-full px-3 py-1.5 text-xs whitespace-nowrap sm:text-sm ${visibilityClass} ${
+                      highlightedIndices.has(index)
+                        ? "text-foreground"
+                        : "text-muted-foreground"
+                    }`}
+                    variant="secondary"
                   >
-                    <p
-                      className={`font-sans text-xs whitespace-nowrap sm:text-sm ${
-                        highlightedIndices.has(index)
-                          ? "text-foreground"
-                          : "text-muted-foreground"
-                      }`}
-                    >
-                      &ldquo;{prompt}&rdquo;
-                    </p>
-                  </div>
+                    &ldquo;{prompt}&rdquo;
+                  </Badge>
                 )
               })}
             </div>
@@ -164,7 +157,7 @@ export function HubSection({
             {features.map((item) => (
               <li
                 key={item}
-                className="flex items-start gap-3 font-sans text-sm text-muted-foreground"
+                className="flex items-start gap-3 text-sm text-muted-foreground"
               >
                 <Icons.Check className="mt-0.5 size-4 shrink-0 text-foreground" />
                 {item}

@@ -16,13 +16,8 @@ export function FooterWordmark({ text, className }: FooterWordmarkProps) {
     >
       <p
         className={cn(
-          "font-sans text-[200px] leading-none text-secondary select-none sm:text-[508px]",
-          "[WebkitTextStroke:1px_hsl(var(--muted-foreground))]"
+          "text-[200px] leading-none text-secondary [-webkit-text-stroke:1px_var(--muted-foreground)] select-none sm:text-[508px]"
         )}
-        style={{
-          WebkitTextStroke: "1px hsl(var(--muted-foreground))",
-          color: "hsl(var(--secondary))",
-        }}
       >
         {text}
       </p>

@@ -1,6 +1,7 @@
 "use client"
 
 import type { ReactNode } from "react"
+import { Card, CardPanel } from "@workspace/ui/components/card"
 import { OTPField, OTPFieldInput } from "@workspace/ui/components/otp-field"
 import { Spinner } from "@workspace/ui/components/spinner"
 import { cn } from "@workspace/ui/lib/utils"
@@ -26,16 +27,16 @@ export function AuthOtpInput({
 }: AuthOtpInputProps) {
   if (verifying) {
     return (
-      <div className="flex h-16 w-full items-center justify-center">
-        <div className="flex h-full w-full items-center justify-center border border-input bg-background/95">
-          <div className="flex items-center space-x-2 rounded-md bg-background px-4 py-2 shadow-sm">
+      <Card className="rounded-none shadow-xs">
+        <CardPanel className="flex h-16 items-center justify-center">
+          <div className="flex items-center gap-2">
             <Spinner className="text-primary" size={16} />
             <span className="text-sm font-medium text-foreground">
               {verifyingLabel}
             </span>
           </div>
-        </div>
-      </div>
+        </CardPanel>
+      </Card>
     )
   }
 

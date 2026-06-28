@@ -1,4 +1,5 @@
 import type { ReactNode } from "react"
+import { Button } from "@workspace/ui/components/button"
 import { LandingContainer } from "./page-container"
 import { cn } from "@workspace/ui/lib/utils"
 
@@ -44,7 +45,7 @@ function LegalBlockView({ block }: { block: LegalBlock }) {
     case "subsection":
       return (
         <>
-          <h3 className="mt-6 mb-3 font-sans text-sm text-foreground">
+          <h3 className="mt-6 mb-3 text-sm text-foreground">
             {block.title}
           </h3>
           {block.blocks.map((child, index) => (
@@ -58,12 +59,13 @@ function LegalBlockView({ block }: { block: LegalBlock }) {
     case "email":
       return (
         <p className="leading-relaxed text-foreground">
-          <a
-            href={`mailto:${block.address}`}
-            className="text-foreground transition-colors hover:text-muted-foreground"
+          <Button
+            className="inline h-auto p-0 text-foreground"
+            render={<a href={`mailto:${block.address}`} />}
+            variant="link"
           >
             {block.address}
-          </a>
+          </Button>
         </p>
       )
     default:
@@ -74,7 +76,7 @@ function LegalBlockView({ block }: { block: LegalBlock }) {
 function LegalSectionView({ section }: { section: LegalSection }) {
   return (
     <section className="space-y-4">
-      <h2 className="mt-8 mb-4 font-sans text-base text-foreground">
+      <h2 className="mt-8 mb-4 text-base text-foreground">
         {section.title}
       </h2>
       {section.blocks?.map((block, index) => (
@@ -91,7 +93,7 @@ function LegalSectionView({ section }: { section: LegalSection }) {
       {section.subsections?.map((subsection) => (
         <div key={subsection.title ?? subsection.content.slice(0, 40)}>
           {subsection.title ? (
-            <h3 className="mt-6 mb-3 font-sans text-sm text-foreground">
+            <h3 className="mt-6 mb-3 text-sm text-foreground">
               {subsection.title}
             </h3>
           ) : null}
@@ -115,15 +117,15 @@ export function LegalPage({ document, children }: LegalPageProps) {
           <LandingContainer size="legal">
             <div className="space-y-8">
               <div className="space-y-4">
-                <h1 className="3xl:text-4xl font-serif text-2xl leading-tight text-foreground sm:text-3xl lg:text-3xl lg:leading-tight xl:text-3xl xl:leading-[1.3] 2xl:text-3xl">
+                <h1 className="3xl:text-4xl font-serif text-2xl leading-tight text-foreground sm:text-3xl lg:text-3xl lg:leading-tight xl:text-3xl xl:leading-snug 2xl:text-3xl">
                   {document.title}
                 </h1>
-                <p className="font-sans text-sm text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   Last updated: {document.lastUpdated}
                 </p>
               </div>
 
-              <div className="prose prose-sm sm:prose-base max-w-none space-y-6 font-sans text-foreground">
+              <div className="prose prose-sm sm:prose-base max-w-none space-y-6 text-foreground">
                 {document.intro?.map((paragraph) => (
                   <p key={paragraph.slice(0, 40)} className={paragraphClass}>
                     {paragraph}
@@ -155,7 +157,7 @@ interface PlaceholderPageProps {
 const placeholderTitleVariants = {
   default: "font-serif text-3xl text-foreground sm:text-4xl",
   story:
-    "font-serif text-3xl leading-tight text-foreground lg:text-3xl lg:leading-tight xl:text-3xl xl:leading-[1.3] 2xl:text-3xl 3xl:text-4xl",
+    "font-serif text-3xl leading-tight text-foreground lg:text-3xl lg:leading-tight xl:text-3xl xl:leading-snug 2xl:text-3xl 3xl:text-4xl",
 } as const
 
 export function PlaceholderPage({
@@ -170,7 +172,7 @@ export function PlaceholderPage({
       <LandingContainer size="narrow">
         <div className="space-y-4 pt-12 text-center sm:pt-16">
           <h1 className={placeholderTitleVariants[variant]}>{title}</h1>
-          <p className="font-sans text-base leading-relaxed text-muted-foreground">
+          <p className="text-base leading-relaxed text-muted-foreground">
             {description}
           </p>
           {action ? <div className="pt-4">{action}</div> : null}

@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react"
 import { motion } from "motion/react"
+import { Button } from "@workspace/ui/components/button"
 import { cn } from "@workspace/ui/lib/utils"
 
 interface SiteNavbarProps {
@@ -80,34 +81,32 @@ export function NavbarMenuButton({
   className,
 }: NavbarMenuButtonProps) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={cn(
-        "relative flex min-h-[44px] min-w-[44px] items-center justify-end p-2 text-primary transition-colors hover:text-primary/80 focus:outline-none focus-visible:outline-none xl:active:text-primary",
-        className
-      )}
-      style={{ WebkitTapHighlightColor: "transparent" }}
+    <Button
       aria-label={isOpen ? "Close menu" : "Open menu"}
+      className={cn("text-primary hover:text-primary/80", className)}
+      onClick={onClick}
+      size="icon-lg"
+      type="button"
+      variant="ghost"
     >
       <div className="relative flex size-5 flex-col items-center justify-center">
         <motion.span
-          className="absolute h-[1.5px] w-4 rounded-none bg-current"
           animate={{ rotate: isOpen ? 45 : 0, y: isOpen ? 0 : -4.5 }}
+          className="absolute h-px w-4 rounded-none bg-current"
           transition={{ type: "spring", stiffness: 300, damping: 25 }}
         />
         <motion.span
-          className="absolute h-[1.5px] w-4 rounded-none bg-current"
           animate={{ opacity: isOpen ? 0 : 1, scaleX: isOpen ? 0 : 1 }}
+          className="absolute h-px w-4 rounded-none bg-current"
           transition={{ type: "spring", stiffness: 300, damping: 25 }}
         />
         <motion.span
-          className="absolute h-[1.5px] w-4 rounded-none bg-current"
           animate={{ rotate: isOpen ? -45 : 0, y: isOpen ? 0 : 4.5 }}
+          className="absolute h-px w-4 rounded-none bg-current"
           transition={{ type: "spring", stiffness: 300, damping: 25 }}
         />
       </div>
-    </button>
+    </Button>
   )
 }
 
@@ -123,7 +122,7 @@ export function NavbarDropdownOverlay({
   return (
     <div
       className={cn(
-        "fixed right-0 bottom-0 left-0 z-40 bg-black/40 transition-opacity duration-150",
+        "fixed right-0 bottom-0 left-0 z-40 bg-foreground/40 transition-opacity duration-150",
         visible
           ? "visible opacity-100"
           : "pointer-events-none invisible opacity-0"
@@ -142,18 +141,16 @@ interface NavbarBrandProps {
 
 export function NavbarBrand({ href, logo, label, onClick }: NavbarBrandProps) {
   return (
-    <a
-      href={href}
+    <Button
+      className="touch-manipulation gap-2 px-0 hover:opacity-80 active:opacity-80"
       onClick={onClick}
-      className="flex touch-manipulation items-center gap-2 transition-opacity duration-200 hover:opacity-80 active:opacity-80"
-      style={{ WebkitTapHighlightColor: "transparent" }}
+      render={<a href={href} />}
+      variant="ghost"
     >
       {logo}
       {label ? (
-        <span className="font-sans text-base text-foreground xl:hidden">
-          {label}
-        </span>
+        <span className="text-base text-foreground xl:hidden">{label}</span>
       ) : null}
-    </a>
+    </Button>
   )
 }

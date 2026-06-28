@@ -1,10 +1,11 @@
 "use client"
 
 import type { ReactNode } from "react"
+import { Button } from "@workspace/ui/components/button"
 import { Icons } from "@workspace/ui/components/icons"
 import { AuthVideoPanel } from "./auth-video-panel"
 import { AuthTermsFooter } from "./auth-terms-footer"
-import { SunsetBanner } from "./sunset-banner"
+// import { SunsetBanner } from "./sunset-banner"
 
 export interface AuthShellProps {
   homeHref: string
@@ -36,7 +37,7 @@ export function AuthShell({
 
   const logo = (
     <div className="size-6">
-      <Icons.LogoSmall className="size-full text-foreground lg:text-white" />
+      <Icons.LogoSmall className="size-full text-foreground" />
     </div>
   )
 
@@ -47,9 +48,14 @@ export function AuthShell({
       children: logo,
     })
   ) : (
-    <a className={logoLinkClassName} href={homeHref}>
+    <Button
+      className={logoLinkClassName}
+      render={<a href={homeHref} />}
+      size="icon-lg"
+      variant="ghost"
+    >
       {logo}
-    </a>
+    </Button>
   )
 
   return (

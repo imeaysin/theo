@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { AuthTestimonials } from "./auth-testimonials"
+import { cn } from "@workspace/ui/lib/utils"
 
 const POSTER_URL =
   "https://midday.ai/cdn-cgi/image/width=1000,quality=80,format=auto/https://cdn.midday.ai/video-poster-v2.jpg"
@@ -36,10 +37,12 @@ export function AuthVideoPanel() {
     <div className="relative m-2 hidden overflow-hidden lg:flex lg:w-1/2">
       <div
         aria-hidden="true"
-        className={`absolute inset-0 h-full w-full transition-all duration-1000 ease-in-out ${
-          isVideoLoaded ? "pointer-events-none opacity-0" : "opacity-100"
-        }`}
-        style={{ filter: isVideoLoaded ? "blur(0px)" : "blur(1px)" }}
+        className={cn(
+          "absolute inset-0 h-full w-full transition-all duration-1000 ease-in-out",
+          isVideoLoaded
+            ? "pointer-events-none opacity-0 blur-none"
+            : "opacity-100 blur-sm"
+        )}
       >
         <img alt="" className="h-full w-full object-cover" src={POSTER_URL} />
       </div>
@@ -47,9 +50,10 @@ export function AuthVideoPanel() {
       <video
         ref={videoRef}
         autoPlay
-        className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-in-out ${
+        className={cn(
+          "absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-in-out",
           isVideoLoaded ? "opacity-100" : "opacity-0"
-        }`}
+        )}
         loop
         muted
         playsInline
@@ -59,9 +63,9 @@ export function AuthVideoPanel() {
         <source src={VIDEO_URL} type="video/mp4" />
       </video>
 
-      <div className="absolute inset-0 bg-black/20" />
+      <div className="absolute inset-0 bg-foreground/20" />
 
-      <div className="relative z-10 flex h-full w-full flex-col items-center justify-center p-2 text-center">
+      <div className="relative z-10 flex h-full w-full flex-col items-center justify-center p-2 text-center text-primary-foreground">
         <div className="max-w-lg">
           <AuthTestimonials />
         </div>

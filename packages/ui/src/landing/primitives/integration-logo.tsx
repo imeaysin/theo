@@ -47,9 +47,7 @@ export function IntegrationLogo({
     <img
       alt={alt ?? id}
       className={cn("size-full object-contain", className)}
-      height={16}
       src={src}
-      width={16}
     />
   )
 }

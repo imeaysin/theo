@@ -1,4 +1,9 @@
 import type { ReactNode } from "react"
+import {
+  Alert,
+  AlertAction,
+  AlertDescription,
+} from "@workspace/ui/components/alert"
 
 export interface SunsetBannerProps {
   message?: string
@@ -10,11 +15,11 @@ export function SunsetBanner({
   action,
 }: SunsetBannerProps) {
   return (
-    <div className="w-full border-b border-border bg-secondary text-foreground">
-      <div className="flex h-9 items-center justify-center gap-2 px-4 text-center font-sans text-xs sm:text-sm">
+    <Alert className="rounded-none border-x-0 border-t-0 bg-secondary py-2">
+      <AlertDescription className="flex w-full items-center justify-center gap-2 text-center text-xs sm:text-sm">
         <span>{message}</span>
-        {action}
-      </div>
-    </div>
+        {action ? <AlertAction>{action}</AlertAction> : null}
+      </AlertDescription>
+    </Alert>
   )
 }

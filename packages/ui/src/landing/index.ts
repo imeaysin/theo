@@ -12,6 +12,20 @@ export type {
 export { ResourcePageShell } from "./layout/resource-page-shell"
 
 export { IntegrationLogo } from "./primitives/integration-logo"
+export { LandingLink } from "./primitives/landing-link"
+export type { LandingLinkProps } from "./primitives/landing-link"
+export { LandingLinkCard } from "./primitives/landing-link-card"
+export type { LandingLinkCardProps } from "./primitives/landing-link-card"
+export { LandingPageHero } from "./primitives/landing-page-hero"
+export type { LandingPageHeroProps } from "./primitives/landing-page-hero"
+export {
+  LandingFeatureTile,
+  LandingIntegrationPill,
+} from "./primitives/landing-tiles"
+export type {
+  LandingFeatureTileProps,
+  LandingIntegrationPillProps,
+} from "./primitives/landing-tiles"
 
 export { FooterWordmark } from "./chrome/footer-wordmark"
 export { SiteFooter } from "./chrome/site-footer"

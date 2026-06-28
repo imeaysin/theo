@@ -1,6 +1,9 @@
 "use client"
 
+import { Badge } from "@workspace/ui/components/badge"
+import { Button } from "@workspace/ui/components/button"
 import { LandingContainer } from "../layout/page-container"
+import { LandingLinkCard } from "../primitives/landing-link-card"
 import { SectionHeading } from "../layout/section-heading"
 import { IntegrationLogo } from "../primitives/integration-logo"
 import { cn } from "@workspace/ui/lib/utils"
@@ -44,48 +47,47 @@ export function IntegrationsGridSection({
         {categories?.length ? (
           <div className="mb-12 flex flex-wrap justify-center gap-2">
             {categories.map((category) => (
-              <a
+              <Button
                 key={category.id}
-                href={category.href}
                 className={cn(
-                  "border px-4 py-2 font-sans text-sm transition-colors",
-                  activeCategory === category.id
-                    ? "border-foreground bg-foreground text-background"
-                    : "border-border bg-background text-muted-foreground hover:border-foreground hover:text-foreground"
+                  activeCategory === category.id &&
+                    "border-foreground bg-foreground text-background hover:bg-foreground/90"
                 )}
+                render={<a href={category.href} />}
+                size="sm"
+                variant="outline"
               >
                 {category.name}
-              </a>
+              </Button>
             ))}
           </div>
         ) : null}
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((item) => (
-            <a
+            <LandingLinkCard
               key={item.slug}
+              className="group"
               href={item.href}
-              className="group flex items-start gap-4 border border-border bg-background p-5 transition-colors hover:border-foreground/20 hover:bg-secondary/50"
+              panelClassName="flex items-start gap-4 p-5"
             >
               <div className="size-10 shrink-0 border border-border bg-secondary p-2">
                 <IntegrationLogo id={item.id} logoUrl={item.logoUrl} />
               </div>
               <div className="min-w-0 space-y-1">
                 <div className="flex items-center gap-2">
-                  <h3 className="font-sans text-sm text-foreground">
-                    {item.name}
-                  </h3>
+                  <h3 className="text-sm text-foreground">{item.name}</h3>
                   {item.beta ? (
-                    <span className="bg-muted px-2 py-0.5 font-sans text-xs text-primary">
+                    <Badge size="sm" variant="secondary">
                       Beta
-                    </span>
+                    </Badge>
                   ) : null}
                 </div>
-                <p className="font-sans text-sm text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   {item.shortDescription}
                 </p>
               </div>
-            </a>
+            </LandingLinkCard>
           ))}
         </div>
       </LandingContainer>

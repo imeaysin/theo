@@ -29,7 +29,7 @@ interface LandingContainerProps {
 }
 
 const containerSizes = {
-  default: "max-w-[1400px]",
+  default: "max-w-(--container-landing)",
   narrow: "max-w-3xl",
   legal: "max-w-4xl",
 } as const
