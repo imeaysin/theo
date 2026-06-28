@@ -55,7 +55,7 @@ export function AuthShell({
   return (
     <div className="relative flex min-h-screen bg-background">
       <div className="fixed top-0 right-0 left-0 z-50 w-full">
-        {showSunsetBanner ? (sunsetBanner ?? <SunsetBanner />) : null}
+        {/* {showSunsetBanner ? (sunsetBanner ?? <SunsetBanner />) : null} */}
         <nav className="pointer-events-none w-full">
           <div className="relative flex items-center px-4 py-3 md:px-4 lg:px-4 xl:px-6 xl:py-4 2xl:px-8">
             {homeLink}
