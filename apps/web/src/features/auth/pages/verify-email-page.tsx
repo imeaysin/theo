@@ -10,18 +10,37 @@ import {
 } from "@/features/auth/hooks/use-auth-mutations"
 import { paths } from "@/config/paths"
 
+function getVerifyEmailCopy(verified: boolean) {
+  if (verified) {
+    return {
+      description: "Your email address has been verified.",
+      title: "You're all set",
+      buttonLabel: "Continue to sign in",
+    }
+  }
+
+  return {
+    description:
+      "We sent a verification link to your email. Open it to activate your account.",
+    title: "Verify your email",
+    buttonLabel: "Back to sign in",
+  }
+}
+
 export function VerifyEmailPage() {
   const [searchParams] = useSearchParams()
   const email = searchParams.get("email") ?? ""
   const token = searchParams.get("token")
   const [verified, setVerified] = useState(false)
   const sendVerification = useSendVerificationEmailMutation()
-  const verifyEmail = useVerifyEmailMutation()
+  const { mutate: verifyEmail, isPending: isVerifying } =
+    useVerifyEmailMutation()
+  const copy = getVerifyEmailCopy(verified)
 
   useEffect(() => {
     if (!token) return
 
-    verifyEmail.mutate(token, {
+    verifyEmail(token, {
       onSuccess: () => {
         setVerified(true)
         toastManager.add({
@@ -38,9 +57,7 @@ export function VerifyEmailPage() {
         })
       },
     })
-    // Token is the only intentional dependency — run once per verification link.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token])
+  }, [token, verifyEmail])
 
   async function resendEmail() {
     if (!email) {
@@ -68,20 +85,13 @@ export function VerifyEmailPage() {
     }
   }
 
-  if (token && verifyEmail.isPending) {
+  if (token && isVerifying) {
     return <PageLoading message="Verifying your email…" />
   }
 
   return (
     <AuthPageBody>
-      <AuthPageHeader
-        description={
-          verified
-            ? "Your email address has been verified."
-            : "We sent a verification link to your email. Open it to activate your account."
-        }
-        title={verified ? "You're all set" : "Verify your email"}
-      />
+      <AuthPageHeader description={copy.description} title={copy.title} />
 
       <div className="flex flex-col gap-3">
         {!verified && email ? (
@@ -103,7 +113,7 @@ export function VerifyEmailPage() {
           type="button"
           variant="default"
         >
-          {verified ? "Continue to sign in" : "Back to sign in"}
+          {copy.buttonLabel}
         </Button>
       </div>
     </AuthPageBody>

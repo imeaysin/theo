@@ -1,7 +1,6 @@
 import { cn } from "@workspace/ui/lib/utils"
 import type { NavItem } from "../types"
 
-/** 32px icon control — shadcn SidebarMenuButton collapsible=icon. */
 export const sidebarIconButtonClassName = cn(
   "flex size-8 shrink-0 items-center justify-center rounded-lg p-2 text-sidebar-foreground ring-sidebar-ring transition outline-none",
   "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
@@ -9,7 +8,6 @@ export const sidebarIconButtonClassName = cn(
   "[&_svg]:size-4 [&_svg]:shrink-0"
 )
 
-/** Primary sidebar nav row — shadcn SidebarMenuButton default. */
 export const sidebarNavItemClassName = cn(
   "flex h-8 w-full min-w-0 items-center gap-2 overflow-hidden rounded-lg px-2 text-sm font-medium text-sidebar-foreground ring-sidebar-ring transition-[width,height,padding] duration-200 ease-linear outline-none",
   "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
@@ -20,7 +18,6 @@ export const sidebarNavItemClassName = cn(
   "[&[aria-current='page']]:bg-sidebar-accent [&[aria-current='page']]:font-medium [&[aria-current='page']]:text-sidebar-accent-foreground"
 )
 
-/** Nested nav row. */
 export const sidebarNavSubItemClassName = cn(
   "flex h-8 w-full min-w-0 items-center gap-2 overflow-hidden rounded-lg pr-2 pl-8 text-sm font-medium text-sidebar-foreground ring-sidebar-ring transition outline-none",
   "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
@@ -29,7 +26,6 @@ export const sidebarNavSubItemClassName = cn(
   "[&[aria-current='page']]:bg-sidebar-accent [&[aria-current='page']]:font-medium [&[aria-current='page']]:text-sidebar-accent-foreground"
 )
 
-/** Nested nav list — no rail, flush with parent menu. */
 export const sidebarMenuSubClassName = "flex flex-col gap-1"
 
 export const sidebarHeaderActionClassName = sidebarIconButtonClassName
@@ -40,7 +36,6 @@ export const sidebarBrandLinkClassName = cn(
   "ring-sidebar-ring focus-visible:ring-2"
 )
 
-/** Hide labels while the sidebar width animates. */
 export const sidebarNavLabelClassName =
   "truncate transition-[margin,opacity] duration-200 ease-linear in-data-[collapsed]:w-0 in-data-[collapsed]:flex-0 in-data-[collapsed]:opacity-0"
 
@@ -61,7 +56,6 @@ export const mobileBottomNavItemClassName = cn(
   "[&[aria-current='page']]:text-foreground"
 )
 
-/** Mobile nav drawers sit on the bottom bar — dim/blur reads wrong; override via portal. */
 export const shellMobileDrawerPortalProps = {
   className:
     "[&_[data-slot=drawer-backdrop]]:bg-transparent [&_[data-slot=drawer-backdrop]]:backdrop-blur-none",

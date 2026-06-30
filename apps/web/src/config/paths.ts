@@ -16,7 +16,6 @@ export const paths = {
   },
 } as const
 
-/** Absolute app URL for auth callbacks and external redirects. */
 export function absoluteAppUrl(path: string): string {
   if (typeof window === "undefined") return path
   return new URL(path, window.location.origin).href

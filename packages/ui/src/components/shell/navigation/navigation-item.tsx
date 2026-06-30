@@ -118,7 +118,11 @@ function IconSidebarParentItem({
           <MenuGroupLabel>{t(item.name)}</MenuGroupLabel>
           {item.child?.map((child) => {
             const ChildIcon = child.icon
-            const childCurrent = isNavItemActive(child, pathname, true)
+            const childCurrent = isNavItemActive({
+              item: child,
+              pathname,
+              isChild: true,
+            })
 
             return (
               <MenuLinkItem
@@ -147,13 +151,13 @@ export function ShellNavItem({
   isChild?: boolean
 }): React.ReactElement {
   const { t, pathname, Link } = useShell()
-  const current = isNavItemActive(item, pathname, isChild)
+  const current = isNavItemActive({ item, pathname, isChild })
   const [expanded, setExpanded] = useState(false)
   const { isIconSidebar } = useSidebarState()
 
   const hasChildren = !!item.child?.length
   const hasActiveChild = isNavParentActive(item, pathname)
-  const isOpen = isNavGroupOpen(item, pathname, expanded)
+  const isOpen = isNavGroupOpen({ item, pathname, expanded })
   const isParentItem = hasChildren && !isChild
 
   if (isParentItem) {
@@ -268,7 +272,7 @@ export function ShellMobileNavItem({
   isActive?: boolean
 }): React.ReactElement {
   const { t, pathname, Link } = useShell()
-  const current = isActive ?? isNavItemActive(item, pathname, isChild)
+  const current = isActive ?? isNavItemActive({ item, pathname, isChild })
   const Icon = item.icon
 
   const content = (
@@ -323,7 +327,7 @@ export function ShellMobileNavMoreItem({
   const Icon = item.icon
   const hasChildren = !!item.child?.length
   const isActionItem = !item.href && item.onClick
-  const current = isNavItemActive(item, pathname, false)
+  const current = isNavItemActive({ item, pathname, isChild: false })
 
   const rowClassName = contentNavItemClassName
 
@@ -355,7 +359,11 @@ export function ShellMobileNavMoreItem({
             <nav className="flex flex-col gap-0.5 px-2 pb-4">
               {item.child?.map((childItem) => {
                 const ChildIcon = childItem.icon
-                const childCurrent = isNavItemActive(childItem, pathname, true)
+                const childCurrent = isNavItemActive({
+                  item: childItem,
+                  pathname,
+                  isChild: true,
+                })
                 return (
                   <Link
                     aria-current={childCurrent ? "page" : undefined}

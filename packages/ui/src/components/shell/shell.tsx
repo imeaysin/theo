@@ -1,14 +1,5 @@
 "use client"
 
-/**
- * App shell public API
- *
- * - `AppShell` — full dashboard layout (sidebar, mobile nav, command palette)
- * - `ShellMain` — optional page header wrapper inside the main area
- * - `NavItem` — navigation config passed to `AppShell`
- * - `MORE_SEPARATOR_NAME` — mobile "more" tab marker in nav config
- */
-
 import type React from "react"
 import { useCallback, useState } from "react"
 import { cn } from "@workspace/ui/lib/utils"

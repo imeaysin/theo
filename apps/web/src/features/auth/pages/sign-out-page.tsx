@@ -6,14 +6,13 @@ import { paths } from "@/config/paths"
 
 export function SignOutPage() {
   const navigate = useNavigate()
-  const signOut = useSignOutMutation()
+  const { mutateAsync: signOut } = useSignOutMutation()
 
   useEffect(() => {
-    void signOut.mutateAsync().finally(() => {
+    void signOut().finally(() => {
       navigate(paths.auth.signIn, { replace: true })
     })
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- run once on mount
-  }, [])
+  }, [navigate, signOut])
 
   return <PageLoading message="Signing out…" />
 }

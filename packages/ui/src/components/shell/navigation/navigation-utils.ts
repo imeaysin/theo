@@ -5,11 +5,17 @@ export function getIsCurrent(item: NavItem) {
   return item.isCurrent ?? defaultIsCurrent
 }
 
-export function isNavItemActive(
-  item: NavItem,
-  pathname: string | null,
-  isChild = false
-): boolean {
+interface NavItemActiveInput {
+  item: NavItem
+  pathname: string | null
+  isChild?: boolean
+}
+
+export function isNavItemActive({
+  item,
+  pathname,
+  isChild = false,
+}: NavItemActiveInput): boolean {
   return getIsCurrent(item)({ item, pathname, isChild })
 }
 
@@ -18,18 +24,26 @@ export function isNavParentActive(
   pathname: string | null
 ): boolean {
   if (!item.child?.length) return false
-  return item.child.some((child) => isNavItemActive(child, pathname, true))
+  return item.child.some((child) =>
+    isNavItemActive({ item: child, pathname, isChild: true })
+  )
 }
 
-export function isNavGroupOpen(
-  item: NavItem,
-  pathname: string | null,
+interface NavGroupOpenInput {
+  item: NavItem
+  pathname: string | null
   expanded: boolean
-): boolean {
+}
+
+export function isNavGroupOpen({
+  item,
+  pathname,
+  expanded,
+}: NavGroupOpenInput): boolean {
   return (
     expanded ||
     isNavParentActive(item, pathname) ||
-    isNavItemActive(item, pathname, false)
+    isNavItemActive({ item, pathname, isChild: false })
   )
 }
 

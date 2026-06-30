@@ -14,10 +14,8 @@ import { MORE_SEPARATOR_NAME } from "@workspace/ui/components/shell"
 import type { NavItem } from "@workspace/ui/components/shell"
 import { paths } from "@/config/paths"
 
-/** App sidebar entry — extend with `roles` when RBAC is wired up. */
 export type AppNavItem = NavItem & { roles?: string[] }
 
-/** Sentinel href for mobile "copy public page link" actions (wired in app shell). */
 export const COPY_PUBLIC_PAGE_LINK_HREF = "__copy_public_page_link__"
 
 const dashboardBase = paths.dashboard
@@ -100,7 +98,6 @@ const appNavigationItems: AppNavItem[] = [
   },
 ]
 
-/** Dashboard sub-routes registered in the router (excludes the root overview). */
 export const dashboardSectionPaths = [
   "bookings",
   "availability",
@@ -121,12 +118,10 @@ function filterByRole(items: AppNavItem[], role?: string | null): NavItem[] {
     .map(({ roles: _roles, ...item }) => item)
 }
 
-/** Sidebar nav for the authenticated app shell. */
 export function getAppNavigation(role?: string | null): NavItem[] {
   return filterByRole(appNavigationItems, role)
 }
 
-/** Mobile "more" drawer links (not shown in desktop sidebar). */
 export function getAppMobileMoreItems(publicPageUrl: string): NavItem[] {
   return [
     {

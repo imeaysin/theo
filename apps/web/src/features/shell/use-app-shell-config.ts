@@ -43,6 +43,19 @@ function withPublicPageActions(
   })
 }
 
+function createCommandSelectAction(
+  item: Pick<NavItem, "href" | "name">,
+  options: { navigate: (path: string) => void; publicPageUrl: string }
+): (() => void) | undefined {
+  if (item.href === COPY_PUBLIC_PAGE_LINK_HREF) {
+    return () => copyPublicPageLink(options.publicPageUrl)
+  }
+  if (item.href) {
+    return () => options.navigate(item.href)
+  }
+  return undefined
+}
+
 export function useAppShellConfig() {
   const navigate = useNavigate()
   const { data: session, isPending: userLoading } = useAuthSession()
@@ -117,12 +130,7 @@ export function useAppShellConfig() {
       section: "Navigation",
       keywords: item.name,
       href: item.href || undefined,
-      onSelect:
-        item.href === COPY_PUBLIC_PAGE_LINK_HREF
-          ? () => copyPublicPageLink(publicPageUrl)
-          : item.href
-            ? () => navigate(item.href)
-            : undefined,
+      onSelect: createCommandSelectAction(item, { navigate, publicPageUrl }),
     }))
   }, [mobileMoreItems, navigate, navigation, publicPageUrl])
 

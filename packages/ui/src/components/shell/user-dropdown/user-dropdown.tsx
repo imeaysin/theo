@@ -74,6 +74,11 @@ export interface UserDropdownProps {
   placement?: UserDropdownPlacement
 }
 
+function getAvatarAlt(name?: string | null) {
+  if (name) return `${name} avatar`
+  return "User avatar"
+}
+
 export function UserDropdown({
   user,
   loading = false,
@@ -90,7 +95,7 @@ export function UserDropdown({
   if (!user && !loading) return null
 
   const name = user?.name ?? "User"
-  const avatarAlt = user?.name ? `${user.name} avatar` : "User avatar"
+  const avatarAlt = getAvatarAlt(user?.name)
   const ChevronIcon = menuOpen ? ChevronUpIcon : ChevronDownIcon
   const isSidebar = placement === "sidebar"
 

@@ -1,10 +1,6 @@
 import type { LucideIcon } from "lucide-react"
 import type React from "react"
 
-/**
- * Minimal, router-agnostic link contract. Apps adapt their router's link
- * component (e.g. react-router's `Link`) to this shape via `linkComponent`.
- */
 export interface ShellLinkProps {
   href: string
   children?: React.ReactNode
@@ -27,7 +23,6 @@ export interface ShellUser {
   avatarUrl?: string | null
 }
 
-/** Sidebar / mobile navigation entry passed to `AppShell`. */
 export interface NavItem {
   name: string
   href: string
@@ -37,13 +32,9 @@ export interface NavItem {
   target?: string
   isLoading?: boolean
   onClick?: React.MouseEventHandler<HTMLAnchorElement | HTMLButtonElement>
-  /** Hidden on mobile bottom bar, only shown on desktop sidebar. */
   onlyDesktop?: boolean
-  /** Only shown on mobile. */
   onlyMobile?: boolean
-  /** Pushed into the mobile "more" section instead of the bottom bar. */
   moreOnMobile?: boolean
-  /** Hidden from the mobile "more" drawer (e.g. when already in the bottom bar). */
   excludeFromMobileMore?: boolean
   isCurrent?: (args: {
     item: Pick<NavItem, "href">
@@ -63,7 +54,6 @@ export interface UserMenuItem {
   target?: string
   rel?: string
   variant?: "default" | "destructive"
-  /** Render a separator above this item. */
   separatorBefore?: boolean
 }
 

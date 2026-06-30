@@ -69,7 +69,6 @@ export interface CommandPaletteProps {
   actions: CommandAction[]
   placeholder?: string
   emptyText?: string
-  /** Centralized handler; falls back to `action.onSelect` then `action.href`. */
   onSelectAction?: (action: CommandAction) => void
 }
 
@@ -163,7 +162,6 @@ export function CommandPalette({
   )
 }
 
-/** Registers the global Cmd/Ctrl+K shortcut to toggle the palette. */
 export function useCommandPaletteShortcut(toggle: () => void): void {
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent): void => {
@@ -177,7 +175,27 @@ export function useCommandPaletteShortcut(toggle: () => void): void {
   }, [toggle])
 }
 
-/** Search button that opens the command palette, mirroring the sidebar trigger. */
+function getCommandTriggerClassName({
+  variant,
+  compact,
+  className,
+}: {
+  variant: "sidebar" | "topnav"
+  compact: boolean
+  className?: string
+}) {
+  if (variant === "topnav") {
+    return cn(
+      "flex size-8 shrink-0 items-center justify-center rounded-lg text-foreground transition hover:bg-accent",
+      className
+    )
+  }
+  if (compact) {
+    return cn(sidebarHeaderActionClassName, className)
+  }
+  return cn(sidebarNavItemClassName, className)
+}
+
 export function CommandTrigger({
   className,
   variant = "sidebar",
@@ -185,7 +203,6 @@ export function CommandTrigger({
 }: {
   className?: string
   variant?: "sidebar" | "topnav"
-  /** Icon-only header action when sidebar is expanded. */
   compact?: boolean
 }): React.ReactElement | null {
   const { openCommandPalette, isCommandPaletteEnabled } = useShell()
@@ -198,14 +215,11 @@ export function CommandTrigger({
         render={
           <button
             aria-label="Search"
-            className={cn(
-              variant === "topnav"
-                ? "flex size-8 shrink-0 items-center justify-center rounded-lg text-foreground transition hover:bg-accent"
-                : compact
-                  ? sidebarHeaderActionClassName
-                  : sidebarNavItemClassName,
-              className
-            )}
+            className={getCommandTriggerClassName({
+              variant,
+              compact,
+              className,
+            })}
             onClick={openCommandPalette}
             type="button"
           >

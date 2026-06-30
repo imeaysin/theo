@@ -17,7 +17,6 @@ const ShellLink: ShellLinkComponent = ({
   </RouterLink>
 )
 
-/** Post-login shell. Routes live in features; nav lives in `config/app-navigation.ts`. */
 export function AppLayout() {
   const location = useLocation()
   const shell = useAppShellConfig()
