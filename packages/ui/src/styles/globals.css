@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import "@fontsource/cal-sans";
+@import "@fontsource-variable/geist-mono";
 
 @custom-variant dark (&:is(.dark *));
 @source "../../../apps/**/*.{ts,tsx}";
@@ -47,10 +49,9 @@
   --color-warning: var(--warning);
   --color-warning-foreground: var(--warning-foreground);
 
-  --font-sans: 'Inter', sans-serif;
-  --font-heading: 'Inter', sans-serif;
-  --font-mono: 'Geist Mono', monospace;
-  --font-serif: var(--font-serif);
+  --font-sans: "Cal Sans", sans-serif;
+  --font-heading: "Cal Sans", sans-serif;
+  --font-mono: "Geist Mono", monospace;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -218,10 +219,7 @@
   --sidebar-accent-foreground: var(--color-neutral-800);
   --sidebar-border: --alpha(var(--color-black) / 6%);
   --sidebar-ring: var(--color-neutral-400);
-  --font-sans: Cal Sans, ui-sans-serif, sans-serif, system-ui;
-  --font-heading: Cal Sans, ui-sans-serif, sans-serif, system-ui;
   --font-serif: Georgia, serif;
-  --font-mono: Menlo, monospace;
   --radius: 0.625rem;
   --shadow-x: 0px;
   --shadow-y: 2px;
@@ -283,10 +281,7 @@
   --sidebar-accent-foreground: var(--color-neutral-100);
   --sidebar-border: --alpha(var(--color-white) / 5%);
   --sidebar-ring: var(--color-neutral-400);
-  --font-sans: Cal Sans, ui-sans-serif, sans-serif, system-ui;
-  --font-heading: Cal Sans, ui-sans-serif, sans-serif, system-ui;
   --font-serif: Georgia, serif;
-  --font-mono: Menlo, monospace;
   --radius: 1.3rem;
   --shadow-x: 0px;
   --shadow-y: 2px;
@@ -330,6 +325,6 @@
   }
 
   html {
-    @apply font-sans font-mono;
+    @apply font-sans;
   }
 }
