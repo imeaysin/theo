@@ -110,7 +110,7 @@ export const NavigationItem: React.FC<{
                 {shouldShowChevron ? (
                   <span className="absolute -right-0.5 -bottom-0.5 rounded-full bg-sidebar-accent p-0.5 lg:hidden">
                     <ExpansionChevron
-                      className="h-2.5 w-2.5"
+                      className="size-2.5"
                       expanded={isExpanded}
                     />
                   </span>
@@ -123,7 +123,7 @@ export const NavigationItem: React.FC<{
             </span>
             {shouldShowChevron ? (
               <ExpansionChevron
-                className="ml-auto hidden h-4 w-4 lg:block"
+                className="ml-auto hidden size-4 lg:block"
                 expanded={isExpanded}
               />
             ) : null}

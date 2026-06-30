@@ -81,7 +81,7 @@ export function AuthTestimonials() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="space-y-4 text-center"
+          className="flex flex-col gap-4 text-center"
         >
           <motion.div
             initial={{ opacity: 0, filter: "blur(2px)", y: 10 }}

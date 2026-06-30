@@ -2,14 +2,14 @@ import { cn } from "@workspace/ui/lib/utils"
 import type { NavigationItemType } from "../types"
 
 export const sidebarNavItemClassName = cn(
-  "group mt-0.5 flex w-full items-center rounded-md px-2 py-1.5 text-sm font-medium text-sidebar-foreground transition",
+  "mt-0.5 flex w-full items-center rounded-md px-2 py-1.5 text-sm font-medium text-sidebar-foreground transition",
   "md:justify-center lg:justify-start",
   "[&[aria-current='page']]:bg-sidebar-accent [&[aria-current='page']]:text-sidebar-accent-foreground",
   "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
 )
 
 export const contentNavItemClassName = cn(
-  "group flex w-full items-center gap-2 rounded-md px-3 py-2.5 text-left text-sm font-medium text-foreground transition",
+  "flex w-full items-center gap-2 rounded-md px-3 py-2.5 text-left text-sm font-medium text-foreground transition",
   "hover:bg-accent hover:text-accent-foreground",
   "[&[aria-current='page']]:bg-accent [&[aria-current='page']]:text-accent-foreground"
 )

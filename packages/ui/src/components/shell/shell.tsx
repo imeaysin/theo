@@ -82,7 +82,7 @@ export function ShellMain({
               >
                 <h3
                   className={cn(
-                    "inline max-w-28 truncate font-heading font-semibold tracking-wide text-foreground sm:max-w-72 md:max-w-80 xl:max-w-full",
+                    "inline max-w-28 truncate font-heading tracking-wide text-foreground sm:max-w-72 md:max-w-80 xl:max-w-full",
                     smallHeading ? "text-base" : "text-xl"
                   )}
                 >
@@ -215,33 +215,35 @@ export function Shell({
             userMenuItems={userMenuItems}
           />
 
-          <div className="flex min-w-0 flex-1 flex-col md:p-2 md:pr-2 md:pl-0 lg:p-3 lg:pr-3 lg:pl-0">
-            <main className="relative z-0 flex min-h-0 flex-1 flex-col overflow-hidden bg-background text-foreground focus:outline-none md:rounded-2xl md:rounded-l-2xl dark:bg-card dark:text-card-foreground">
-              <TopNav
-                brandLabel={brandLabel}
-                homeHref={homeHref}
-                logo={logo}
-                onSignOut={onSignOut}
-                signOutLabel={signOutLabel}
-                user={user}
-                userLoading={userLoading}
-                userMenuItems={userMenuItems}
-              />
-              <div className="max-w-full flex-1 overflow-y-auto p-2 sm:p-4 lg:p-6">
-                {withoutMain ? (
-                  children
-                ) : (
-                  <ShellMain {...mainProps}>{children}</ShellMain>
-                )}
-                {!mainProps.backPath && (
-                  <MobileNavigation
-                    bottomNavItems={bottomNavItems}
-                    items={navigation}
-                  />
-                )}
-              </div>
-            </main>
-          </div>
+          <main
+            className={cn(
+              "relative z-0 flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-background focus:outline-none md:m-2 md:ms-0 md:rounded-xl md:shadow-sm/5"
+            )}
+          >
+            <TopNav
+              brandLabel={brandLabel}
+              homeHref={homeHref}
+              logo={logo}
+              onSignOut={onSignOut}
+              signOutLabel={signOutLabel}
+              user={user}
+              userLoading={userLoading}
+              userMenuItems={userMenuItems}
+            />
+            <div className="max-w-full flex-1 overflow-y-auto p-2 sm:p-4 lg:p-6">
+              {withoutMain ? (
+                children
+              ) : (
+                <ShellMain {...mainProps}>{children}</ShellMain>
+              )}
+              {!mainProps.backPath && (
+                <MobileNavigation
+                  bottomNavItems={bottomNavItems}
+                  items={navigation}
+                />
+              )}
+            </div>
+          </main>
         </div>
       </div>
 

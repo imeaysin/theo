@@ -192,7 +192,7 @@ export function CommandTrigger({
           <button
             aria-label="Search"
             className={cn(
-              "group flex shrink-0 items-center justify-center transition",
+              "flex shrink-0 items-center justify-center transition",
               variant === "topnav"
                 ? "rounded-full p-2 text-foreground hover:bg-accent"
                 : "rounded-md px-3 py-2 text-sm font-medium text-sidebar-foreground hover:bg-sidebar-accent lg:px-2 lg:hover:text-sidebar-accent-foreground",
@@ -201,7 +201,7 @@ export function CommandTrigger({
             onClick={openCommandPalette}
             type="button"
           >
-            <SearchIcon className="h-4 w-4 shrink-0 text-inherit" />
+            <SearchIcon className="size-4 shrink-0 text-inherit" />
           </button>
         }
       />

@@ -5,8 +5,8 @@ export interface AuthPageHeaderProps {
 
 export function AuthPageHeader({ title, description }: AuthPageHeaderProps) {
   return (
-    <div className="space-y-2 text-center">
-      <h1 className="mb-4 font-serif text-lg lg:text-xl">{title}</h1>
+    <div className="flex flex-col gap-2 text-center">
+      <h1 className="font-heading text-lg tracking-wide lg:text-xl">{title}</h1>
       {description ? (
         <p className="text-sm text-muted-foreground">{description}</p>
       ) : null}

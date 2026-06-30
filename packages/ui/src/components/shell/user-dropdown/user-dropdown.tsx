@@ -19,7 +19,7 @@ type UserDropdownPlacement = "topnav" | "sidebar" | "default"
 const PLACEMENT_STYLES = {
   topnav: {
     avatarSize: "size-8",
-    statusDot: "-right-0.5 -bottom-0.5 h-2.5 w-2.5",
+    statusDot: "-right-0.5 -bottom-0.5 size-2.5",
     statusBorder: "border-border",
     fallbackText: "text-xs",
     triggerHover: "hover:bg-accent",
@@ -28,7 +28,7 @@ const PLACEMENT_STYLES = {
   },
   sidebar: {
     avatarSize: "size-6",
-    statusDot: "-right-0.5 -bottom-0.5 h-2 w-2",
+    statusDot: "-right-0.5 -bottom-0.5 size-2",
     statusBorder: "border-sidebar-border",
     fallbackText: "text-[10px]",
     triggerHover: "hover:bg-sidebar-accent",
@@ -37,7 +37,7 @@ const PLACEMENT_STYLES = {
   },
   default: {
     avatarSize: "size-8",
-    statusDot: "-right-0.5 -bottom-0.5 h-2.5 w-2.5",
+    statusDot: "-right-0.5 -bottom-0.5 size-2.5",
     statusBorder: "border-sidebar-border",
     fallbackText: "text-xs",
     triggerHover: "hover:bg-sidebar-accent",
@@ -95,7 +95,7 @@ export function UserDropdown({
         render={
           <button
             className={cn(
-              "group mx-0 flex cursor-pointer appearance-none items-center rounded-full text-left transition outline-none focus:ring-0 focus:outline-none md:rounded-none lg:rounded",
+              "mx-0 flex cursor-pointer appearance-none items-center rounded-full text-left transition outline-none focus:ring-0 focus:outline-none md:rounded-none lg:rounded",
               styles.triggerHover,
               small ? "shrink-0 p-2" : "w-full px-2 py-1.5"
             )}
@@ -135,7 +135,7 @@ export function UserDropdown({
             </span>
             <ChevronIcon
               aria-hidden="true"
-              className={cn("h-4 w-4 shrink-0", styles.chevronText)}
+              className={cn("size-4 shrink-0", styles.chevronText)}
             />
           </span>
         )}

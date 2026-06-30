@@ -5,7 +5,7 @@ import type { LucideIcon } from "lucide-react"
 import type React from "react"
 import { cn } from "@workspace/ui/lib/utils"
 
-const navIconClassName = "h-4 w-4 shrink-0 lg:mr-2"
+const navIconClassName = "size-4 shrink-0 lg:mr-2"
 
 export function NavItemIcon({
   icon: Icon,

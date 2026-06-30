@@ -30,7 +30,7 @@ export function AuthOtpInput({
       <Card className="rounded-none shadow-xs">
         <CardPanel className="flex h-16 items-center justify-center">
           <div className="flex items-center gap-2">
-            <Spinner className="text-primary" size={16} />
+            <Spinner className="size-4 text-primary" />
             <span className="text-sm font-medium text-foreground">
               {verifyingLabel}
             </span>
@@ -75,7 +75,7 @@ export interface AuthPageBodyProps {
 
 export function AuthPageBody({ children, footer }: AuthPageBodyProps) {
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col gap-6">
       {children}
       {footer ? <div className="text-center">{footer}</div> : null}
     </div>

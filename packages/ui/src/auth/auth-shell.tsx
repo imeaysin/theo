@@ -79,7 +79,7 @@ export function AuthShell({
 
       <div className="flex w-full flex-col items-center justify-center p-8 pb-2 lg:w-1/2 lg:p-12">
         <div className="flex h-full min-h-[calc(100svh-6rem)] w-full max-w-md flex-col pt-20 lg:pt-24">
-          <div className="flex flex-1 flex-col justify-center space-y-8">
+          <div className="flex flex-1 flex-col justify-center gap-8">
             {children}
           </div>
           <AuthTermsFooter

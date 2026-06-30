@@ -78,7 +78,7 @@ export function MobileNavigation({
     <>
       <nav
         className={cn(
-          "fixed bottom-0 left-0 z-30 flex w-full border-t border-border bg-background/80 px-1 pb-[max(0.25rem,env(safe-area-inset-bottom))] shadow backdrop-blur-md md:hidden dark:bg-card/80"
+          "fixed bottom-0 left-0 z-30 flex w-full border-t border-border bg-background/80 px-1 pb-[max(0.25rem,env(safe-area-inset-bottom))] shadow backdrop-blur-md md:hidden"
         )}
       >
         {mobileNavigationBottomItems.map((item) =>

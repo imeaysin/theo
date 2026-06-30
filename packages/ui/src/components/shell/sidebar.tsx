@@ -57,7 +57,7 @@ export function SideBar({
           <div>
             <header className="mb-3 hidden items-center justify-between lg:flex">
               <Link
-                className="flex min-w-0 items-center gap-2 px-1.5 font-heading text-sm font-semibold tracking-wide text-sidebar-foreground"
+                className="flex min-w-0 items-center gap-2 px-1.5 font-heading text-sm tracking-wide text-sidebar-foreground"
                 href={homeHref}
               >
                 {logo}
