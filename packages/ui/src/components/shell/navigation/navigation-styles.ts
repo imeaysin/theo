@@ -40,8 +40,14 @@ export const sidebarBrandLinkClassName = cn(
   "focus-visible:ring-2 ring-sidebar-ring"
 )
 
-export const sidebarChevronClassName =
-  "ml-auto size-4 shrink-0 text-sidebar-foreground/60"
+/** Hide labels while the sidebar width animates. */
+export const sidebarNavLabelClassName =
+  "truncate transition-[margin,opacity] duration-200 ease-linear in-data-[collapsed]:w-0 in-data-[collapsed]:flex-0 in-data-[collapsed]:opacity-0"
+
+export const sidebarChevronClassName = cn(
+  "ml-auto size-4 shrink-0 text-sidebar-foreground/60 transition-[margin,opacity] duration-200 ease-linear",
+  "in-data-[collapsed]:w-0 in-data-[collapsed]:flex-0 in-data-[collapsed]:opacity-0"
+)
 
 export const contentNavItemClassName = cn(
   "flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-foreground transition",

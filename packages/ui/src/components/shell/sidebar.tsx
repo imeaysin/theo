@@ -185,19 +185,13 @@ export function ShellSidebar({
           ) : null}
 
           {user || userLoading ? (
-            <div
-              className={cn(
-                "shrink-0",
-                isIconSidebar ? "flex justify-center" : "w-full"
-              )}
-            >
+            <div className="w-full shrink-0">
               <UserDropdown
                 loading={userLoading}
                 menuItems={userMenuItems}
                 onSignOut={onSignOut}
                 placement="sidebar"
                 signOutLabel={signOutLabel}
-                small={isIconSidebar}
                 user={user}
               />
             </div>

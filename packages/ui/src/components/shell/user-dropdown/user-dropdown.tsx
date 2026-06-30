@@ -10,6 +10,11 @@ import {
 } from "@workspace/ui/components/avatar"
 import { Menu, MenuPopup, MenuTrigger } from "@workspace/ui/components/menu"
 import { cn } from "@workspace/ui/lib/utils"
+import {
+  sidebarChevronClassName,
+  sidebarNavItemClassName,
+  sidebarNavLabelClassName,
+} from "../navigation/navigation-styles"
 import { useShell } from "../shell-context"
 import type { ShellUser, UserMenuItem } from "../types"
 import { getUserInitials, UserMenuItemsList } from "../user-menu-content"
@@ -87,6 +92,57 @@ export function UserDropdown({
   const name = user?.name ?? "User"
   const avatarAlt = user?.name ? `${user.name} avatar` : "User avatar"
   const ChevronIcon = menuOpen ? ChevronUpIcon : ChevronDownIcon
+  const isSidebar = placement === "sidebar"
+
+  if (isSidebar) {
+    return (
+      <Menu onOpenChange={setMenuOpen} open={menuOpen}>
+        <MenuTrigger
+          disabled={loading}
+          render={
+            <button
+              className={cn(
+                sidebarNavItemClassName,
+                "cursor-pointer appearance-none text-left focus:ring-0 focus:outline-none"
+              )}
+              data-testid="user-dropdown-trigger-button"
+              type="button"
+            />
+          }
+        >
+          <Avatar className="size-6 shrink-0 overflow-hidden rounded-lg">
+            <AvatarImage alt={avatarAlt} src={user?.avatarUrl ?? undefined} />
+            <AvatarFallback className="rounded-lg text-[10px]">
+              {getUserInitials(name)}
+            </AvatarFallback>
+          </Avatar>
+          <span
+            className={cn(
+              "flex min-w-0 flex-1 items-center gap-2",
+              sidebarNavLabelClassName
+            )}
+          >
+            <span className="min-w-0 truncate text-sm font-medium text-sidebar-foreground">
+              {loading ? "Loading..." : name}
+            </span>
+            <ChevronIcon
+              aria-hidden="true"
+              className={sidebarChevronClassName}
+            />
+          </span>
+        </MenuTrigger>
+
+        <MenuPopup align="start" className="min-w-56">
+          <UserMenuItemsList
+            linkComponent={Link}
+            menuItems={menuItems}
+            onSignOut={onSignOut}
+            signOutLabel={signOutLabel}
+          />
+        </MenuPopup>
+      </Menu>
+    )
+  }
 
   return (
     <Menu onOpenChange={setMenuOpen} open={menuOpen}>
@@ -95,9 +151,9 @@ export function UserDropdown({
         render={
           <button
             className={cn(
-              "mx-0 flex cursor-pointer appearance-none items-center rounded-lg text-left transition outline-none focus:ring-0 focus:outline-none",
+              "mx-0 flex cursor-pointer appearance-none items-center rounded-lg px-2 py-1.5 text-left transition outline-none focus:ring-0 focus:outline-none",
               styles.triggerHover,
-              small ? "size-8 shrink-0 justify-center p-0" : "w-full px-2 py-1.5"
+              small ? "size-8 shrink-0 justify-center p-0" : "w-full"
             )}
             data-testid="user-dropdown-trigger-button"
             type="button"
