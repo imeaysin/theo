@@ -24,6 +24,8 @@ function toGridItems(items: typeof apps) {
     logoUrl: app.logoUrl,
     href: `/integrations/${app.slug}`,
     beta: app.beta,
+    active: app.active,
+    category: getCategoryName(app.category),
   }))
 }
 

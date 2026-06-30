@@ -5,7 +5,7 @@ import { FeaturePageTemplate } from "@/components/templates/feature-page-templat
 import { TestimonialsSection } from "@/components/sections/testimonials-section"
 import { siteConfig } from "@/config/site"
 import { marketingEnv } from "@/config/env"
-import { apps, getIntegrationFilterTabs } from "@/data/apps"
+import { apps, getIntegrationFilterTabs, getCategoryName } from "@/data/apps"
 import { defaultFaqItems } from "@/data/faq"
 import { featurePages, featurePageSlugs } from "@/data/feature-pages"
 import { privacyDocument, termsDocument } from "@/data/legal"
@@ -40,7 +40,10 @@ interface StaticPageEntry {
   render: () => ReactElement
 }
 
-function ctaBlock(title: string, description?: string) {
+const defaultCtaDescription =
+  "Start your 14-day free trial and see everything connected in one place."
+
+function ctaBlock(title: string, description = defaultCtaDescription) {
   return (
     <CtaSection
       description={description}
@@ -60,6 +63,8 @@ function integrationGridItems() {
     logoUrl: app.logoUrl,
     href: `/integrations/${app.slug}`,
     beta: app.beta,
+    active: app.active,
+    category: getCategoryName(app.category),
   }))
 }
 
@@ -92,7 +97,10 @@ function buildStaticPages(): Record<string, StaticPageEntry> {
           subtitle="Connect the tools you already use to keep your business in sync."
           title="Apps & integrations"
         />
-        {ctaBlock("Connect your tools")}
+        {ctaBlock(
+          "Connect your tools",
+          "Connect banks, email, payments, and accounting tools to Theo."
+        )}
       </>
     ),
   }
@@ -107,7 +115,7 @@ function buildStaticPages(): Record<string, StaticPageEntry> {
     render: () => (
       <>
         <TestimonialsSection title="Founders on Theo" />
-        {ctaBlock("Join them")}
+        {ctaBlock("Join them", "Join founders who run their company on Theo.")}
       </>
     ),
   }
@@ -144,7 +152,10 @@ function buildStaticPages(): Record<string, StaticPageEntry> {
     render: () => (
       <>
         <UpdatesListSection items={updatesItems} />
-        {ctaBlock("Try Theo today")}
+        {ctaBlock(
+          "Try Theo today",
+          "Start your trial and get new features as we ship them."
+        )}
       </>
     ),
   }
@@ -202,7 +213,10 @@ function buildStaticPages(): Record<string, StaticPageEntry> {
           promptsTitle="Skip the dashboards"
           title={`${siteConfig.name}, everywhere`}
         />
-        {ctaBlock("Connect your AI tools")}
+        {ctaBlock(
+          "Connect your AI tools",
+          "Connect Claude, ChatGPT, Cursor, and more to your Theo account."
+        )}
       </>
     ),
   }

@@ -1,1 +1,94 @@
 @import "@workspace/ui/globals.css";
+@import "@workspace/ui/landing.css";
+
+@theme inline {
+  --animate-dropdown-fade: dropdown-fade 0.15s ease-out forwards;
+  --animate-dropdown-slide: dropdown-slide 0.2s ease-out forwards;
+  --animate-mobile-slide: mobile-slide 0.2s ease-out forwards;
+  --animate-marquee-left: marquee-left 30s linear infinite;
+  --animate-marquee-left-slow: marquee-left 35s linear infinite;
+  --animate-marquee-right: marquee-right 28s linear infinite;
+  --animate-fade-blur-in: fade-blur-in 0.7s ease-out forwards;
+
+  @keyframes dropdown-fade {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes dropdown-slide {
+    from {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes mobile-slide {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes marquee-left {
+    from {
+      transform: translateX(0);
+    }
+
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes marquee-right {
+    from {
+      transform: translateX(-50%);
+    }
+
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes fade-blur-in {
+    from {
+      opacity: 0;
+      filter: blur(8px);
+    }
+
+    to {
+      opacity: 1;
+      filter: blur(0);
+    }
+  }
+}
+
+@layer utilities {
+  .bg-background-semi-transparent {
+    position: relative;
+  }
+
+  .bg-background-semi-transparent::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: var(--background);
+    opacity: 0.8;
+    z-index: -1;
+    pointer-events: none;
+  }
+}

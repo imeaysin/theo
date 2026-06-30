@@ -1,10 +1,16 @@
 import { Logo } from "./logo"
 
-export const AppLogo = () => {
+export function AppLogo({
+  href = "/",
+  label = "ACME",
+}: {
+  href?: string
+  label?: string
+}) {
   return (
-    <a className="flex items-center gap-1" href="/">
+    <a className="flex items-center gap-1 text-foreground" href={href}>
       <Logo />
-      <p className="font-bold text-inherit">ACME</p>
+      <p className="font-bold text-inherit">{label}</p>
     </a>
   )
 }

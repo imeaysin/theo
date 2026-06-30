@@ -3,7 +3,7 @@ import { Geist_Mono, Hedvig_Letters_Serif, Inter } from "next/font/google"
 import "@/styles/globals.css"
 import { Footer } from "@/components/layout/footer"
 import { Header } from "@/components/layout/header"
-import { SunsetBanner } from "@/components/layout/sunset-banner"
+// import { SunsetBanner } from "@/components/layout/sunset-banner"
 import { siteConfig } from "@/config/site"
 import { ThemeProvider } from "@workspace/ui/components/theme-provider"
 import { cn } from "@workspace/ui/lib/utils"
@@ -68,7 +68,7 @@ export default function RootLayout({
             disableTransitionOnChange
             enableSystem
           >
-            <SunsetBanner />
+            {/* <SunsetBanner /> */}
             <Header />
             <main className="container mx-auto overflow-hidden px-4 pt-9 md:overflow-visible">
               {children}

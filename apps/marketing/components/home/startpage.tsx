@@ -273,7 +273,7 @@ export function StartPage() {
               <div className="3xl:max-w-5xl mx-auto max-w-3xl space-y-5 px-2 lg:space-y-6 lg:px-0">
                 <Link
                   href="#features"
-                  className="inline-flex items-center gap-2 rounded-full border border-border px-3.5 py-1.5 font-sans text-xs text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground"
+                  className="inline-flex items-center gap-2 rounded-none border border-border px-3.5 py-1.5 font-sans text-xs text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground"
                 >
                   Theo is launching soon
                   <span aria-hidden="true">&rarr;</span>

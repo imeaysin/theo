@@ -239,7 +239,7 @@ export function Header({
       />
 
       {/* Navigation Bar */}
-      <nav className="fixed top-9 right-0 left-0 z-50 w-full">
+      <nav className="fixed top-0 right-0 left-0 z-50 w-full">
         <div
           ref={headerRef}
           className={cn(
