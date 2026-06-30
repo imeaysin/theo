@@ -5,7 +5,10 @@ import type React from "react"
 import { cn } from "@workspace/ui/lib/utils"
 import { CommandTrigger } from "./command-palette"
 import { ShellNav } from "./navigation/navigation"
-import { sidebarBrandLinkClassName, sidebarIconButtonClassName } from "./navigation/navigation-styles"
+import {
+  sidebarBrandLinkClassName,
+  sidebarIconButtonClassName,
+} from "./navigation/navigation-styles"
 import { useShell } from "./shell-context"
 import { useSidebarState } from "./sidebar-state"
 import { UserDropdown } from "./user-dropdown/user-dropdown"
@@ -14,7 +17,11 @@ import type { NavItem, ShellUser, UserMenuItem } from "./types"
 const SIDEBAR_WIDTH = "18rem"
 const SIDEBAR_WIDTH_ICON = "3rem"
 
-function SidebarLogoMark({ logo }: { logo: React.ReactNode }): React.ReactElement {
+function SidebarLogoMark({
+  logo,
+}: {
+  logo: React.ReactNode
+}): React.ReactElement {
   return (
     <span className="flex size-4 shrink-0 items-center justify-center [&>svg]:size-full">
       {logo}
@@ -43,7 +50,7 @@ function SidebarBrand({
           slotClassName,
           "transition-opacity",
           !isTabletIconOnly &&
-          "group-hover/brand:pointer-events-none group-hover/brand:opacity-0"
+            "group-hover/brand:pointer-events-none group-hover/brand:opacity-0"
         )}
         href={homeHref}
       >

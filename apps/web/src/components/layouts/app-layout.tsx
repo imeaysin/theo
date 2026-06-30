@@ -25,11 +25,10 @@ import { Logo } from "@workspace/ui/components/logo"
 import { toastManager } from "@workspace/ui/components/toast"
 import { useAuthSession } from "@/features/auth/hooks/use-auth-session"
 import { useSignOutMutation } from "@/features/auth/hooks/use-auth-mutations"
-import { dashboardMainNavigation } from "@/features/dashboard/dashboard-navigation"
 import {
-  useDashboardBottomNavItems,
-  usePublicPageUrl,
-} from "@/features/dashboard/hooks/use-dashboard-bottom-nav-items"
+  getAppMobileMoreItems,
+  getAppNavigation,
+} from "@/config/app-navigation"
 import { paths } from "@/config/paths"
 import { site } from "@/config/site"
 
@@ -43,35 +42,26 @@ const ShellLink: ShellLinkComponent = ({
   </RouterLink>
 )
 
-/** Authenticated app chrome — sidebar, mobile nav, and command palette. */
+/** Post-login shell. Routes live in features; nav lives in `config/app-navigation.ts`. */
 export function AppLayout() {
   const location = useLocation()
   const navigate = useNavigate()
   const { data: session, isPending: userLoading } = useAuthSession()
   const signOut = useSignOutMutation()
   const user = session?.user
-  const bottomNavItems = useDashboardBottomNavItems()
-  const publicPageUrl = usePublicPageUrl()
 
-  const commandActions = useMemo<CommandAction[]>(() => {
-    const items = flattenNavItems([
-      ...dashboardMainNavigation.filter((item) => item.name !== "more"),
-      ...bottomNavItems,
-    ])
+  const navigation = useMemo(() => getAppNavigation(user?.role), [user?.role])
 
-    return items.map((item) => ({
-      id: item.href || item.name,
-      name: item.name,
-      section: "Navigation",
-      keywords: item.name,
-      href: item.href || undefined,
-      onSelect: item.onClick
-        ? undefined
-        : () => {
-            if (item.href) navigate(item.href)
-          },
-    }))
-  }, [bottomNavItems, navigate])
+  const publicPageUrl = useMemo(() => {
+    const slug = user?.name?.trim().toLowerCase().replace(/\s+/g, "-") || "user"
+    if (typeof window === "undefined") return `/${slug}`
+    return `${window.location.origin}/${slug}`
+  }, [user?.name])
+
+  const mobileMoreItems = useMemo(
+    () => getAppMobileMoreItems(publicPageUrl),
+    [publicPageUrl]
+  )
 
   const userMenuItems = useMemo<UserMenuItem[]>(
     () => [
@@ -102,10 +92,7 @@ export function AppLayout() {
         icon: CopyIcon,
         onClick: () => {
           void navigator.clipboard.writeText(publicPageUrl).then(() => {
-            toastManager.add({
-              title: "Link copied",
-              type: "success",
-            })
+            toastManager.add({ title: "Link copied", type: "success" })
           })
         },
       },
@@ -125,14 +112,34 @@ export function AppLayout() {
     [publicPageUrl]
   )
 
+  const commandActions = useMemo<CommandAction[]>(() => {
+    const items = flattenNavItems([
+      ...navigation.filter((item) => item.name !== "more"),
+      ...mobileMoreItems,
+    ])
+
+    return items.map((item) => ({
+      id: item.href || item.name,
+      name: item.name,
+      section: "Navigation",
+      keywords: item.name,
+      href: item.href || undefined,
+      onSelect: item.onClick
+        ? undefined
+        : () => {
+            if (item.href) navigate(item.href)
+          },
+    }))
+  }, [mobileMoreItems, navigate, navigation])
+
   return (
     <AppShell
-      bottomNavItems={bottomNavItems}
+      bottomNavItems={mobileMoreItems}
       brandLabel={site.name}
       commandActions={commandActions}
       linkComponent={ShellLink}
       logo={<Logo />}
-      navigation={dashboardMainNavigation}
+      navigation={navigation}
       onSignOut={() => signOut.mutate()}
       pathname={location.pathname}
       userLoading={userLoading}

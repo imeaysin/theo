@@ -4,6 +4,7 @@ import { PageNotFound } from "@workspace/ui/components/page-not-found"
 import { AuthLayout } from "@/components/layouts/auth-layout"
 import { AppLayout } from "@/components/layouts/app-layout"
 import { RootLayout } from "@/components/layouts/root-layout"
+import { accountRoutes } from "@/features/account/routes"
 import { authRoutes } from "@/features/auth/routes"
 import { dashboardRoutes } from "@/features/dashboard/routes"
 import { homeRoutes } from "@/features/home/routes"
@@ -24,7 +25,7 @@ export const router = createBrowserRouter([
     children: [
       {
         element: <AppLayout />,
-        children: dashboardRoutes,
+        children: [...dashboardRoutes, ...accountRoutes],
       },
     ],
   },

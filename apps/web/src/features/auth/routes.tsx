@@ -1,7 +1,6 @@
 import type { RouteObject } from "react-router-dom"
 import { ForgotPasswordPage } from "@/features/auth/pages/forgot-password-page"
 import { ResetPasswordPage } from "@/features/auth/pages/reset-password-page"
-import { SettingsPage } from "@/features/auth/pages/settings-page"
 import { SignInPage } from "@/features/auth/pages/sign-in-page"
 import { SignOutPage } from "@/features/auth/pages/sign-out-page"
 import { SignUpPage } from "@/features/auth/pages/sign-up-page"
@@ -17,5 +16,4 @@ export const authRoutes: RouteObject[] = [
   { path: paths.auth.resetPassword, element: <ResetPasswordPage /> },
   { path: paths.auth.verifyEmail, element: <VerifyEmailPage /> },
   { path: paths.auth.twoFactor, element: <TwoFactorPage /> },
-  { path: paths.auth.settings, element: <SettingsPage /> },
 ]

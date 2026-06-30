@@ -3,7 +3,7 @@ import type { NavItem } from "../types"
 
 /** 32px icon control — shadcn SidebarMenuButton collapsible=icon. */
 export const sidebarIconButtonClassName = cn(
-  "flex size-8 shrink-0 items-center justify-center rounded-lg p-2 text-sidebar-foreground ring-sidebar-ring outline-none transition",
+  "flex size-8 shrink-0 items-center justify-center rounded-lg p-2 text-sidebar-foreground ring-sidebar-ring transition outline-none",
   "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
   "focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground",
   "[&_svg]:size-4 [&_svg]:shrink-0"
@@ -11,7 +11,7 @@ export const sidebarIconButtonClassName = cn(
 
 /** Primary sidebar nav row — shadcn SidebarMenuButton default. */
 export const sidebarNavItemClassName = cn(
-  "flex h-8 w-full min-w-0 items-center gap-2 overflow-hidden rounded-lg px-2 text-sm font-medium text-sidebar-foreground ring-sidebar-ring outline-none transition-[width,height,padding] duration-200 ease-linear",
+  "flex h-8 w-full min-w-0 items-center gap-2 overflow-hidden rounded-lg px-2 text-sm font-medium text-sidebar-foreground ring-sidebar-ring transition-[width,height,padding] duration-200 ease-linear outline-none",
   "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
   "focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground",
   "[&_svg]:size-4 [&_svg]:shrink-0",
@@ -22,7 +22,7 @@ export const sidebarNavItemClassName = cn(
 
 /** Nested nav row. */
 export const sidebarNavSubItemClassName = cn(
-  "flex h-8 w-full min-w-0 items-center gap-2 overflow-hidden rounded-lg pl-8 pr-2 text-sm font-medium text-sidebar-foreground ring-sidebar-ring outline-none transition",
+  "flex h-8 w-full min-w-0 items-center gap-2 overflow-hidden rounded-lg pr-2 pl-8 text-sm font-medium text-sidebar-foreground ring-sidebar-ring transition outline-none",
   "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
   "focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground",
   "[&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-sidebar-accent-foreground",
@@ -35,9 +35,9 @@ export const sidebarMenuSubClassName = "flex flex-col gap-1"
 export const sidebarHeaderActionClassName = sidebarIconButtonClassName
 
 export const sidebarBrandLinkClassName = cn(
-  "flex h-8 min-w-0 items-center gap-2 overflow-hidden rounded-lg px-2 font-heading text-sm tracking-wide text-sidebar-foreground outline-none transition",
+  "flex h-8 min-w-0 items-center gap-2 overflow-hidden rounded-lg px-2 font-heading text-sm tracking-wide text-sidebar-foreground transition outline-none",
   "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-  "focus-visible:ring-2 ring-sidebar-ring"
+  "ring-sidebar-ring focus-visible:ring-2"
 )
 
 /** Hide labels while the sidebar width animates. */

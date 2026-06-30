@@ -223,11 +223,7 @@ export function Shell({
                 "relative z-0 flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-background focus:outline-none md:m-2 md:ms-0 md:rounded-xl md:shadow-sm/5"
               )}
             >
-              <TopNav
-                brandLabel={brandLabel}
-                homeHref={homeHref}
-                logo={logo}
-              />
+              <TopNav brandLabel={brandLabel} homeHref={homeHref} logo={logo} />
               <div className="max-w-full flex-1 overflow-y-auto p-2 sm:p-4 lg:p-6">
                 {withoutMain ? (
                   children

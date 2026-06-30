@@ -41,11 +41,7 @@ function useShellNavItems(items: NavItem[]) {
   }, [items])
 }
 
-export function ShellNav({
-  items,
-}: {
-  items: NavItem[]
-}): React.ReactElement {
+export function ShellNav({ items }: { items: NavItem[] }): React.ReactElement {
   const { desktopItems } = useShellNavItems(items)
   const { isIconSidebar } = useSidebarState()
 

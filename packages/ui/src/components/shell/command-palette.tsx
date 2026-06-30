@@ -32,7 +32,10 @@ import {
   TooltipTrigger,
 } from "@workspace/ui/components/tooltip"
 import { useShell } from "./shell-context"
-import { sidebarHeaderActionClassName, sidebarNavItemClassName } from "./navigation/navigation-styles"
+import {
+  sidebarHeaderActionClassName,
+  sidebarNavItemClassName,
+} from "./navigation/navigation-styles"
 import type { CommandAction } from "./types"
 
 interface CommandGroupModel {

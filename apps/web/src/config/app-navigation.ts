@@ -2,7 +2,9 @@ import {
   BarChart3Icon,
   CalendarIcon,
   ClockIcon,
+  CopyIcon,
   EllipsisIcon,
+  ExternalLinkIcon,
   LayoutGridIcon,
   Link2Icon,
   RouteIcon,
@@ -10,11 +12,15 @@ import {
 } from "lucide-react"
 import { MORE_SEPARATOR_NAME } from "@workspace/ui/components/shell"
 import type { NavItem } from "@workspace/ui/components/shell"
+import { toastManager } from "@workspace/ui/components/toast"
 import { paths } from "@/config/paths"
+
+/** App sidebar entry — extend with `roles` when RBAC is wired up. */
+export type AppNavItem = NavItem & { roles?: string[] }
 
 const dashboardBase = paths.dashboard
 
-export const dashboardMainNavigation: NavItem[] = [
+const appNavigationItems: AppNavItem[] = [
   {
     name: "Event types",
     href: dashboardBase,
@@ -91,3 +97,39 @@ export const dashboardMainNavigation: NavItem[] = [
     icon: EllipsisIcon,
   },
 ]
+
+function filterByRole(items: AppNavItem[], role?: string | null): NavItem[] {
+  return items
+    .filter(
+      (item) => !item.roles?.length || (role && item.roles.includes(role))
+    )
+    .map(({ roles: _roles, ...item }) => item)
+}
+
+/** Sidebar nav for the authenticated app shell. */
+export function getAppNavigation(role?: string | null): NavItem[] {
+  return filterByRole(appNavigationItems, role)
+}
+
+/** Mobile "more" drawer links (not shown in desktop sidebar). */
+export function getAppMobileMoreItems(publicPageUrl: string): NavItem[] {
+  return [
+    {
+      name: "View public page",
+      href: publicPageUrl,
+      icon: ExternalLinkIcon,
+      target: "_blank",
+    },
+    {
+      name: "Copy public page link",
+      href: "",
+      icon: CopyIcon,
+      onClick: (event) => {
+        event.preventDefault()
+        void navigator.clipboard.writeText(publicPageUrl).then(() => {
+          toastManager.add({ title: "Link copied", type: "success" })
+        })
+      },
+    },
+  ]
+}

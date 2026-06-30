@@ -267,8 +267,7 @@ export function ShellMobileNavItem({
   isActive?: boolean
 }): React.ReactElement {
   const { t, pathname, Link } = useShell()
-  const current =
-    isActive ?? isNavItemActive(item, pathname, isChild)
+  const current = isActive ?? isNavItemActive(item, pathname, isChild)
   const Icon = item.icon
 
   const content = (
