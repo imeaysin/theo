@@ -5,6 +5,7 @@ import {
   type CreateNoteInput,
   type NoteResponse,
 } from "@workspace/contracts"
+import { apiRoutes } from "@/config/api-routes"
 import { apiFetch } from "@/lib/api"
 
 export const notesQueryKey = ["notes"] as const
@@ -13,7 +14,7 @@ export function useNotesQuery() {
   return useQuery({
     queryKey: notesQueryKey,
     queryFn: async () => {
-      const data = await apiFetch<unknown>("/v1/notes")
+      const data = await apiFetch<unknown>(apiRoutes.notes)
       return NotesListResponseSchema.parse(data)
     },
   })
@@ -25,7 +26,7 @@ export function useCreateNoteMutation() {
   return useMutation({
     mutationFn: async (input: CreateNoteInput) => {
       const body = CreateNoteSchema.parse(input)
-      const data = await apiFetch<unknown>("/v1/notes", {
+      const data = await apiFetch<unknown>(apiRoutes.notes, {
         method: "POST",
         body: JSON.stringify(body),
       })
@@ -42,7 +43,7 @@ export function useDeleteNoteMutation() {
 
   return useMutation({
     mutationFn: (noteId: string) =>
-      apiFetch<void>(`/v1/notes/${noteId}`, { method: "DELETE" }),
+      apiFetch<void>(apiRoutes.note(noteId), { method: "DELETE" }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: notesQueryKey })
     },

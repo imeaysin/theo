@@ -11,7 +11,7 @@ import { Field, FieldError, FieldLabel } from "@workspace/ui/components/field"
 import { Input } from "@workspace/ui/components/input"
 import { toastManager } from "@workspace/ui/components/toast"
 import { useResetPasswordMutation } from "@/features/auth/hooks/use-auth-mutations"
-import { paths } from "@/config/paths"
+import { routes } from "@/config/routes"
 
 export function ResetPasswordPage() {
   const navigate = useNavigate()
@@ -40,7 +40,7 @@ export function ResetPasswordPage() {
         description: "You can now sign in with your new password.",
         type: "success",
       })
-      navigate(paths.auth.signIn)
+      navigate(routes.signIn)
     } catch {
       toastManager.add({
         title: "Reset failed",
@@ -55,7 +55,7 @@ export function ResetPasswordPage() {
       footer={
         <Link
           className="font-sans text-sm text-muted-foreground underline underline-offset-2 transition-colors hover:text-foreground"
-          to={paths.auth.signIn}
+          to={routes.signIn}
         >
           Back to sign in
         </Link>

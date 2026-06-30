@@ -3,7 +3,6 @@
 import type { ReactNode } from "react"
 import { Button } from "@workspace/ui/components/button"
 import { Icons } from "@workspace/ui/components/icons"
-import { AuthVideoPanel } from "./auth-video-panel"
 import { AuthTermsFooter } from "./auth-terms-footer"
 
 export interface AuthShellProps {
@@ -64,19 +63,17 @@ export function AuthShell({
   renderTermsLink,
 }: AuthShellProps) {
   return (
-    <div className="relative flex min-h-screen bg-background">
+    <div className="relative flex min-h-screen flex-col bg-background">
       <div className="fixed top-0 right-0 left-0 z-50 w-full">
         <nav className="pointer-events-none w-full">
-          <div className="relative flex items-center px-4 py-3 md:px-4 lg:px-4 xl:px-6 xl:py-4 2xl:px-8">
+          <div className="relative flex items-center px-4 py-3 md:px-6">
             <AuthHomeLink homeHref={homeHref} renderHomeLink={renderHomeLink} />
           </div>
         </nav>
       </div>
 
-      <AuthVideoPanel />
-
-      <div className="flex w-full flex-col items-center justify-center p-8 pb-2 lg:w-1/2 lg:p-12">
-        <div className="flex h-full min-h-[calc(100svh-6rem)] w-full max-w-md flex-col pt-20 lg:pt-24">
+      <div className="flex flex-1 flex-col items-center justify-center p-8 pb-2">
+        <div className="flex h-full min-h-[calc(100svh-6rem)] w-full max-w-md flex-col pt-20">
           <div className="flex flex-1 flex-col justify-center gap-8">
             {children}
           </div>

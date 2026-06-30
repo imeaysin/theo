@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 import { ShellMain } from "@workspace/ui/components/shell"
 import { Button } from "@workspace/ui/components/button"
 import { useAuthSession } from "@/features/auth/hooks/use-auth-session"
-import { paths } from "@/config/paths"
+import { routes } from "@/config/routes"
 
 export function SettingsPage() {
   const { data: session } = useAuthSession()
@@ -22,7 +22,7 @@ export function SettingsPage() {
         </dl>
         <Button
           className="w-fit"
-          render={<Link to={paths.auth.signOut} />}
+          render={<Link to={routes.signOut} />}
           type="button"
           variant="outline"
         >

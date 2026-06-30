@@ -23,7 +23,6 @@ export function AppLayout() {
 
   return (
     <AppShell
-      bottomNavItems={shell.bottomNavItems}
       brandLabel={shell.brandLabel}
       commandActions={shell.commandActions}
       linkComponent={ShellLink}

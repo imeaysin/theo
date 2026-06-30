@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { AuthOtpInput, AuthPageBody, AuthPageHeader } from "@workspace/ui/auth"
 import { toastManager } from "@workspace/ui/components/toast"
 import { useVerifyTotpMutation } from "@/features/auth/hooks/use-auth-mutations"
-import { paths } from "@/config/paths"
+import { defaultAuthenticatedRoute, routes } from "@/config/routes"
 
 export function TwoFactorPage() {
   const navigate = useNavigate()
@@ -15,7 +15,7 @@ export function TwoFactorPage() {
     setInvalid(false)
     try {
       await verifyTotp.mutateAsync({ code: value })
-      navigate(paths.dashboard)
+      navigate(defaultAuthenticatedRoute)
     } catch {
       setInvalid(true)
       setCode("")
@@ -32,7 +32,7 @@ export function TwoFactorPage() {
       footer={
         <Link
           className="font-sans text-sm text-muted-foreground underline underline-offset-2 transition-colors hover:text-foreground"
-          to={paths.auth.signIn}
+          to={routes.signIn}
         >
           Back to sign in
         </Link>

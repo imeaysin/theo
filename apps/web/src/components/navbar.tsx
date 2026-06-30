@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import { NavbarAuth } from "@/features/auth/components/navbar-auth"
-import { paths } from "@/config/paths"
+import { routes } from "@/config/routes"
 import { site } from "@/config/site"
 
 export function Navbar() {
@@ -9,7 +9,7 @@ export function Navbar() {
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
         <Link
           className="font-heading text-sm font-semibold tracking-tight"
-          to={paths.home}
+          to={routes.home}
         >
           {site.name}
         </Link>

@@ -7,7 +7,11 @@ import type {
   TwoFactorInput,
 } from "@workspace/contracts"
 import { authClient } from "@/lib/auth"
-import { absoluteAppUrl, paths } from "@/config/paths"
+import {
+  absoluteAppUrl,
+  defaultAuthenticatedRoute,
+  routes,
+} from "@/config/routes"
 
 export function useSignInMutation() {
   return useMutation({
@@ -26,7 +30,7 @@ export function useSignUpMutation() {
         email: input.email,
         password: input.password,
         name: input.name,
-        callbackURL: absoluteAppUrl(paths.auth.verifyEmail),
+        callbackURL: absoluteAppUrl(routes.verifyEmail),
       })
       if (error) throw error
       return data
@@ -51,7 +55,7 @@ export function useForgotPasswordMutation() {
     mutationFn: async (input: ForgotPasswordInput) => {
       const { data, error } = await authClient.requestPasswordReset({
         email: input.email,
-        redirectTo: absoluteAppUrl(paths.auth.resetPassword),
+        redirectTo: absoluteAppUrl(routes.resetPassword),
       })
       if (error) throw error
       return data
@@ -96,7 +100,7 @@ export function useSendVerificationEmailMutation() {
     mutationFn: async (email: string) => {
       const { data, error } = await authClient.sendVerificationEmail({
         email,
-        callbackURL: absoluteAppUrl(paths.auth.verifyEmail),
+        callbackURL: absoluteAppUrl(routes.verifyEmail),
       })
       if (error) throw error
       return data
@@ -119,7 +123,7 @@ export function useSocialSignInMutation() {
     mutationFn: async (provider: "google" | "github") => {
       const { data, error } = await authClient.signIn.social({
         provider,
-        callbackURL: absoluteAppUrl(paths.dashboard),
+        callbackURL: absoluteAppUrl(defaultAuthenticatedRoute),
       })
       if (error) throw error
       return data

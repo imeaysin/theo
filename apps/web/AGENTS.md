@@ -2,28 +2,19 @@
 
 Vite + React 19 + React Router 7 + TanStack Query.
 
-## Structure
+## Route config (two files)
 
-```
-src/
-  features/<name>/     pages, hooks, components for a domain
-  lib/api.ts           authenticated fetch, ApiError, unwraps { data }
-  routes/              route definitions
-test/                  Vitest tests mirror src paths (e.g. test/lib/api.test.ts)
-```
+| File                   | Purpose                                                    |
+| ---------------------- | ---------------------------------------------------------- |
+| `config/routes.ts`     | App: `routeSegments` (router) + `routes` (Link / navigate) |
+| `config/api-routes.ts` | API: versioned paths for `apiFetch()`                      |
 
-## Data fetching
+**Do not hardcode path strings elsewhere.** Feature `routes.tsx` imports `routeSegments`; pages import `routes`.
 
-- Use TanStack Query hooks in `features/*/hooks/`.
-- Call `apiFetch<T>()` from `lib/api.ts` — types from `@workspace/contracts`.
-- Auth token via `@workspace/auth` client.
+## Adding a feature
 
-## Tests
-
-- Vitest with `@/` → `src/` alias (`vitest.config.ts`).
-- Place tests under `test/`, not colocated in `src/`.
-- Package-level logic (dates, contracts) is tested in `packages/*/test/`.
-
-## UI
-
-- Shared components live in `@workspace/ui` — do not duplicate in this app.
+1. Add segment under `routeSegments.app` in `config/routes.ts`
+2. Add full URL to `routes` in the same file
+3. Add `apiRoutes` entry in `config/api-routes.ts` if it calls the API
+4. Create feature `routes.tsx` using `routeSegments`
+5. Register in `app/router.tsx` and `config/app-navigation.ts`

@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom"
 import { PageLoading } from "@workspace/ui/components/page-loading"
 import { useAuthSession } from "@/features/auth/hooks/use-auth-session"
-import { paths } from "@/config/paths"
+import { routes } from "@/config/routes"
 
 export function ProtectedRoute() {
   const { data: session, isPending } = useAuthSession()
@@ -11,7 +11,7 @@ export function ProtectedRoute() {
   }
 
   if (!session) {
-    return <Navigate replace to={paths.auth.signIn} />
+    return <Navigate replace to={routes.signIn} />
   }
 
   return <Outlet />

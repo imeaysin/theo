@@ -1,12 +1,12 @@
 import { Link, Outlet } from "react-router-dom"
 import { AuthShell } from "@workspace/ui/auth"
-import { paths } from "@/config/paths"
+import { routes } from "@/config/routes"
 import { site } from "@/config/site"
 
 export function AuthLayout() {
   return (
     <AuthShell
-      homeHref={paths.home}
+      homeHref={routes.home}
       privacyHref={site.links.privacy}
       renderHomeLink={({ href, className, children }) => (
         <Link className={className} to={href}>

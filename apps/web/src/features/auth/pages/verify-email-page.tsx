@@ -8,7 +8,7 @@ import {
   useSendVerificationEmailMutation,
   useVerifyEmailMutation,
 } from "@/features/auth/hooks/use-auth-mutations"
-import { paths } from "@/config/paths"
+import { routes } from "@/config/routes"
 
 function getVerifyEmailCopy(verified: boolean) {
   if (verified) {
@@ -108,7 +108,7 @@ export function VerifyEmailPage() {
         ) : null}
         <Button
           className="w-full"
-          render={<Link to={paths.auth.signIn} />}
+          render={<Link to={routes.signIn} />}
           size="lg"
           type="button"
           variant="default"

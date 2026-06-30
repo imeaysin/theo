@@ -11,7 +11,7 @@ import { Field, FieldError, FieldLabel } from "@workspace/ui/components/field"
 import { Input } from "@workspace/ui/components/input"
 import { toastManager } from "@workspace/ui/components/toast"
 import { useForgotPasswordMutation } from "@/features/auth/hooks/use-auth-mutations"
-import { paths } from "@/config/paths"
+import { routes } from "@/config/routes"
 
 export function ForgotPasswordPage() {
   const forgotPassword = useForgotPasswordMutation()
@@ -42,7 +42,7 @@ export function ForgotPasswordPage() {
       footer={
         <Link
           className="font-sans text-sm text-muted-foreground underline underline-offset-2 transition-colors hover:text-foreground"
-          to={paths.auth.signIn}
+          to={routes.signIn}
         >
           Back to sign in
         </Link>

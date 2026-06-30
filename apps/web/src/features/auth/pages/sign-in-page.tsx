@@ -11,7 +11,7 @@ import { toastManager } from "@workspace/ui/components/toast"
 import { AuthButtons } from "@/features/auth/components/auth-buttons"
 import { useSignInMutation } from "@/features/auth/hooks/use-auth-mutations"
 import { useAuthSession } from "@/features/auth/hooks/use-auth-session"
-import { paths } from "@/config/paths"
+import { defaultAuthenticatedRoute, routes } from "@/config/routes"
 import { site } from "@/config/site"
 
 function getSignInErrorMessage(error: unknown) {
@@ -38,17 +38,17 @@ export function SignInPage() {
   }
 
   if (session) {
-    return <Navigate replace to={paths.dashboard} />
+    return <Navigate replace to={defaultAuthenticatedRoute} />
   }
 
   async function onSubmit(values: SignInInput) {
     try {
       const data = await signIn.mutateAsync(values)
       if (data && "twoFactorRedirect" in data && data.twoFactorRedirect) {
-        navigate(paths.auth.twoFactor)
+        navigate(routes.twoFactor)
         return
       }
-      navigate(paths.dashboard)
+      navigate(defaultAuthenticatedRoute)
     } catch (error) {
       const message = getSignInErrorMessage(error)
       toastManager.add({
@@ -58,7 +58,7 @@ export function SignInPage() {
       })
       if (message.includes("Verify your email")) {
         navigate(
-          `${paths.auth.verifyEmail}?email=${encodeURIComponent(values.email)}`
+          `${routes.verifyEmail}?email=${encodeURIComponent(values.email)}`
         )
       }
     }
@@ -71,7 +71,7 @@ export function SignInPage() {
           Don&apos;t have an account?{" "}
           <Link
             className="text-foreground underline underline-offset-2 transition-colors hover:text-foreground/80"
-            to={paths.auth.signUp}
+            to={routes.signUp}
           >
             Sign up
           </Link>
@@ -118,7 +118,7 @@ export function SignInPage() {
         <div className="flex justify-end">
           <Link
             className="font-sans text-sm text-muted-foreground underline underline-offset-2 transition-colors hover:text-foreground"
-            to={paths.auth.forgotPassword}
+            to={routes.forgotPassword}
           >
             Forgot password?
           </Link>

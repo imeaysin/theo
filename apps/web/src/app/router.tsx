@@ -1,4 +1,4 @@
-import { createBrowserRouter, Link } from "react-router-dom"
+import { createBrowserRouter, Link, Navigate } from "react-router-dom"
 import { Button } from "@workspace/ui/components/button"
 import { PageNotFound } from "@workspace/ui/components/page-not-found"
 import { AuthLayout } from "@/components/layouts/auth-layout"
@@ -10,7 +10,7 @@ import { dashboardRoutes } from "@/features/dashboard/routes"
 import { notesRoutes } from "@/features/notes/routes"
 import { homeRoutes } from "@/features/home/routes"
 import { ProtectedRoute } from "@/routing/protected-route"
-import { paths } from "@/config/paths"
+import { routeSegments, routes } from "@/config/routes"
 
 export const router = createBrowserRouter([
   {
@@ -18,6 +18,7 @@ export const router = createBrowserRouter([
     children: homeRoutes,
   },
   {
+    path: routeSegments.auth.root,
     element: <AuthLayout />,
     children: authRoutes,
   },
@@ -25,8 +26,17 @@ export const router = createBrowserRouter([
     element: <ProtectedRoute />,
     children: [
       {
+        path: routeSegments.app.root,
         element: <AppLayout />,
-        children: [...dashboardRoutes, ...notesRoutes, ...accountRoutes],
+        children: [
+          {
+            index: true,
+            element: <Navigate replace to={routeSegments.app.dashboard} />,
+          },
+          ...dashboardRoutes,
+          ...notesRoutes,
+          ...accountRoutes,
+        ],
       },
     ],
   },
@@ -34,7 +44,7 @@ export const router = createBrowserRouter([
     path: "*",
     element: (
       <PageNotFound
-        action={<Button render={<Link to={paths.home} />}>Go home</Button>}
+        action={<Button render={<Link to={routes.home} />}>Go home</Button>}
       />
     ),
   },

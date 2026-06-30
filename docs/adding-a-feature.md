@@ -32,7 +32,8 @@ apps/web/src/features/notes/
   routes.tsx
 ```
 
-Wire routes in `app/router.tsx` and nav in `config/app-navigation.ts`.
+1. Add segment + URL in `apps/web/src/config/routes.ts` and API path in `config/api-routes.ts`.
+2. Create feature `routes.tsx` using `routeSegments` from `config/routes.ts`.
 
 ## 4. Authorization
 

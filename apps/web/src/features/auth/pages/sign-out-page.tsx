@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { PageLoading } from "@workspace/ui/components/page-loading"
 import { useSignOutMutation } from "@/features/auth/hooks/use-auth-mutations"
-import { paths } from "@/config/paths"
+import { routes } from "@/config/routes"
 
 export function SignOutPage() {
   const navigate = useNavigate()
@@ -10,7 +10,7 @@ export function SignOutPage() {
 
   useEffect(() => {
     void signOut().finally(() => {
-      navigate(paths.auth.signIn, { replace: true })
+      navigate(routes.signIn, { replace: true })
     })
   }, [navigate, signOut])
 

@@ -11,7 +11,7 @@ import { toastManager } from "@workspace/ui/components/toast"
 import { AuthButtons } from "@/features/auth/components/auth-buttons"
 import { useSignUpMutation } from "@/features/auth/hooks/use-auth-mutations"
 import { useAuthSession } from "@/features/auth/hooks/use-auth-session"
-import { paths } from "@/config/paths"
+import { defaultAuthenticatedRoute, routes } from "@/config/routes"
 import { site } from "@/config/site"
 
 export function SignUpPage() {
@@ -33,7 +33,7 @@ export function SignUpPage() {
   }
 
   if (session) {
-    return <Navigate replace to={paths.dashboard} />
+    return <Navigate replace to={defaultAuthenticatedRoute} />
   }
 
   async function onSubmit(values: SignUpInput) {
@@ -45,7 +45,7 @@ export function SignUpPage() {
         type: "success",
       })
       navigate(
-        `${paths.auth.verifyEmail}?email=${encodeURIComponent(values.email)}`
+        `${routes.verifyEmail}?email=${encodeURIComponent(values.email)}`
       )
     } catch {
       toastManager.add({
@@ -63,7 +63,7 @@ export function SignUpPage() {
           Already have an account?{" "}
           <Link
             className="text-foreground underline underline-offset-2 transition-colors hover:text-foreground/80"
-            to={paths.auth.signIn}
+            to={routes.signIn}
           >
             Sign in
           </Link>

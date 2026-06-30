@@ -19,7 +19,4 @@ export default defineConfig({
     },
   },
   envDir: path.join(rootDir, "../.."),
-  build: {
-    chunkSizeWarningLimit: 2000,
-  },
 })
