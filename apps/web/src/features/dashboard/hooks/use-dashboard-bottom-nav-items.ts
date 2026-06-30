@@ -1,19 +1,23 @@
 import { useMemo } from "react"
-import { CopyIcon, ExternalLinkIcon, SettingsIcon } from "lucide-react"
+import { CopyIcon, ExternalLinkIcon } from "lucide-react"
 import type { NavItem } from "@workspace/ui/components/shell"
 import { toastManager } from "@workspace/ui/components/toast"
 import { useAuthSession } from "@/features/auth/hooks/use-auth-session"
-import { paths } from "@/config/paths"
 
-export function useDashboardBottomNavItems(): NavItem[] {
+export function usePublicPageUrl(): string {
   const { data: session } = useAuthSession()
   const user = session?.user
 
-  const publicPageUrl = useMemo(() => {
+  return useMemo(() => {
     const slug = user?.name?.trim().toLowerCase().replace(/\s+/g, "-") || "user"
     if (typeof window === "undefined") return `/${slug}`
     return `${window.location.origin}/${slug}`
   }, [user?.name])
+}
+
+/** Secondary links shown in the mobile "more" drawer — not the desktop sidebar. */
+export function useDashboardBottomNavItems(): NavItem[] {
+  const publicPageUrl = usePublicPageUrl()
 
   return useMemo<NavItem[]>(
     () => [
@@ -36,12 +40,6 @@ export function useDashboardBottomNavItems(): NavItem[] {
             })
           })
         },
-      },
-      {
-        name: "Settings",
-        href: paths.auth.settings,
-        icon: SettingsIcon,
-        excludeFromMobileMore: true,
       },
     ],
     [publicPageUrl]

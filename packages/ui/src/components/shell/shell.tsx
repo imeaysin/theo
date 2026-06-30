@@ -207,7 +207,6 @@ export function Shell({
 
           <div className="flex flex-1" data-testid="dashboard-shell">
             <ShellSidebar
-              bottomNavItems={bottomNavItems}
               brandLabel={brandLabel}
               homeHref={homeHref}
               logo={logoIcon ?? logo}

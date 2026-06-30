@@ -5,7 +5,6 @@ import type React from "react"
 import { cn } from "@workspace/ui/lib/utils"
 import { CommandTrigger } from "./command-palette"
 import { ShellNav } from "./navigation/navigation"
-import { ShellNavItem } from "./navigation/navigation-item"
 import { sidebarBrandLinkClassName, sidebarIconButtonClassName } from "./navigation/navigation-styles"
 import { useShell } from "./shell-context"
 import { useSidebarState } from "./sidebar-state"
@@ -90,7 +89,6 @@ function SidebarTrigger({
 
 export interface ShellSidebarProps {
   navigation: NavItem[]
-  bottomNavItems?: NavItem[]
   logo?: React.ReactNode
   brandLabel?: string
   homeHref?: string
@@ -104,7 +102,6 @@ export interface ShellSidebarProps {
 
 export function ShellSidebar({
   navigation,
-  bottomNavItems = [],
   logo,
   brandLabel,
   homeHref = "/",
@@ -170,19 +167,6 @@ export function ShellSidebar({
 
             <ShellNav items={navigation} />
           </div>
-
-          {bottomNavItems.length > 0 ? (
-            <div
-              className={cn(
-                "flex flex-col gap-1",
-                isIconSidebar ? "items-center" : "items-stretch"
-              )}
-            >
-              {bottomNavItems.map((item) => (
-                <ShellNavItem item={item} key={item.name} />
-              ))}
-            </div>
-          ) : null}
 
           {user || userLoading ? (
             <div className="w-full shrink-0">

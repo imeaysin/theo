@@ -7,6 +7,8 @@ import {
 } from "react-router-dom"
 import {
   CircleHelpIcon,
+  CopyIcon,
+  ExternalLinkIcon,
   MapIcon,
   MoonIcon,
   SettingsIcon,
@@ -20,10 +22,14 @@ import type {
   UserMenuItem,
 } from "@workspace/ui/components/shell"
 import { Logo } from "@workspace/ui/components/logo"
+import { toastManager } from "@workspace/ui/components/toast"
 import { useAuthSession } from "@/features/auth/hooks/use-auth-session"
 import { useSignOutMutation } from "@/features/auth/hooks/use-auth-mutations"
 import { dashboardMainNavigation } from "@/features/dashboard/dashboard-navigation"
-import { useDashboardBottomNavItems } from "@/features/dashboard/hooks/use-dashboard-bottom-nav-items"
+import {
+  useDashboardBottomNavItems,
+  usePublicPageUrl,
+} from "@/features/dashboard/hooks/use-dashboard-bottom-nav-items"
 import { paths } from "@/config/paths"
 import { site } from "@/config/site"
 
@@ -45,6 +51,7 @@ export function AppLayout() {
   const signOut = useSignOutMutation()
   const user = session?.user
   const bottomNavItems = useDashboardBottomNavItems()
+  const publicPageUrl = usePublicPageUrl()
 
   const commandActions = useMemo<CommandAction[]>(() => {
     const items = flattenNavItems([
@@ -84,6 +91,25 @@ export function AppLayout() {
         icon: MoonIcon,
       },
       {
+        label: "View public page",
+        href: publicPageUrl,
+        icon: ExternalLinkIcon,
+        target: "_blank",
+        separatorBefore: true,
+      },
+      {
+        label: "Copy public page link",
+        icon: CopyIcon,
+        onClick: () => {
+          void navigator.clipboard.writeText(publicPageUrl).then(() => {
+            toastManager.add({
+              title: "Link copied",
+              type: "success",
+            })
+          })
+        },
+      },
+      {
         label: "Visit roadmap",
         href: "https://cal.com/roadmap",
         icon: MapIcon,
@@ -96,7 +122,7 @@ export function AppLayout() {
         icon: CircleHelpIcon,
       },
     ],
-    []
+    [publicPageUrl]
   )
 
   return (
