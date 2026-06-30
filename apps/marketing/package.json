@@ -13,24 +13,26 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@fontsource-variable/geist-mono": "^5.2.8",
+    "@fontsource/cal-sans": "^5.2.3",
     "@workspace/config": "workspace:*",
     "@workspace/ui": "workspace:*",
-    "next": "16.2.9",
+    "next": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:"
   },
   "devDependencies": {
-    "@next/env": "16.2.9",
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^25.9.1",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@next/env": "catalog:",
+    "@tailwindcss/postcss": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
     "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
     "@workspace/vitest-config": "workspace:*",
-    "eslint": "^9.17.0",
-    "tailwindcss": "^4.3.0",
-    "typescript": "5.9.3",
-    "vitest": "^4.1.6"
+    "eslint": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }
