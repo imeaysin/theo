@@ -4,6 +4,8 @@ export interface JWTClaims {
   role: RoleName
   name: string
   activeOrganizationId?: string | null
+  /** Member role(s) in the active organization — set when the JWT is minted. */
+  organizationRole?: string | null
   sub?: string
   iss?: string
   aud?: string | string[]

@@ -12,7 +12,24 @@ jest.mock("@thallesp/nestjs-better-auth", () => ({
 
 jest.mock("@workspace/auth/nestjs", () => ({
   Public: () => () => undefined,
+  CurrentUser: () => () => undefined,
+  RequirePermission: () => () => undefined,
   JwksGuard: class JwksGuard {
+    canActivate() {
+      return true
+    }
+  },
+  RbacGuard: class RbacGuard {
+    canActivate() {
+      return true
+    }
+  },
+  OrgRbacGuard: class OrgRbacGuard {
+    async canActivate() {
+      return true
+    }
+  },
+  RolesGuard: class RolesGuard {
     canActivate() {
       return true
     }
@@ -49,9 +66,11 @@ describe("AppController (e2e)", () => {
       .expect(200)
       .expect((res) => {
         expect(res.body).toMatchObject({
-          status: "ok",
-          auth: "/api/auth",
-          health: "/v1/health",
+          data: {
+            status: "ok",
+            auth: "/api/auth",
+            health: "/v1/health",
+          },
         })
       })
   })
@@ -61,7 +80,9 @@ describe("AppController (e2e)", () => {
       .get("/v1/health")
       .expect(200)
       .expect((res) => {
-        expect(res.body).toMatchObject({ status: "ok", db: "up" })
+        expect(res.body).toMatchObject({
+          data: { status: "ok", db: "up" },
+        })
       })
   })
 })

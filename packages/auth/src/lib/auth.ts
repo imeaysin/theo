@@ -9,7 +9,6 @@ import { emailOTP } from "better-auth/plugins/email-otp"
 import { organization } from "better-auth/plugins/organization"
 import { passkey } from "@better-auth/passkey"
 import { nextCookies } from "better-auth/next-js"
-import { MongoClient } from "mongodb"
 import { env } from "@workspace/config"
 import {
   sendVerificationEmail,
@@ -26,6 +25,7 @@ import {
   guestRole,
 } from "../permissions/platform"
 import { ac as orgAc, roles as orgRoles } from "../permissions/organization"
+import { authDb, authMongoClient } from "../db/mongo"
 
 function socialProviders() {
   const providers: Record<string, Record<string, string>> = {}
@@ -71,9 +71,6 @@ function socialProviders() {
   return providers
 }
 
-const mongoClient = new MongoClient(env.MONGODB_URI)
-const mongoDb = mongoClient.db()
-
 export function createAuth() {
   return betterAuth({
     appName: env.APP_NAME,
@@ -83,7 +80,7 @@ export function createAuth() {
       origin.trim()
     ),
 
-    database: mongodbAdapter(mongoDb, { client: mongoClient }),
+    database: mongodbAdapter(authDb, { client: authMongoClient }),
 
     emailAndPassword: {
       enabled: true,
@@ -111,13 +108,28 @@ export function createAuth() {
         },
         jwt: {
           expirationTime: env.AUTH_JWT_EXPIRATION,
-          definePayload: ({ user, session }) => ({
-            id: user.id,
-            email: user.email,
-            role: user.role,
-            name: user.name,
-            activeOrganizationId: session.activeOrganizationId ?? null,
-          }),
+          definePayload: async ({ user, session }) => {
+            const activeOrganizationId = session.activeOrganizationId ?? null
+            let organizationRole: string | null = null
+
+            if (activeOrganizationId) {
+              const member = await authDb.collection("member").findOne({
+                organizationId: activeOrganizationId,
+                userId: user.id,
+              })
+              organizationRole =
+                typeof member?.role === "string" ? member.role : null
+            }
+
+            return {
+              id: user.id,
+              email: user.email,
+              role: user.role,
+              name: user.name,
+              activeOrganizationId,
+              organizationRole,
+            }
+          },
         },
       }),
 
@@ -125,6 +137,7 @@ export function createAuth() {
 
       admin({
         ac,
+        defaultRole: "user",
         roles: {
           guest: guestRole,
           user: userRole,

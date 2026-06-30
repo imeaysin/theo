@@ -151,7 +151,7 @@ This template follows official patterns for each layer of the stack.
 |---------|------|
 | `@workspace/config` | Single root `.env`, Zod validation, dev URL constants |
 | `@workspace/contracts` | Zod schemas shared by API + clients |
-| `@workspace/auth` | Better Auth config + Nest/Next/Expo adapters |
+| `@workspace/auth` | Better Auth config + Nest/Next/Expo adapters — **[authorization docs](./packages/auth/README.md)** |
 | `@workspace/ui` | Components consumed as source (`transpilePackages` in Next, direct import in Vite) |
 
 ## CI

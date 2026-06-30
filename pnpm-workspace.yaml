@@ -38,6 +38,7 @@ catalog:
   "@nestjs/cli": 11.0.23
   "@nestjs/schematics": 11.1.0
   "@nestjs/throttler": 6.5.0
+  "@nestjs/cqrs": 11.0.3
   lucide-react: 1.22.0
   date-fns: 4.4.0
   "@fontsource-variable/geist-mono": 5.2.8

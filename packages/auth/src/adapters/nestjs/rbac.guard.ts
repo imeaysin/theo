@@ -5,7 +5,7 @@ import {
   ForbiddenException,
 } from "@nestjs/common"
 import { Reflector } from "@nestjs/core"
-import { roles } from "../../permissions/platform"
+import { checkPlatformPermission } from "../../permissions/check-platform-permission"
 import { PERMISSION_KEY } from "./require-permission.decorator"
 import type { JWTClaims } from "../../types/auth.types"
 
@@ -20,16 +20,13 @@ export class RbacGuard implements CanActivate {
     }>(PERMISSION_KEY, [ctx.getHandler(), ctx.getClass()])
     if (!required) return true
 
-    const req = ctx.switchToHttp().getRequest<{ user: JWTClaims }>()
-    const roleName = `${req.user.role}Role` as keyof typeof roles
-    const role = roles[roleName]
-    if (!role) throw new ForbiddenException(`Unknown role: ${req.user.role}`)
+    const user = ctx.switchToHttp().getRequest<{ user: JWTClaims }>().user
 
-    const result = role.authorize({
-      [required.resource]: [required.action],
-    })
-    if (!result.success)
+    if (
+      !checkPlatformPermission(user.role, required.resource, required.action)
+    ) {
       throw new ForbiddenException("Insufficient permissions")
+    }
 
     return true
   }

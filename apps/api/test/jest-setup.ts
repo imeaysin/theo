@@ -5,8 +5,10 @@ jest.mock("jose", () => ({
 
 jest.mock("@workspace/auth/nestjs", () => ({
   Public: () => () => undefined,
-  JwksGuard: class JwksGuard {},
-  RbacGuard: class RbacGuard {},
   CurrentUser: () => () => undefined,
   RequirePermission: () => () => undefined,
+  JwksGuard: class JwksGuard {},
+  RbacGuard: class RbacGuard {},
+  OrgRbacGuard: class OrgRbacGuard {},
+  RolesGuard: class RolesGuard {},
 }))

@@ -1,6 +1,6 @@
 import { Controller, Get } from "@nestjs/common"
 import { ApiOperation, ApiTags } from "@nestjs/swagger"
-import { Public } from "@workspace/auth/nestjs"
+import { Public } from "../../common/decorators"
 import { isDbConnected } from "@workspace/db"
 import { env } from "@workspace/config"
 
