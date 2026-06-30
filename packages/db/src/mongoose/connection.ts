@@ -1,5 +1,8 @@
 import mongoose from "mongoose"
 import { databaseEnv } from "@workspace/config/database"
+import { createLogger } from "@workspace/logger"
+
+const logger = createLogger("DB")
 
 let isConnected = false
 
@@ -25,12 +28,18 @@ export async function connectDb(uri: string = databaseEnv.MONGODB_URI) {
         serverSelectionTimeoutMS: 5000,
       })
       isConnected = true
-      console.log(`[DB] Connected to MongoDB (attempt ${attempt})`)
+      logger.info({ attempt }, "Connected to MongoDB")
       return instance
     } catch (error) {
       lastError = error
-      console.warn(
-        `[DB] Connection attempt ${attempt}/${RETRY_ATTEMPTS} failed. Retrying in ${RETRY_DELAY_MS / 1000}s...`
+      logger.warn(
+        {
+          attempt,
+          maxAttempts: RETRY_ATTEMPTS,
+          retryInMs: RETRY_DELAY_MS,
+          err: error instanceof Error ? error : { message: String(error) },
+        },
+        "MongoDB connection attempt failed"
       )
       if (attempt < RETRY_ATTEMPTS) {
         await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS))
@@ -45,6 +54,7 @@ export async function disconnectDb() {
   if (!isConnected) return
   await mongoose.disconnect()
   isConnected = false
+  logger.info("Disconnected from MongoDB")
 }
 
 export function isDbConnected(): boolean {

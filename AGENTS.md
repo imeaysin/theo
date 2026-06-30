@@ -42,7 +42,7 @@ Set `SKIP_ENV_VALIDATION=true` when env is incomplete locally.
 - **Responses:** wrapped in `{ data }` by `TransformResponseInterceptor` — document with `apiDataResponse()` envelope schemas in contracts.
 - **Auth:** JWT from Better Auth; guards in `app.module.ts`; decorators in `common/decorators`.
 - **Tests:** `test/unit/*.spec.ts` (Jest), `test/e2e/*.e2e-spec.ts` (`pnpm test:e2e` in api).
-- **Logging:** `@workspace/logger` (`createLogger`) — not Nest `Logger` for HTTP/errors.
+- **Logging:** `@workspace/logger` (pino) everywhere — `NestLoggerService` for Nest internals, `createLogger()` in interceptors/filters/bootstrap. Do not use Nest `Logger` or `console.log` in app runtime code.
 
 ### Web (`apps/web`)
 

@@ -22,7 +22,7 @@ modules/<feature>/
 | Path                        | Role                                                                    |
 | --------------------------- | ----------------------------------------------------------------------- |
 | `configure-app.ts`          | CORS, helmet, versioning, swagger (`cleanupOpenApiDoc`), static uploads |
-| `interceptors/`             | HTTP logging (`@workspace/logger`), `{ data }` transform                |
+| `interceptors/`             | HTTP logging (`createLogger("HTTP")`), `{ data }` transform             |
 | `filters/`                  | Global exception handler                                                |
 | `decorators/`               | Re-exports auth decorators + `@Roles`                                   |
 | `storage/storage.module.ts` | `STORAGE` provider from `@workspace/storage`                            |
