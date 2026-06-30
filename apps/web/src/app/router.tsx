@@ -2,7 +2,7 @@ import { createBrowserRouter, Link } from "react-router-dom"
 import { Button } from "@workspace/ui/components/button"
 import { PageNotFound } from "@workspace/ui/components/page-not-found"
 import { AuthLayout } from "@/components/layouts/auth-layout"
-import { DashboardLayout } from "@/components/layouts/dashboard-layout"
+import { AppLayout } from "@/components/layouts/app-layout"
 import { RootLayout } from "@/components/layouts/root-layout"
 import { authRoutes } from "@/features/auth/routes"
 import { dashboardRoutes } from "@/features/dashboard/routes"
@@ -23,7 +23,7 @@ export const router = createBrowserRouter([
     element: <ProtectedRoute />,
     children: [
       {
-        element: <DashboardLayout />,
+        element: <AppLayout />,
         children: dashboardRoutes,
       },
     ],

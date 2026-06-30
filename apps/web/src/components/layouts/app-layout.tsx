@@ -37,7 +37,8 @@ const ShellLink: ShellLinkComponent = ({
   </RouterLink>
 )
 
-export function DashboardLayout() {
+/** Authenticated app chrome — sidebar, mobile nav, and command palette. */
+export function AppLayout() {
   const location = useLocation()
   const navigate = useNavigate()
   const { data: session, isPending: userLoading } = useAuthSession()
