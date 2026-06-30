@@ -1,10 +1,9 @@
-import {
-  Link as RouterLink,
-  Outlet,
-  useLocation,
-} from "react-router-dom"
+import { Link as RouterLink, Outlet, useLocation } from "react-router-dom"
 import { AppShell } from "@workspace/ui/components/shell"
-import type { ShellLinkComponent, ShellLinkProps } from "@workspace/ui/components/shell"
+import type {
+  ShellLinkComponent,
+  ShellLinkProps,
+} from "@workspace/ui/components/shell"
 import { Logo } from "@workspace/ui/components/logo"
 import { useAppShellConfig } from "@/features/shell/use-app-shell-config"
 

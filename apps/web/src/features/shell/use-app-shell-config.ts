@@ -9,7 +9,11 @@ import {
   SettingsIcon,
 } from "lucide-react"
 import { flattenNavItems } from "@workspace/ui/components/shell"
-import type { CommandAction, NavItem, UserMenuItem } from "@workspace/ui/components/shell"
+import type {
+  CommandAction,
+  NavItem,
+  UserMenuItem,
+} from "@workspace/ui/components/shell"
 import {
   COPY_PUBLIC_PAGE_LINK_HREF,
   getAppMobileMoreItems,
@@ -17,10 +21,7 @@ import {
 } from "@/config/app-navigation"
 import { paths } from "@/config/paths"
 import { site } from "@/config/site"
-import {
-  buildPublicPageUrl,
-  copyPublicPageLink,
-} from "@/lib/public-page"
+import { buildPublicPageUrl, copyPublicPageLink } from "@/lib/public-page"
 import { useAuthSession } from "@/features/auth/hooks/use-auth-session"
 import { useSignOutMutation } from "@/features/auth/hooks/use-auth-mutations"
 
@@ -56,7 +57,11 @@ export function useAppShellConfig() {
   )
 
   const mobileMoreItems = useMemo(
-    () => withPublicPageActions(getAppMobileMoreItems(publicPageUrl), publicPageUrl),
+    () =>
+      withPublicPageActions(
+        getAppMobileMoreItems(publicPageUrl),
+        publicPageUrl
+      ),
     [publicPageUrl]
   )
 
