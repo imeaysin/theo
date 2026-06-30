@@ -53,8 +53,8 @@ export function SideBar({
           } as React.CSSProperties
         }
       >
-        <div className="flex h-full flex-col justify-between py-3 lg:pt-4">
-          <div>
+        <div className="flex h-full flex-col items-center justify-between py-3 lg:items-stretch lg:pt-4">
+          <div className="flex w-full flex-col items-center lg:items-stretch">
             <header className="mb-3 hidden items-center justify-between lg:flex">
               <Link
                 className="flex min-w-0 items-center gap-2 px-1.5 font-heading text-sm tracking-wide text-sidebar-foreground"
@@ -81,10 +81,12 @@ export function SideBar({
 
             {logo ? (
               <Link
-                className="mb-2 text-center md:inline lg:hidden"
+                className="mb-2 flex size-9 shrink-0 items-center justify-center self-center rounded-lg transition hover:bg-sidebar-accent lg:hidden"
                 href={homeHref}
               >
-                {logo}
+                <span className="flex size-5 items-center justify-center [&>svg]:size-full">
+                  {logo}
+                </span>
               </Link>
             ) : null}
 
@@ -92,7 +94,7 @@ export function SideBar({
           </div>
 
           {bottomNavItems.length > 0 && (
-            <div className="md:px-2 md:pb-4 lg:p-0">
+            <div className="flex flex-col items-center gap-0.5 pb-4 lg:items-stretch lg:p-0">
               {bottomNavItems.map((item, index) => (
                 <div className={cn(index === 0 && "mt-3")} key={item.name}>
                   <NavigationItem item={item} />
