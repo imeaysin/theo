@@ -1,9 +1,5 @@
-"use client"
-
-import { useState } from "react"
 import { AuthOAuthButton } from "@workspace/ui/auth"
-import { authClient } from "@/lib/auth"
-import { paths } from "@/config/paths"
+import { useSocialSignInMutation } from "@/features/auth/hooks/use-auth-mutations"
 
 const providers = [
   { id: "google" as const, label: "Google", primary: true },
@@ -11,29 +7,17 @@ const providers = [
 ]
 
 export function AuthButtons() {
-  const [loadingProvider, setLoadingProvider] = useState<
-    "google" | "github" | null
-  >(null)
-
-  async function signInWith(provider: "google" | "github") {
-    setLoadingProvider(provider)
-    try {
-      await authClient.signIn.social({
-        provider,
-        callbackURL: `${window.location.origin}${paths.dashboard}`,
-      })
-    } finally {
-      setLoadingProvider(null)
-    }
-  }
+  const socialSignIn = useSocialSignInMutation()
 
   return (
     <div className="flex flex-col gap-3">
       {providers.map((provider) => (
         <AuthOAuthButton
           key={provider.id}
-          loading={loadingProvider === provider.id}
-          onClick={() => void signInWith(provider.id)}
+          loading={
+            socialSignIn.isPending && socialSignIn.variables === provider.id
+          }
+          onClick={() => socialSignIn.mutate(provider.id)}
           primary={provider.primary}
           provider={provider.id}
         />

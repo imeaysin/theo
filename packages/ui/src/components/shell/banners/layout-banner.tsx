@@ -4,10 +4,6 @@ export interface BannerContainerProps {
   children?: React.ReactNode
 }
 
-/**
- * Generic sticky banner region rendered above the shell. Apps pass their own
- * banner nodes (verify-email, billing, impersonation, etc.) as children.
- */
 export function BannerContainer({
   children,
 }: BannerContainerProps): React.ReactElement | null {

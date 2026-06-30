@@ -4,6 +4,7 @@ const webClientSchema = z.object({
   VITE_API_URL: z.string().url().optional(),
   VITE_AUTH_URL: z.string().url().optional(),
   VITE_APP_NAME: z.string().min(1).optional(),
+  VITE_MARKETING_URL: z.string().url().optional(),
 })
 
 const marketingClientSchema = z.object({
@@ -20,11 +21,13 @@ const mobileClientSchema = z.object({
 
 const defaultApiUrl = "http://localhost:4000"
 const defaultAppName = "Theo"
+const defaultMarketingUrl = "http://localhost:3000"
 
 export interface ClientPublicEnv {
   apiUrl: string
   authUrl: string
   appName: string
+  marketingUrl: string
 }
 
 function resolveClientUrls(
@@ -48,7 +51,9 @@ function resolveClientUrls(
     source.EXPO_PUBLIC_APP_NAME ??
     defaultAppName
 
-  return { apiUrl, authUrl, appName }
+  const marketingUrl = source.VITE_MARKETING_URL ?? defaultMarketingUrl
+
+  return { apiUrl, authUrl, appName, marketingUrl }
 }
 
 /** `apps/web` (Vite) — pass `import.meta.env`. */
@@ -99,6 +104,7 @@ export function getClientPublicEnvSource(): Record<string, string | undefined> {
     source.VITE_API_URL = viteEnv.env.VITE_API_URL
     source.VITE_AUTH_URL = viteEnv.env.VITE_AUTH_URL
     source.VITE_APP_NAME = viteEnv.env.VITE_APP_NAME
+    source.VITE_MARKETING_URL = viteEnv.env.VITE_MARKETING_URL
   }
 
   if (typeof process !== "undefined") {

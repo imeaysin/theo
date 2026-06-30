@@ -18,16 +18,17 @@ const identity = (key: string): string => key
 
 const noop = (): void => undefined
 
+function resolvePathname(pathname?: string): string {
+  if (pathname) return pathname
+  if (typeof window !== "undefined") return window.location.pathname
+  return "/"
+}
+
 export interface ShellContextValue {
-  /** Router-aware link component. Defaults to a plain anchor. */
   Link: ShellLinkComponent
-  /** Current pathname used to resolve active navigation items. */
   pathname: string
-  /** Optional label translator. Defaults to identity. */
   t: (key: string) => string
-  /** Opens the command palette (no-op when disabled). */
   openCommandPalette: () => void
-  /** Whether the command palette is mounted. */
   isCommandPaletteEnabled: boolean
 }
 
@@ -58,8 +59,7 @@ export function ShellProvider({
   isCommandPaletteEnabled = false,
   children,
 }: ShellProviderProps): React.ReactElement {
-  const resolvedPathname =
-    pathname ?? (typeof window !== "undefined" ? window.location.pathname : "/")
+  const resolvedPathname = resolvePathname(pathname)
 
   const value = useMemo<ShellContextValue>(
     () => ({

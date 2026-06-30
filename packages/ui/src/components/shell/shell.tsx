@@ -5,15 +5,16 @@ import { useCallback, useState } from "react"
 import { cn } from "@workspace/ui/lib/utils"
 import { BannerContainer } from "./banners/layout-banner"
 import { CommandPalette, useCommandPaletteShortcut } from "./command-palette"
-import { MobileNavigation } from "./navigation/navigation"
+import { ShellMobileNav } from "./navigation/navigation"
 import { ShellProvider } from "./shell-context"
+import { SidebarStateProvider } from "./sidebar-state"
 import { ShellBackButton } from "./shell-back-button"
 import { getShellCtaClassName } from "./shell-layout"
-import { SideBar } from "./sidebar"
+import { ShellSidebar } from "./sidebar"
 import { TopNav } from "./top-nav"
 import type {
   CommandAction,
-  NavigationItemType,
+  NavItem,
   ShellLinkComponent,
   ShellUser,
   UserMenuItem,
@@ -31,7 +32,6 @@ export interface ShellMainProps {
   large?: boolean
   backPath?: string | boolean
   onBack?: () => void
-  disableSticky?: boolean
   flexChildrenContainer?: boolean
   children: React.ReactNode
 }
@@ -48,7 +48,6 @@ export function ShellMain({
   large,
   backPath,
   onBack,
-  disableSticky: _disableSticky,
   flexChildrenContainer,
   children,
 }: ShellMainProps): React.ReactElement {
@@ -82,7 +81,7 @@ export function ShellMain({
               >
                 <h3
                   className={cn(
-                    "inline max-w-28 truncate font-heading font-semibold tracking-wide text-foreground sm:max-w-72 md:max-w-80 xl:max-w-full",
+                    "inline max-w-28 truncate font-heading tracking-wide text-foreground sm:max-w-72 md:max-w-80 xl:max-w-full",
                     smallHeading ? "text-base" : "text-xl"
                   )}
                 >
@@ -117,37 +116,29 @@ export function ShellMain({
 }
 
 export interface ShellProps extends ShellMainProps {
-  // routing / i18n
   linkComponent?: ShellLinkComponent
   pathname?: string
   t?: (key: string) => string
 
-  // navigation + identity
-  navigation: NavigationItemType[]
-  bottomNavItems?: NavigationItemType[]
+  navigation: NavItem[]
+  bottomNavItems?: NavItem[]
   user?: ShellUser | null
   userLoading?: boolean
   onSignOut?: () => void
   userMenuItems?: UserMenuItem[]
   signOutLabel?: string
 
-  // branding
   logo?: React.ReactNode
   logoIcon?: React.ReactNode
   brandLabel?: string
   homeHref?: string
-  settingsHref?: string
 
-  // command palette
   commandActions?: CommandAction[]
   onSelectCommandAction?: (action: CommandAction) => void
   commandPlaceholder?: string
   enableCommandPalette?: boolean
 
-  // banners
   banners?: React.ReactNode
-
-  // main content
   withoutMain?: boolean
 }
 
@@ -166,7 +157,6 @@ export function Shell({
   logoIcon,
   brandLabel,
   homeHref = "/",
-  settingsHref: _settingsHref,
   commandActions = [],
   onSelectCommandAction,
   commandPlaceholder,
@@ -198,35 +188,29 @@ export function Shell({
       pathname={pathname}
       t={t}
     >
-      <div className="flex min-h-screen flex-col bg-sidebar">
-        {banners && <BannerContainer>{banners}</BannerContainer>}
+      <SidebarStateProvider>
+        <div className="flex min-h-screen flex-col bg-sidebar">
+          {banners && <BannerContainer>{banners}</BannerContainer>}
 
-        <div className="flex flex-1" data-testid="dashboard-shell">
-          <SideBar
-            bottomNavItems={bottomNavItems}
-            brandLabel={brandLabel}
-            logo={logoIcon ?? logo}
-            homeHref={homeHref}
-            navigation={navigation}
-            onSignOut={onSignOut}
-            signOutLabel={signOutLabel}
-            user={user}
-            userLoading={userLoading}
-            userMenuItems={userMenuItems}
-          />
+          <div className="flex flex-1" data-testid="dashboard-shell">
+            <ShellSidebar
+              brandLabel={brandLabel}
+              homeHref={homeHref}
+              logo={logoIcon ?? logo}
+              navigation={navigation}
+              onSignOut={onSignOut}
+              signOutLabel={signOutLabel}
+              user={user}
+              userLoading={userLoading}
+              userMenuItems={userMenuItems}
+            />
 
-          <div className="flex min-w-0 flex-1 flex-col md:p-2 md:pr-2 md:pl-0 lg:p-3 lg:pr-3 lg:pl-0">
-            <main className="relative z-0 flex min-h-0 flex-1 flex-col overflow-hidden bg-background text-foreground focus:outline-none md:rounded-2xl md:rounded-l-2xl dark:bg-card dark:text-card-foreground">
-              <TopNav
-                brandLabel={brandLabel}
-                homeHref={homeHref}
-                logo={logo}
-                onSignOut={onSignOut}
-                signOutLabel={signOutLabel}
-                user={user}
-                userLoading={userLoading}
-                userMenuItems={userMenuItems}
-              />
+            <main
+              className={cn(
+                "relative z-0 flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-background focus:outline-none md:m-2 md:ms-0 md:rounded-xl md:shadow-sm/5"
+              )}
+            >
+              <TopNav brandLabel={brandLabel} homeHref={homeHref} logo={logo} />
               <div className="max-w-full flex-1 overflow-y-auto p-2 sm:p-4 lg:p-6">
                 {withoutMain ? (
                   children
@@ -234,7 +218,7 @@ export function Shell({
                   <ShellMain {...mainProps}>{children}</ShellMain>
                 )}
                 {!mainProps.backPath && (
-                  <MobileNavigation
+                  <ShellMobileNav
                     bottomNavItems={bottomNavItems}
                     items={navigation}
                   />
@@ -243,47 +227,29 @@ export function Shell({
             </main>
           </div>
         </div>
-      </div>
 
-      {isCommandPaletteEnabled && (
-        <CommandPalette
-          actions={commandActions}
-          onOpenChange={setCommandOpen}
-          onSelectAction={onSelectCommandAction}
-          open={commandOpen}
-          placeholder={commandPlaceholder}
-        />
-      )}
+        {isCommandPaletteEnabled && (
+          <CommandPalette
+            actions={commandActions}
+            onOpenChange={setCommandOpen}
+            onSelectAction={onSelectCommandAction}
+            open={commandOpen}
+            placeholder={commandPlaceholder}
+          />
+        )}
+      </SidebarStateProvider>
     </ShellProvider>
   )
 }
 
 export const AppShell = Shell
 
-export { ShellProvider, useShell } from "./shell-context"
-export type { ShellContextValue } from "./shell-context"
-export {
-  CommandPalette,
-  CommandTrigger,
-  useCommandPaletteShortcut,
-} from "./command-palette"
-export { SideBar } from "./sidebar"
-export { TopNav } from "./top-nav"
-export { BannerContainer } from "./banners/layout-banner"
-export {
-  Navigation,
-  MobileNavigation,
-  MobileNavigationMoreItems,
-  MORE_SEPARATOR_NAME,
-} from "./navigation/navigation"
-export {
-  NavigationItem,
-  MobileNavigationItem,
-  MobileNavigationMoreItem,
-} from "./navigation/navigation-item"
-export { UserDropdown } from "./user-dropdown/user-dropdown"
+export { flattenNavItems } from "./navigation/navigation-utils"
+export { MORE_SEPARATOR_NAME } from "./navigation/navigation"
+
 export type {
   CommandAction,
+  NavItem,
   NavigationItemType,
   ShellLinkComponent,
   ShellLinkProps,

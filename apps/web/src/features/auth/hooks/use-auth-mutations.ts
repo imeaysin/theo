@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 import type {
   ForgotPasswordInput,
   ResetPasswordInput,
@@ -7,49 +7,34 @@ import type {
   TwoFactorInput,
 } from "@workspace/contracts"
 import { authClient } from "@/lib/auth"
-
-export const authQueryKeys = {
-  session: ["auth", "session"] as const,
-}
+import { absoluteAppUrl, paths } from "@/config/paths"
 
 export function useSignInMutation() {
-  const queryClient = useQueryClient()
-
   return useMutation({
     mutationFn: async (input: SignInInput) => {
       const { data, error } = await authClient.signIn.email(input)
       if (error) throw error
       return data
     },
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: authQueryKeys.session })
-    },
   })
 }
 
 export function useSignUpMutation() {
-  const queryClient = useQueryClient()
-
   return useMutation({
     mutationFn: async (input: SignUpInput) => {
       const { data, error } = await authClient.signUp.email({
         email: input.email,
         password: input.password,
         name: input.name,
-        callbackURL: `${window.location.origin}/auth/verify-email`,
+        callbackURL: absoluteAppUrl(paths.auth.verifyEmail),
       })
       if (error) throw error
       return data
-    },
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: authQueryKeys.session })
     },
   })
 }
 
 export function useSignOutMutation() {
-  const queryClient = useQueryClient()
-
   return useMutation({
     mutationFn: async () => {
       const { error } = await authClient.signOut()
@@ -57,9 +42,6 @@ export function useSignOutMutation() {
       if (typeof sessionStorage !== "undefined") {
         sessionStorage.removeItem("__ba_jwt")
       }
-    },
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: authQueryKeys.session })
     },
   })
 }
@@ -69,7 +51,7 @@ export function useForgotPasswordMutation() {
     mutationFn: async (input: ForgotPasswordInput) => {
       const { data, error } = await authClient.requestPasswordReset({
         email: input.email,
-        redirectTo: `${window.location.origin}/auth/reset-password`,
+        redirectTo: absoluteAppUrl(paths.auth.resetPassword),
       })
       if (error) throw error
       return data
@@ -97,8 +79,6 @@ export function useResetPasswordMutation() {
 }
 
 export function useVerifyTotpMutation() {
-  const queryClient = useQueryClient()
-
   return useMutation({
     mutationFn: async (input: TwoFactorInput) => {
       const { data, error } = await authClient.twoFactor.verifyTotp({
@@ -108,9 +88,6 @@ export function useVerifyTotpMutation() {
       if (error) throw error
       return data
     },
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: authQueryKeys.session })
-    },
   })
 }
 
@@ -119,7 +96,30 @@ export function useSendVerificationEmailMutation() {
     mutationFn: async (email: string) => {
       const { data, error } = await authClient.sendVerificationEmail({
         email,
-        callbackURL: `${window.location.origin}/auth/verify-email`,
+        callbackURL: absoluteAppUrl(paths.auth.verifyEmail),
+      })
+      if (error) throw error
+      return data
+    },
+  })
+}
+
+export function useVerifyEmailMutation() {
+  return useMutation({
+    mutationFn: async (token: string) => {
+      const { data, error } = await authClient.verifyEmail({ query: { token } })
+      if (error) throw error
+      return data
+    },
+  })
+}
+
+export function useSocialSignInMutation() {
+  return useMutation({
+    mutationFn: async (provider: "google" | "github") => {
+      const { data, error } = await authClient.signIn.social({
+        provider,
+        callbackURL: absoluteAppUrl(paths.dashboard),
       })
       if (error) throw error
       return data

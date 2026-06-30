@@ -1,105 +1,192 @@
 "use client"
 
+import { PanelLeftIcon } from "lucide-react"
 import type React from "react"
 import { cn } from "@workspace/ui/lib/utils"
 import { CommandTrigger } from "./command-palette"
-import { Navigation } from "./navigation/navigation"
-import { NavigationItem } from "./navigation/navigation-item"
+import { ShellNav } from "./navigation/navigation"
+import {
+  sidebarBrandLinkClassName,
+  sidebarIconButtonClassName,
+} from "./navigation/navigation-styles"
 import { useShell } from "./shell-context"
-import type { NavigationItemType, ShellUser, UserMenuItem } from "./types"
+import { useSidebarState } from "./sidebar-state"
 import { UserDropdown } from "./user-dropdown/user-dropdown"
+import type { NavItem, ShellUser, UserMenuItem } from "./types"
 
-export interface SideBarProps {
-  user?: ShellUser | null
-  userLoading?: boolean
-  navigation: NavigationItemType[]
-  bottomNavItems?: NavigationItemType[]
+const SIDEBAR_WIDTH = "18rem"
+const SIDEBAR_WIDTH_ICON = "3rem"
+
+function SidebarLogoMark({
+  logo,
+}: {
+  logo: React.ReactNode
+}): React.ReactElement {
+  return (
+    <span className="flex size-4 shrink-0 items-center justify-center [&>svg]:size-full">
+      {logo}
+    </span>
+  )
+}
+
+function SidebarBrand({
+  logo,
+  homeHref,
+}: {
+  logo?: React.ReactNode
+  homeHref: string
+}): React.ReactElement | null {
+  const { Link } = useShell()
+  const { toggleSidebar, isTabletIconOnly } = useSidebarState()
+
+  if (!logo) return null
+
+  const slotClassName = cn(sidebarIconButtonClassName, "absolute inset-0")
+
+  return (
+    <div className="group/brand relative size-8 shrink-0">
+      <Link
+        className={cn(
+          slotClassName,
+          "transition-opacity",
+          !isTabletIconOnly &&
+            "group-hover/brand:pointer-events-none group-hover/brand:opacity-0"
+        )}
+        href={homeHref}
+      >
+        <SidebarLogoMark logo={logo} />
+      </Link>
+      {!isTabletIconOnly ? (
+        <button
+          aria-label="Expand sidebar"
+          className={cn(
+            slotClassName,
+            "opacity-0 transition-opacity group-hover/brand:opacity-100"
+          )}
+          onClick={toggleSidebar}
+          type="button"
+        >
+          <PanelLeftIcon aria-hidden="true" />
+        </button>
+      ) : null}
+    </div>
+  )
+}
+
+function SidebarTrigger({
+  className,
+  ...props
+}: React.ComponentProps<"button">): React.ReactElement | null {
+  const { toggleSidebar, isTabletIconOnly } = useSidebarState()
+
+  if (isTabletIconOnly) return null
+
+  return (
+    <button
+      aria-label="Toggle sidebar"
+      className={cn(sidebarIconButtonClassName, className)}
+      onClick={toggleSidebar}
+      type="button"
+      {...props}
+    >
+      <PanelLeftIcon aria-hidden="true" />
+    </button>
+  )
+}
+
+export interface ShellSidebarProps {
+  navigation: NavItem[]
   logo?: React.ReactNode
   brandLabel?: string
   homeHref?: string
+  bannersHeight?: number
+  user?: ShellUser | null
+  userLoading?: boolean
   onSignOut?: () => void
   userMenuItems?: UserMenuItem[]
   signOutLabel?: string
-  bannersHeight?: number
 }
 
-export function SideBar({
-  user,
-  userLoading,
+export function ShellSidebar({
   navigation,
-  bottomNavItems = [],
   logo,
   brandLabel,
   homeHref = "/",
-  onSignOut,
-  userMenuItems,
-  signOutLabel,
   bannersHeight = 0,
-}: SideBarProps): React.ReactElement {
+  user,
+  userLoading,
+  onSignOut,
+  userMenuItems = [],
+  signOutLabel,
+}: ShellSidebarProps): React.ReactElement {
   const { Link } = useShell()
+  const { isIconSidebar } = useSidebarState()
 
   return (
-    <div className="relative">
+    <div className="relative my-2.5">
       <aside
         className={cn(
-          "fixed left-0 hidden h-full max-h-screen w-(--sidebar-width-icon) min-w-(--sidebar-width-icon) flex-col overflow-x-hidden overflow-y-auto bg-sidebar font-sans text-sidebar-foreground md:sticky md:flex lg:w-(--sidebar-width) lg:min-w-(--sidebar-width) lg:px-3"
+          "fixed left-0 hidden h-full max-h-screen flex-col overflow-x-hidden overflow-y-auto bg-sidebar p-2 font-sans text-sidebar-foreground transition-[width,min-width] duration-200 ease-linear md:sticky md:flex",
+          isIconSidebar
+            ? "w-(--sidebar-width-icon) min-w-(--sidebar-width-icon)"
+            : "w-(--sidebar-width) min-w-(--sidebar-width)"
         )}
+        data-collapsed={isIconSidebar ? "" : undefined}
         style={
           {
-            "--sidebar-width": "18rem",
-            "--sidebar-width-icon": "3.5rem",
+            "--sidebar-width": SIDEBAR_WIDTH,
+            "--sidebar-width-icon": SIDEBAR_WIDTH_ICON,
             maxHeight: `calc(100vh - ${bannersHeight}px)`,
             top: `${bannersHeight}px`,
           } as React.CSSProperties
         }
       >
-        <div className="flex h-full flex-col justify-between py-3 lg:pt-4">
-          <div>
-            <header className="mb-3 hidden items-center justify-between lg:flex">
-              <Link
-                className="flex min-w-0 items-center gap-2 px-1.5 font-heading text-sm font-semibold tracking-wide text-sidebar-foreground"
-                href={homeHref}
-              >
-                {logo}
-                {brandLabel ? (
-                  <span className="truncate">{brandLabel}</span>
-                ) : null}
-              </Link>
-              <div className="flex shrink-0 items-center gap-0.5">
-                <CommandTrigger className="px-2 py-1.5" />
-                <UserDropdown
-                  loading={userLoading}
-                  menuItems={userMenuItems}
-                  onSignOut={onSignOut}
-                  placement="sidebar"
-                  signOutLabel={signOutLabel}
-                  small
-                  user={user}
-                />
-              </div>
-            </header>
+        <div className="flex h-full flex-col gap-1">
+          <div
+            className={cn(
+              "flex min-h-0 flex-1 flex-col gap-1",
+              isIconSidebar ? "items-center" : "items-stretch"
+            )}
+          >
+            <div
+              className={cn(
+                "flex h-8 w-full shrink-0 items-center",
+                isIconSidebar ? "justify-center" : "justify-between gap-1"
+              )}
+            >
+              {isIconSidebar ? (
+                <SidebarBrand homeHref={homeHref} logo={logo} />
+              ) : (
+                <>
+                  <Link className={sidebarBrandLinkClassName} href={homeHref}>
+                    {logo ? <SidebarLogoMark logo={logo} /> : null}
+                    {brandLabel ? (
+                      <span className="truncate">{brandLabel}</span>
+                    ) : null}
+                  </Link>
+                  <div className="flex shrink-0 items-center gap-1">
+                    <CommandTrigger compact />
+                    <SidebarTrigger />
+                  </div>
+                </>
+              )}
+            </div>
 
-            {logo ? (
-              <Link
-                className="mb-2 text-center md:inline lg:hidden"
-                href={homeHref}
-              >
-                {logo}
-              </Link>
-            ) : null}
-
-            <Navigation items={navigation} />
+            <ShellNav items={navigation} />
           </div>
 
-          {bottomNavItems.length > 0 && (
-            <div className="md:px-2 md:pb-4 lg:p-0">
-              {bottomNavItems.map((item, index) => (
-                <div className={cn(index === 0 && "mt-3")} key={item.name}>
-                  <NavigationItem item={item} />
-                </div>
-              ))}
+          {user || userLoading ? (
+            <div className="w-full shrink-0">
+              <UserDropdown
+                loading={userLoading}
+                menuItems={userMenuItems}
+                onSignOut={onSignOut}
+                placement="sidebar"
+                signOutLabel={signOutLabel}
+                user={user}
+              />
             </div>
-          )}
+          ) : null}
         </div>
       </aside>
     </div>

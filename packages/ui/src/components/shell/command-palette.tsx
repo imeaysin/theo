@@ -32,6 +32,10 @@ import {
   TooltipTrigger,
 } from "@workspace/ui/components/tooltip"
 import { useShell } from "./shell-context"
+import {
+  sidebarHeaderActionClassName,
+  sidebarNavItemClassName,
+} from "./navigation/navigation-styles"
 import type { CommandAction } from "./types"
 
 interface CommandGroupModel {
@@ -65,7 +69,6 @@ export interface CommandPaletteProps {
   actions: CommandAction[]
   placeholder?: string
   emptyText?: string
-  /** Centralized handler; falls back to `action.onSelect` then `action.href`. */
   onSelectAction?: (action: CommandAction) => void
 }
 
@@ -159,7 +162,6 @@ export function CommandPalette({
   )
 }
 
-/** Registers the global Cmd/Ctrl+K shortcut to toggle the palette. */
 export function useCommandPaletteShortcut(toggle: () => void): void {
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent): void => {
@@ -173,13 +175,35 @@ export function useCommandPaletteShortcut(toggle: () => void): void {
   }, [toggle])
 }
 
-/** Search button that opens the command palette, mirroring the sidebar trigger. */
+function getCommandTriggerClassName({
+  variant,
+  compact,
+  className,
+}: {
+  variant: "sidebar" | "topnav"
+  compact: boolean
+  className?: string
+}) {
+  if (variant === "topnav") {
+    return cn(
+      "flex size-8 shrink-0 items-center justify-center rounded-lg text-foreground transition hover:bg-accent",
+      className
+    )
+  }
+  if (compact) {
+    return cn(sidebarHeaderActionClassName, className)
+  }
+  return cn(sidebarNavItemClassName, className)
+}
+
 export function CommandTrigger({
   className,
   variant = "sidebar",
+  compact = false,
 }: {
   className?: string
   variant?: "sidebar" | "topnav"
+  compact?: boolean
 }): React.ReactElement | null {
   const { openCommandPalette, isCommandPaletteEnabled } = useShell()
 
@@ -191,17 +215,15 @@ export function CommandTrigger({
         render={
           <button
             aria-label="Search"
-            className={cn(
-              "group flex shrink-0 items-center justify-center transition",
-              variant === "topnav"
-                ? "rounded-full p-2 text-foreground hover:bg-accent"
-                : "rounded-md px-3 py-2 text-sm font-medium text-sidebar-foreground hover:bg-sidebar-accent lg:px-2 lg:hover:text-sidebar-accent-foreground",
-              className
-            )}
+            className={getCommandTriggerClassName({
+              variant,
+              compact,
+              className,
+            })}
             onClick={openCommandPalette}
             type="button"
           >
-            <SearchIcon className="h-4 w-4 shrink-0 text-inherit" />
+            <SearchIcon aria-hidden="true" />
           </button>
         }
       />

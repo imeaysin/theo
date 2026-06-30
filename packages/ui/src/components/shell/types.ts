@@ -1,10 +1,6 @@
 import type { LucideIcon } from "lucide-react"
 import type React from "react"
 
-/**
- * Minimal, router-agnostic link contract. Apps adapt their router's link
- * component (e.g. react-router's `Link`) to this shape via `linkComponent`.
- */
 export interface ShellLinkProps {
   href: string
   children?: React.ReactNode
@@ -27,29 +23,28 @@ export interface ShellUser {
   avatarUrl?: string | null
 }
 
-export interface NavigationItemType {
+export interface NavItem {
   name: string
   href: string
   icon?: LucideIcon
   badge?: React.ReactNode
-  child?: NavigationItemType[]
+  child?: NavItem[]
   target?: string
   isLoading?: boolean
   onClick?: React.MouseEventHandler<HTMLAnchorElement | HTMLButtonElement>
-  /** Hidden on mobile bottom bar, only shown on desktop sidebar. */
   onlyDesktop?: boolean
-  /** Only shown on mobile. */
   onlyMobile?: boolean
-  /** Pushed into the mobile "more" section instead of the bottom bar. */
   moreOnMobile?: boolean
-  /** Hidden from the mobile "more" drawer (e.g. when already in the bottom bar). */
   excludeFromMobileMore?: boolean
   isCurrent?: (args: {
-    item: Pick<NavigationItemType, "href">
+    item: Pick<NavItem, "href">
     isChild?: boolean
     pathname: string | null
   }) => boolean
 }
+
+/** @deprecated Use `NavItem` */
+export type NavigationItemType = NavItem
 
 export interface UserMenuItem {
   label: string
@@ -59,7 +54,6 @@ export interface UserMenuItem {
   target?: string
   rel?: string
   variant?: "default" | "destructive"
-  /** Render a separator above this item. */
   separatorBefore?: boolean
 }
 

@@ -2,8 +2,9 @@ import { createBrowserRouter, Link } from "react-router-dom"
 import { Button } from "@workspace/ui/components/button"
 import { PageNotFound } from "@workspace/ui/components/page-not-found"
 import { AuthLayout } from "@/components/layouts/auth-layout"
-import { DashboardLayout } from "@/components/layouts/dashboard-layout"
+import { AppLayout } from "@/components/layouts/app-layout"
 import { RootLayout } from "@/components/layouts/root-layout"
+import { accountRoutes } from "@/features/account/routes"
 import { authRoutes } from "@/features/auth/routes"
 import { dashboardRoutes } from "@/features/dashboard/routes"
 import { homeRoutes } from "@/features/home/routes"
@@ -23,8 +24,8 @@ export const router = createBrowserRouter([
     element: <ProtectedRoute />,
     children: [
       {
-        element: <DashboardLayout />,
-        children: dashboardRoutes,
+        element: <AppLayout />,
+        children: [...dashboardRoutes, ...accountRoutes],
       },
     ],
   },

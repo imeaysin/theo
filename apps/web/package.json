@@ -14,6 +14,8 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@fontsource-variable/geist-mono": "^5.2.8",
+    "@fontsource/cal-sans": "^5.2.3",
     "@hookform/resolvers": "^5.4.0",
     "@tanstack/react-query": "^5.101.1",
     "@workspace/auth": "workspace:*",
@@ -25,8 +27,7 @@
     "react-dom": "catalog:",
     "react-hook-form": "^7.80.0",
     "react-router-dom": "^7.18.0",
-    "zod": "^4.4.3",
-    "zustand": "^5.0.14"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.1",
