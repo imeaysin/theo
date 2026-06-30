@@ -1,5 +1,5 @@
 import { cn } from "@workspace/ui/lib/utils"
-import type { NavigationItemType } from "../types"
+import type { NavItem } from "../types"
 
 /** 32px icon control — shadcn SidebarMenuButton collapsible=icon. */
 export const sidebarIconButtonClassName = cn(
@@ -60,7 +60,7 @@ export function defaultIsCurrent({
   item,
   pathname,
 }: {
-  item: Pick<NavigationItemType, "href">
+  item: Pick<NavItem, "href">
   isChild?: boolean
   pathname: string | null
 }): boolean {

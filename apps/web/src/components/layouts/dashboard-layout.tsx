@@ -12,7 +12,7 @@ import {
   SettingsIcon,
   UserIcon,
 } from "lucide-react"
-import { AppShell } from "@workspace/ui/components/shell"
+import { AppShell, flattenNavItems } from "@workspace/ui/components/shell"
 import type {
   CommandAction,
   ShellLinkComponent,
@@ -22,10 +22,7 @@ import type {
 import { Logo } from "@workspace/ui/components/logo"
 import { useAuthSession } from "@/features/auth/hooks/use-auth-session"
 import { useSignOutMutation } from "@/features/auth/hooks/use-auth-mutations"
-import {
-  dashboardMainNavigation,
-  flattenNavigationItems,
-} from "@/features/dashboard/dashboard-navigation"
+import { dashboardMainNavigation } from "@/features/dashboard/dashboard-navigation"
 import { useDashboardBottomNavItems } from "@/features/dashboard/hooks/use-dashboard-bottom-nav-items"
 import { paths } from "@/config/paths"
 import { site } from "@/config/site"
@@ -49,7 +46,7 @@ export function DashboardLayout() {
   const bottomNavItems = useDashboardBottomNavItems()
 
   const commandActions = useMemo<CommandAction[]>(() => {
-    const items = flattenNavigationItems([
+    const items = flattenNavItems([
       ...dashboardMainNavigation.filter((item) => item.name !== "more"),
       ...bottomNavItems,
     ])

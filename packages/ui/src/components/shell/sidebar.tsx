@@ -1,40 +1,111 @@
 "use client"
 
+import { PanelLeftCloseIcon, PanelLeftIcon } from "lucide-react"
 import type React from "react"
 import { cn } from "@workspace/ui/lib/utils"
-import { Navigation } from "./navigation/navigation"
-import { NavigationItem } from "./navigation/navigation-item"
-import { SidebarLogoMark } from "./navigation/sidebar-logo-mark"
-import { sidebarBrandLinkClassName } from "./navigation/navigation-styles"
-import { ShellSidebarBrand } from "./shell-sidebar-brand"
-import { useShellSidebar } from "./shell-sidebar-context"
-import { ShellSidebarTrigger } from "./shell-sidebar-trigger"
 import { CommandTrigger } from "./command-palette"
+import { ShellNav } from "./navigation/navigation"
+import { ShellNavItem } from "./navigation/navigation-item"
+import { sidebarBrandLinkClassName, sidebarIconButtonClassName } from "./navigation/navigation-styles"
 import { useShell } from "./shell-context"
-import type { NavigationItemType } from "./types"
+import { useSidebarState } from "./sidebar-state"
+import type { NavItem } from "./types"
 
 const SIDEBAR_WIDTH = "18rem"
 const SIDEBAR_WIDTH_ICON = "3rem"
 
-export interface SideBarProps {
-  navigation: NavigationItemType[]
-  bottomNavItems?: NavigationItemType[]
+function SidebarLogoMark({ logo }: { logo: React.ReactNode }): React.ReactElement {
+  return (
+    <span className="flex size-4 shrink-0 items-center justify-center [&>svg]:size-full">
+      {logo}
+    </span>
+  )
+}
+
+function SidebarBrand({
+  logo,
+  homeHref,
+}: {
+  logo?: React.ReactNode
+  homeHref: string
+}): React.ReactElement | null {
+  const { Link } = useShell()
+  const { toggleSidebar, isTabletIconOnly } = useSidebarState()
+
+  if (!logo) return null
+
+  const slotClassName = cn(sidebarIconButtonClassName, "absolute inset-0")
+
+  return (
+    <div className="group/brand relative size-8 shrink-0">
+      <Link
+        className={cn(
+          slotClassName,
+          "transition-opacity",
+          !isTabletIconOnly &&
+            "group-hover/brand:pointer-events-none group-hover/brand:opacity-0"
+        )}
+        href={homeHref}
+      >
+        <SidebarLogoMark logo={logo} />
+      </Link>
+      {!isTabletIconOnly ? (
+        <button
+          aria-label="Expand sidebar"
+          className={cn(
+            slotClassName,
+            "opacity-0 transition-opacity group-hover/brand:opacity-100"
+          )}
+          onClick={toggleSidebar}
+          type="button"
+        >
+          <PanelLeftIcon aria-hidden="true" />
+        </button>
+      ) : null}
+    </div>
+  )
+}
+
+function SidebarCollapseButton({
+  className,
+  ...props
+}: React.ComponentProps<"button">): React.ReactElement | null {
+  const { toggleSidebar, isTabletIconOnly } = useSidebarState()
+
+  if (isTabletIconOnly) return null
+
+  return (
+    <button
+      aria-label="Collapse sidebar"
+      className={cn(sidebarIconButtonClassName, className)}
+      onClick={toggleSidebar}
+      type="button"
+      {...props}
+    >
+      <PanelLeftCloseIcon aria-hidden="true" />
+    </button>
+  )
+}
+
+export interface ShellSidebarProps {
+  navigation: NavItem[]
+  bottomNavItems?: NavItem[]
   logo?: React.ReactNode
   brandLabel?: string
   homeHref?: string
   bannersHeight?: number
 }
 
-export function SideBar({
+export function ShellSidebar({
   navigation,
   bottomNavItems = [],
   logo,
   brandLabel,
   homeHref = "/",
   bannersHeight = 0,
-}: SideBarProps): React.ReactElement {
+}: ShellSidebarProps): React.ReactElement {
   const { Link } = useShell()
-  const { isIconSidebar } = useShellSidebar()
+  const { isIconSidebar } = useSidebarState()
 
   return (
     <div className="relative">
@@ -69,7 +140,7 @@ export function SideBar({
               )}
             >
               {isIconSidebar ? (
-                <ShellSidebarBrand homeHref={homeHref} logo={logo} />
+                <SidebarBrand homeHref={homeHref} logo={logo} />
               ) : (
                 <>
                   <Link className={sidebarBrandLinkClassName} href={homeHref}>
@@ -80,13 +151,13 @@ export function SideBar({
                   </Link>
                   <div className="flex shrink-0 items-center gap-1">
                     <CommandTrigger compact />
-                    <ShellSidebarTrigger />
+                    <SidebarCollapseButton />
                   </div>
                 </>
               )}
             </div>
 
-            <Navigation items={navigation} />
+            <ShellNav items={navigation} />
           </div>
 
           {bottomNavItems.length > 0 ? (
@@ -97,7 +168,7 @@ export function SideBar({
               )}
             >
               {bottomNavItems.map((item) => (
-                <NavigationItem item={item} key={item.name} />
+                <ShellNavItem item={item} key={item.name} />
               ))}
             </div>
           ) : null}

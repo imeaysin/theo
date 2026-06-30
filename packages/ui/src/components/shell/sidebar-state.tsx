@@ -23,7 +23,7 @@ function readCollapsedPreference(): boolean {
   }
 }
 
-export interface ShellSidebarContextValue {
+interface SidebarStateValue {
   collapsed: boolean
   isIconSidebar: boolean
   isTabletIconOnly: boolean
@@ -31,17 +31,17 @@ export interface ShellSidebarContextValue {
   setCollapsed: (collapsed: boolean) => void
 }
 
-const ShellSidebarContext = createContext<ShellSidebarContextValue | null>(null)
+const SidebarStateContext = createContext<SidebarStateValue | null>(null)
 
-export function useShellSidebar(): ShellSidebarContextValue {
-  const ctx = useContext(ShellSidebarContext)
+export function useSidebarState(): SidebarStateValue {
+  const ctx = useContext(SidebarStateContext)
   if (!ctx) {
-    throw new Error("useShellSidebar must be used within <ShellSidebarProvider>")
+    throw new Error("useSidebarState must be used within <AppShell>")
   }
   return ctx
 }
 
-export function ShellSidebarProvider({
+export function SidebarStateProvider({
   children,
 }: {
   children: React.ReactNode
@@ -81,7 +81,7 @@ export function ShellSidebarProvider({
 
   const isIconSidebar = isTabletIconOnly || collapsed
 
-  const value = useMemo<ShellSidebarContextValue>(
+  const value = useMemo<SidebarStateValue>(
     () => ({
       collapsed,
       isIconSidebar,
@@ -93,8 +93,8 @@ export function ShellSidebarProvider({
   )
 
   return (
-    <ShellSidebarContext.Provider value={value}>
+    <SidebarStateContext.Provider value={value}>
       {children}
-    </ShellSidebarContext.Provider>
+    </SidebarStateContext.Provider>
   )
 }

@@ -9,49 +9,45 @@ import {
 } from "@workspace/ui/components/drawer"
 import { cn } from "@workspace/ui/lib/utils"
 import { CommandTrigger } from "../command-palette"
-import { useShellSidebar } from "../shell-sidebar-context"
 import { useShell } from "../shell-context"
-import type { NavigationItemType } from "../types"
+import { useSidebarState } from "../sidebar-state"
+import type { NavItem } from "../types"
 import {
-  MobileNavigationItem,
-  MobileNavigationMoreItem,
-  NavigationItem,
+  ShellMobileNavItem,
+  ShellMobileNavMoreItem,
+  ShellNavItem,
 } from "./navigation-item"
 
 export const MORE_SEPARATOR_NAME = "more"
 
-export function useNavigationItems(items: NavigationItemType[]) {
+function useShellNavItems(items: NavItem[]) {
   return useMemo(() => {
-    const desktopNavigationItems = items.filter(
+    const desktopItems = items.filter(
       (item) => item.name !== MORE_SEPARATOR_NAME && !item.onlyMobile
     )
-    const mobileNavigationBottomItems = items.filter(
+    const mobileBottomItems = items.filter(
       (item) =>
         (!item.moreOnMobile && !item.onlyDesktop) ||
         item.name === MORE_SEPARATOR_NAME
     )
-    const mobileNavigationMoreItems = items.filter(
+    const mobileMoreItems = items.filter(
       (item) =>
         item.moreOnMobile &&
         !item.onlyDesktop &&
         item.name !== MORE_SEPARATOR_NAME
     )
 
-    return {
-      desktopNavigationItems,
-      mobileNavigationBottomItems,
-      mobileNavigationMoreItems,
-    }
+    return { desktopItems, mobileBottomItems, mobileMoreItems }
   }, [items])
 }
 
-export function Navigation({
+export function ShellNav({
   items,
 }: {
-  items: NavigationItemType[]
+  items: NavItem[]
 }): React.ReactElement {
-  const { desktopNavigationItems } = useNavigationItems(items)
-  const { isIconSidebar } = useShellSidebar()
+  const { desktopItems } = useShellNavItems(items)
+  const { isIconSidebar } = useSidebarState()
 
   return (
     <nav
@@ -60,23 +56,23 @@ export function Navigation({
         isIconSidebar ? "items-center" : "items-stretch"
       )}
     >
-      {desktopNavigationItems.map((item) => (
-        <NavigationItem item={item} key={item.name} />
+      {desktopItems.map((item) => (
+        <ShellNavItem item={item} key={item.name} />
       ))}
       {isIconSidebar ? <CommandTrigger /> : null}
     </nav>
   )
 }
 
-export function MobileNavigation({
+export function ShellMobileNav({
   items,
   bottomNavItems = [],
 }: {
-  items: NavigationItemType[]
-  bottomNavItems?: NavigationItemType[]
+  items: NavItem[]
+  bottomNavItems?: NavItem[]
 }): React.ReactElement {
   const { t } = useShell()
-  const { mobileNavigationBottomItems } = useNavigationItems(items)
+  const { mobileBottomItems } = useShellNavItems(items)
   const [moreOpen, setMoreOpen] = useState(false)
 
   return (
@@ -86,16 +82,16 @@ export function MobileNavigation({
           "fixed bottom-0 left-0 z-30 flex w-full border-t border-border bg-background/80 px-1 pb-[max(0.25rem,env(safe-area-inset-bottom))] shadow backdrop-blur-md md:hidden"
         )}
       >
-        {mobileNavigationBottomItems.map((item) =>
+        {mobileBottomItems.map((item) =>
           item.name === MORE_SEPARATOR_NAME ? (
-            <MobileNavigationItem
+            <ShellMobileNavItem
               isActive={moreOpen}
               item={item}
               key={item.name}
               onClick={() => setMoreOpen(true)}
             />
           ) : (
-            <MobileNavigationItem item={item} key={item.name} />
+            <ShellMobileNavItem item={item} key={item.name} />
           )
         )}
       </nav>
@@ -109,7 +105,7 @@ export function MobileNavigation({
             </DrawerTitle>
           </div>
           <div className="max-h-[70vh] overflow-y-auto pb-[env(safe-area-inset-bottom)]">
-            <MobileNavigationMoreItems
+            <ShellMobileNavMoreItems
               bottomNavItems={bottomNavItems}
               items={items}
               onNavigate={() => setMoreOpen(false)}
@@ -121,27 +117,27 @@ export function MobileNavigation({
   )
 }
 
-export function MobileNavigationMoreItems({
+export function ShellMobileNavMoreItems({
   items,
   bottomNavItems = [],
   onNavigate,
 }: {
-  items: NavigationItemType[]
-  bottomNavItems?: NavigationItemType[]
+  items: NavItem[]
+  bottomNavItems?: NavItem[]
   onNavigate?: () => void
 }): React.ReactElement {
-  const { mobileNavigationMoreItems } = useNavigationItems(items)
+  const { mobileMoreItems } = useShellNavItems(items)
 
   const mobileMoreBottomItems = bottomNavItems.filter(
     (item) => !item.excludeFromMobileMore
   )
 
-  const allItems = [...mobileNavigationMoreItems, ...mobileMoreBottomItems]
+  const allItems = [...mobileMoreItems, ...mobileMoreBottomItems]
 
   return (
     <nav className="flex flex-col gap-0.5 px-2 pb-4">
       {allItems.map((item) => (
-        <MobileNavigationMoreItem
+        <ShellMobileNavMoreItem
           item={item}
           key={item.name}
           onNavigate={onNavigate}

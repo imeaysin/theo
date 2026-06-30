@@ -9,12 +9,12 @@ import {
   WorkflowIcon,
 } from "lucide-react"
 import { MORE_SEPARATOR_NAME } from "@workspace/ui/components/shell"
-import type { NavigationItemType } from "@workspace/ui/components/shell"
+import type { NavItem } from "@workspace/ui/components/shell"
 import { paths } from "@/config/paths"
 
 const dashboardBase = paths.dashboard
 
-export const dashboardMainNavigation: NavigationItemType[] = [
+export const dashboardMainNavigation: NavItem[] = [
   {
     name: "Event types",
     href: dashboardBase,
@@ -91,9 +91,3 @@ export const dashboardMainNavigation: NavigationItemType[] = [
     icon: EllipsisIcon,
   },
 ]
-
-export function flattenNavigationItems(
-  items: NavigationItemType[]
-): NavigationItemType[] {
-  return items.flatMap((item) => (item.child ? [item, ...item.child] : [item]))
-}

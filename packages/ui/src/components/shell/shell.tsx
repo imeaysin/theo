@@ -1,20 +1,29 @@
 "use client"
 
+/**
+ * App shell public API
+ *
+ * - `AppShell` — full dashboard layout (sidebar, mobile nav, command palette)
+ * - `ShellMain` — optional page header wrapper inside the main area
+ * - `NavItem` — navigation config passed to `AppShell`
+ * - `MORE_SEPARATOR_NAME` — mobile "more" tab marker in nav config
+ */
+
 import type React from "react"
 import { useCallback, useState } from "react"
 import { cn } from "@workspace/ui/lib/utils"
 import { BannerContainer } from "./banners/layout-banner"
 import { CommandPalette, useCommandPaletteShortcut } from "./command-palette"
-import { MobileNavigation } from "./navigation/navigation"
+import { ShellMobileNav } from "./navigation/navigation"
 import { ShellProvider } from "./shell-context"
-import { ShellSidebarProvider } from "./shell-sidebar-context"
+import { SidebarStateProvider } from "./sidebar-state"
 import { ShellBackButton } from "./shell-back-button"
 import { getShellCtaClassName } from "./shell-layout"
-import { SideBar } from "./sidebar"
+import { ShellSidebar } from "./sidebar"
 import { TopNav } from "./top-nav"
 import type {
   CommandAction,
-  NavigationItemType,
+  NavItem,
   ShellLinkComponent,
   ShellUser,
   UserMenuItem,
@@ -118,37 +127,30 @@ export function ShellMain({
 }
 
 export interface ShellProps extends ShellMainProps {
-  // routing / i18n
   linkComponent?: ShellLinkComponent
   pathname?: string
   t?: (key: string) => string
 
-  // navigation + identity
-  navigation: NavigationItemType[]
-  bottomNavItems?: NavigationItemType[]
+  navigation: NavItem[]
+  bottomNavItems?: NavItem[]
   user?: ShellUser | null
   userLoading?: boolean
   onSignOut?: () => void
   userMenuItems?: UserMenuItem[]
   signOutLabel?: string
 
-  // branding
   logo?: React.ReactNode
   logoIcon?: React.ReactNode
   brandLabel?: string
   homeHref?: string
   settingsHref?: string
 
-  // command palette
   commandActions?: CommandAction[]
   onSelectCommandAction?: (action: CommandAction) => void
   commandPlaceholder?: string
   enableCommandPalette?: boolean
 
-  // banners
   banners?: React.ReactNode
-
-  // main content
   withoutMain?: boolean
 }
 
@@ -158,11 +160,11 @@ export function Shell({
   t,
   navigation,
   bottomNavItems,
-  user,
-  userLoading,
-  onSignOut,
-  userMenuItems,
-  signOutLabel,
+  user: _user,
+  userLoading: _userLoading,
+  onSignOut: _onSignOut,
+  userMenuItems: _userMenuItems,
+  signOutLabel: _signOutLabel,
   logo,
   logoIcon,
   brandLabel,
@@ -199,44 +201,44 @@ export function Shell({
       pathname={pathname}
       t={t}
     >
-      <ShellSidebarProvider>
+      <SidebarStateProvider>
         <div className="flex min-h-screen flex-col bg-sidebar">
-        {banners && <BannerContainer>{banners}</BannerContainer>}
+          {banners && <BannerContainer>{banners}</BannerContainer>}
 
-        <div className="flex flex-1" data-testid="dashboard-shell">
-          <SideBar
-            bottomNavItems={bottomNavItems}
-            brandLabel={brandLabel}
-            logo={logoIcon ?? logo}
-            homeHref={homeHref}
-            navigation={navigation}
-          />
-
-          <main
-            className={cn(
-              "relative z-0 flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-background focus:outline-none md:m-2 md:ms-0 md:rounded-xl md:shadow-sm/5"
-            )}
-          >
-            <TopNav
+          <div className="flex flex-1" data-testid="dashboard-shell">
+            <ShellSidebar
+              bottomNavItems={bottomNavItems}
               brandLabel={brandLabel}
               homeHref={homeHref}
-              logo={logo}
+              logo={logoIcon ?? logo}
+              navigation={navigation}
             />
-            <div className="max-w-full flex-1 overflow-y-auto p-2 sm:p-4 lg:p-6">
-              {withoutMain ? (
-                children
-              ) : (
-                <ShellMain {...mainProps}>{children}</ShellMain>
+
+            <main
+              className={cn(
+                "relative z-0 flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-background focus:outline-none md:m-2 md:ms-0 md:rounded-xl md:shadow-sm/5"
               )}
-              {!mainProps.backPath && (
-                <MobileNavigation
-                  bottomNavItems={bottomNavItems}
-                  items={navigation}
-                />
-              )}
-            </div>
-          </main>
-        </div>
+            >
+              <TopNav
+                brandLabel={brandLabel}
+                homeHref={homeHref}
+                logo={logo}
+              />
+              <div className="max-w-full flex-1 overflow-y-auto p-2 sm:p-4 lg:p-6">
+                {withoutMain ? (
+                  children
+                ) : (
+                  <ShellMain {...mainProps}>{children}</ShellMain>
+                )}
+                {!mainProps.backPath && (
+                  <ShellMobileNav
+                    bottomNavItems={bottomNavItems}
+                    items={navigation}
+                  />
+                )}
+              </div>
+            </main>
+          </div>
         </div>
 
         {isCommandPaletteEnabled && (
@@ -248,43 +250,19 @@ export function Shell({
             placeholder={commandPlaceholder}
           />
         )}
-      </ShellSidebarProvider>
+      </SidebarStateProvider>
     </ShellProvider>
   )
 }
 
 export const AppShell = Shell
 
-export { ShellProvider, useShell } from "./shell-context"
-export type { ShellContextValue } from "./shell-context"
-export {
-  ShellSidebarProvider,
-  useShellSidebar,
-} from "./shell-sidebar-context"
-export { ShellSidebarBrand } from "./shell-sidebar-brand"
-export { ShellSidebarTrigger } from "./shell-sidebar-trigger"
-export {
-  CommandPalette,
-  CommandTrigger,
-  useCommandPaletteShortcut,
-} from "./command-palette"
-export { SideBar } from "./sidebar"
-export { TopNav } from "./top-nav"
-export { BannerContainer } from "./banners/layout-banner"
-export {
-  Navigation,
-  MobileNavigation,
-  MobileNavigationMoreItems,
-  MORE_SEPARATOR_NAME,
-} from "./navigation/navigation"
-export {
-  NavigationItem,
-  MobileNavigationItem,
-  MobileNavigationMoreItem,
-} from "./navigation/navigation-item"
-export { UserDropdown } from "./user-dropdown/user-dropdown"
+export { flattenNavItems } from "./navigation/navigation-utils"
+export { MORE_SEPARATOR_NAME } from "./navigation/navigation"
+
 export type {
   CommandAction,
+  NavItem,
   NavigationItemType,
   ShellLinkComponent,
   ShellLinkProps,

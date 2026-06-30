@@ -22,7 +22,7 @@ const TOAST_ICONS = {
 
 type SwipeDirection = "up" | "down" | "left" | "right"
 
-type ToastData = {
+interface ToastData {
   rootProps?: Omit<
     React.ComponentProps<typeof Toast.Root>,
     "children" | "className" | "swipeDirection" | "toast"

@@ -1,11 +1,11 @@
 import { useMemo } from "react"
 import { CopyIcon, ExternalLinkIcon, SettingsIcon } from "lucide-react"
-import type { NavigationItemType } from "@workspace/ui/components/shell"
+import type { NavItem } from "@workspace/ui/components/shell"
 import { toastManager } from "@workspace/ui/components/toast"
 import { useAuthSession } from "@/features/auth/hooks/use-auth-session"
 import { paths } from "@/config/paths"
 
-export function useDashboardBottomNavItems(): NavigationItemType[] {
+export function useDashboardBottomNavItems(): NavItem[] {
   const { data: session } = useAuthSession()
   const user = session?.user
 
@@ -15,7 +15,7 @@ export function useDashboardBottomNavItems(): NavigationItemType[] {
     return `${window.location.origin}/${slug}`
   }, [user?.name])
 
-  return useMemo<NavigationItemType[]>(
+  return useMemo<NavItem[]>(
     () => [
       {
         name: "View public page",

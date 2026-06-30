@@ -27,12 +27,13 @@ export interface ShellUser {
   avatarUrl?: string | null
 }
 
-export interface NavigationItemType {
+/** Sidebar / mobile navigation entry passed to `AppShell`. */
+export interface NavItem {
   name: string
   href: string
   icon?: LucideIcon
   badge?: React.ReactNode
-  child?: NavigationItemType[]
+  child?: NavItem[]
   target?: string
   isLoading?: boolean
   onClick?: React.MouseEventHandler<HTMLAnchorElement | HTMLButtonElement>
@@ -45,11 +46,14 @@ export interface NavigationItemType {
   /** Hidden from the mobile "more" drawer (e.g. when already in the bottom bar). */
   excludeFromMobileMore?: boolean
   isCurrent?: (args: {
-    item: Pick<NavigationItemType, "href">
+    item: Pick<NavItem, "href">
     isChild?: boolean
     pathname: string | null
   }) => boolean
 }
+
+/** @deprecated Use `NavItem` */
+export type NavigationItemType = NavItem
 
 export interface UserMenuItem {
   label: string

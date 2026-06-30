@@ -1,6 +1,12 @@
 "use client"
 
-import { ChevronRightIcon } from "lucide-react"
+import {
+  ChevronDownIcon,
+  ChevronRightIcon,
+  ChevronUpIcon,
+  RotateCwIcon,
+} from "lucide-react"
+import type { LucideIcon } from "lucide-react"
 import type React from "react"
 import { Fragment, useState } from "react"
 import {
@@ -10,95 +16,163 @@ import {
   DrawerTrigger,
 } from "@workspace/ui/components/drawer"
 import {
+  Menu,
+  MenuGroup,
+  MenuGroupLabel,
+  MenuLinkItem,
+  MenuPopup,
+  MenuTrigger,
+} from "@workspace/ui/components/menu"
+import {
   Tooltip,
   TooltipPopup,
   TooltipTrigger,
 } from "@workspace/ui/components/tooltip"
+import { cn } from "@workspace/ui/lib/utils"
 import { useShell } from "../shell-context"
-import { useShellSidebar } from "../shell-sidebar-context"
-import type { NavigationItemType } from "../types"
-import {
-  ExpansionChevron,
-  NavItemIcon,
-  NavigationChildPanel,
-  SidebarIconParentNavItem,
-} from "./navigation-parts"
+import { useSidebarState } from "../sidebar-state"
+import type { NavItem } from "../types"
 import {
   contentNavItemClassName,
-  defaultIsCurrent,
   mobileBottomNavItemClassName,
+  sidebarChevronClassName,
+  sidebarMenuSubClassName,
   sidebarNavItemClassName,
   sidebarNavSubItemClassName,
 } from "./navigation-styles"
+import {
+  isNavGroupOpen,
+  isNavItemActive,
+  isNavParentActive,
+} from "./navigation-utils"
 
-function readStoredExpansion(itemName: string): boolean | null {
-  if (typeof window === "undefined") return null
-  try {
-    const stored = window.sessionStorage.getItem(`nav-expansion-${itemName}`)
-    return stored === null ? null : (JSON.parse(stored) as boolean)
-  } catch {
-    return null
+function NavItemIcon({
+  icon: Icon,
+  isLoading,
+  className = "size-4 shrink-0",
+}: {
+  icon?: LucideIcon
+  isLoading?: boolean
+  className?: string
+}): React.ReactElement | null {
+  if (isLoading) {
+    return <RotateCwIcon className={cn(className, "animate-spin")} />
   }
+
+  if (!Icon) return null
+
+  return <Icon aria-hidden="true" className={className} />
 }
 
-const usePersistedExpansionState = (itemName: string) => {
-  const [isExpanded, setIsExpanded] = useState(
-    () => readStoredExpansion(itemName) ?? false
+function NavGroupPanel({
+  open,
+  children,
+}: {
+  open: boolean
+  children: React.ReactNode
+}): React.ReactElement {
+  return (
+    <div
+      aria-hidden={!open}
+      className={cn(
+        "grid transition-all duration-300 ease-in-out",
+        open
+          ? "visible grid-rows-[1fr] opacity-100"
+          : "invisible grid-rows-[0fr] opacity-0"
+      )}
+    >
+      <div className="overflow-hidden">
+        <ul className={sidebarMenuSubClassName}>{children}</ul>
+      </div>
+    </div>
   )
-
-  const setPersistedExpansion = (expanded: boolean) => {
-    setIsExpanded(expanded)
-    if (typeof window !== "undefined") {
-      try {
-        window.sessionStorage.setItem(
-          `nav-expansion-${itemName}`,
-          JSON.stringify(expanded)
-        )
-      } catch {
-        // ignore storage failures
-      }
-    }
-  }
-
-  return [isExpanded, setPersistedExpansion] as const
 }
 
-export const NavigationItem: React.FC<{
-  item: NavigationItemType
-  isChild?: boolean
-}> = (props) => {
-  const { item, isChild } = props
+function IconSidebarParentItem({
+  item,
+  hasActiveChild,
+}: {
+  item: NavItem
+  hasActiveChild: boolean
+}): React.ReactElement {
   const { t, pathname, Link } = useShell()
-  const isCurrent = item.isCurrent ?? defaultIsCurrent
-  const current = isCurrent({ isChild: !!isChild, item, pathname })
-  const [isExpanded, setIsExpanded] = usePersistedExpansionState(item.name)
-  const { isIconSidebar } = useShellSidebar()
 
-  const hasChildren = !!item.child && item.child.length > 0
-  const hasActiveChild =
-    hasChildren &&
-    item.child?.some((child) =>
-      isCurrent({ isChild: true, item: child, pathname })
-    )
-  const shouldShowChildren =
-    isExpanded || hasActiveChild || isCurrent({ pathname, isChild, item })
-  const shouldShowChevron = hasChildren && !hasActiveChild
-  const isParentNavigationItem = hasChildren && !isChild
+  return (
+    <Menu>
+      <MenuTrigger
+        render={
+          <button
+            aria-haspopup="menu"
+            aria-label={t(item.name)}
+            className={sidebarNavItemClassName}
+            data-active={hasActiveChild ? true : undefined}
+            type="button"
+          />
+        }
+      >
+        <NavItemIcon icon={item.icon} isLoading={item.isLoading} />
+      </MenuTrigger>
+      <MenuPopup align="start" className="min-w-44" side="right" sideOffset={8}>
+        <MenuGroup>
+          <MenuGroupLabel>{t(item.name)}</MenuGroupLabel>
+          {item.child?.map((child) => {
+            const ChildIcon = child.icon
+            const childCurrent = isNavItemActive(child, pathname, true)
 
-  if (isParentNavigationItem) {
+            return (
+              <MenuLinkItem
+                aria-current={childCurrent ? "page" : undefined}
+                key={child.name}
+                render={<Link href={child.href} target={child.target} />}
+              >
+                {ChildIcon ? (
+                  <ChildIcon aria-hidden="true" className="size-4 shrink-0" />
+                ) : null}
+                {t(child.name)}
+              </MenuLinkItem>
+            )
+          })}
+        </MenuGroup>
+      </MenuPopup>
+    </Menu>
+  )
+}
+
+export function ShellNavItem({
+  item,
+  isChild = false,
+}: {
+  item: NavItem
+  isChild?: boolean
+}): React.ReactElement {
+  const { t, pathname, Link } = useShell()
+  const current = isNavItemActive(item, pathname, isChild)
+  const [expanded, setExpanded] = useState(false)
+  const { isIconSidebar } = useSidebarState()
+
+  const hasChildren = !!item.child?.length
+  const hasActiveChild = isNavParentActive(item, pathname)
+  const isOpen = isNavGroupOpen(item, pathname, expanded)
+  const isParentItem = hasChildren && !isChild
+
+  if (isParentItem) {
     if (isIconSidebar) {
-      return <SidebarIconParentNavItem hasActiveChild={!!hasActiveChild} item={item} />
+      return (
+        <IconSidebarParentItem hasActiveChild={hasActiveChild} item={item} />
+      )
     }
+
+    const ChevronIcon = expanded ? ChevronUpIcon : ChevronDownIcon
 
     return (
       <Fragment>
         <button
           aria-current={current ? "page" : undefined}
-          aria-expanded={isExpanded}
+          aria-expanded={isOpen}
           aria-label={t(item.name)}
           className={sidebarNavItemClassName}
           data-active={hasActiveChild ? true : undefined}
-          onClick={() => setIsExpanded(!isExpanded)}
+          onClick={() => setExpanded((value) => !value)}
           type="button"
         >
           {item.icon || item.isLoading ? (
@@ -108,19 +182,20 @@ export const NavigationItem: React.FC<{
             {t(item.name)}
             {item.badge}
           </span>
-          {shouldShowChevron ? (
-            <ExpansionChevron expanded={isExpanded} />
+          {hasChildren && !hasActiveChild ? (
+            <ChevronIcon
+              aria-hidden="true"
+              className={sidebarChevronClassName}
+            />
           ) : null}
         </button>
-        {hasChildren && !isIconSidebar ? (
-          <NavigationChildPanel open={shouldShowChildren}>
-            {item.child?.map((child) => (
-              <li key={child.name}>
-                <NavigationItem isChild item={child} />
-              </li>
-            ))}
-          </NavigationChildPanel>
-        ) : null}
+        <NavGroupPanel open={isOpen}>
+          {item.child?.map((child) => (
+            <li key={child.name}>
+              <ShellNavItem isChild item={child} />
+            </li>
+          ))}
+        </NavGroupPanel>
       </Fragment>
     )
   }
@@ -180,16 +255,20 @@ export const NavigationItem: React.FC<{
   )
 }
 
-export const MobileNavigationItem: React.FC<{
-  item: NavigationItemType
+export function ShellMobileNavItem({
+  item,
+  isChild = false,
+  onClick,
+  isActive,
+}: {
+  item: NavItem
   isChild?: boolean
   onClick?: () => void
   isActive?: boolean
-}> = (props) => {
-  const { item, isChild, onClick, isActive } = props
+}): React.ReactElement {
   const { t, pathname, Link } = useShell()
-  const isCurrent = item.isCurrent ?? defaultIsCurrent
-  const current = isActive ?? isCurrent({ isChild: !!isChild, item, pathname })
+  const current =
+    isActive ?? isNavItemActive(item, pathname, isChild)
   const Icon = item.icon
 
   const content = (
@@ -232,18 +311,19 @@ export const MobileNavigationItem: React.FC<{
   )
 }
 
-export const MobileNavigationMoreItem: React.FC<{
-  item: NavigationItemType
+export function ShellMobileNavMoreItem({
+  item,
+  onNavigate,
+}: {
+  item: NavItem
   onNavigate?: () => void
-}> = (props) => {
-  const { item, onNavigate } = props
+}): React.ReactElement {
   const { t, pathname, Link } = useShell()
-  const isCurrent = item.isCurrent ?? defaultIsCurrent
 
   const Icon = item.icon
-  const hasChildren = !!item.child && item.child.length > 0
+  const hasChildren = !!item.child?.length
   const isActionItem = !item.href && item.onClick
-  const current = isCurrent({ isChild: false, item, pathname })
+  const current = isNavItemActive(item, pathname, false)
 
   const rowClassName = contentNavItemClassName
 
@@ -271,11 +351,7 @@ export const MobileNavigationMoreItem: React.FC<{
             <nav className="flex flex-col gap-0.5 px-2 pb-4">
               {item.child?.map((childItem) => {
                 const ChildIcon = childItem.icon
-                const childCurrent = isCurrent({
-                  isChild: true,
-                  item: childItem,
-                  pathname,
-                })
+                const childCurrent = isNavItemActive(childItem, pathname, true)
                 return (
                   <Link
                     aria-current={childCurrent ? "page" : undefined}
