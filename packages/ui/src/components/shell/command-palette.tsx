@@ -102,7 +102,7 @@ export function CommandPalette({
           <CommandPanel>
             <CommandEmpty>{emptyText}</CommandEmpty>
             <CommandList>
-              {(group: CommandGroupModel) => (
+              {groups.map((group, groupIndex) => (
                 <Fragment key={group.value}>
                   <CommandGroup items={group.items}>
                     <CommandGroupLabel>{group.value}</CommandGroupLabel>
@@ -123,9 +123,9 @@ export function CommandPalette({
                       )}
                     </CommandCollection>
                   </CommandGroup>
-                  <CommandSeparator />
+                  {groupIndex < groups.length - 1 ? <CommandSeparator /> : null}
                 </Fragment>
-              )}
+              ))}
             </CommandList>
           </CommandPanel>
           <CommandFooter>
@@ -194,7 +194,7 @@ export function CommandTrigger({
             className={cn(
               "group flex shrink-0 items-center justify-center transition",
               variant === "topnav"
-                ? "rounded-full p-2 text-foreground hover:bg-sidebar"
+                ? "rounded-full p-2 text-foreground hover:bg-accent"
                 : "rounded-md px-3 py-2 text-sm font-medium text-sidebar-foreground hover:bg-sidebar-accent lg:px-2 lg:hover:text-sidebar-accent-foreground",
               className
             )}

@@ -1,17 +1,14 @@
 "use client"
 
-import { ArrowLeftIcon } from "lucide-react"
 import type React from "react"
 import { useCallback, useState } from "react"
-import { Button } from "@workspace/ui/components/button"
 import { cn } from "@workspace/ui/lib/utils"
 import { BannerContainer } from "./banners/layout-banner"
-import {
-  CommandPalette,
-  useCommandPaletteShortcut,
-} from "./command-palette"
+import { CommandPalette, useCommandPaletteShortcut } from "./command-palette"
 import { MobileNavigation } from "./navigation/navigation"
-import { ShellProvider, useShell } from "./shell-context"
+import { ShellProvider } from "./shell-context"
+import { ShellBackButton } from "./shell-back-button"
+import { getShellCtaClassName } from "./shell-layout"
 import { SideBar } from "./sidebar"
 import { TopNav } from "./top-nav"
 import type {
@@ -51,39 +48,14 @@ export function ShellMain({
   large,
   backPath,
   onBack,
-  disableSticky,
+  disableSticky: _disableSticky,
   flexChildrenContainer,
   children,
 }: ShellMainProps): React.ReactElement {
-  const { Link } = useShell()
-
-  const backButton = backPath ? (
-    typeof backPath === "string" ? (
-      <Button
-        aria-label="Go back"
-        className="mr-2 rounded-md"
-        render={<Link href={backPath} />}
-        size="icon-sm"
-        variant="ghost"
-      >
-        <ArrowLeftIcon />
-      </Button>
-    ) : (
-      <Button
-        aria-label="Go back"
-        className="mr-2 rounded-md"
-        onClick={() =>
-          onBack
-            ? onBack()
-            : typeof window !== "undefined" && window.history.back()
-        }
-        size="icon-sm"
-        variant="ghost"
-      >
-        <ArrowLeftIcon />
-      </Button>
-    )
-  ) : null
+  const backButton =
+    backPath != null && backPath !== false ? (
+      <ShellBackButton backPath={backPath} onBack={onBack} />
+    ) : null
 
   return (
     <>
@@ -110,7 +82,7 @@ export function ShellMain({
               >
                 <h3
                   className={cn(
-                    "inline max-w-28 truncate font-cal font-semibold tracking-wide text-foreground sm:max-w-72 md:max-w-80 xl:max-w-full",
+                    "inline max-w-28 truncate font-heading font-semibold tracking-wide text-foreground sm:max-w-72 md:max-w-80 xl:max-w-full",
                     smallHeading ? "text-base" : "text-xl"
                   )}
                 >
@@ -126,18 +98,11 @@ export function ShellMain({
                 )}
               </div>
               {beforeCTAactions}
-              {CTA && (
-                <div
-                  className={cn(
-                    backPath
-                      ? "relative"
-                      : "fixed right-4 bottom-20 z-40 md:relative md:right-0 md:bottom-auto md:z-auto",
-                    "shrink-0"
-                  )}
-                >
+              {CTA ? (
+                <div className={getShellCtaClassName(Boolean(backPath))}>
                   {CTA}
                 </div>
-              )}
+              ) : null}
               {actions}
             </header>
           )}
@@ -201,7 +166,7 @@ export function Shell({
   logoIcon,
   brandLabel,
   homeHref = "/",
-  settingsHref,
+  settingsHref: _settingsHref,
   commandActions = [],
   onSelectCommandAction,
   commandPlaceholder,
@@ -250,8 +215,8 @@ export function Shell({
             userMenuItems={userMenuItems}
           />
 
-          <div className="flex min-w-0 flex-1 flex-col md:p-2 md:pl-0 md:pr-2 lg:p-3 lg:pl-0 lg:pr-3">
-            <main className="relative z-0 flex min-h-0 flex-1 flex-col overflow-hidden bg-background focus:outline-none md:rounded-2xl md:rounded-l-2xl">
+          <div className="flex min-w-0 flex-1 flex-col md:p-2 md:pr-2 md:pl-0 lg:p-3 lg:pr-3 lg:pl-0">
+            <main className="relative z-0 flex min-h-0 flex-1 flex-col overflow-hidden bg-background text-foreground focus:outline-none md:rounded-2xl md:rounded-l-2xl dark:bg-card dark:text-card-foreground">
               <TopNav
                 brandLabel={brandLabel}
                 homeHref={homeHref}

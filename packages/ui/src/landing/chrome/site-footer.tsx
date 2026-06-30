@@ -54,13 +54,9 @@ function StatusIndicator({
 }) {
   return (
     <Button
-      className="inline-flex h-auto items-center gap-2 p-0 no-underline hover:opacity-80 hover:no-underline"
+      className="inline-flex h-auto items-center gap-2 p-0 no-underline hover:no-underline hover:opacity-80"
       render={
-        <a
-          href={status.href}
-          rel="noopener noreferrer"
-          target="_blank"
-        />
+        <a href={status.href} rel="noopener noreferrer" target="_blank" />
       }
       variant="ghost"
     >
@@ -68,7 +64,7 @@ function StatusIndicator({
       <span className="text-sm text-foreground">{status.value}</span>
       <span className="relative flex size-2 shrink-0 items-center justify-center">
         <span className="relative z-10 block size-2 rounded-full bg-success" />
-        <span className="absolute inset-0 animate-pulse-glow rounded-full bg-success" />
+        <span className="animate-pulse-glow absolute inset-0 rounded-full bg-success" />
       </span>
     </Button>
   )

@@ -1,4 +1,5 @@
 @import "@workspace/ui/globals.css";
+@import "@workspace/ui/landing.css";
 
 @theme inline {
   --animate-dropdown-fade: dropdown-fade 0.15s ease-out forwards;

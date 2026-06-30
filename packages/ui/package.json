@@ -44,6 +44,7 @@
   },
   "exports": {
     "./globals.css": "./src/styles/globals.css",
+    "./landing.css": "./src/styles/landing.css",
     "./postcss.config": "./postcss.config.mjs",
     "./lib/*": "./src/lib/*.ts",
     "./components/shell": "./src/components/shell/shell.tsx",

@@ -45,9 +45,7 @@ function LegalBlockView({ block }: { block: LegalBlock }) {
     case "subsection":
       return (
         <>
-          <h3 className="mt-6 mb-3 text-sm text-foreground">
-            {block.title}
-          </h3>
+          <h3 className="mt-6 mb-3 text-sm text-foreground">{block.title}</h3>
           {block.blocks.map((child, index) => (
             <LegalBlockView
               key={`${block.title}-${child.type}-${index}`}
@@ -76,9 +74,7 @@ function LegalBlockView({ block }: { block: LegalBlock }) {
 function LegalSectionView({ section }: { section: LegalSection }) {
   return (
     <section className="space-y-4">
-      <h2 className="mt-8 mb-4 text-base text-foreground">
-        {section.title}
-      </h2>
+      <h2 className="mt-8 mb-4 text-base text-foreground">{section.title}</h2>
       {section.blocks?.map((block, index) => (
         <LegalBlockView key={`${section.title}-${index}`} block={block} />
       ))}

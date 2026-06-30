@@ -59,8 +59,7 @@ export function ShellProvider({
   children,
 }: ShellProviderProps): React.ReactElement {
   const resolvedPathname =
-    pathname ??
-    (typeof window !== "undefined" ? window.location.pathname : "/")
+    pathname ?? (typeof window !== "undefined" ? window.location.pathname : "/")
 
   const value = useMemo<ShellContextValue>(
     () => ({

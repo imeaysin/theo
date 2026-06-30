@@ -37,11 +37,7 @@ function FeatureTile({
       href={href}
     >
       <div className="mb-4 flex h-[60px] w-[60px] items-center justify-center rounded-none border border-border bg-secondary transition-all duration-200 hover:border-muted-foreground">
-        <MaterialIcon
-          className="text-muted-foreground"
-          name={icon}
-          size={24}
-        />
+        <MaterialIcon className="text-muted-foreground" name={icon} size={24} />
       </div>
       <div className="flex flex-col items-center text-center">
         <h3 className="text-sm leading-[21px] text-foreground">{title}</h3>

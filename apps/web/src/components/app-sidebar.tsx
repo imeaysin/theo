@@ -1,6 +1,14 @@
 import { Link, useLocation } from "react-router-dom"
-import { LayoutDashboardIcon, SettingsIcon } from "lucide-react"
+import {
+  CircleHelpIcon,
+  LayoutDashboardIcon,
+  MapIcon,
+  MoonIcon,
+  SettingsIcon,
+  UserIcon,
+} from "lucide-react"
 import { NavUser } from "@workspace/ui/components/nav-user"
+import type { ShellLinkProps } from "@workspace/ui/components/shell"
 import {
   Sidebar,
   SidebarContent,
@@ -17,6 +25,42 @@ import { useAuthSession } from "@/features/auth/hooks/use-auth-session"
 import { useSignOutMutation } from "@/features/auth/hooks/use-auth-mutations"
 import { paths } from "@/config/paths"
 import { site } from "@/config/site"
+
+const RouterNavLink = ({ href, children, ...props }: ShellLinkProps) => (
+  <Link to={href} {...props}>
+    {children}
+  </Link>
+)
+
+const userMenuItems = [
+  {
+    label: "My profile",
+    href: paths.auth.settings,
+    icon: UserIcon,
+  },
+  {
+    label: "My settings",
+    href: paths.auth.settings,
+    icon: SettingsIcon,
+  },
+  {
+    label: "Out of office",
+    href: `${paths.auth.settings}/out-of-office`,
+    icon: MoonIcon,
+  },
+  {
+    label: "Visit roadmap",
+    href: "https://cal.com/roadmap",
+    icon: MapIcon,
+    target: "_blank",
+    rel: "noreferrer",
+    separatorBefore: true,
+  },
+  {
+    label: "Help",
+    icon: CircleHelpIcon,
+  },
+] as const
 
 const navItems = [
   { title: "Overview", href: paths.dashboard, icon: LayoutDashboardIcon },
@@ -64,6 +108,8 @@ export function AppSidebar() {
       {user ? (
         <SidebarFooter>
           <NavUser
+            linkComponent={RouterNavLink}
+            menuItems={[...userMenuItems]}
             onSignOut={() => signOut.mutate()}
             user={{
               name: user.name ?? "User",

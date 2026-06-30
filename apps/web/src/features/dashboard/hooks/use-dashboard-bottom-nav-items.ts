@@ -1,9 +1,5 @@
 import { useMemo } from "react"
-import {
-  CopyIcon,
-  ExternalLinkIcon,
-  SettingsIcon,
-} from "lucide-react"
+import { CopyIcon, ExternalLinkIcon, SettingsIcon } from "lucide-react"
 import type { NavigationItemType } from "@workspace/ui/components/shell"
 import { toastManager } from "@workspace/ui/components/toast"
 import { useAuthSession } from "@/features/auth/hooks/use-auth-session"
@@ -14,8 +10,7 @@ export function useDashboardBottomNavItems(): NavigationItemType[] {
   const user = session?.user
 
   const publicPageUrl = useMemo(() => {
-    const slug =
-      user?.name?.trim().toLowerCase().replace(/\s+/g, "-") || "user"
+    const slug = user?.name?.trim().toLowerCase().replace(/\s+/g, "-") || "user"
     if (typeof window === "undefined") return `/${slug}`
     return `${window.location.origin}/${slug}`
   }, [user?.name])
@@ -46,6 +41,7 @@ export function useDashboardBottomNavItems(): NavigationItemType[] {
         name: "Settings",
         href: paths.auth.settings,
         icon: SettingsIcon,
+        excludeFromMobileMore: true,
       },
     ],
     [publicPageUrl]

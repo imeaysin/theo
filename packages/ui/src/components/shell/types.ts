@@ -42,6 +42,8 @@ export interface NavigationItemType {
   onlyMobile?: boolean
   /** Pushed into the mobile "more" section instead of the bottom bar. */
   moreOnMobile?: boolean
+  /** Hidden from the mobile "more" drawer (e.g. when already in the bottom bar). */
+  excludeFromMobileMore?: boolean
   isCurrent?: (args: {
     item: Pick<NavigationItemType, "href">
     isChild?: boolean

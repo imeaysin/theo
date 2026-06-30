@@ -1,23 +1,9 @@
 "use client"
 
-import {
-  ChevronsUpDown,
-  CircleHelp,
-  LogOut,
-  Map,
-  Moon,
-  Settings,
-  User,
-} from "lucide-react"
-
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@workspace/ui/components/avatar"
+import { ChevronsUpDown } from "lucide-react"
+import type React from "react"
 import {
   Menu,
-  MenuItem,
   MenuPopup,
   MenuSeparator,
   MenuTrigger,
@@ -28,18 +14,69 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@workspace/ui/components/sidebar"
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@workspace/ui/components/avatar"
+import type { ShellLinkProps, UserMenuItem } from "./shell/types"
+import {
+  getUserInitials,
+  UserMenuItemsList,
+} from "./shell/user-menu-content"
+
+function UserIdentityBlock({
+  user,
+  emailClassName,
+}: {
+  user: { name: string; email: string; avatar: string }
+  emailClassName: string
+}): React.ReactElement {
+  return (
+    <>
+      <Avatar className="h-8 w-8 rounded-lg">
+        <AvatarImage alt={user.name} src={user.avatar} />
+        <AvatarFallback className="rounded-lg">
+          {getUserInitials(user.name)}
+        </AvatarFallback>
+      </Avatar>
+      <div className="grid min-w-0 flex-1 text-left text-sm leading-tight">
+        <span className="truncate font-semibold">{user.name}</span>
+        <span className={emailClassName}>{user.email}</span>
+      </div>
+    </>
+  )
+}
+
+function DefaultNavLink({
+  href,
+  children,
+  ...props
+}: ShellLinkProps): React.ReactElement {
+  return (
+    <a href={href} {...props}>
+      {children}
+    </a>
+  )
+}
 
 export function NavUser({
   user,
+  menuItems = [],
+  signOutLabel = "Sign out",
   onSignOut,
+  linkComponent: LinkComponent = DefaultNavLink,
 }: {
   user: {
     name: string
     email: string
     avatar: string
   }
+  menuItems?: UserMenuItem[]
+  signOutLabel?: string
   onSignOut?: () => void
-}) {
+  linkComponent?: React.ComponentType<ShellLinkProps>
+}): React.ReactElement {
   const { isMobile } = useSidebar()
 
   return (
@@ -49,69 +86,38 @@ export function NavUser({
           <MenuTrigger
             render={
               <SidebarMenuButton
+                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 size="lg"
                 tooltip="Profile"
-                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               >
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">
-                    {user.name.slice(0, 2).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
-                  <span className="truncate font-semibold">{user.name}</span>
-                  <span className="truncate text-xs">{user.email}</span>
-                </div>
+                <UserIdentityBlock
+                  emailClassName="truncate text-xs text-sidebar-foreground/60"
+                  user={user}
+                />
                 <ChevronsUpDown className="ml-auto size-4 group-data-[collapsible=icon]:hidden" />
               </SidebarMenuButton>
             }
           />
           <MenuPopup
+            align="end"
             className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
             side={isMobile ? "bottom" : "right"}
-            align="end"
             sideOffset={4}
           >
             <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-              <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">
-                  {user.name.slice(0, 2).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{user.name}</span>
-                <span className="truncate text-xs">{user.email}</span>
-              </div>
+              <UserIdentityBlock
+                emailClassName="truncate text-xs text-muted-foreground"
+                user={user}
+              />
             </div>
-            <MenuSeparator />
-            <MenuItem render={<a href="/settings/my-account/profile" />}>
-              <User className="mr-2 size-4" />
-              My profile
-            </MenuItem>
-            <MenuItem render={<a href="/settings/my-account/general" />}>
-              <Settings className="mr-2 size-4" />
-              My settings
-            </MenuItem>
-            <MenuItem render={<a href="/settings/my-account/out-of-office" />}>
-              <Moon className="mr-2 size-4" />
-              Out of office
-            </MenuItem>
-            <MenuSeparator />
-            <MenuItem render={<a href="#" target="_blank" rel="noreferrer" />}>
-              <Map className="mr-2 size-4" />
-              Visit roadmap
-            </MenuItem>
-            <MenuItem onClick={() => console.log("Help")}>
-              <CircleHelp className="mr-2 size-4" />
-              Help
-            </MenuItem>
-            <MenuSeparator />
-            <MenuItem onClick={onSignOut}>
-              <LogOut className="mr-2 size-4" />
-              Sign out
-            </MenuItem>
+            {menuItems.length > 0 ? <MenuSeparator /> : null}
+            <UserMenuItemsList
+              iconClassName="mr-2 size-4"
+              linkComponent={LinkComponent}
+              menuItems={menuItems}
+              onSignOut={onSignOut}
+              signOutLabel={signOutLabel}
+            />
           </MenuPopup>
         </Menu>
       </SidebarMenuItem>

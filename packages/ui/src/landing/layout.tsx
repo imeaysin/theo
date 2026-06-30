@@ -102,7 +102,9 @@ export function SectionHeading({
           {eyebrow}
         </p>
       ) : null}
-      <HeadingTag className={cn(styles.title, titleClassName)}>{title}</HeadingTag>
+      <HeadingTag className={cn(styles.title, titleClassName)}>
+        {title}
+      </HeadingTag>
       {subtitle ? <p className={styles.subtitle}>{subtitle}</p> : null}
       {children}
     </div>

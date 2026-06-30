@@ -2,14 +2,66 @@
 
 import { AnimatePresence, motion } from "framer-motion"
 import { useEffect, useState } from "react"
-import { authTestimonials } from "./data/testimonials"
+import { authTestimonials, type AuthTestimonial } from "./data/testimonials"
+
+function splitTestimonialSecondPart(secondPart: string): {
+  punctuation: string
+  remainder: string
+} {
+  const startsWithPunctuation =
+    secondPart.startsWith(".") || secondPart.startsWith(",")
+
+  if (startsWithPunctuation) {
+    return {
+      punctuation: secondPart[0] ?? ".",
+      remainder: secondPart.slice(1),
+    }
+  }
+
+  return {
+    punctuation: ".",
+    remainder: secondPart,
+  }
+}
+
+function TestimonialQuote({
+  testimonial,
+  highlightSecondPart,
+}: {
+  testimonial: AuthTestimonial
+  highlightSecondPart: boolean
+}) {
+  const { punctuation, remainder } = splitTestimonialSecondPart(
+    testimonial.secondPart
+  )
+
+  if (highlightSecondPart) {
+    return (
+      <>
+        {testimonial.firstPart}
+        {punctuation}
+        <span className="text-primary-foreground">{remainder}&rdquo;</span>
+      </>
+    )
+  }
+
+  return (
+    <>
+      <span className="text-primary-foreground">
+        {testimonial.firstPart}
+        {punctuation}
+      </span>
+      {remainder}&rdquo;
+    </>
+  )
+}
 
 export function AuthTestimonials() {
-  const [currentTestimonial, setCurrentTestimonial] = useState(0)
+  const [currentTestimonial, setCurrentTestimonial] = useState(() =>
+    Math.floor(Math.random() * authTestimonials.length)
+  )
 
   useEffect(() => {
-    setCurrentTestimonial(Math.floor(Math.random() * authTestimonials.length))
-
     const interval = setInterval(() => {
       setCurrentTestimonial((prev) => (prev + 1) % authTestimonials.length)
     }, 6000)
@@ -19,14 +71,6 @@ export function AuthTestimonials() {
 
   const testimonial = authTestimonials[currentTestimonial]
   if (!testimonial) return null
-
-  const secondPart = testimonial.secondPart
-  const startsWithPunctuation =
-    secondPart.startsWith(".") || secondPart.startsWith(",")
-  const punctuation = startsWithPunctuation ? secondPart[0] : "."
-  const secondPartWithoutPunctuation = startsWithPunctuation
-    ? secondPart.slice(1)
-    : secondPart
 
   return (
     <div className="relative flex h-64 items-center justify-center">
@@ -60,23 +104,10 @@ export function AuthTestimonials() {
               </svg>
             </div>
             <p className="pl-4 text-xl leading-relaxed text-primary-foreground/40">
-              {currentTestimonial === 0 ? (
-                <>
-                  {testimonial.firstPart}
-                  {punctuation}
-                  <span className="text-primary-foreground">
-                    {secondPartWithoutPunctuation}&rdquo;
-                  </span>
-                </>
-              ) : (
-                <>
-                  <span className="text-primary-foreground">
-                    {testimonial.firstPart}
-                    {punctuation}
-                  </span>
-                  {secondPartWithoutPunctuation}&rdquo;
-                </>
-              )}
+              <TestimonialQuote
+                highlightSecondPart={currentTestimonial === 0}
+                testimonial={testimonial}
+              />
             </p>
           </motion.div>
 

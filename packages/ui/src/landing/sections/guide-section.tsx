@@ -3,7 +3,6 @@
 import type { ReactNode } from "react"
 import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
-import { Card, CardPanel } from "@workspace/ui/components/card"
 import { Icons } from "@workspace/ui/components/icons"
 
 export interface GuideStep {

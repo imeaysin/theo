@@ -119,7 +119,11 @@ export function IntegrationsSection({
         </div>
 
         <div className="mt-8 text-center">
-          <Button render={<a href={integrationsHref} />} size="sm" variant="link">
+          <Button
+            render={<a href={integrationsHref} />}
+            size="sm"
+            variant="link"
+          >
             View all integrations
           </Button>
         </div>

@@ -1,0 +1,40 @@
+@theme inline {
+  --container-landing: 87.5rem;
+  --animate-pulse-glow: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      opacity: 0.2;
+      transform: scale(1);
+      box-shadow: 0 0 0 0 color-mix(in oklch, var(--success) 40%, transparent);
+    }
+
+    50% {
+      opacity: 0.4;
+      transform: scale(1.2);
+      box-shadow: 0 0 0 4px color-mix(in oklch, var(--success) 20%, transparent);
+    }
+  }
+}
+
+@utility landing-grid-bg {
+  background-image:
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 4rem 4rem;
+}
+
+@utility marquee-fade-left {
+  background-image: linear-gradient(to right,
+      var(--background) 0%,
+      color-mix(in oklch, var(--background) 80%, transparent) 50%,
+      transparent 100%);
+}
+
+@utility marquee-fade-right {
+  background-image: linear-gradient(to left,
+      var(--background) 0%,
+      color-mix(in oklch, var(--background) 80%, transparent) 50%,
+      transparent 100%);
+}

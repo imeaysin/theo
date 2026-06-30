@@ -61,7 +61,11 @@ function getServerSnapshot(): boolean {
   return false
 }
 
-export type MediaQueryInput = {
+function noopSubscribeCleanup(): void {
+  // SSR: no matchMedia listener to remove.
+}
+
+export interface MediaQueryInput {
   min?: Breakpoint | number
   max?: Breakpoint | number
   /** Touch-like input (finger). Use "fine" for mouse/trackpad. */
@@ -75,7 +79,7 @@ export function useMediaQuery(
 
   const subscribe = useCallback(
     (callback: () => void) => {
-      if (typeof window === "undefined") return () => {}
+      if (typeof window === "undefined") return noopSubscribeCleanup
       const mql = window.matchMedia(mediaQuery)
       mql.addEventListener("change", callback)
       return () => mql.removeEventListener("change", callback)

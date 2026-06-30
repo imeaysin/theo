@@ -25,14 +25,12 @@ import {
   TooltipTrigger,
 } from "@workspace/ui/components/tooltip"
 
-const SIDEBAR_COOKIE_NAME: string = "sidebar_state"
-const SIDEBAR_COOKIE_MAX_AGE: number = 60 * 60 * 24 * 7
-/** Keep in sync with `--sidebar-width` in globals.css */
-const SIDEBAR_WIDTH: string = "18rem"
-const SIDEBAR_WIDTH_MOBILE: string = "18rem"
-/** Keep in sync with `--sidebar-width-icon` in globals.css (Cal.com tablet icon rail: w-14) */
-const SIDEBAR_WIDTH_ICON: string = "3.5rem"
-const SIDEBAR_KEYBOARD_SHORTCUT: string = "b"
+const SIDEBAR_COOKIE_NAME = "sidebar_state"
+const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
+const SIDEBAR_WIDTH = "18rem"
+const SIDEBAR_WIDTH_MOBILE = "18rem"
+const SIDEBAR_WIDTH_ICON = "3.5rem"
+const SIDEBAR_KEYBOARD_SHORTCUT = "b"
 
 const sidebarMenuButtonVariants = cva(
   "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-lg p-2 text-left text-sm ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pe-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:shrink-0 [&>svg:not([class*='size-'])]:size-4",
@@ -56,7 +54,7 @@ const sidebarMenuButtonVariants = cva(
   }
 )
 
-export type SidebarContextProps = {
+export interface SidebarContextProps {
   state: "expanded" | "collapsed"
   open: boolean
   setOpen: (open: boolean) => void
@@ -647,9 +645,9 @@ export function SidebarMenuSkeleton({
   showIcon?: boolean
 }): React.ReactElement {
   // Random width between 50 to 90%.
-  const width = React.useMemo(() => {
-    return `${Math.floor(Math.random() * 40) + 50}%`
-  }, [])
+  const [width] = React.useState(
+    () => `${Math.floor(Math.random() * 40) + 50}%`
+  )
 
   return (
     <div

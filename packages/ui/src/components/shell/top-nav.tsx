@@ -30,9 +30,9 @@ export function TopNav({
   const { Link } = useShell()
 
   return (
-    <nav className="sticky top-0 z-40 flex h-14 w-full items-center justify-between gap-3 border-b border-border bg-sidebar/50 px-4 backdrop-blur-lg md:hidden">
+    <nav className="sticky top-0 z-40 flex h-14 w-full items-center justify-between gap-3 border-b border-border bg-background/80 px-4 backdrop-blur-lg md:hidden dark:bg-card/80">
       <Link
-        className="flex min-w-0 items-center gap-2 font-cal text-base font-semibold tracking-wide text-sidebar-accent-foreground"
+        className="flex min-w-0 items-center gap-2 font-heading text-base font-semibold tracking-wide text-foreground"
         href={homeHref}
       >
         {logo ? (

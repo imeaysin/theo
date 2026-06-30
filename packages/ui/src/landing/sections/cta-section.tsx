@@ -21,9 +21,9 @@ export function CtaSection({
   className,
 }: CtaSectionProps) {
   return (
-    <section className={cn("pb-24 pt-24", className)}>
+    <section className={cn("pt-24 pb-24", className)}>
       <PageContainer>
-        <div className="relative border border-border bg-background p-8 text-center lg:p-12 before:pointer-events-none before:absolute before:inset-0 before:bg-[repeating-linear-gradient(-60deg,rgba(219,219,219,0.4),rgba(219,219,219,0.4)_1px,transparent_1px,transparent_6px)] dark:before:bg-[repeating-linear-gradient(-60deg,rgba(44,44,44,0.4),rgba(44,44,44,0.4)_1px,transparent_1px,transparent_6px)]">
+        <div className="relative border border-border bg-background p-8 text-center before:pointer-events-none before:absolute before:inset-0 before:bg-[repeating-linear-gradient(-60deg,rgba(219,219,219,0.4),rgba(219,219,219,0.4)_1px,transparent_1px,transparent_6px)] lg:p-12 dark:before:bg-[repeating-linear-gradient(-60deg,rgba(44,44,44,0.4),rgba(44,44,44,0.4)_1px,transparent_1px,transparent_6px)]">
           <div className="relative z-10">
             <h2 className="mb-4 font-serif text-2xl text-foreground sm:text-2xl">
               {title}

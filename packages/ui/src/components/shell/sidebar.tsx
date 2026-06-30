@@ -1,15 +1,10 @@
 "use client"
 
-import { RotateCwIcon } from "lucide-react"
 import type React from "react"
-import {
-  Tooltip,
-  TooltipPopup,
-  TooltipTrigger,
-} from "@workspace/ui/components/tooltip"
 import { cn } from "@workspace/ui/lib/utils"
 import { CommandTrigger } from "./command-palette"
 import { Navigation } from "./navigation/navigation"
+import { NavigationItem } from "./navigation/navigation-item"
 import { useShell } from "./shell-context"
 import type { NavigationItemType, ShellUser, UserMenuItem } from "./types"
 import { UserDropdown } from "./user-dropdown/user-dropdown"
@@ -41,7 +36,7 @@ export function SideBar({
   signOutLabel,
   bannersHeight = 0,
 }: SideBarProps): React.ReactElement {
-  const { t, Link } = useShell()
+  const { Link } = useShell()
 
   return (
     <div className="relative">
@@ -49,16 +44,20 @@ export function SideBar({
         className={cn(
           "fixed left-0 hidden h-full max-h-screen w-(--sidebar-width-icon) min-w-(--sidebar-width-icon) flex-col overflow-x-hidden overflow-y-auto bg-sidebar font-sans text-sidebar-foreground md:sticky md:flex lg:w-(--sidebar-width) lg:min-w-(--sidebar-width) lg:px-3"
         )}
-        style={{
-          maxHeight: `calc(100vh - ${bannersHeight}px)`,
-          top: `${bannersHeight}px`,
-        }}
+        style={
+          {
+            "--sidebar-width": "18rem",
+            "--sidebar-width-icon": "3.5rem",
+            maxHeight: `calc(100vh - ${bannersHeight}px)`,
+            top: `${bannersHeight}px`,
+          } as React.CSSProperties
+        }
       >
         <div className="flex h-full flex-col justify-between py-3 lg:pt-4">
           <div>
             <header className="mb-3 hidden items-center justify-between lg:flex">
               <Link
-                className="flex min-w-0 items-center gap-2 px-1.5 font-cal text-sm font-semibold tracking-wide text-sidebar-accent-foreground"
+                className="flex min-w-0 items-center gap-2 px-1.5 font-heading text-sm font-semibold tracking-wide text-sidebar-foreground"
                 href={homeHref}
               >
                 {logo}
@@ -94,64 +93,11 @@ export function SideBar({
 
           {bottomNavItems.length > 0 && (
             <div className="md:px-2 md:pb-4 lg:p-0">
-              {bottomNavItems.map((item, index) => {
-                const Icon = item.icon
-                const itemClassName = cn(
-                  "group mt-0.5 flex w-full items-center rounded-md px-2 py-1.5 text-left text-sm font-medium text-sidebar-foreground transition [&[aria-current='page']]:bg-sidebar-accent [&[aria-current='page']]:text-sidebar-accent-foreground",
-                  "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                  index === 0 && "mt-3"
-                )
-                const iconNode = Icon ? (
-                  item.isLoading ? (
-                    <RotateCwIcon className="ml-3 h-4 w-4 shrink-0 animate-spin md:mx-auto lg:mr-2 lg:ml-0" />
-                  ) : (
-                    <Icon
-                      aria-hidden="true"
-                      className="ml-3 h-4 w-4 shrink-0 md:mx-auto lg:mr-2 lg:ml-0"
-                    />
-                  )
-                ) : null
-                const labelNode = (
-                  <span className="hidden w-full justify-between lg:flex">
-                    <div className="flex">{t(item.name)}</div>
-                  </span>
-                )
-                const trigger = item.href ? (
-                  <Link
-                    aria-label={t(item.name)}
-                    className={itemClassName}
-                    href={item.href}
-                    onClick={
-                      item.onClick as React.MouseEventHandler<HTMLAnchorElement>
-                    }
-                    target={item.target}
-                  >
-                    {iconNode}
-                    {labelNode}
-                  </Link>
-                ) : (
-                  <button
-                    aria-label={t(item.name)}
-                    className={itemClassName}
-                    onClick={
-                      item.onClick as React.MouseEventHandler<HTMLButtonElement>
-                    }
-                    type="button"
-                  >
-                    {iconNode}
-                    {labelNode}
-                  </button>
-                )
-
-                return (
-                  <Tooltip key={item.name}>
-                    <TooltipTrigger render={trigger} />
-                    <TooltipPopup className="lg:hidden" side="right">
-                      {t(item.name)}
-                    </TooltipPopup>
-                  </Tooltip>
-                )
-              })}
+              {bottomNavItems.map((item, index) => (
+                <div className={cn(index === 0 && "mt-3")} key={item.name}>
+                  <NavigationItem item={item} />
+                </div>
+              ))}
             </div>
           )}
         </div>

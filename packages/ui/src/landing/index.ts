@@ -6,11 +6,7 @@ export type { SectionHeadingProps } from "./layout"
 export { FeatureHero } from "./feature-hero"
 export type { FeatureHeroProps } from "./feature-hero"
 export { LegalPage, PlaceholderPage } from "./legal-page"
-export type {
-  LegalBlock,
-  LegalDocument,
-  LegalSection,
-} from "./legal-page"
+export type { LegalBlock, LegalDocument, LegalSection } from "./legal-page"
 export { ResourcePageShell } from "./resource-page-shell"
 
 // Chrome

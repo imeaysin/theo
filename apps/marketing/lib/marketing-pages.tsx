@@ -115,10 +115,7 @@ function buildStaticPages(): Record<string, StaticPageEntry> {
     render: () => (
       <>
         <TestimonialsSection title="Founders on Theo" />
-        {ctaBlock(
-          "Join them",
-          "Join founders who run their company on Theo."
-        )}
+        {ctaBlock("Join them", "Join founders who run their company on Theo.")}
       </>
     ),
   }

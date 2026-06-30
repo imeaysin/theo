@@ -1,5 +1,6 @@
 "use client"
 
+import { Badge, type BadgeProps } from "@workspace/ui/components/badge"
 import { AnimatePresence, motion } from "framer-motion"
 import { useEffect, useRef, useState } from "react"
 
@@ -11,6 +12,39 @@ interface Invoice {
   invoiceDate: string
   invoiceNo: string
   status: "sent" | "paid" | "overdue" | "scheduled" | "recurring"
+}
+
+const INVOICE_STATUS_CONFIG: Record<
+  Invoice["status"],
+  { label: string; variant: NonNullable<BadgeProps["variant"]> }
+> = {
+  sent: { label: "Sent", variant: "secondary" },
+  overdue: { label: "Overdue", variant: "warning" },
+  scheduled: { label: "Scheduled", variant: "info" },
+  recurring: { label: "Recurring", variant: "outline" },
+  paid: { label: "Paid", variant: "success" },
+}
+
+function InvoiceStatusBadge({ status }: { status: Invoice["status"] }) {
+  const config = INVOICE_STATUS_CONFIG[status]
+
+  return (
+    <motion.div
+      key={status}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      transition={{ duration: 0.2 }}
+    >
+      <Badge
+        className="rounded-full px-1.5 py-px text-[9px] md:text-[10px]"
+        size="sm"
+        variant={config.variant}
+      >
+        {config.label}
+      </Badge>
+    </motion.div>
+  )
 }
 
 const initialInvoices: Omit<Invoice, "status">[] = [
@@ -429,72 +463,7 @@ export function InvoicePaymentAnimation({
                     <td className="w-[115px] px-1.5 md:w-[110px] md:px-2">
                       <div className="flex h-full items-center">
                         <AnimatePresence mode="wait">
-                          {invoice.status === "sent" ? (
-                            <motion.div
-                              key="sent"
-                              initial={{ opacity: 0, scale: 0.9 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              exit={{ opacity: 0, scale: 0.9 }}
-                              transition={{ duration: 0.2 }}
-                              className="inline-flex items-center rounded-full border border-border bg-secondary px-1.5 py-px"
-                            >
-                              <span className="font-sans text-[9px] text-foreground md:text-[10px]">
-                                Sent
-                              </span>
-                            </motion.div>
-                          ) : invoice.status === "overdue" ? (
-                            <motion.div
-                              key="overdue"
-                              initial={{ opacity: 0, scale: 0.9 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              exit={{ opacity: 0, scale: 0.9 }}
-                              transition={{ duration: 0.2 }}
-                              className="inline-flex items-center rounded-full border border-yellow-500/20 bg-yellow-500/10 px-1.5 py-px"
-                            >
-                              <span className="font-sans text-[9px] text-yellow-500 md:text-[10px]">
-                                Overdue
-                              </span>
-                            </motion.div>
-                          ) : invoice.status === "scheduled" ? (
-                            <motion.div
-                              key="scheduled"
-                              initial={{ opacity: 0, scale: 0.9 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              exit={{ opacity: 0, scale: 0.9 }}
-                              transition={{ duration: 0.2 }}
-                              className="inline-flex items-center rounded-full border border-blue-500/20 bg-blue-500/10 px-1.5 py-px"
-                            >
-                              <span className="font-sans text-[9px] text-blue-500 md:text-[10px]">
-                                Scheduled
-                              </span>
-                            </motion.div>
-                          ) : invoice.status === "recurring" ? (
-                            <motion.div
-                              key="recurring"
-                              initial={{ opacity: 0, scale: 0.9 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              exit={{ opacity: 0, scale: 0.9 }}
-                              transition={{ duration: 0.2 }}
-                              className="inline-flex items-center rounded-full border border-orange-500/20 bg-orange-500/10 px-1.5 py-px"
-                            >
-                              <span className="font-sans text-[9px] text-orange-500 md:text-[10px]">
-                                Recurring
-                              </span>
-                            </motion.div>
-                          ) : (
-                            <motion.div
-                              key="paid"
-                              initial={{ opacity: 0, scale: 0.9 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              exit={{ opacity: 0, scale: 0.9 }}
-                              transition={{ duration: 0.2 }}
-                              className="inline-flex items-center rounded-full border border-green-500/20 bg-green-500/10 px-1.5 py-px"
-                            >
-                              <span className="font-sans text-[9px] text-green-500 md:text-[10px]">
-                                Paid
-                              </span>
-                            </motion.div>
-                          )}
+                          <InvoiceStatusBadge status={invoice.status} />
                         </AnimatePresence>
                       </div>
                     </td>

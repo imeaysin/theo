@@ -1,11 +1,6 @@
 "use client"
 
-import {
-  ChevronDownIcon,
-  ChevronRightIcon,
-  ChevronUpIcon,
-  RotateCwIcon,
-} from "lucide-react"
+import { ChevronRightIcon } from "lucide-react"
 import type React from "react"
 import { Fragment, useState } from "react"
 import {
@@ -22,6 +17,18 @@ import {
 import { cn } from "@workspace/ui/lib/utils"
 import { useShell } from "../shell-context"
 import type { NavigationItemType } from "../types"
+import {
+  ExpansionChevron,
+  getSidebarChildClassName,
+  NavItemIcon,
+  NavigationChildPanel,
+} from "./navigation-parts"
+import {
+  contentNavItemClassName,
+  defaultIsCurrent,
+  mobileBottomNavItemClassName,
+  sidebarNavItemClassName,
+} from "./navigation-styles"
 
 function readStoredExpansion(itemName: string): boolean | null {
   if (typeof window === "undefined") return null
@@ -55,17 +62,6 @@ const usePersistedExpansionState = (itemName: string) => {
   return [isExpanded, setPersistedExpansion] as const
 }
 
-const defaultIsCurrent: NonNullable<NavigationItemType["isCurrent"]> = ({
-  isChild,
-  item,
-  pathname,
-}) =>
-  isChild
-    ? item.href === pathname
-    : item.href
-      ? (pathname?.startsWith(item.href) ?? false)
-      : false
-
 export const NavigationItem: React.FC<{
   index?: number
   item: NavigationItemType
@@ -88,7 +84,6 @@ export const NavigationItem: React.FC<{
     isExpanded || hasActiveChild || isCurrent({ pathname, isChild, item })
   const shouldShowChevron = hasChildren && !hasActiveChild
   const isParentNavigationItem = hasChildren && !isChild
-  const Icon = item.icon
 
   if (isParentNavigationItem) {
     return (
@@ -101,71 +96,54 @@ export const NavigationItem: React.FC<{
                 aria-expanded={isExpanded}
                 aria-label={t(item.name)}
                 className={cn(
-                  "group relative mt-0.5 flex w-full items-center rounded-md px-2 py-1.5 text-sm font-medium text-sidebar-foreground transition",
-                  "md:justify-center lg:justify-start",
-                  "[&[aria-current='page']]:bg-sidebar-accent [&[aria-current='page']]:text-sidebar-accent-foreground",
-                  "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                  sidebarNavItemClassName,
+                  "relative md:justify-center lg:justify-start"
                 )}
                 onClick={() => setIsExpanded(!isExpanded)}
                 type="button"
               />
             }
           >
-            {Icon && (
+            {item.icon || item.isLoading ? (
               <div className="relative">
-                {item.isLoading ? (
-                  <RotateCwIcon className="h-4 w-4 shrink-0 animate-spin lg:mr-2" />
-                ) : (
-                  <Icon className="h-4 w-4 shrink-0 lg:mr-2" aria-hidden="true" />
-                )}
-                {shouldShowChevron && (
+                <NavItemIcon icon={item.icon} isLoading={item.isLoading} />
+                {shouldShowChevron ? (
                   <span className="absolute -right-0.5 -bottom-0.5 rounded-full bg-sidebar-accent p-0.5 lg:hidden">
-                    {isExpanded ? (
-                      <ChevronUpIcon className="h-2.5 w-2.5" />
-                    ) : (
-                      <ChevronDownIcon className="h-2.5 w-2.5" />
-                    )}
+                    <ExpansionChevron
+                      className="h-2.5 w-2.5"
+                      expanded={isExpanded}
+                    />
                   </span>
-                )}
+                ) : null}
               </div>
-            )}
+            ) : null}
             <span className="hidden w-full justify-between truncate lg:flex">
               {t(item.name)}
               {item.badge}
             </span>
-            {shouldShowChevron &&
-              (isExpanded ? (
-                <ChevronUpIcon className="ml-auto hidden h-4 w-4 lg:block" />
-              ) : (
-                <ChevronDownIcon className="ml-auto hidden h-4 w-4 lg:block" />
-              ))}
+            {shouldShowChevron ? (
+              <ExpansionChevron
+                className="ml-auto hidden h-4 w-4 lg:block"
+                expanded={isExpanded}
+              />
+            ) : null}
           </TooltipTrigger>
           <TooltipPopup className="lg:hidden" side="right">
             {t(item.name)}
           </TooltipPopup>
         </Tooltip>
-        {hasChildren && (
-          <div
-            aria-hidden={!shouldShowChildren}
-            className={cn(
-              "grid transition-all duration-300 ease-in-out",
-              shouldShowChildren
-                ? "visible grid-rows-[1fr] opacity-100"
-                : "invisible grid-rows-[0fr] opacity-0"
-            )}
-          >
-            <div className="overflow-hidden">
-              {item.child?.map((child, index) => (
-                <NavigationItem
-                  index={index}
-                  isChild
-                  item={child}
-                  key={child.name}
-                />
-              ))}
-            </div>
-          </div>
-        )}
+        {hasChildren ? (
+          <NavigationChildPanel open={shouldShowChildren}>
+            {item.child?.map((child, index) => (
+              <NavigationItem
+                index={index}
+                isChild
+                item={child}
+                key={child.name}
+              />
+            ))}
+          </NavigationChildPanel>
+        ) : null}
       </Fragment>
     )
   }
@@ -178,32 +156,18 @@ export const NavigationItem: React.FC<{
             aria-current={current ? "page" : undefined}
             aria-label={t(item.name)}
             className={cn(
-              "group flex items-center rounded-md px-2 py-1.5 text-sm font-medium text-sidebar-foreground transition",
+              sidebarNavItemClassName,
               isChild
-                ? cn(
-                    "hidden h-8 pl-16 lg:flex lg:pl-11 [&[aria-current='page']]:bg-sidebar-accent [&[aria-current='page']]:text-sidebar-accent-foreground",
-                    props.index === 0
-                      ? "mt-0"
-                      : "mt-1 hover:mt-1 [&[aria-current='page']]:mt-1"
-                  )
-                : "mt-0.5 md:justify-center lg:justify-start [&[aria-current='page']]:bg-sidebar-accent [&[aria-current='page']]:text-sidebar-accent-foreground",
-              "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                ? getSidebarChildClassName(props.index)
+                : "md:justify-center lg:justify-start"
             )}
-            data-test-id={item.name}
+            data-testid={item.name}
             href={item.href}
             target={item.target}
           />
         }
       >
-        {Icon &&
-          (item.isLoading ? (
-            <RotateCwIcon className="h-4 w-4 shrink-0 animate-spin lg:mr-2" />
-          ) : (
-            <Icon
-              aria-hidden="true"
-              className="h-4 w-4 shrink-0 lg:mr-2"
-            />
-          ))}
+        <NavItemIcon icon={item.icon} isLoading={item.isLoading} />
         <span className="hidden w-full justify-between truncate lg:flex">
           {t(item.name)}
           {item.badge}
@@ -219,7 +183,6 @@ export const NavigationItem: React.FC<{
 export const MobileNavigationItem: React.FC<{
   item: NavigationItemType
   isChild?: boolean
-  /** When provided, the item renders as a button (used by the "More" trigger). */
   onClick?: () => void
   isActive?: boolean
 }> = (props) => {
@@ -228,9 +191,6 @@ export const MobileNavigationItem: React.FC<{
   const isCurrent = item.isCurrent ?? defaultIsCurrent
   const current = isActive ?? isCurrent({ isChild: !!isChild, item, pathname })
   const Icon = item.icon
-
-  const className =
-    "relative my-2 min-w-0 flex-1 overflow-hidden rounded-md bg-transparent! p-1 text-center text-xs font-medium text-muted-foreground hover:text-foreground focus:z-10 sm:text-sm [&[aria-current='page']]:text-foreground"
 
   const content = (
     <>
@@ -251,7 +211,7 @@ export const MobileNavigationItem: React.FC<{
     return (
       <button
         aria-current={current ? "page" : undefined}
-        className={className}
+        className={mobileBottomNavItemClassName}
         onClick={onClick}
         type="button"
       >
@@ -263,7 +223,7 @@ export const MobileNavigationItem: React.FC<{
   return (
     <Link
       aria-current={current ? "page" : undefined}
-      className={className}
+      className={mobileBottomNavItemClassName}
       href={item.href}
       target={item.target}
     >
@@ -274,21 +234,18 @@ export const MobileNavigationItem: React.FC<{
 
 export const MobileNavigationMoreItem: React.FC<{
   item: NavigationItemType
-  /** Called after navigating/acting so the parent can close an open drawer. */
   onNavigate?: () => void
 }> = (props) => {
   const { item, onNavigate } = props
-  const { t, Link } = useShell()
+  const { t, pathname, Link } = useShell()
+  const isCurrent = item.isCurrent ?? defaultIsCurrent
 
   const Icon = item.icon
   const hasChildren = !!item.child && item.child.length > 0
   const isActionItem = !item.href && item.onClick
+  const current = isCurrent({ isChild: false, item, pathname })
 
-  const rowClassName = cn(
-    "group flex w-full items-center gap-2 rounded-md px-3 py-2.5 text-left text-sm font-medium text-sidebar-foreground transition",
-    "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-    "[&[aria-current='page']]:bg-sidebar-accent [&[aria-current='page']]:text-sidebar-accent-foreground"
-  )
+  const rowClassName = contentNavItemClassName
 
   const label = (
     <>
@@ -314,8 +271,14 @@ export const MobileNavigationMoreItem: React.FC<{
             <nav className="flex flex-col gap-0.5 px-2 pb-4">
               {item.child?.map((childItem) => {
                 const ChildIcon = childItem.icon
+                const childCurrent = isCurrent({
+                  isChild: true,
+                  item: childItem,
+                  pathname,
+                })
                 return (
                   <Link
+                    aria-current={childCurrent ? "page" : undefined}
                     className={rowClassName}
                     href={childItem.href}
                     key={childItem.name}
@@ -356,6 +319,7 @@ export const MobileNavigationMoreItem: React.FC<{
 
   return (
     <Link
+      aria-current={current ? "page" : undefined}
       className={rowClassName}
       href={item.href}
       onClick={onNavigate}

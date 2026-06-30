@@ -16,7 +16,7 @@ export function FooterWordmark({ text, className }: FooterWordmarkProps) {
     >
       <p
         className={cn(
-          "text-[200px] leading-none text-secondary [-webkit-text-stroke:1px_var(--muted-foreground)] select-none sm:text-[508px]"
+          "text-[200px] leading-none text-secondary select-none [-webkit-text-stroke:1px_var(--muted-foreground)] sm:text-[508px]"
         )}
       >
         {text}

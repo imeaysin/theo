@@ -39,7 +39,7 @@ export function SiteNavbar({
           className={cn(
             "relative flex items-center justify-between px-4 py-3 xl:gap-6 xl:px-6 xl:py-4 2xl:px-8",
             isMenuOpen && "border-b border-border",
-            !transparent && "bg-background-semi-transparent backdrop-blur-md",
+            !transparent && "bg-background/80 backdrop-blur-md",
             navClassName
           )}
         >

@@ -306,7 +306,7 @@ function MorphingDialogContainer({ children }: MorphingDialogContainerProps) {
         <>
           <motion.div
             key={`backdrop-${uniqueId}`}
-            className="fixed inset-0 z-[9999] bg-white/40 backdrop-blur-sm dark:bg-black/40"
+            className="fixed inset-0 z-[9999] bg-background/40 backdrop-blur-sm"
             style={{
               height: "100dvh", // Dynamic viewport height for mobile Safari
             }}

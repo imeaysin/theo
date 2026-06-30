@@ -68,8 +68,7 @@ export const dashboardMainNavigation: NavigationItemType[] = [
     href: `${dashboardBase}/apps`,
     icon: LayoutGridIcon,
     moreOnMobile: true,
-    isCurrent: ({ pathname, item }) =>
-      pathname?.startsWith(item.href) ?? false,
+    isCurrent: ({ pathname, item }) => pathname?.startsWith(item.href) ?? false,
     child: [
       {
         name: "App Store",
@@ -96,7 +95,5 @@ export const dashboardMainNavigation: NavigationItemType[] = [
 export function flattenNavigationItems(
   items: NavigationItemType[]
 ): NavigationItemType[] {
-  return items.flatMap((item) =>
-    item.child ? [item, ...item.child] : [item]
-  )
+  return items.flatMap((item) => (item.child ? [item, ...item.child] : [item]))
 }
