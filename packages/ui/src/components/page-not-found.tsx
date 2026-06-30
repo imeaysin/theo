@@ -11,7 +11,9 @@ import {
 } from "@workspace/ui/components/page-state"
 import { cn } from "@workspace/ui/lib/utils"
 
-export interface PageNotFoundProps extends React.ComponentProps<typeof PageState> {
+export interface PageNotFoundProps extends React.ComponentProps<
+  typeof PageState
+> {
   title?: string
   description?: string
   homeHref?: string

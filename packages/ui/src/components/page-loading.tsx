@@ -1,5 +1,9 @@
 import type * as React from "react"
-import { Empty, EmptyDescription, EmptyMedia } from "@workspace/ui/components/empty"
+import {
+  Empty,
+  EmptyDescription,
+  EmptyMedia,
+} from "@workspace/ui/components/empty"
 import { Spinner } from "@workspace/ui/components/spinner"
 import { cn } from "@workspace/ui/lib/utils"
 

@@ -14,7 +14,10 @@ export function PageState({
   ...props
 }: React.ComponentProps<typeof Empty>) {
   return (
-    <Empty className={cn("min-h-[50vh] flex-1 gap-8 py-16 sm:py-24", className)} {...props}>
+    <Empty
+      className={cn("min-h-[50vh] flex-1 gap-8 py-16 sm:py-24", className)}
+      {...props}
+    >
       {children}
     </Empty>
   )
@@ -51,7 +54,10 @@ export function PageStateTitle({
 }: React.ComponentProps<"h1">) {
   return (
     <h1
-      className={cn("font-heading text-xl font-semibold text-foreground sm:text-2xl", className)}
+      className={cn(
+        "font-heading text-xl font-semibold text-foreground sm:text-2xl",
+        className
+      )}
       {...props}
     >
       {children}
