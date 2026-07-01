@@ -5,7 +5,8 @@ import {
   Injectable,
 } from "@nestjs/common"
 import { Reflector } from "@nestjs/core"
-import { checkOrganizationPermissionAsync } from "../../permissions/organization"
+import { checkOrganizationPermissionAsync } from "../../permissions/organization/server"
+import type { OrganizationRequiredPermission } from "../../permissions/organization"
 import type { JwtClaims } from "../../types/auth"
 import { ORG_PERMISSION_KEY } from "./require-org-permission.decorator"
 
@@ -14,10 +15,11 @@ export class OrgRbacGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   async canActivate(ctx: ExecutionContext): Promise<boolean> {
-    const required = this.reflector.getAllAndOverride<{
-      resource: string
-      action: string
-    }>(ORG_PERMISSION_KEY, [ctx.getHandler(), ctx.getClass()])
+    const required =
+      this.reflector.getAllAndOverride<OrganizationRequiredPermission>(
+        ORG_PERMISSION_KEY,
+        [ctx.getHandler(), ctx.getClass()]
+      )
     if (!required) return true
 
     const user = ctx.switchToHttp().getRequest<{ user: JwtClaims }>().user

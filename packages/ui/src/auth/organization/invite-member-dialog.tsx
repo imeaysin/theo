@@ -3,7 +3,6 @@
 import {
   useAssignableOrganizationRoles,
   useInviteMember,
-  useOrganizationPermissionByKey,
 } from "@workspace/auth/react"
 import { UserPlus } from "lucide-react"
 import { type SyntheticEvent, useState } from "react"
@@ -39,8 +38,6 @@ export function InviteMemberDialog({
   open,
   onOpenChange,
 }: InviteMemberDialogProps) {
-  const { data: invitePermission } =
-    useOrganizationPermissionByKey("inviteMember")
   const {
     roles,
     formatOrganizationRoleLabel,
@@ -65,7 +62,6 @@ export function InviteMemberDialog({
 
   function handleSubmit(event: SyntheticEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (!invitePermission?.success) return
 
     const formData = new FormData(event.currentTarget)
     inviteMember(
@@ -105,7 +101,7 @@ export function InviteMemberDialog({
               <Input
                 aria-invalid={!!emailError}
                 autoFocus
-                disabled={isPending || !invitePermission?.success}
+                disabled={isPending}
                 id="invite-member-email"
                 name="email"
                 onChange={() => setEmailError(undefined)}
@@ -123,9 +119,7 @@ export function InviteMemberDialog({
             <Field>
               <Label htmlFor="invite-member-role">Role</Label>
               <Select
-                disabled={
-                  isPending || rolesPending || !invitePermission?.success
-                }
+                disabled={isPending || rolesPending}
                 onValueChange={(value) => setRole(value ?? defaultRole)}
                 value={selectedRole}
               >
@@ -151,10 +145,7 @@ export function InviteMemberDialog({
             >
               Cancel
             </AlertDialogClose>
-            <Button
-              disabled={isPending || !invitePermission?.success}
-              type="submit"
-            >
+            <Button disabled={isPending} type="submit">
               {isPending ? <Spinner /> : null}
               Invite member
             </Button>

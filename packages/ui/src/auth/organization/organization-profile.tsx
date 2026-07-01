@@ -2,6 +2,7 @@
 
 import {
   useActiveOrganization,
+  useOrganizationPermission,
   useUpdateOrganization,
 } from "@workspace/auth/react"
 import type { Organization } from "@workspace/auth/types/organization"
@@ -16,16 +17,39 @@ import { Spinner } from "@workspace/ui/components/spinner"
 import { toastManager } from "@workspace/ui/components/toast"
 import { cn } from "@workspace/ui/lib/utils"
 import { OrganizationSlugField } from "./organization-slug-field"
+import { organizationUiPermissions } from "./ui-permissions"
 
 interface OrganizationProfileFormProps {
   organization: Organization
   className?: string
 }
 
+function OrganizationProfileSkeleton({ className }: { className?: string }) {
+  return (
+    <Card className={cn(className)}>
+      <CardPanel className="flex flex-col gap-4">
+        <Field>
+          <Label>Name</Label>
+          <Skeleton>
+            <Input className="invisible" />
+          </Skeleton>
+        </Field>
+        <Field>
+          <Label>Slug</Label>
+          <Skeleton>
+            <Input className="invisible" />
+          </Skeleton>
+        </Field>
+      </CardPanel>
+    </Card>
+  )
+}
+
 function OrganizationProfileForm({
   organization,
   className,
-}: OrganizationProfileFormProps) {
+  readOnly = false,
+}: OrganizationProfileFormProps & { readOnly?: boolean }) {
   const { mutate: updateOrganization, isPending } = useUpdateOrganization()
   const [slug, setSlug] = useState(organization.slug ?? "")
   const [nameError, setNameError] = useState<string>()
@@ -63,7 +87,7 @@ function OrganizationProfileForm({
               aria-invalid={!!nameError}
               autoComplete="organization"
               defaultValue={organization.name ?? ""}
-              disabled={isPending}
+              disabled={isPending || readOnly}
               id={nameInputId}
               name="name"
               onChange={() => setNameError(undefined)}
@@ -79,7 +103,7 @@ function OrganizationProfileForm({
 
           <OrganizationSlugField
             currentSlug={organization.slug}
-            disabled={isPending}
+            disabled={isPending || readOnly}
             id={slugInputId}
             onChange={setSlug}
             value={slug}
@@ -87,10 +111,12 @@ function OrganizationProfileForm({
         </CardPanel>
 
         <CardFooter>
-          <Button disabled={isPending} size="sm" type="submit">
-            {isPending ? <Spinner /> : null}
-            Save changes
-          </Button>
+          {readOnly ? null : (
+            <Button disabled={isPending} size="sm" type="submit">
+              {isPending ? <Spinner /> : null}
+              Save changes
+            </Button>
+          )}
         </CardFooter>
       </Card>
     </form>
@@ -103,35 +129,28 @@ export interface OrganizationProfileProps {
 
 export function OrganizationProfile({ className }: OrganizationProfileProps) {
   const { data: activeOrganization } = useActiveOrganization()
+  const { data: canUpdateOrganization, isPending: permissionPending } =
+    useOrganizationPermission(organizationUiPermissions.updateOrganization)
+  const readOnly = !canUpdateOrganization?.success
+
+  if (!activeOrganization || permissionPending) {
+    return (
+      <div>
+        <h2 className="mb-3 text-sm font-semibold">Profile</h2>
+        <OrganizationProfileSkeleton className={className} />
+      </div>
+    )
+  }
 
   return (
     <div>
       <h2 className="mb-3 text-sm font-semibold">Profile</h2>
-
-      {activeOrganization ? (
-        <OrganizationProfileForm
-          key={activeOrganization.id}
-          className={className}
-          organization={activeOrganization}
-        />
-      ) : (
-        <Card className={cn(className)}>
-          <CardPanel className="flex flex-col gap-4">
-            <Field>
-              <Label>Name</Label>
-              <Skeleton>
-                <Input className="invisible" />
-              </Skeleton>
-            </Field>
-            <Field>
-              <Label>Slug</Label>
-              <Skeleton>
-                <Input className="invisible" />
-              </Skeleton>
-            </Field>
-          </CardPanel>
-        </Card>
-      )}
+      <OrganizationProfileForm
+        key={activeOrganization.id}
+        className={className}
+        organization={activeOrganization}
+        readOnly={readOnly}
+      />
     </div>
   )
 }

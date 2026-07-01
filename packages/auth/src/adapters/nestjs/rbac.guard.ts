@@ -5,7 +5,10 @@ import {
   ForbiddenException,
 } from "@nestjs/common"
 import { Reflector } from "@nestjs/core"
-import { checkPlatformPermission } from "../../permissions/platform"
+import {
+  checkPlatformPermission,
+  type PlatformRequiredPermission,
+} from "../../permissions/platform"
 import { PERMISSION_KEY } from "./require-permission.decorator"
 import type { JwtClaims } from "../../types/auth"
 
@@ -14,10 +17,11 @@ export class RbacGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(ctx: ExecutionContext): boolean {
-    const required = this.reflector.getAllAndOverride<{
-      resource: string
-      action: string
-    }>(PERMISSION_KEY, [ctx.getHandler(), ctx.getClass()])
+    const required =
+      this.reflector.getAllAndOverride<PlatformRequiredPermission>(
+        PERMISSION_KEY,
+        [ctx.getHandler(), ctx.getClass()]
+      )
     if (!required) return true
 
     const user = ctx.switchToHttp().getRequest<{ user: JwtClaims }>().user

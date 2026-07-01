@@ -5,13 +5,13 @@ import { useEffect, useMemo } from "react"
 import { authClient, type AuthClient } from "../lib/auth-client"
 import type { ActiveOrganization } from "../types/organization"
 import { useAuthUiConfig } from "./auth-ui-config"
+import { organizationPluginOptions } from "../config/organization-plugin"
+import { canAssignOrganizationRole } from "../permissions/organization"
 import {
-  canAssignOrganizationRole,
   formatOrganizationRoleLabel,
   getStaticOrganizationRoleNames,
-  organizationPermissions,
-  type OrganizationPermissionKey,
-} from "./organization-permissions"
+  type OrganizationPermissionCheck,
+} from "../permissions/organization"
 import { authQueryKeys } from "./query-keys"
 import { useAuthSession } from "./use-auth-session"
 import { unwrapClientResult } from "./utils/client-call"
@@ -263,11 +263,12 @@ export function useListUserInvitations(client: AuthClient = authClient) {
   })
 }
 
-export function useHasPermission(
-  permission: Record<string, string[]>,
+export function useOrganizationPermission(
+  input: OrganizationPermissionCheck,
   organizationId?: string,
   client: AuthClient = authClient
 ) {
+  const { permissions } = input
   const { enabled, session } = useAuthenticatedQueryEnabled(client)
   const resolvedOrganizationId = resolveActiveOrganizationId(
     organizationId,
@@ -277,39 +278,19 @@ export function useHasPermission(
   return useQuery({
     queryKey: authQueryKeys.organizationPermission(
       resolvedOrganizationId ?? "",
-      permission
+      permissions
     ),
     enabled: enabled && !!resolvedOrganizationId,
     queryFn: () =>
       unwrapClientResult(
         client.organization.hasPermission({
-          permissions: permission,
+          permissions,
           ...(resolvedOrganizationId
             ? { organizationId: resolvedOrganizationId }
             : {}),
         })
       ),
   })
-}
-
-export function useOrganizationPermission(
-  permission: Record<string, string[]>,
-  organizationId?: string,
-  client: AuthClient = authClient
-) {
-  return useHasPermission(permission, organizationId, client)
-}
-
-export function useOrganizationPermissionByKey(
-  permissionKey: OrganizationPermissionKey,
-  organizationId?: string,
-  client: AuthClient = authClient
-) {
-  return useOrganizationPermission(
-    organizationPermissions[permissionKey],
-    organizationId,
-    client
-  )
 }
 
 export function useListOrganizationRoles(
@@ -326,18 +307,11 @@ export function useListOrganizationRoles(
     queryKey: authQueryKeys.organizationRoles(resolvedOrganizationId),
     enabled: enabled && !!resolvedOrganizationId,
     queryFn: async () => {
-      try {
-        return await unwrapClientResult(
-          client.organization.listRoles(
-            organizationId ? { query: { organizationId } } : undefined
-          )
+      return unwrapClientResult(
+        client.organization.listRoles(
+          organizationId ? { query: { organizationId } } : undefined
         )
-      } catch {
-        return getStaticOrganizationRoleNames().map((role) => ({
-          role,
-          permission: {},
-        }))
-      }
+      )
     },
   })
 }
@@ -347,14 +321,19 @@ export function useAssignableOrganizationRoles(organizationId?: string) {
   const { data: roleRecords, isPending: rolesPending } =
     useListOrganizationRoles(organizationId)
   const { data: canUpdateMembers, isPending: permissionPending } =
-    useOrganizationPermissionByKey("updateMember", organizationId)
+    useOrganizationPermission(
+      { permissions: { member: ["update"] } },
+      organizationId
+    )
 
   const assignableRoles = useMemo(() => {
     if (!canUpdateMembers?.success) return []
 
     const roleNames =
-      roleRecords?.map((record: { role: string }) => record.role) ??
-      getStaticOrganizationRoleNames()
+      roleRecords?.map((record) => record.role) ??
+      (organizationPluginOptions.dynamicAccessControl.enabled
+        ? []
+        : getStaticOrganizationRoleNames())
 
     return roleNames.filter((roleName: string) =>
       canAssignOrganizationRole(activeMember?.role, roleName)

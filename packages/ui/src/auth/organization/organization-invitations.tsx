@@ -1,7 +1,6 @@
 "use client"
 
 import { useActiveOrganization } from "@workspace/auth/react"
-import type { ComponentProps } from "react"
 import { Card } from "@workspace/ui/components/card"
 import {
   Table,
@@ -20,13 +19,12 @@ export interface OrganizationInvitationsProps {
 
 export function OrganizationInvitations({
   className,
-  ...props
-}: OrganizationInvitationsProps & ComponentProps<"div">) {
+}: OrganizationInvitationsProps) {
   const { data: activeOrganization, isPending } = useActiveOrganization()
   const invitationList = activeOrganization?.invitations ?? []
 
   return (
-    <div className={cn("flex flex-col gap-3", className)} {...props}>
+    <div className={cn("flex flex-col gap-3", className)}>
       <h3 className="truncate text-sm font-semibold">Invitations</h3>
 
       <Card className="p-0">

@@ -2,7 +2,7 @@
 
 import { useActiveOrganization } from "@workspace/auth/react"
 import { useState } from "react"
-import { Button } from "@workspace/ui/components/button"
+import { DangerZoneRow } from "./danger-zone-row"
 import { LeaveOrganizationDialog } from "./leave-organization-dialog"
 
 export function LeaveOrganization() {
@@ -10,23 +10,14 @@ export function LeaveOrganization() {
   const [confirmOpen, setConfirmOpen] = useState(false)
 
   return (
-    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <p className="text-sm leading-tight font-medium">Leave workspace</p>
-        <p className="mt-0.5 text-xs text-muted-foreground">
-          Remove yourself from this workspace.
-        </p>
-      </div>
-
-      <Button
-        className="text-destructive"
+    <>
+      <DangerZoneRow
+        actionLabel="Leave workspace"
+        description="Remove yourself from this workspace."
         disabled={!activeOrganization}
-        onClick={() => setConfirmOpen(true)}
-        size="sm"
-        variant="outline"
-      >
-        Leave workspace
-      </Button>
+        onAction={() => setConfirmOpen(true)}
+        title="Leave workspace"
+      />
 
       {activeOrganization ? (
         <LeaveOrganizationDialog
@@ -35,6 +26,6 @@ export function LeaveOrganization() {
           organization={activeOrganization}
         />
       ) : null}
-    </div>
+    </>
   )
 }

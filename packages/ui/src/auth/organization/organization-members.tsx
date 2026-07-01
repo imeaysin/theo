@@ -2,9 +2,8 @@
 
 import {
   useActiveOrganization,
-  useOrganizationPermissionByKey,
+  useOrganizationPermission,
 } from "@workspace/auth/react"
-import type { ComponentProps } from "react"
 import { useState } from "react"
 import { Button } from "@workspace/ui/components/button"
 import { Card } from "@workspace/ui/components/card"
@@ -19,27 +18,27 @@ import {
 import { cn } from "@workspace/ui/lib/utils"
 import { InviteMemberDialog } from "./invite-member-dialog"
 import { OrganizationMemberRow } from "./organization-member-row"
+import { organizationUiPermissions } from "./ui-permissions"
 
 export interface OrganizationMembersProps {
   className?: string
 }
 
-export function OrganizationMembers({
-  className,
-  ...props
-}: OrganizationMembersProps & ComponentProps<"div">) {
+export function OrganizationMembers({ className }: OrganizationMembersProps) {
   const { data: activeOrganization, isPending } = useActiveOrganization()
-  const { data: invitePermission } =
-    useOrganizationPermissionByKey("inviteMember")
+  const { data: invitePermission } = useOrganizationPermission(
+    organizationUiPermissions.inviteMember
+  )
   const [inviteOpen, setInviteOpen] = useState(false)
 
   const members = activeOrganization?.members ?? []
+  const canInvite = !!invitePermission?.success
 
   return (
-    <div className={cn("flex flex-col gap-3", className)} {...props}>
+    <div className={cn("flex flex-col gap-3", className)}>
       <div className="flex items-end justify-between gap-3">
         <h3 className="truncate text-sm font-semibold">Members</h3>
-        {invitePermission?.success ? (
+        {canInvite ? (
           <Button
             disabled={isPending}
             onClick={() => setInviteOpen(true)}
@@ -86,7 +85,9 @@ export function OrganizationMembers({
         </Table>
       </Card>
 
-      <InviteMemberDialog onOpenChange={setInviteOpen} open={inviteOpen} />
+      {canInvite ? (
+        <InviteMemberDialog onOpenChange={setInviteOpen} open={inviteOpen} />
+      ) : null}
     </div>
   )
 }

@@ -106,6 +106,7 @@ export interface ShellSidebarProps {
   userMenuItems?: UserMenuItem[]
   signOutLabel?: string
   sidebarHeader?: React.ReactNode
+  sidebarUserControl?: React.ReactNode
 }
 
 export function ShellSidebar({
@@ -120,6 +121,7 @@ export function ShellSidebar({
   userMenuItems = [],
   signOutLabel,
   sidebarHeader,
+  sidebarUserControl,
 }: ShellSidebarProps): React.ReactElement {
   const { Link } = useShell()
   const { isIconSidebar } = useSidebarState()
@@ -188,18 +190,19 @@ export function ShellSidebar({
             <ShellNav items={navigation} />
           </div>
 
-          {user || userLoading ? (
-            <div className="w-full shrink-0">
-              <UserDropdown
-                loading={userLoading}
-                menuItems={userMenuItems}
-                onSignOut={onSignOut}
-                placement="sidebar"
-                signOutLabel={signOutLabel}
-                user={user}
-              />
-            </div>
-          ) : null}
+          {sidebarUserControl ??
+            (user || userLoading ? (
+              <div className="w-full shrink-0">
+                <UserDropdown
+                  loading={userLoading}
+                  menuItems={userMenuItems}
+                  onSignOut={onSignOut}
+                  placement="sidebar"
+                  signOutLabel={signOutLabel}
+                  user={user}
+                />
+              </div>
+            ) : null)}
         </div>
       </aside>
     </div>

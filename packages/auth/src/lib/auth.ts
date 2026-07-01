@@ -20,6 +20,7 @@ import {
 import { adminPluginOptions } from "../config/admin-plugin"
 import { organizationPluginOptions } from "../config/organization-plugin"
 import type { JwtPayload } from "../config/jwt"
+import { authCollections } from "../permissions/collections"
 import { authDb, authMongoClient } from "../db/mongo"
 
 function socialProviders() {
@@ -108,10 +109,12 @@ export function createAuth() {
             let organizationRole: string | null = null
 
             if (activeOrganizationId) {
-              const member = await authDb.collection("member").findOne({
-                organizationId: activeOrganizationId,
-                userId: user.id,
-              })
+              const member = await authDb
+                .collection(authCollections.member)
+                .findOne({
+                  organizationId: activeOrganizationId,
+                  userId: user.id,
+                })
               organizationRole =
                 typeof member?.role === "string" ? member.role : null
             }

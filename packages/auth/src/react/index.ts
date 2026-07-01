@@ -15,7 +15,6 @@ export {
   useAuthenticate,
   useAuthSession,
   useFullOrganization,
-  useHasPermission,
   useIsUsernameAvailable,
   useListAccounts,
   useListApiKeys,
@@ -28,25 +27,20 @@ export {
   useListSessions,
   useListUserInvitations,
   useOrganizationPermission,
-  useOrganizationPermissionByKey,
   useSession,
   useUser,
 } from "./queries"
 export {
-  canAssignOrganizationRole,
-  checkOrganizationRolePermission,
   formatOrganizationRoleLabel,
-  getStaticOrganizationRoleNames,
-  organizationPermissions,
-  organizationAc,
-  organizationStatement,
   parseOrganizationRoles,
-  staticOrganizationRoles,
-} from "./organization-permissions"
+} from "../permissions/organization"
 export type {
-  OrganizationPermissionKey,
-  OrganizationRoleName,
-} from "./organization-permissions"
+  OrganizationAction,
+  OrganizationPermissionCheck,
+  OrganizationPermissionMap,
+  OrganizationResource,
+  OrganizationRequiredPermission,
+} from "../permissions/organization"
 export {
   useAcceptInvitation,
   useAddPasskey,

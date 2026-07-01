@@ -11,12 +11,7 @@ import { CqrsModule } from "@nestjs/cqrs"
 import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler"
 import { AuthModule } from "@thallesp/nestjs-better-auth"
 import { auth } from "@workspace/auth"
-import {
-  JwksGuard,
-  OrgRbacGuard,
-  RbacGuard,
-  RolesGuard,
-} from "@workspace/auth/nestjs"
+import { JwksGuard, OrgRbacGuard, RbacGuard } from "@workspace/auth/nestjs"
 import { AppController } from "./app.controller"
 import { AppService } from "./app.service"
 import {
@@ -79,11 +74,6 @@ import { UploadsModule } from "./modules/uploads/uploads.module"
     {
       provide: APP_GUARD,
       useFactory: (reflector: Reflector) => new OrgRbacGuard(reflector),
-      inject: [Reflector],
-    },
-    {
-      provide: APP_GUARD,
-      useFactory: (reflector: Reflector) => new RolesGuard(reflector),
       inject: [Reflector],
     },
     { provide: APP_PIPE, useClass: ZodValidationPipe },

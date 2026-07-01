@@ -1,3 +1,5 @@
+import type { OrganizationPermissionMap } from "../permissions/organization"
+
 export const authQueryKeys = {
   all: ["auth"] as const,
   session: () => [...authQueryKeys.all, "session"] as const,
@@ -25,7 +27,7 @@ export const authQueryKeys = {
   userInvitations: () => [...authQueryKeys.all, "user-invitations"] as const,
   organizationPermission: (
     organizationId: string,
-    permission: Record<string, string[]>
+    permission: OrganizationPermissionMap
   ) =>
     [
       ...authQueryKeys.all,

@@ -1,10 +1,9 @@
 "use client"
 
 import {
-  formatOrganizationRoleLabel,
   useActiveOrganization,
   useAssignableOrganizationRoles,
-  useOrganizationPermissionByKey,
+  useOrganizationPermission,
   useSession,
   useUpdateMemberRole,
 } from "@workspace/auth/react"
@@ -25,6 +24,7 @@ import { cn } from "@workspace/ui/lib/utils"
 import { AuthUserView } from "../auth-user-view"
 import { LeaveOrganizationDialog } from "./leave-organization-dialog"
 import { RemoveMemberDialog } from "./remove-member-dialog"
+import { organizationUiPermissions } from "./ui-permissions"
 
 export interface OrganizationMemberRowProps {
   member: OrganizationMember
@@ -34,9 +34,9 @@ export function OrganizationMemberRow({ member }: OrganizationMemberRowProps) {
   const { data: session } = useSession()
   const { data: activeOrganization } = useActiveOrganization()
   const { data: hasUpdatePermission, isPending: updatePermissionPending } =
-    useOrganizationPermissionByKey("updateMember")
+    useOrganizationPermission(organizationUiPermissions.updateMember)
   const { data: hasDeletePermission, isPending: deletePermissionPending } =
-    useOrganizationPermissionByKey("removeMember")
+    useOrganizationPermission(organizationUiPermissions.removeMember)
   const { roles: assignableRoles, formatOrganizationRoleLabel: formatRole } =
     useAssignableOrganizationRoles()
   const { mutate: updateMemberRole, isPending: isUpdatingRole } =
@@ -64,7 +64,7 @@ export function OrganizationMemberRow({ member }: OrganizationMemberRowProps) {
         <AuthUserView user={member.user} />
       </TableCell>
 
-      <TableCell>{formatOrganizationRoleLabel(member.role)}</TableCell>
+      <TableCell>{formatRole(member.role)}</TableCell>
 
       <TableCell>
         <div className="flex items-center justify-end gap-1">

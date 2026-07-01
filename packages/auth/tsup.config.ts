@@ -44,8 +44,8 @@ export default defineConfig((options): Options | Options[] => [
     ...shared,
     entry: {
       "auth-client": "src/lib/auth-client.ts",
-      "permissions/platform": "src/permissions/platform.ts",
-      "permissions/organization": "src/permissions/organization.ts",
+      "permissions/platform": "src/permissions/platform/index.ts",
+      "permissions/organization": "src/permissions/organization/index.ts",
       "types/auth": "src/types/auth.ts",
       "types/organization": "src/types/organization.ts",
       "adapters/nextjs/index": "src/adapters/nextjs/index.ts",

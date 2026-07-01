@@ -3,7 +3,7 @@
 import {
   formatOrganizationRoleLabel,
   useCancelInvitation,
-  useOrganizationPermissionByKey,
+  useOrganizationPermission,
 } from "@workspace/auth/react"
 import type { OrganizationInvitation } from "@workspace/auth/types/organization"
 import { X } from "lucide-react"
@@ -12,6 +12,7 @@ import { Button } from "@workspace/ui/components/button"
 import { Spinner } from "@workspace/ui/components/spinner"
 import { TableCell, TableRow } from "@workspace/ui/components/table"
 import { cn } from "@workspace/ui/lib/utils"
+import { organizationUiPermissions } from "./ui-permissions"
 
 export interface OrganizationInvitationRowProps {
   invitation: OrganizationInvitation
@@ -28,7 +29,7 @@ export function OrganizationInvitationRow({
   invitation,
 }: OrganizationInvitationRowProps) {
   const { data: cancelPermission, isPending: cancelPermissionPending } =
-    useOrganizationPermissionByKey("cancelInvitation")
+    useOrganizationPermission(organizationUiPermissions.cancelInvitation)
   const { mutate: cancelInvitation, isPending: cancelPending } =
     useCancelInvitation()
 

@@ -15,8 +15,10 @@ import {
   MenuTrigger,
 } from "@workspace/ui/components/menu"
 import { cn } from "@workspace/ui/lib/utils"
-import { AuthUserAvatar } from "./auth-user-avatar"
+import { AuthUserAvatar, type AuthUserAvatarUser } from "./auth-user-avatar"
 import { AuthUserView } from "./auth-user-view"
+import { CreateOrganizationDialog } from "./organization/create-organization-dialog"
+import { OrganizationSwitcherMenu } from "./organization/organization-switcher-menu"
 
 export interface AuthUserButtonMenuItem {
   label: string
@@ -28,11 +30,84 @@ export interface AuthUserButtonMenuItem {
 
 export interface AuthUserButtonProps {
   className?: string
-  size?: "icon" | "default" | "compact"
+  size?: "icon" | "default" | "compact" | "sidebar"
   align?: "start" | "center" | "end"
   menuItems?: AuthUserButtonMenuItem[]
   hideSettings?: boolean
+  showWorkspaceMenu?: boolean
   onSignOut?: () => void
+}
+
+function getTriggerClassName(
+  size: AuthUserButtonProps["size"],
+  className?: string
+) {
+  if (size === "sidebar") {
+    return cn(
+      "flex h-8 w-full min-w-0 cursor-pointer appearance-none items-center gap-2 overflow-hidden rounded-lg px-2 text-left text-sm font-medium text-sidebar-foreground ring-sidebar-ring transition outline-none",
+      "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+      "focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground",
+      "in-data-[collapsed]:size-8 in-data-[collapsed]:w-8 in-data-[collapsed]:shrink-0 in-data-[collapsed]:justify-center in-data-[collapsed]:gap-0 in-data-[collapsed]:p-2",
+      className
+    )
+  }
+
+  if (size === "icon") {
+    return cn("rounded-full", className)
+  }
+
+  return cn(
+    buttonVariants({
+      variant: "ghost",
+      size: size === "compact" ? "sm" : "lg",
+    }),
+    "inline-flex h-auto max-w-full items-center font-normal",
+    size === "compact" ? "gap-1 py-1" : "py-2.5",
+    className
+  )
+}
+
+function TriggerContent({
+  isPending,
+  size,
+  user,
+}: {
+  isPending: boolean
+  size: AuthUserButtonProps["size"]
+  user: AuthUserAvatarUser | null
+}) {
+  if (size === "sidebar") {
+    return (
+      <>
+        <AuthUserAvatar
+          className="size-6 shrink-0 rounded-lg"
+          loading={isPending}
+          user={user}
+        />
+        <span className="flex min-w-0 flex-1 items-center gap-2 truncate transition-[margin,opacity] duration-200 ease-linear in-data-[collapsed]:w-0 in-data-[collapsed]:flex-0 in-data-[collapsed]:opacity-0">
+          <span className="min-w-0 truncate text-sm font-medium">
+            {isPending ? "Loading..." : (user?.name ?? "User")}
+          </span>
+          <ChevronsUpDown className="ml-auto size-4 shrink-0 text-sidebar-foreground/60 in-data-[collapsed]:hidden" />
+        </span>
+      </>
+    )
+  }
+
+  if (size === "icon") {
+    return <AuthUserAvatar loading={isPending} user={user} />
+  }
+
+  return (
+    <>
+      <AuthUserView
+        className="min-w-0 flex-1"
+        loading={isPending}
+        user={user}
+      />
+      <ChevronsUpDown className="ml-auto size-4 shrink-0 text-muted-foreground" />
+    </>
+  )
 }
 
 export function AuthUserButton({
@@ -41,11 +116,13 @@ export function AuthUserButton({
   align = "end",
   menuItems = [],
   hideSettings = false,
+  showWorkspaceMenu = false,
   onSignOut,
 }: AuthUserButtonProps) {
   const config = useAuthUiConfig()
   const { data: session, isPending } = useSession()
   const [open, setOpen] = useState(false)
+  const [createOrganizationOpen, setCreateOrganizationOpen] = useState(false)
   const { Link } = config
 
   const user = session?.user ?? null
@@ -59,42 +136,23 @@ export function AuthUserButton({
   }
 
   const isIconOnly = size === "icon"
+  const isSidebar = size === "sidebar"
 
   return (
     <Menu onOpenChange={setOpen} open={open}>
       <MenuTrigger
         aria-label={isIconOnly ? "Account menu" : undefined}
-        className={
-          isIconOnly
-            ? cn("rounded-full", className)
-            : cn(
-                buttonVariants({
-                  variant: "ghost",
-                  size: size === "compact" ? "sm" : "lg",
-                }),
-                "inline-flex h-auto max-w-full items-center font-normal",
-                size === "compact" ? "gap-1 py-1" : "py-2.5",
-                className
-              )
-        }
+        className={getTriggerClassName(size, className)}
         disabled={isPending && !user}
         render={<button type="button" />}
       >
-        {isIconOnly ? (
-          <AuthUserAvatar loading={isPending} user={user} />
-        ) : (
-          <>
-            <AuthUserView
-              className="min-w-0 flex-1"
-              loading={isPending}
-              user={user}
-            />
-            <ChevronsUpDown className="ml-auto size-4 shrink-0 text-muted-foreground" />
-          </>
-        )}
+        <TriggerContent isPending={isPending} size={size} user={user} />
       </MenuTrigger>
 
-      <MenuPopup align={align} className="min-w-56">
+      <MenuPopup
+        align={isSidebar ? "start" : align}
+        className={cn("min-w-56", showWorkspaceMenu && "min-w-64")}
+      >
         {user ? (
           <>
             <MenuGroup>
@@ -104,6 +162,17 @@ export function AuthUserButton({
             </MenuGroup>
 
             <MenuSeparator />
+
+            {showWorkspaceMenu ? (
+              <>
+                <OrganizationSwitcherMenu
+                  hideHeader
+                  onClose={() => setOpen(false)}
+                  onCreateOrganization={() => setCreateOrganizationOpen(true)}
+                />
+                <MenuSeparator />
+              </>
+            ) : null}
 
             {menuItems.map((item) => {
               const Icon = item.icon
@@ -160,6 +229,13 @@ export function AuthUserButton({
           </>
         ) : null}
       </MenuPopup>
+
+      {showWorkspaceMenu ? (
+        <CreateOrganizationDialog
+          onOpenChange={setCreateOrganizationOpen}
+          open={createOrganizationOpen}
+        />
+      ) : null}
     </Menu>
   )
 }
