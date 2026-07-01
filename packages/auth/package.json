@@ -33,9 +33,14 @@
       "require": "./dist/permissions/organization.cjs"
     },
     "./types": {
-      "types": "./dist/types/auth.types.d.ts",
-      "import": "./dist/types/auth.types.js",
-      "require": "./dist/types/auth.types.cjs"
+      "types": "./dist/types/auth.d.ts",
+      "import": "./dist/types/auth.js",
+      "require": "./dist/types/auth.cjs"
+    },
+    "./types/organization": {
+      "types": "./dist/types/organization.d.ts",
+      "import": "./dist/types/organization.js",
+      "require": "./dist/types/organization.cjs"
     },
     "./nextjs": {
       "types": "./dist/adapters/nextjs/index.d.ts",

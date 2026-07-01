@@ -18,7 +18,7 @@ import {
   ApiParam,
   ApiTags,
 } from "@nestjs/swagger"
-import type { JWTClaims } from "@workspace/auth/types"
+import type { JwtClaims } from "@workspace/auth/types"
 import { NotesListResponseSchema } from "@workspace/contracts"
 import { CurrentUser } from "../../common/decorators"
 import { ApiAuthErrorResponses } from "../../common/decorators/api-error-responses.decorator"
@@ -52,7 +52,7 @@ export class NotesController {
     description: "Returns all notes owned by the authenticated user.",
   })
   @ApiOkResponse({ type: NotesListApiResponseDto })
-  async list(@CurrentUser() user: JWTClaims) {
+  async list(@CurrentUser() user: JwtClaims) {
     const items = await this.queryBus.execute(new ListNotesQuery(user.id))
     return NotesListResponseSchema.parse({ items })
   }
@@ -64,7 +64,7 @@ export class NotesController {
     description: "Creates a new note for the authenticated user.",
   })
   @ApiCreatedResponse({ type: NoteApiResponseDto })
-  create(@CurrentUser() user: JWTClaims, @Body() body: CreateNoteDto) {
+  create(@CurrentUser() user: JwtClaims, @Body() body: CreateNoteDto) {
     return this.commandBus.execute(new CreateNoteCommand(user.id, body))
   }
 
@@ -75,7 +75,7 @@ export class NotesController {
     description: "Deletes up to 100 notes by id. Only owned notes are removed.",
   })
   @ApiOkResponse({ type: BulkDeleteNotesApiResponseDto })
-  bulkDelete(@CurrentUser() user: JWTClaims, @Body() body: BulkDeleteNotesDto) {
+  bulkDelete(@CurrentUser() user: JwtClaims, @Body() body: BulkDeleteNotesDto) {
     return this.commandBus.execute(new BulkDeleteNotesCommand(user.id, body))
   }
 
@@ -92,7 +92,7 @@ export class NotesController {
   })
   @ApiOkResponse({ type: NoteApiResponseDto })
   update(
-    @CurrentUser() user: JWTClaims,
+    @CurrentUser() user: JwtClaims,
     @Param("id") id: string,
     @Body() body: UpdateNoteDto
   ) {
@@ -112,7 +112,7 @@ export class NotesController {
     example: "507f1f77bcf86cd799439011",
   })
   @ApiNoContentResponse({ description: "Note deleted" })
-  remove(@CurrentUser() user: JWTClaims, @Param("id") id: string) {
+  remove(@CurrentUser() user: JwtClaims, @Param("id") id: string) {
     return this.commandBus.execute(new DeleteNoteCommand(user.id, id))
   }
 }

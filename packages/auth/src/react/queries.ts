@@ -1,9 +1,17 @@
 "use client"
 
 import { useQuery } from "@tanstack/react-query"
-import { useEffect } from "react"
+import { useEffect, useMemo } from "react"
 import { authClient, type AuthClient } from "../lib/auth-client"
+import type { ActiveOrganization } from "../types/organization"
 import { useAuthUiConfig } from "./auth-ui-config"
+import {
+  canAssignOrganizationRole,
+  formatOrganizationRoleLabel,
+  getStaticOrganizationRoleNames,
+  organizationPermissions,
+  type OrganizationPermissionKey,
+} from "./organization-permissions"
 import { authQueryKeys } from "./query-keys"
 import { useAuthSession } from "./use-auth-session"
 import { unwrapClientResult } from "./utils/client-call"
@@ -129,26 +137,28 @@ export function useActiveOrganization(
   client: AuthClient = authClient
 ) {
   const { enabled } = useAuthenticatedQueryEnabled(client)
-  return useQuery({
+  return useQuery<ActiveOrganization | null>({
     queryKey: authQueryKeys.activeOrganization(slug),
     enabled,
     queryFn: async () => {
       const { data: session } = client.useSession.get()
+      let organizationId = session?.session.activeOrganizationId
+
       if (slug) {
         const organizations = await unwrapClientResult(
           client.organization.list()
         )
-        return (
+        organizationId =
           organizations?.find(
             (organization: { slug?: string }) => organization.slug === slug
-          ) ?? null
-        )
+          )?.id ?? undefined
       }
-      const activeOrganizationId = session?.session.activeOrganizationId
-      if (!activeOrganizationId) return null
+
+      if (!organizationId) return null
+
       return unwrapClientResult(
         client.organization.getFullOrganization({
-          query: { organizationId: activeOrganizationId },
+          query: { organizationId },
         })
       )
     },
@@ -160,7 +170,7 @@ export function useFullOrganization(
   client: AuthClient = authClient
 ) {
   const { enabled } = useAuthenticatedQueryEnabled(client)
-  return useQuery({
+  return useQuery<ActiveOrganization | null>({
     queryKey: authQueryKeys.fullOrganization(organizationId),
     enabled: enabled && !!organizationId,
     queryFn: () =>
@@ -181,19 +191,42 @@ export function useListOrganizations(client: AuthClient = authClient) {
   })
 }
 
+function resolveActiveOrganizationId(
+  organizationId: string | undefined,
+  session: ReturnType<typeof useAuthSession>["data"]
+) {
+  return organizationId ?? session?.session.activeOrganizationId ?? undefined
+}
+
+export function useActiveMember(client: AuthClient = authClient) {
+  const { enabled, session } = useAuthenticatedQueryEnabled(client)
+  const organizationId = resolveActiveOrganizationId(undefined, session)
+
+  return useQuery({
+    queryKey: authQueryKeys.activeMember(organizationId),
+    enabled: enabled && !!organizationId,
+    queryFn: () => unwrapClientResult(client.organization.getActiveMember()),
+  })
+}
+
 export function useListOrganizationMembers(
   organizationId?: string,
   client: AuthClient = authClient
 ) {
-  const { enabled } = useAuthenticatedQueryEnabled(client)
+  const { enabled, session } = useAuthenticatedQueryEnabled(client)
+  const resolvedOrganizationId = resolveActiveOrganizationId(
+    organizationId,
+    session
+  )
+
   return useQuery({
-    queryKey: authQueryKeys.organizationMembers(organizationId),
-    enabled: enabled && !!organizationId,
+    queryKey: authQueryKeys.organizationMembers(resolvedOrganizationId),
+    enabled: enabled && !!resolvedOrganizationId,
     queryFn: () =>
       unwrapClientResult(
-        client.organization.listMembers({
-          query: { organizationId: organizationId! },
-        })
+        client.organization.listMembers(
+          organizationId ? { query: { organizationId } } : undefined
+        )
       ),
   })
 }
@@ -202,15 +235,20 @@ export function useListOrganizationInvitations(
   organizationId?: string,
   client: AuthClient = authClient
 ) {
-  const { enabled } = useAuthenticatedQueryEnabled(client)
+  const { enabled, session } = useAuthenticatedQueryEnabled(client)
+  const resolvedOrganizationId = resolveActiveOrganizationId(
+    organizationId,
+    session
+  )
+
   return useQuery({
-    queryKey: authQueryKeys.organizationInvitations(organizationId),
-    enabled: enabled && !!organizationId,
+    queryKey: authQueryKeys.organizationInvitations(resolvedOrganizationId),
+    enabled: enabled && !!resolvedOrganizationId,
     queryFn: () =>
       unwrapClientResult(
-        client.organization.listInvitations({
-          query: { organizationId: organizationId! },
-        })
+        client.organization.listInvitations(
+          organizationId ? { query: { organizationId } } : undefined
+        )
       ),
   })
 }
@@ -226,27 +264,108 @@ export function useListUserInvitations(client: AuthClient = authClient) {
 }
 
 export function useHasPermission(
-  input: {
-    organizationId: string
-    permission: Record<string, string[]>
-  },
+  permission: Record<string, string[]>,
+  organizationId?: string,
   client: AuthClient = authClient
 ) {
-  const { enabled } = useAuthenticatedQueryEnabled(client)
+  const { enabled, session } = useAuthenticatedQueryEnabled(client)
+  const resolvedOrganizationId = resolveActiveOrganizationId(
+    organizationId,
+    session
+  )
+
   return useQuery({
     queryKey: authQueryKeys.organizationPermission(
-      input.organizationId,
-      input.permission
+      resolvedOrganizationId ?? "",
+      permission
     ),
-    enabled: enabled && !!input.organizationId,
+    enabled: enabled && !!resolvedOrganizationId,
     queryFn: () =>
       unwrapClientResult(
         client.organization.hasPermission({
-          organizationId: input.organizationId,
-          permissions: input.permission,
+          permissions: permission,
+          ...(resolvedOrganizationId
+            ? { organizationId: resolvedOrganizationId }
+            : {}),
         })
       ),
   })
+}
+
+export function useOrganizationPermission(
+  permission: Record<string, string[]>,
+  organizationId?: string,
+  client: AuthClient = authClient
+) {
+  return useHasPermission(permission, organizationId, client)
+}
+
+export function useOrganizationPermissionByKey(
+  permissionKey: OrganizationPermissionKey,
+  organizationId?: string,
+  client: AuthClient = authClient
+) {
+  return useOrganizationPermission(
+    organizationPermissions[permissionKey],
+    organizationId,
+    client
+  )
+}
+
+export function useListOrganizationRoles(
+  organizationId?: string,
+  client: AuthClient = authClient
+) {
+  const { enabled, session } = useAuthenticatedQueryEnabled(client)
+  const resolvedOrganizationId = resolveActiveOrganizationId(
+    organizationId,
+    session
+  )
+
+  return useQuery({
+    queryKey: authQueryKeys.organizationRoles(resolvedOrganizationId),
+    enabled: enabled && !!resolvedOrganizationId,
+    queryFn: async () => {
+      try {
+        return await unwrapClientResult(
+          client.organization.listRoles(
+            organizationId ? { query: { organizationId } } : undefined
+          )
+        )
+      } catch {
+        return getStaticOrganizationRoleNames().map((role) => ({
+          role,
+          permission: {},
+        }))
+      }
+    },
+  })
+}
+
+export function useAssignableOrganizationRoles(organizationId?: string) {
+  const { data: activeMember, isPending: memberPending } = useActiveMember()
+  const { data: roleRecords, isPending: rolesPending } =
+    useListOrganizationRoles(organizationId)
+  const { data: canUpdateMembers, isPending: permissionPending } =
+    useOrganizationPermissionByKey("updateMember", organizationId)
+
+  const assignableRoles = useMemo(() => {
+    if (!canUpdateMembers?.success) return []
+
+    const roleNames =
+      roleRecords?.map((record: { role: string }) => record.role) ??
+      getStaticOrganizationRoleNames()
+
+    return roleNames.filter((roleName: string) =>
+      canAssignOrganizationRole(activeMember?.role, roleName)
+    )
+  }, [activeMember?.role, canUpdateMembers?.success, roleRecords])
+
+  return {
+    roles: assignableRoles,
+    formatOrganizationRoleLabel,
+    isPending: rolesPending || memberPending || permissionPending,
+  }
 }
 
 export function useIsUsernameAvailable(

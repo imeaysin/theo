@@ -1,5 +1,5 @@
-import type { JWTClaims } from "@workspace/auth/types"
+import type { JwtClaims } from "@workspace/auth/types"
 
 export class GetMeQuery {
-  constructor(public readonly user: JWTClaims) {}
+  constructor(public readonly user: JwtClaims) {}
 }

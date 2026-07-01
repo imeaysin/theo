@@ -7,8 +7,8 @@ import {
 } from "better-auth/client/plugins"
 import * as SecureStore from "expo-secure-store"
 import { parseClientPublicEnv } from "@workspace/config/client"
-import { ac, roles } from "../../permissions/platform"
-import { ac as orgAc, roles as orgRoles } from "../../permissions/organization"
+import { adminPluginOptions } from "../../config/admin-plugin"
+import { organizationPluginOptions } from "../../config/organization-plugin"
 
 const TOKEN_KEY = "__ba_token"
 
@@ -20,13 +20,9 @@ export const mobileAuthClient = createAuthClient({
   baseURL: authUrl,
   plugins: [
     jwtClient(),
-    adminClient({ ac, roles }),
+    adminClient(adminPluginOptions),
     twoFactorClient(),
-    organizationClient({
-      ac: orgAc,
-      roles: orgRoles,
-      dynamicAccessControl: { enabled: true },
-    }),
+    organizationClient(organizationPluginOptions),
   ],
   fetchOptions: {
     onSuccess: async (ctx) => {

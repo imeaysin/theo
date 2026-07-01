@@ -138,6 +138,7 @@ export interface ShellProps extends ShellMainProps {
   commandPlaceholder?: string
   enableCommandPalette?: boolean
   userControl?: React.ReactNode
+  sidebarHeader?: React.ReactNode
 
   banners?: React.ReactNode
   withoutMain?: boolean
@@ -163,6 +164,7 @@ export function Shell({
   commandPlaceholder,
   enableCommandPalette,
   userControl,
+  sidebarHeader,
   banners,
   withoutMain,
   children,
@@ -205,6 +207,7 @@ export function Shell({
               user={user}
               userLoading={userLoading}
               userMenuItems={userMenuItems}
+              sidebarHeader={sidebarHeader}
             />
 
             <main

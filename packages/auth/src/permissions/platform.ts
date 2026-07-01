@@ -51,5 +51,22 @@ export const adminRole = ac.newRole({
   team: ["invite", "remove", "update-role"],
 })
 
-export const roles = { guestRole, userRole, managerRole, adminRole }
-export type RoleName = "guest" | "user" | "manager" | "admin"
+export const platformRoles = {
+  guest: guestRole,
+  user: userRole,
+  manager: managerRole,
+  admin: adminRole,
+} as const
+
+export const roles = platformRoles
+
+export function checkPlatformPermission(
+  platformRole: string,
+  resource: string,
+  action: string
+): boolean {
+  const role = platformRoles[platformRole as keyof typeof platformRoles]
+  if (!role) return false
+
+  return role.authorize({ [resource]: [action] }).success
+}

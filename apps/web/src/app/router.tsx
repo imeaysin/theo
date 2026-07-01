@@ -9,6 +9,7 @@ import { accountRoutes } from "@/features/account/routes"
 import { authRoutes } from "@/features/auth/routes"
 import { dashboardRoutes } from "@/features/dashboard/routes"
 import { notesRoutes } from "@/features/notes/routes"
+import { organizationRoutes } from "@/features/organization/routes"
 import { homeRoutes } from "@/features/home/routes"
 import { ProtectedRoute } from "@/routing/protected-route"
 import { routeSegments, routes } from "@/config/routes"
@@ -40,6 +41,7 @@ export const router = createBrowserRouter([
               ...dashboardRoutes,
               ...notesRoutes,
               ...accountRoutes,
+              ...organizationRoutes,
             ],
           },
         ],

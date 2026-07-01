@@ -9,7 +9,7 @@ import {
   ApiOperation,
   ApiTags,
 } from "@nestjs/swagger"
-import type { JWTClaims } from "@workspace/auth/types"
+import type { JwtClaims } from "@workspace/auth/types"
 import { DomainErrorCode } from "@workspace/contracts"
 import { CurrentUser } from "../../common/decorators"
 import { ApiAuthErrorResponses } from "../../common/decorators/api-error-responses.decorator"
@@ -51,7 +51,7 @@ export class UploadsController {
     FileInterceptor("file", { limits: { fileSize: MAX_BYTES, files: 1 } })
   )
   upload(
-    @CurrentUser() user: JWTClaims,
+    @CurrentUser() user: JwtClaims,
     @UploadedFile()
     file?: {
       buffer: Buffer

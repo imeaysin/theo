@@ -410,14 +410,16 @@ export function useUpdateOrganization(client: AuthClient = authClient) {
   const invalidate = useInvalidateAuthQueries()
   return useMutation({
     mutationFn: async (input: {
-      organizationId: string
+      organizationId?: string
       name?: string
       slug?: string
       logo?: string | null
     }) =>
       unwrapClientResult(
         client.organization.update({
-          organizationId: input.organizationId,
+          ...(input.organizationId
+            ? { organizationId: input.organizationId }
+            : {}),
           data: {
             name: input.name,
             slug: input.slug,
@@ -451,10 +453,19 @@ export function useInviteMember(client: AuthClient = authClient) {
   const invalidate = useInvalidateAuthQueries()
   return useMutation({
     mutationFn: async (input: {
-      organizationId: string
       email: string
       role: string
-    }) => unwrapClientResult(client.organization.inviteMember(input)),
+      organizationId?: string
+    }) =>
+      unwrapClientResult(
+        client.organization.inviteMember({
+          email: input.email,
+          role: input.role,
+          ...(input.organizationId
+            ? { organizationId: input.organizationId }
+            : {}),
+        })
+      ),
     onSuccess: () => invalidate(),
   })
 }
@@ -462,11 +473,13 @@ export function useInviteMember(client: AuthClient = authClient) {
 export function useRemoveMember(client: AuthClient = authClient) {
   const invalidate = useInvalidateAuthQueries()
   return useMutation({
-    mutationFn: async (input: { organizationId: string; memberId: string }) =>
+    mutationFn: async (input: { memberId: string; organizationId?: string }) =>
       unwrapClientResult(
         client.organization.removeMember({
-          organizationId: input.organizationId,
           memberIdOrEmail: input.memberId,
+          ...(input.organizationId
+            ? { organizationId: input.organizationId }
+            : {}),
         })
       ),
     onSuccess: () => invalidate(),
@@ -477,10 +490,19 @@ export function useUpdateMemberRole(client: AuthClient = authClient) {
   const invalidate = useInvalidateAuthQueries()
   return useMutation({
     mutationFn: async (input: {
-      organizationId: string
       memberId: string
       role: string
-    }) => unwrapClientResult(client.organization.updateMemberRole(input)),
+      organizationId?: string
+    }) =>
+      unwrapClientResult(
+        client.organization.updateMemberRole({
+          memberId: input.memberId,
+          role: input.role,
+          ...(input.organizationId
+            ? { organizationId: input.organizationId }
+            : {}),
+        })
+      ),
     onSuccess: () => invalidate(),
   })
 }
@@ -488,8 +510,17 @@ export function useUpdateMemberRole(client: AuthClient = authClient) {
 export function useLeaveOrganization(client: AuthClient = authClient) {
   const invalidate = useInvalidateAuthQueries()
   return useMutation({
-    mutationFn: async (input: { organizationId: string }) =>
-      unwrapClientResult(client.organization.leave(input)),
+    mutationFn: async (input: { organizationId?: string } = {}) => {
+      const organizationId =
+        input.organizationId ??
+        client.useSession.get().data?.session.activeOrganizationId
+
+      if (!organizationId) {
+        throw new Error("No active organization")
+      }
+
+      return unwrapClientResult(client.organization.leave({ organizationId }))
+    },
     onSuccess: () => invalidate(),
   })
 }

@@ -5,6 +5,7 @@ import type {
   ShellLinkProps,
 } from "@workspace/ui/components/shell"
 import { Logo } from "@workspace/ui/components/logo"
+import { AppOrganizationSwitcher } from "@/features/auth/components/app-organization-switcher"
 import { AppUserButton } from "@/features/auth/components/app-user-button"
 import { useAppShellConfig } from "@/features/shell/use-app-shell-config"
 
@@ -31,10 +32,11 @@ export function AppLayout() {
       navigation={shell.navigation}
       onSignOut={shell.onSignOut}
       pathname={location.pathname}
+      sidebarHeader={<AppOrganizationSwitcher />}
+      userControl={<AppUserButton />}
       userLoading={shell.userLoading}
       withoutMain
       user={shell.user}
-      userControl={<AppUserButton />}
       userMenuItems={shell.userMenuItems}
     >
       <Outlet />

@@ -9,7 +9,9 @@ export type {
 } from "./auth-ui-config"
 export {
   useAccountInfo,
+  useActiveMember,
   useActiveOrganization,
+  useAssignableOrganizationRoles,
   useAuthenticate,
   useAuthSession,
   useFullOrganization,
@@ -20,13 +22,31 @@ export {
   useListDeviceSessions,
   useListOrganizationInvitations,
   useListOrganizationMembers,
+  useListOrganizationRoles,
   useListOrganizations,
   useListPasskeys,
   useListSessions,
   useListUserInvitations,
+  useOrganizationPermission,
+  useOrganizationPermissionByKey,
   useSession,
   useUser,
 } from "./queries"
+export {
+  canAssignOrganizationRole,
+  checkOrganizationRolePermission,
+  formatOrganizationRoleLabel,
+  getStaticOrganizationRoleNames,
+  organizationPermissions,
+  organizationAc,
+  organizationStatement,
+  parseOrganizationRoles,
+  staticOrganizationRoles,
+} from "./organization-permissions"
+export type {
+  OrganizationPermissionKey,
+  OrganizationRoleName,
+} from "./organization-permissions"
 export {
   useAcceptInvitation,
   useAddPasskey,

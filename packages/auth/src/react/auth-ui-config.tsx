@@ -31,6 +31,8 @@ export interface AuthRoutes {
   twoFactor: string
   settingsAccount: string
   settingsSecurity: string
+  organizationSettings: string
+  organizationPeople: string
   defaultAuthenticated: string
 }
 

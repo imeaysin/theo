@@ -18,6 +18,10 @@ export const authQueryKeys = {
     [...authQueryKeys.all, "organization-members", organizationId] as const,
   organizationInvitations: (organizationId?: string) =>
     [...authQueryKeys.all, "organization-invitations", organizationId] as const,
+  organizationRoles: (organizationId?: string) =>
+    [...authQueryKeys.all, "organization-roles", organizationId] as const,
+  activeMember: (organizationId?: string) =>
+    [...authQueryKeys.all, "active-member", organizationId] as const,
   userInvitations: () => [...authQueryKeys.all, "user-invitations"] as const,
   organizationPermission: (
     organizationId: string,

@@ -32,6 +32,8 @@ export function AuthUiConfigBridge({
         twoFactor: routes.twoFactor,
         settingsAccount: routes.settingsAccount,
         settingsSecurity: routes.settingsSecurity,
+        organizationSettings: routes.organizationSettings,
+        organizationPeople: routes.organizationPeople,
         defaultAuthenticated: defaultAuthenticatedRoute,
       }}
       siteName="Theo"

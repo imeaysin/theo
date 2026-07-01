@@ -17,14 +17,9 @@ import {
   sendOtpEmail,
   sendOrganizationInvitationEmail,
 } from "@workspace/email"
-import {
-  ac,
-  adminRole,
-  userRole,
-  managerRole,
-  guestRole,
-} from "../permissions/platform"
-import { ac as orgAc, roles as orgRoles } from "../permissions/organization"
+import { adminPluginOptions } from "../config/admin-plugin"
+import { organizationPluginOptions } from "../config/organization-plugin"
+import type { JwtPayload } from "../config/jwt"
 import { authDb, authMongoClient } from "../db/mongo"
 
 function socialProviders() {
@@ -128,7 +123,7 @@ export function createAuth() {
               name: user.name,
               activeOrganizationId,
               organizationRole,
-            }
+            } satisfies JwtPayload
           },
         },
       }),
@@ -136,14 +131,8 @@ export function createAuth() {
       bearer(),
 
       admin({
-        ac,
+        ...adminPluginOptions,
         defaultRole: "user",
-        roles: {
-          guest: guestRole,
-          user: userRole,
-          manager: managerRole,
-          admin: adminRole,
-        },
       }),
 
       twoFactor({ issuer: env.AUTH_TOTP_ISSUER }),
@@ -167,14 +156,13 @@ export function createAuth() {
       }),
 
       organization({
-        ac: orgAc,
-        roles: orgRoles,
+        ...organizationPluginOptions,
         allowUserToCreateOrganization: true,
         organizationLimit: 10,
         membershipLimit: 100,
         invitationExpiresIn: 60 * 60 * 24 * 7,
         dynamicAccessControl: {
-          enabled: true,
+          ...organizationPluginOptions.dynamicAccessControl,
           maximumRolesPerOrganization: 20,
         },
         sendInvitationEmail: async (data) => {
@@ -193,7 +181,6 @@ export function createAuth() {
   })
 }
 
-/** Better Auth singleton — use this in Next.js routes and server code. */
 export const auth = createAuth()
 
 export type Auth = ReturnType<typeof createAuth>

@@ -8,7 +8,7 @@ import {
 } from "@nestjs/swagger"
 import { CurrentUser } from "../../common/decorators"
 import { ApiAuthErrorResponses } from "../../common/decorators/api-error-responses.decorator"
-import type { JWTClaims } from "@workspace/auth/types"
+import type { JwtClaims } from "@workspace/auth/types"
 import { MeApiResponseDto } from "./me.dto"
 import { GetMeQuery } from "./queries/get-me.query"
 
@@ -25,7 +25,7 @@ export class MeController {
     description: "Returns JWT claims for the bearer token.",
   })
   @ApiOkResponse({ type: MeApiResponseDto })
-  getMe(@CurrentUser() user: JWTClaims) {
+  getMe(@CurrentUser() user: JwtClaims) {
     return this.queryBus.execute(new GetMeQuery(user))
   }
 }
