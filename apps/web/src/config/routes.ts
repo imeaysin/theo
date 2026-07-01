@@ -9,6 +9,7 @@ export const routeSegments = {
     resetPassword: "reset-password",
     verifyEmail: "verify-email",
     twoFactor: "two-factor",
+    acceptInvitation: "accept-invitation",
   },
   app: {
     root: "app",
@@ -39,6 +40,7 @@ export const routes = {
   ),
   verifyEmail: toPath(routeSegments.auth.root, routeSegments.auth.verifyEmail),
   twoFactor: toPath(routeSegments.auth.root, routeSegments.auth.twoFactor),
+  acceptInvitation: "/accept-invitation",
   dashboard: toPath(routeSegments.app.root, routeSegments.app.dashboard),
   notes: toPath(routeSegments.app.root, routeSegments.app.notes),
   settings: toPath(routeSegments.app.root, routeSegments.app.settings),

@@ -20,8 +20,8 @@ import {
 import { adminPluginOptions } from "../config/admin-plugin"
 import { organizationPluginOptions } from "../config/organization-plugin"
 import type { JwtPayload } from "../config/jwt"
-import { authCollections } from "../permissions/collections"
 import { authDb, authMongoClient } from "../db/mongo"
+import { findOrganizationMemberRole } from "./organization-role"
 import {
   ensureDefaultOrganization,
   ensureSessionActiveOrganization,
@@ -129,18 +129,9 @@ export function createAuth() {
           expirationTime: env.AUTH_JWT_EXPIRATION,
           definePayload: async ({ user, session }) => {
             const activeOrganizationId = session.activeOrganizationId ?? null
-            let organizationRole: string | null = null
-
-            if (activeOrganizationId) {
-              const member = await authDb
-                .collection(authCollections.member)
-                .findOne({
-                  organizationId: activeOrganizationId,
-                  userId: user.id,
-                })
-              organizationRole =
-                typeof member?.role === "string" ? member.role : null
-            }
+            const organizationRole = activeOrganizationId
+              ? await findOrganizationMemberRole(activeOrganizationId, user.id)
+              : null
 
             return {
               id: user.id,

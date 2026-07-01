@@ -7,13 +7,19 @@ import { absoluteAppUrl, defaultAuthenticatedRoute } from "@/config/routes"
 
 const providers: AuthOAuthProvider[] = ["google", "github"]
 
-export function AuthButtons() {
+type AuthButtonsProps = {
+  callbackPath?: string
+}
+
+export function AuthButtons({
+  callbackPath = defaultAuthenticatedRoute,
+}: AuthButtonsProps) {
   const socialSignIn = useSocialSignInMutation()
 
   function handleProviderClick(provider: AuthOAuthProvider) {
     const input: SocialSignInInput = {
       provider,
-      callbackURL: absoluteAppUrl(defaultAuthenticatedRoute),
+      callbackURL: absoluteAppUrl(callbackPath),
     }
     socialSignIn.mutate(input)
   }

@@ -32,6 +32,7 @@ modules/<feature>/
 
 - **Unit:** `test/unit/**/*.spec.ts` — run via `pnpm test` in this app.
 - **E2e:** `test/e2e/**/*.e2e-spec.ts` — run via `pnpm test:e2e` (needs MongoDB).
+- **Auth smoke (optional, local):** `bash apps/api/scripts/auth-flow-test.sh` with `pnpm dev:api` running.
 - Shared setup: `test/jest-setup.ts`.
 
 ## Adding an endpoint

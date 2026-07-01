@@ -1,12 +1,21 @@
 import { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { AuthOtpInput, AuthPageBody, AuthPageHeader } from "@workspace/ui/auth"
 import { toastManager } from "@workspace/ui/components/toast"
 import { useVerifyTotpMutation } from "@workspace/auth/react"
 import { defaultAuthenticatedRoute, routes } from "@/config/routes"
+import {
+  getSafeRedirectPath,
+  withAuthRedirectQuery,
+} from "@/routing/safe-redirect"
 
 export function TwoFactorPage() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const redirectPath = getSafeRedirectPath(
+    searchParams.get("redirect"),
+    defaultAuthenticatedRoute
+  )
   const verifyTotp = useVerifyTotpMutation()
   const [code, setCode] = useState("")
   const [invalid, setInvalid] = useState(false)
@@ -15,7 +24,7 @@ export function TwoFactorPage() {
     setInvalid(false)
     try {
       await verifyTotp.mutateAsync({ code: value })
-      navigate(defaultAuthenticatedRoute)
+      navigate(redirectPath)
     } catch {
       setInvalid(true)
       setCode("")
@@ -32,7 +41,11 @@ export function TwoFactorPage() {
       footer={
         <Link
           className="font-sans text-sm text-muted-foreground underline underline-offset-2 transition-colors hover:text-foreground"
-          to={routes.signIn}
+          to={withAuthRedirectQuery(
+            routes.signIn,
+            searchParams.get("redirect"),
+            defaultAuthenticatedRoute
+          )}
         >
           Back to sign in
         </Link>

@@ -31,6 +31,23 @@ skip_test() {
   skip=$((skip + 1))
 }
 
+check_output_contains() {
+  local name="$1"
+  local output="$2"
+  shift 2
+
+  for pattern in "$@"; do
+    if ! printf '%s' "$output" | grep -qi "$pattern"; then
+      echo "FAIL  $name (missing: $pattern)"
+      fail=$((fail + 1))
+      return
+    fi
+  done
+
+  echo "PASS  $name"
+  pass=$((pass + 1))
+}
+
 mint_verify_token() {
   (cd "$SCRIPT_DIR/.." && node "$SCRIPT_DIR/create-verify-token.mjs" "$1" 2>/dev/null) | tr -d '\r\n'
 }
@@ -108,9 +125,28 @@ if [ "$VERIFIED" = true ]; then
 
   SESSION=$(curl -s -b "$COOKIE" -c "$COOKIE" "$BASE/api/auth/get-session")
   check "session active" "echo '$SESSION' | grep -q '$EMAIL'"
+
+  ORG_LIST_EARLY=$(curl -s -b "$COOKIE" -H "Origin: $ORIGIN" "$BASE/api/auth/organization/list")
+  check_output_contains "default workspace provisioned on sign-up" "$ORG_LIST_EARLY" workspace
+  check_output_contains "session has activeOrganizationId after sign-in" "$SESSION" activeOrganizationId
+
+  JWT_EARLY=$(curl -s -b "$COOKIE" -c "$COOKIE" -H "Origin: $ORIGIN" "$BASE/api/auth/token" | grep -o '"token":"[^"]*"' | head -1 | cut -d'"' -f4 || true)
+  if [ -n "$JWT_EARLY" ]; then
+    ME_EARLY=$(curl -s -H "Authorization: Bearer $JWT_EARLY" "$BASE/v1/me")
+    check_output_contains "JWT activeOrganizationId after sign-in" "$ME_EARLY" activeOrganizationId
+    check_output_contains "JWT organizationRole is owner" "$ME_EARLY" organizationRole owner
+    JWT="$JWT_EARLY"
+  else
+    skip_test "JWT activeOrganizationId after sign-in"
+    skip_test "JWT organizationRole is owner"
+  fi
 else
   skip_test "sign-in after verify (verification incomplete)"
   skip_test "session active"
+  skip_test "default workspace provisioned on sign-up"
+  skip_test "session has activeOrganizationId after sign-in"
+  skip_test "JWT activeOrganizationId after sign-in"
+  skip_test "JWT organizationRole is owner"
 fi
 
 # --- JWT + protected route ---
@@ -153,6 +189,13 @@ if [ "$VERIFIED" = true ]; then
       -H "Origin: $ORIGIN" \
       -d "{\"name\":\"Edge Org 2\",\"slug\":\"$SLUG\"}")
     check "duplicate org slug rejected" "echo '$ORG_DUP' | grep -qiE 'slug|exists|already|ORGANIZATION'"
+    INVITE_EMAIL="invite-$(date +%s)@example.com"
+    INVITE=$(curl -s -b "$COOKIE" -c "$COOKIE" -X POST "$BASE/api/auth/organization/invite-member" \
+      -H 'Content-Type: application/json' \
+      -H "Origin: $ORIGIN" \
+      -d "{\"email\":\"$INVITE_EMAIL\",\"role\":\"member\"}")
+    check_output_contains "owner can invite member" "$INVITE" id email
+    check "accept invitation without session blocked" "curl -s -o /dev/null -w '%{http_code}' -X POST '$BASE/api/auth/organization/accept-invitation' -H 'Content-Type: application/json' -d '{\"invitationId\":\"fake\"}' | grep -q '401'"
     if [ -n "$JWT" ]; then
       ME=$(curl -s -H "Authorization: Bearer $JWT" "$BASE/v1/me")
       check "JWT includes activeOrganizationId" "echo '$ME' | grep -q 'activeOrganizationId'"
@@ -162,11 +205,15 @@ if [ "$VERIFIED" = true ]; then
   else
     skip_test "create organization (no session)"
     skip_test "duplicate org slug rejected"
+    skip_test "owner can invite member"
+    skip_test "accept invitation without session blocked"
     skip_test "JWT includes activeOrganizationId"
   fi
 else
   skip_test "create organization (no session)"
   skip_test "duplicate org slug rejected"
+  skip_test "owner can invite member"
+  skip_test "accept invitation without session blocked"
   skip_test "JWT includes activeOrganizationId"
 fi
 
@@ -197,7 +244,7 @@ check "email-otp verify wrong code" "curl -s -X POST '$BASE/api/auth/email-otp/v
 if [ "$VERIFIED" = true ]; then
   check "org wrong origin blocked" "curl -s -o /dev/null -w '%{http_code}' -b '$COOKIE' -X POST '$BASE/api/auth/organization/create' -H 'Content-Type: application/json' -H 'Origin: http://evil.example' -d '{\"name\":\"X\",\"slug\":\"evil-$(date +%s)\"}' | grep -qE '^(401|403)$'"
   ORG_LIST=$(curl -s -b "$COOKIE" -H "Origin: $ORIGIN" "$BASE/api/auth/organization/list")
-  check "list organizations" "echo '$ORG_LIST' | grep -qE '\"id\"|organizations|slug'"
+  check_output_contains "list organizations" "$ORG_LIST" id slug
 fi
 
 # --- Sign out ---

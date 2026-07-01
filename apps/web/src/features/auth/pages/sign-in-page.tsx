@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Link, Navigate, useNavigate } from "react-router-dom"
+import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { signInSchema, type SignInInput } from "@workspace/contracts"
 import { AuthDivider, AuthPageBody, AuthPageHeader } from "@workspace/ui/auth"
@@ -12,6 +12,10 @@ import { AuthButtons } from "@/features/auth/components/auth-buttons"
 import { useSignInMutation, useAuthSession } from "@workspace/auth/react"
 import { defaultAuthenticatedRoute, routes } from "@/config/routes"
 import { site } from "@/config/site"
+import {
+  getSafeRedirectPath,
+  withAuthRedirectQuery,
+} from "@/routing/safe-redirect"
 
 function getSignInErrorMessage(error: unknown) {
   if (error && typeof error === "object" && "code" in error) {
@@ -25,6 +29,11 @@ function getSignInErrorMessage(error: unknown) {
 
 export function SignInPage() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const redirectPath = getSafeRedirectPath(
+    searchParams.get("redirect"),
+    defaultAuthenticatedRoute
+  )
   const { data: session, isPending } = useAuthSession()
   const signIn = useSignInMutation()
   const form = useForm<SignInInput>({
@@ -37,17 +46,23 @@ export function SignInPage() {
   }
 
   if (session) {
-    return <Navigate replace to={defaultAuthenticatedRoute} />
+    return <Navigate replace to={redirectPath} />
   }
 
   async function onSubmit(values: SignInInput) {
     try {
       const data = await signIn.mutateAsync(values)
       if (data && "twoFactorRedirect" in data && data.twoFactorRedirect) {
-        navigate(routes.twoFactor)
+        navigate(
+          withAuthRedirectQuery(
+            routes.twoFactor,
+            searchParams.get("redirect"),
+            defaultAuthenticatedRoute
+          )
+        )
         return
       }
-      navigate(defaultAuthenticatedRoute)
+      navigate(redirectPath)
     } catch (error) {
       const message = getSignInErrorMessage(error)
       toastManager.add({
@@ -70,7 +85,11 @@ export function SignInPage() {
           Don&apos;t have an account?{" "}
           <Link
             className="text-foreground underline underline-offset-2 transition-colors hover:text-foreground/80"
-            to={routes.signUp}
+            to={withAuthRedirectQuery(
+              routes.signUp,
+              searchParams.get("redirect"),
+              defaultAuthenticatedRoute
+            )}
           >
             Sign up
           </Link>
@@ -82,7 +101,7 @@ export function SignInPage() {
         title={`Welcome to ${site.name}`}
       />
 
-      <AuthButtons />
+      <AuthButtons callbackPath={redirectPath} />
 
       <AuthDivider />
 

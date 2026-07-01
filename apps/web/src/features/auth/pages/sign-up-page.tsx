@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Link, Navigate, useNavigate } from "react-router-dom"
+import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { signUpSchema, type SignUpInput } from "@workspace/contracts"
 import { AuthDivider, AuthPageBody, AuthPageHeader } from "@workspace/ui/auth"
@@ -16,9 +16,18 @@ import {
   routes,
 } from "@/config/routes"
 import { site } from "@/config/site"
+import {
+  getSafeRedirectPath,
+  withAuthRedirectQuery,
+} from "@/routing/safe-redirect"
 
 export function SignUpPage() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const redirectPath = getSafeRedirectPath(
+    searchParams.get("redirect"),
+    defaultAuthenticatedRoute
+  )
   const { data: session, isPending } = useAuthSession()
   const signUp = useSignUpMutation()
   const form = useForm<SignUpInput>({
@@ -36,7 +45,7 @@ export function SignUpPage() {
   }
 
   if (session) {
-    return <Navigate replace to={defaultAuthenticatedRoute} />
+    return <Navigate replace to={redirectPath} />
   }
 
   async function onSubmit(values: SignUpInput) {
@@ -69,7 +78,11 @@ export function SignUpPage() {
           Already have an account?{" "}
           <Link
             className="text-foreground underline underline-offset-2 transition-colors hover:text-foreground/80"
-            to={routes.signIn}
+            to={withAuthRedirectQuery(
+              routes.signIn,
+              searchParams.get("redirect"),
+              defaultAuthenticatedRoute
+            )}
           >
             Sign in
           </Link>
@@ -81,7 +94,7 @@ export function SignUpPage() {
         title={`Join ${site.name}`}
       />
 
-      <AuthButtons />
+      <AuthButtons callbackPath={redirectPath} />
 
       <AuthDivider />
 

@@ -6,6 +6,7 @@ import { AppLayout } from "@/components/layouts/app-layout"
 import { RootLayout } from "@/components/layouts/root-layout"
 import { RouterLayout } from "@/components/layouts/router-layout"
 import { accountRoutes } from "@/features/account/routes"
+import { AcceptInvitationPage } from "@/features/auth/pages/accept-invitation-page"
 import { authRoutes } from "@/features/auth/routes"
 import { dashboardRoutes } from "@/features/dashboard/routes"
 import { notesRoutes } from "@/features/notes/routes"
@@ -26,6 +27,11 @@ export const router = createBrowserRouter([
         path: routeSegments.auth.root,
         element: <AuthLayout />,
         children: authRoutes,
+      },
+      {
+        path: routes.acceptInvitation,
+        element: <AuthLayout />,
+        children: [{ index: true, element: <AcceptInvitationPage /> }],
       },
       {
         element: <ProtectedRoute />,

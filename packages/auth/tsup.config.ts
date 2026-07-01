@@ -35,6 +35,7 @@ export default defineConfig((options): Options | Options[] => [
       auth: "src/lib/auth.ts",
       "adapters/nextjs/server": "src/adapters/nextjs/server.ts",
     },
+    treeshake: false,
     dts: false,
     clean: !options.watch,
     onSuccess:

@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { authDb } from "../../db/mongo"
+import { authDb, ensureAuthMongoConnected, toMongoId } from "../../db/mongo"
 import { authCollections } from "../collections"
 import {
   ac,
@@ -18,10 +18,12 @@ async function authorizeDynamicRole<R extends OrganizationResource>(
   resource: R,
   action: OrganizationAction<R>
 ): Promise<boolean> {
+  await ensureAuthMongoConnected()
+
   const record = await authDb
     .collection(authCollections.organizationRole)
     .findOne({
-      organizationId,
+      organizationId: toMongoId(organizationId),
       role: roleName.trim(),
     })
   if (!record || typeof record.permission !== "string") return false
