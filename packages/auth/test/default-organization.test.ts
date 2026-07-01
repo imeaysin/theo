@@ -1,15 +1,13 @@
 import type { GenericEndpointContext } from "better-auth"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import {
-  buildDefaultOrganization,
-  ensureDefaultOrganization,
+  buildOrganizationSlug,
   ensureSessionActiveOrganization,
+  sanitizeOrganizationSlug,
 } from "../src/lib/default-organization"
 
 const mockAdapter = {
   listOrganizations: vi.fn(),
-  createOrganization: vi.fn(),
-  createMember: vi.fn(),
 }
 
 vi.mock("better-auth/plugins/organization", () => ({
@@ -30,84 +28,17 @@ function createContext(
   } as GenericEndpointContext
 }
 
-describe("buildDefaultOrganization", () => {
-  it("builds a readable workspace name and stable slug", () => {
-    const result = buildDefaultOrganization({
-      id: "user-12345678",
-      name: "Ada Lovelace",
-    })
-
-    expect(result).toEqual({
-      name: "Ada Lovelace's Workspace",
-      slug: "ada-lovelace-user-123",
-    })
-  })
-
-  it("falls back when the user name is empty", () => {
-    const result = buildDefaultOrganization({
-      id: "abcdef12",
-      name: "   ",
-    })
-
-    expect(result).toEqual({
-      name: "My's Workspace",
-      slug: "my-abcdef12",
-    })
+describe("sanitizeOrganizationSlug", () => {
+  it("normalizes names into URL-safe slugs", () => {
+    expect(sanitizeOrganizationSlug("Acme Inc.")).toBe("acme-inc")
   })
 })
 
-describe("ensureDefaultOrganization", () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
-  it("returns null when hook context is missing", async () => {
-    await expect(
-      ensureDefaultOrganization(null, { id: "u1", name: "User" })
-    ).resolves.toBeNull()
-  })
-
-  it("returns the first existing organization without creating another", async () => {
-    mockAdapter.listOrganizations.mockResolvedValueOnce([
-      { id: "org-existing", name: "Existing", slug: "existing" },
-    ])
-
-    const organizationId = await ensureDefaultOrganization(
-      createContext({ id: "u1", name: "User" }),
-      { id: "u1", name: "User" }
+describe("buildOrganizationSlug", () => {
+  it("appends a stable user suffix", () => {
+    expect(buildOrganizationSlug("Ada Lovelace", "user-12345678")).toBe(
+      "ada-lovelace-user-123"
     )
-
-    expect(organizationId).toBe("org-existing")
-    expect(mockAdapter.createOrganization).not.toHaveBeenCalled()
-    expect(mockAdapter.createMember).not.toHaveBeenCalled()
-  })
-
-  it("creates a default workspace and owner membership for new users", async () => {
-    mockAdapter.listOrganizations.mockResolvedValueOnce([])
-    mockAdapter.createOrganization.mockResolvedValueOnce({
-      id: "org-new",
-      name: "User's Workspace",
-      slug: "user-u1",
-      createdAt: new Date(),
-    })
-
-    const organizationId = await ensureDefaultOrganization(
-      createContext({ id: "u1", name: "User" }),
-      { id: "u1", name: "User" }
-    )
-
-    expect(organizationId).toBe("org-new")
-    expect(mockAdapter.createOrganization).toHaveBeenCalledWith({
-      organization: expect.objectContaining({
-        name: "User's Workspace",
-        slug: "user-u1",
-      }),
-    })
-    expect(mockAdapter.createMember).toHaveBeenCalledWith({
-      userId: "u1",
-      organizationId: "org-new",
-      role: "owner",
-    })
   })
 })
 
@@ -127,14 +58,10 @@ describe("ensureSessionActiveOrganization", () => {
     ).resolves.toEqual({ data: session })
   })
 
-  it("sets activeOrganizationId when a default workspace is provisioned", async () => {
-    mockAdapter.listOrganizations.mockResolvedValueOnce([])
-    mockAdapter.createOrganization.mockResolvedValueOnce({
-      id: "org-new",
-      name: "User's Workspace",
-      slug: "user-u1",
-      createdAt: new Date(),
-    })
+  it("sets activeOrganizationId from the first existing workspace", async () => {
+    mockAdapter.listOrganizations.mockResolvedValueOnce([
+      { id: "org-existing", name: "Existing", slug: "existing" },
+    ])
 
     const session = { userId: "u1" }
     const context = createContext({ id: "u1", name: "User" })
@@ -144,8 +71,19 @@ describe("ensureSessionActiveOrganization", () => {
     ).resolves.toEqual({
       data: {
         userId: "u1",
-        activeOrganizationId: "org-new",
+        activeOrganizationId: "org-existing",
       },
     })
+  })
+
+  it("does not create a workspace when the user has none", async () => {
+    mockAdapter.listOrganizations.mockResolvedValueOnce([])
+
+    const session = { userId: "u1" }
+    const context = createContext({ id: "u1", name: "User" })
+
+    await expect(
+      ensureSessionActiveOrganization(context, session)
+    ).resolves.toEqual({ data: session })
   })
 })

@@ -58,7 +58,7 @@ export function OrganizationSlugField({
     resetCheckSlug()
 
     const trimmed = value.trim()
-    if (!trimmed || trimmed === currentSlug) return
+    if (!trimmed || trimmed === currentSlug?.trim()) return
 
     const timeout = window.setTimeout(() => {
       checkSlug({ slug: trimmed })
@@ -67,7 +67,10 @@ export function OrganizationSlugField({
     return () => window.clearTimeout(timeout)
   }, [checkSlug, currentSlug, resetCheckSlug, value])
 
-  const slugTaken = !!checkSlugError || checkSlugData?.status === false
+  const trimmedValue = value.trim()
+  const isCurrentSlug = !!currentSlug && trimmedValue === currentSlug.trim()
+  const slugTaken =
+    !isCurrentSlug && (!!checkSlugError || checkSlugData?.status === false)
   const validationError =
     error ?? (slugTaken ? "This slug is already taken" : undefined)
 
@@ -88,7 +91,7 @@ export function OrganizationSlugField({
           type="text"
           value={value}
         />
-        {value.trim() && value.trim() !== currentSlug ? (
+        {trimmedValue && !isCurrentSlug ? (
           <InputGroupAddon align="inline-end">
             <SlugAvailabilityIcon
               hasError={slugTaken}

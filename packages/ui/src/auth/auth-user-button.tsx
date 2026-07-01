@@ -1,6 +1,10 @@
 "use client"
 
-import { useAuthUiConfig, useSession } from "@workspace/auth/react"
+import {
+  useActiveOrganization,
+  useAuthUiConfig,
+  useSession,
+} from "@workspace/auth/react"
 import type { LucideIcon } from "lucide-react"
 import { ChevronsUpDown, LogOut, Settings } from "lucide-react"
 import { useState } from "react"
@@ -18,6 +22,7 @@ import { cn } from "@workspace/ui/lib/utils"
 import { AuthUserAvatar, type AuthUserAvatarUser } from "./auth-user-avatar"
 import { AuthUserView } from "./auth-user-view"
 import { OrganizationSwitcherMenu } from "./organization/organization-switcher-menu"
+import { OrganizationView } from "./organization/organization-view"
 
 export interface AuthUserButtonMenuItem {
   label: string
@@ -71,11 +76,35 @@ function TriggerContent({
   isPending,
   size,
   user,
+  activeOrganization,
+  showWorkspaceMenu,
 }: {
   isPending: boolean
   size: AuthUserButtonProps["size"]
   user: AuthUserAvatarUser | null
+  activeOrganization?: { name: string; slug: string } | null
+  showWorkspaceMenu: boolean
 }) {
+  const showWorkspaceTrigger =
+    showWorkspaceMenu && size === "sidebar" && activeOrganization
+
+  if (showWorkspaceTrigger) {
+    return (
+      <>
+        <OrganizationView
+          className="min-w-0 flex-1 in-data-[collapsed]:hidden"
+          organization={activeOrganization}
+        />
+        <OrganizationView
+          className="hidden min-w-0 in-data-[collapsed]:flex"
+          hideSlug
+          organization={activeOrganization}
+        />
+        <ChevronsUpDown className="ml-auto size-4 shrink-0 text-sidebar-foreground/60 in-data-[collapsed]:hidden" />
+      </>
+    )
+  }
+
   if (size === "sidebar") {
     return (
       <>
@@ -122,6 +151,7 @@ export function AuthUserButton({
 }: AuthUserButtonProps) {
   const config = useAuthUiConfig()
   const { data: session, isPending } = useSession()
+  const { data: activeOrganization } = useActiveOrganization()
   const [open, setOpen] = useState(false)
   const { Link } = config
 
@@ -137,16 +167,27 @@ export function AuthUserButton({
 
   const isIconOnly = size === "icon"
   const isSidebar = size === "sidebar"
+  const workspaceTriggerLabel =
+    showWorkspaceMenu && activeOrganization
+      ? activeOrganization.name
+      : (user?.name ?? "Account menu")
+  const hasAccountSection = menuItems.length > 0 || !hideSettings
 
   return (
     <Menu onOpenChange={setOpen} open={open}>
       <MenuTrigger
-        aria-label={isIconOnly ? "Account menu" : undefined}
+        aria-label={isIconOnly ? "Account menu" : workspaceTriggerLabel}
         className={getTriggerClassName(size, className)}
         disabled={isPending && !user}
         render={<button type="button" />}
       >
-        <TriggerContent isPending={isPending} size={size} user={user} />
+        <TriggerContent
+          activeOrganization={activeOrganization}
+          isPending={isPending}
+          showWorkspaceMenu={showWorkspaceMenu}
+          size={size}
+          user={user}
+        />
       </MenuTrigger>
 
       <MenuPopup
@@ -161,17 +202,19 @@ export function AuthUserButton({
               </MenuGroupLabel>
             </MenuGroup>
 
-            <MenuSeparator />
+            <MenuSeparator className="my-1.5" />
 
             {showWorkspaceMenu ? (
-              <>
-                <OrganizationSwitcherMenu
-                  hideHeader
-                  onClose={() => setOpen(false)}
-                  onCreateOrganization={onCreateOrganization}
-                />
-                <MenuSeparator />
-              </>
+              <OrganizationSwitcherMenu
+                hideHeader
+                hidePersonal
+                onClose={() => setOpen(false)}
+                onCreateOrganization={onCreateOrganization}
+              />
+            ) : null}
+
+            {showWorkspaceMenu && hasAccountSection ? (
+              <MenuSeparator className="my-1.5" />
             ) : null}
 
             {menuItems.map((item) => {
@@ -216,11 +259,11 @@ export function AuthUserButton({
                 onClick={() => config.navigate(config.routes.settingsAccount)}
               >
                 <Settings className="text-muted-foreground" />
-                Settings
+                Account settings
               </MenuItem>
             ) : null}
 
-            <MenuSeparator />
+            <MenuSeparator className="my-1.5" />
 
             <MenuItem onClick={handleSignOut}>
               <LogOut className="text-muted-foreground" />

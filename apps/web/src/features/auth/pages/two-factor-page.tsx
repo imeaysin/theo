@@ -3,19 +3,20 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { AuthOtpInput, AuthPageBody, AuthPageHeader } from "@workspace/ui/auth"
 import { toastManager } from "@workspace/ui/components/toast"
 import { useVerifyTotpMutation } from "@workspace/auth/react"
-import { defaultAuthenticatedRoute, routes } from "@/config/routes"
+import { routes, defaultAuthenticatedRoute } from "@/config/routes"
 import {
-  getSafeRedirectPath,
+  resolvePostAuthRedirectPath,
   withAuthRedirectQuery,
 } from "@/routing/safe-redirect"
 
 export function TwoFactorPage() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const redirectPath = getSafeRedirectPath(
-    searchParams.get("redirect"),
-    defaultAuthenticatedRoute
-  )
+  const redirectPath = resolvePostAuthRedirectPath({
+    redirect: searchParams.get("redirect"),
+    fallback: defaultAuthenticatedRoute,
+    invitationPath: routes.acceptInvitation,
+  })
   const verifyTotp = useVerifyTotpMutation()
   const [code, setCode] = useState("")
   const [invalid, setInvalid] = useState(false)

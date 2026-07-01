@@ -17,6 +17,20 @@ export function getSafeRedirectPath(
   return path
 }
 
+/** Post-auth landing path — invitation links only; everything else uses fallback. */
+export function resolvePostAuthRedirectPath(options: {
+  redirect: string | null | undefined
+  fallback: string
+  invitationPath: string
+}): string {
+  const safeRedirect = getSafeRedirectPath(options.redirect, options.fallback)
+  if (safeRedirect.startsWith(options.invitationPath)) {
+    return safeRedirect
+  }
+
+  return options.fallback
+}
+
 /** Appends `?redirect=` when returning to an auth page should preserve post-login navigation. */
 export function withAuthRedirectQuery(
   path: string,

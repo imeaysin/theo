@@ -22,7 +22,7 @@ export function useAppShellConfig() {
   const userMenuItems = useMemo<UserMenuItem[]>(
     () => [
       {
-        label: "Settings",
+        label: "Account settings",
         href: routes.settingsAccount,
         icon: SettingsIcon,
       },

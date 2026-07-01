@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useUpdateOrganization } from "@workspace/auth/react"
 import type { Organization } from "@workspace/auth/types/organization"
 import type { OrganizationProfileProps } from "@workspace/ui/auth"
-import { sanitizeOrganizationSlug } from "@workspace/ui/auth"
 import { useCallback, useEffect, useRef } from "react"
 import { useForm, useWatch } from "react-hook-form"
 import { toastManager } from "@workspace/ui/components/toast"
@@ -37,13 +36,6 @@ export function useOrganizationProfileForm(
     })
     slugEdited.current = false
   }, [form, organization.id, organization.name, organization.slug])
-
-  useEffect(() => {
-    if (slugEdited.current) return
-    form.setValue("slug", sanitizeOrganizationSlug(name), {
-      shouldValidate: Boolean(name),
-    })
-  }, [form, name])
 
   const handleSlugChange = useCallback(
     (value: string) => {

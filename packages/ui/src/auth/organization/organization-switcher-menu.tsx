@@ -10,7 +10,11 @@ import {
 import type { OrganizationSummary } from "@workspace/auth/types/organization"
 import { PlusCircle, Settings } from "lucide-react"
 import type { ReactNode } from "react"
-import { MenuItem, MenuSeparator } from "@workspace/ui/components/menu"
+import {
+  MenuGroup,
+  MenuItem,
+  MenuSeparator,
+} from "@workspace/ui/components/menu"
 import { AuthUserView } from "../auth-user-view"
 import { OrganizationView } from "./organization-view"
 
@@ -63,57 +67,63 @@ export function OrganizationSwitcherMenu({
     }
   }
 
-  const showCreateSeparator =
-    !hideCreate &&
-    (otherOrganizations.length > 0 || (!!activeOrg && !hidePersonal))
+  const showPersonalSwitcher = Boolean(activeOrg && !hidePersonal)
+  const hasSwitcherEntries =
+    showPersonalSwitcher || otherOrganizations.length > 0
+  const hasWorkspaceActions = Boolean(activeOrg) || !hideCreate
 
   return (
     <>
       {menuHeader}
       {menuHeader ? <MenuSeparator /> : null}
 
-      {activeOrg && !hidePersonal ? (
-        <MenuItem onClick={() => handleSetActive(null)}>
-          <AuthUserView hideSubtitle user={session?.user} />
-        </MenuItem>
-      ) : null}
-
-      {otherOrganizations.map((organization) => (
-        <MenuItem
-          key={organization.id}
-          onClick={() => handleSetActive(organization)}
-        >
-          <OrganizationView organization={organization} />
-        </MenuItem>
-      ))}
-
-      {activeOrg ? (
+      {hasSwitcherEntries ? (
         <>
-          <MenuSeparator />
-          <MenuItem
-            onClick={() => {
-              onClose()
-              config.navigate(config.routes.organizationSettings)
-            }}
-          >
-            <Settings className="text-muted-foreground" />
-            Workspace settings
-          </MenuItem>
+          {showPersonalSwitcher ? (
+            <MenuItem onClick={() => handleSetActive(null)}>
+              <AuthUserView hideSubtitle user={session?.user} />
+            </MenuItem>
+          ) : null}
+
+          {otherOrganizations.map((organization) => (
+            <MenuItem
+              key={organization.id}
+              onClick={() => handleSetActive(organization)}
+            >
+              <OrganizationView organization={organization} />
+            </MenuItem>
+          ))}
         </>
       ) : null}
 
-      {!hideCreate ? (
+      {hasWorkspaceActions ? (
         <>
-          {showCreateSeparator ? <MenuSeparator /> : null}
-          <MenuItem
-            onClick={() => {
-              onClose()
-              onCreateOrganization?.()
-            }}
-          >
-            <PlusCircle className="text-muted-foreground" />
-            Create workspace
-          </MenuItem>
+          {hasSwitcherEntries ? <MenuSeparator className="my-1.5" /> : null}
+          <MenuGroup className="space-y-0.5">
+            {activeOrg ? (
+              <MenuItem
+                onClick={() => {
+                  onClose()
+                  config.navigate(config.routes.organizationSettings)
+                }}
+              >
+                <Settings className="text-muted-foreground" />
+                Workspace settings
+              </MenuItem>
+            ) : null}
+
+            {!hideCreate ? (
+              <MenuItem
+                onClick={() => {
+                  onClose()
+                  onCreateOrganization?.()
+                }}
+              >
+                <PlusCircle className="text-muted-foreground" />
+                Create workspace
+              </MenuItem>
+            ) : null}
+          </MenuGroup>
         </>
       ) : null}
     </>

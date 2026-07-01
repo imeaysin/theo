@@ -2,7 +2,7 @@ import type { GenericEndpointContext, Session } from "better-auth"
 import { getOrgAdapter } from "better-auth/plugins/organization"
 import { organizationPluginOptions } from "../config/organization-plugin"
 
-function sanitizeOrganizationSlug(value: string) {
+export function sanitizeOrganizationSlug(value: string) {
   return value
     .toLowerCase()
     .trim()
@@ -10,51 +10,22 @@ function sanitizeOrganizationSlug(value: string) {
     .replace(/^-+|-+$/g, "")
 }
 
-export function buildDefaultOrganization(user: { id: string; name: string }) {
-  const label = user.name?.trim() || "My"
-  const base = sanitizeOrganizationSlug(label) || "workspace"
-
-  return {
-    name: `${label}'s Workspace`,
-    slug: `${base}-${user.id.slice(0, 8)}`,
-  }
+export function buildOrganizationSlug(name: string, userId: string) {
+  const base = sanitizeOrganizationSlug(name) || "workspace"
+  return `${base}-${userId.slice(0, 8)}`
 }
 
 function getOrganizationAdapter(context: GenericEndpointContext) {
   return getOrgAdapter(context.context, organizationPluginOptions)
 }
 
-export async function ensureDefaultOrganization(
-  context: GenericEndpointContext | null,
-  user: { id: string; name: string }
+async function getFirstOrganizationId(
+  context: GenericEndpointContext,
+  userId: string
 ) {
-  if (!context) {
-    return null
-  }
-
   const adapter = getOrganizationAdapter(context)
-  const organizations = await adapter.listOrganizations(user.id)
-
-  if (organizations.length > 0) {
-    return organizations[0]?.id ?? null
-  }
-
-  const { name, slug } = buildDefaultOrganization(user)
-  const organization = await adapter.createOrganization({
-    organization: {
-      name,
-      slug,
-      createdAt: new Date(),
-    },
-  })
-
-  await adapter.createMember({
-    userId: user.id,
-    organizationId: organization.id,
-    role: "owner",
-  })
-
-  return organization.id
+  const organizations = await adapter.listOrganizations(userId)
+  return organizations[0]?.id ?? null
 }
 
 export async function ensureSessionActiveOrganization(
@@ -77,10 +48,7 @@ export async function ensureSessionActiveOrganization(
     return { data: session }
   }
 
-  const organizationId = await ensureDefaultOrganization(context, {
-    id: user.id,
-    name: user.name,
-  })
+  const organizationId = await getFirstOrganizationId(context, user.id)
 
   if (!organizationId) {
     return { data: session }

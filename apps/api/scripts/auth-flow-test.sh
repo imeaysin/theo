@@ -127,26 +127,26 @@ if [ "$VERIFIED" = true ]; then
   check "session active" "echo '$SESSION' | grep -q '$EMAIL'"
 
   ORG_LIST_EARLY=$(curl -s -b "$COOKIE" -H "Origin: $ORIGIN" "$BASE/api/auth/organization/list")
-  check_output_contains "default workspace provisioned on sign-up" "$ORG_LIST_EARLY" workspace
-  check_output_contains "session has activeOrganizationId after sign-in" "$SESSION" activeOrganizationId
+  check "no workspace before onboarding" "echo '$ORG_LIST_EARLY' | grep -q '\\[\\]'"
+  check "session has no activeOrganizationId before onboarding" "! echo '$SESSION' | grep -q 'activeOrganizationId'"
 
   JWT_EARLY=$(curl -s -b "$COOKIE" -c "$COOKIE" -H "Origin: $ORIGIN" "$BASE/api/auth/token" | grep -o '"token":"[^"]*"' | head -1 | cut -d'"' -f4 || true)
   if [ -n "$JWT_EARLY" ]; then
     ME_EARLY=$(curl -s -H "Authorization: Bearer $JWT_EARLY" "$BASE/v1/me")
-    check_output_contains "JWT activeOrganizationId after sign-in" "$ME_EARLY" activeOrganizationId
-    check_output_contains "JWT organizationRole is owner" "$ME_EARLY" organizationRole owner
+    check "JWT has no activeOrganizationId before onboarding" "! echo '$ME_EARLY' | grep -q 'activeOrganizationId'"
+    check "JWT organizationRole is null before onboarding" "echo '$ME_EARLY' | grep -q '\"organizationRole\":null'"
     JWT="$JWT_EARLY"
   else
-    skip_test "JWT activeOrganizationId after sign-in"
-    skip_test "JWT organizationRole is owner"
+    skip_test "JWT has no activeOrganizationId before onboarding"
+    skip_test "JWT organizationRole is null before onboarding"
   fi
 else
   skip_test "sign-in after verify (verification incomplete)"
   skip_test "session active"
-  skip_test "default workspace provisioned on sign-up"
-  skip_test "session has activeOrganizationId after sign-in"
-  skip_test "JWT activeOrganizationId after sign-in"
-  skip_test "JWT organizationRole is owner"
+  skip_test "no workspace before onboarding"
+  skip_test "session has no activeOrganizationId before onboarding"
+  skip_test "JWT has no activeOrganizationId before onboarding"
+  skip_test "JWT organizationRole is null before onboarding"
 fi
 
 # --- JWT + protected route ---

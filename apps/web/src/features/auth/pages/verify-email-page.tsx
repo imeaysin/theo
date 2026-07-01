@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Link, useSearchParams } from "react-router-dom"
+import { Link, Navigate, useSearchParams } from "react-router-dom"
 import { AuthPageBody, AuthPageHeader } from "@workspace/ui/auth"
 import { Button } from "@workspace/ui/components/button"
 import { PageLoading } from "@workspace/ui/components/page-loading"
@@ -7,9 +7,14 @@ import { toastManager } from "@workspace/ui/components/toast"
 import {
   useSendVerificationEmailMutation,
   useVerifyEmailMutation,
+  useAuthSession,
 } from "@workspace/auth/react"
 import { OpenEmailButton } from "@workspace/ui/auth"
-import { absoluteAppUrl, routes } from "@/config/routes"
+import {
+  absoluteAppUrl,
+  routes,
+  defaultAuthenticatedRoute,
+} from "@/config/routes"
 
 function getVerifyEmailCopy(verified: boolean) {
   if (verified) {
@@ -32,6 +37,7 @@ export function VerifyEmailPage() {
   const [searchParams] = useSearchParams()
   const email = searchParams.get("email") ?? ""
   const token = searchParams.get("token")
+  const { data: session } = useAuthSession()
   const [verified, setVerified] = useState(false)
   const sendVerification = useSendVerificationEmailMutation()
   const { mutate: verifyEmail, isPending: isVerifying } =
@@ -87,6 +93,10 @@ export function VerifyEmailPage() {
         type: "error",
       })
     }
+  }
+
+  if (session && (verified || !token)) {
+    return <Navigate replace to={defaultAuthenticatedRoute} />
   }
 
   if (token && isVerifying) {

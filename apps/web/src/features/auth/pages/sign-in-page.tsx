@@ -13,7 +13,7 @@ import { useSignInMutation, useAuthSession } from "@workspace/auth/react"
 import { defaultAuthenticatedRoute, routes } from "@/config/routes"
 import { site } from "@/config/site"
 import {
-  getSafeRedirectPath,
+  resolvePostAuthRedirectPath,
   withAuthRedirectQuery,
 } from "@/routing/safe-redirect"
 
@@ -30,10 +30,11 @@ function getSignInErrorMessage(error: unknown) {
 export function SignInPage() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const redirectPath = getSafeRedirectPath(
-    searchParams.get("redirect"),
-    defaultAuthenticatedRoute
-  )
+  const redirectPath = resolvePostAuthRedirectPath({
+    redirect: searchParams.get("redirect"),
+    fallback: defaultAuthenticatedRoute,
+    invitationPath: routes.acceptInvitation,
+  })
   const { data: session, isPending } = useAuthSession()
   const signIn = useSignInMutation()
   const form = useForm<SignInInput>({

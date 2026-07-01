@@ -28,6 +28,11 @@ export interface CreateOrganizationDialogProps {
   slugError?: string
   onSubmit: () => void
   isPending?: boolean
+  required?: boolean
+  showSlug?: boolean
+  title?: string
+  description?: string
+  submitLabel?: string
 }
 
 export function CreateOrganizationDialog({
@@ -42,15 +47,23 @@ export function CreateOrganizationDialog({
   slugError,
   onSubmit,
   isPending = false,
+  required = false,
+  showSlug = true,
+  title = "Create workspace",
+  description = "Create a workspace to collaborate with your team.",
+  submitLabel = "Create workspace",
 }: CreateOrganizationDialogProps) {
+  function handleOpenChange(nextOpen: boolean) {
+    if (required && !nextOpen) return
+    onOpenChange(nextOpen)
+  }
+
   return (
-    <Dialog onOpenChange={onOpenChange} open={open}>
-      <DialogPopup>
+    <Dialog onOpenChange={handleOpenChange} open={open}>
+      <DialogPopup showCloseButton={!required}>
         <DialogHeader>
-          <DialogTitle>Create workspace</DialogTitle>
-          <DialogDescription>
-            Create a workspace to collaborate with your team.
-          </DialogDescription>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
 
         <Form className="contents" onSubmit={onSubmit}>
@@ -70,26 +83,34 @@ export function CreateOrganizationDialog({
               <FieldError>{nameError}</FieldError>
             </Field>
 
-            <OrganizationSlugField
-              disabled={isPending}
-              error={slugError}
-              id="create-organization-slug"
-              onBlur={onSlugBlur}
-              onChange={onSlugChange}
-              value={slug}
-            />
+            {showSlug ? (
+              <OrganizationSlugField
+                disabled={isPending}
+                error={slugError}
+                id="create-organization-slug"
+                onBlur={onSlugBlur}
+                onChange={onSlugChange}
+                value={slug}
+              />
+            ) : null}
           </DialogPanel>
 
           <DialogFooter>
-            <DialogClose
-              render={
-                <Button disabled={isPending} type="button" variant="outline" />
-              }
-            >
-              Cancel
-            </DialogClose>
+            {required ? null : (
+              <DialogClose
+                render={
+                  <Button
+                    disabled={isPending}
+                    type="button"
+                    variant="outline"
+                  />
+                }
+              >
+                Cancel
+              </DialogClose>
+            )}
             <Button loading={isPending} type="submit">
-              Create workspace
+              {submitLabel}
             </Button>
           </DialogFooter>
         </Form>

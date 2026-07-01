@@ -22,10 +22,7 @@ import { organizationPluginOptions } from "../config/organization-plugin"
 import type { JwtPayload } from "../config/jwt"
 import { authDb, authMongoClient } from "../db/mongo"
 import { findOrganizationMemberRole } from "./organization-role"
-import {
-  ensureDefaultOrganization,
-  ensureSessionActiveOrganization,
-} from "./default-organization"
+import { ensureSessionActiveOrganization } from "./default-organization"
 
 function socialProviders() {
   const providers: Record<string, Record<string, string>> = {}
@@ -83,16 +80,6 @@ export function createAuth() {
     database: mongodbAdapter(authDb, { client: authMongoClient }),
 
     databaseHooks: {
-      user: {
-        create: {
-          after: async (user, context) => {
-            await ensureDefaultOrganization(context, {
-              id: user.id,
-              name: user.name,
-            })
-          },
-        },
-      },
       session: {
         create: {
           before: async (session, context) =>

@@ -9,6 +9,7 @@ import {
   AppSidebarUser,
   AppUserButton,
 } from "@/features/auth/components/app-auth-user-button"
+import { WorkspaceOnboardingGate } from "@/features/auth/components/workspace-onboarding-gate"
 import { useAppShellConfig } from "@/features/shell/use-app-shell-config"
 
 const ShellLink: ShellLinkComponent = ({
@@ -26,18 +27,20 @@ export function AppLayout() {
   const shell = useAppShellConfig()
 
   return (
-    <AppShell
-      brandLabel={shell.brandLabel}
-      commandActions={shell.commandActions}
-      linkComponent={ShellLink}
-      logo={<Logo />}
-      navigation={shell.navigation}
-      pathname={location.pathname}
-      sidebarUserControl={<AppSidebarUser />}
-      userControl={<AppUserButton />}
-      withoutMain
-    >
-      <Outlet />
-    </AppShell>
+    <WorkspaceOnboardingGate>
+      <AppShell
+        brandLabel={shell.brandLabel}
+        commandActions={shell.commandActions}
+        linkComponent={ShellLink}
+        logo={<Logo />}
+        navigation={shell.navigation}
+        pathname={location.pathname}
+        sidebarUserControl={<AppSidebarUser />}
+        userControl={<AppUserButton />}
+        withoutMain
+      >
+        <Outlet />
+      </AppShell>
+    </WorkspaceOnboardingGate>
   )
 }
