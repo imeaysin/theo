@@ -1,7 +1,13 @@
 import { useState } from "react"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
+import { twoFactorSchema } from "@workspace/contracts"
 import { AuthOtpInput, AuthPageBody, AuthPageHeader } from "@workspace/ui/auth"
-import { toastManager } from "@workspace/ui/components/toast"
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+} from "@workspace/ui/components/field"
 import { useVerifyTotp } from "@workspace/auth/react"
 import { routes, defaultAuthenticatedRoute } from "@/config/routes"
 import {
@@ -19,21 +25,23 @@ export function TwoFactorPage() {
   })
   const verifyTotp = useVerifyTotp()
   const [code, setCode] = useState("")
-  const [invalid, setInvalid] = useState(false)
+  const [codeError, setCodeError] = useState<string>()
 
   async function handleComplete(value: string) {
-    setInvalid(false)
+    const result = twoFactorSchema.safeParse({ code: value })
+    if (!result.success) {
+      setCodeError(result.error.issues[0]?.message ?? "Enter the 6-digit code")
+      setCode("")
+      return
+    }
+
+    setCodeError(undefined)
     try {
       await verifyTotp.mutateAsync({ code: value })
       navigate(redirectPath)
     } catch {
-      setInvalid(true)
+      setCodeError("Check your authenticator app and try again.")
       setCode("")
-      toastManager.add({
-        title: "Invalid code",
-        description: "Check your authenticator app and try again.",
-        type: "error",
-      })
     }
   }
 
@@ -56,20 +64,25 @@ export function TwoFactorPage() {
         title="Verify your identity"
       />
 
-      <div className="flex flex-col gap-6">
+      <Field data-invalid={!!codeError}>
+        <FieldLabel htmlFor="two-factor-code">Verification code</FieldLabel>
         <AuthOtpInput
-          invalid={invalid}
+          id="two-factor-code"
+          invalid={!!codeError}
           onComplete={(value) => void handleComplete(value)}
-          onValueChange={setCode}
+          onValueChange={(value) => {
+            setCode(value)
+            if (codeError) setCodeError(undefined)
+          }}
           value={code}
           verifying={verifyTotp.isPending}
         />
-
-        <p className="text-center font-mono text-xs text-muted-foreground">
-          Open your authenticator apps like 1Password, Authy, etc. to verify
-          your identity.
-        </p>
-      </div>
+        <FieldDescription>
+          Open your authenticator app (1Password, Authy, etc.) to get a 6-digit
+          code.
+        </FieldDescription>
+        <FieldError>{codeError}</FieldError>
+      </Field>
     </AuthPageBody>
   )
 }

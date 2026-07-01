@@ -7,6 +7,7 @@ import { Spinner } from "@workspace/ui/components/spinner"
 import { cn } from "@workspace/ui/lib/utils"
 
 export interface AuthOtpInputProps {
+  id?: string
   value: string
   onValueChange: (value: string) => void
   onComplete?: (value: string) => void
@@ -17,6 +18,7 @@ export interface AuthOtpInputProps {
 }
 
 export function AuthOtpInput({
+  id,
   value,
   onValueChange,
   onComplete,
@@ -62,6 +64,7 @@ export function AuthOtpInput({
             "size-14 text-lg leading-14 sm:size-14 sm:text-lg sm:leading-14",
             invalid && "border-destructive"
           )}
+          id={index === 0 ? id : undefined}
         />
       ))}
     </OTPField>

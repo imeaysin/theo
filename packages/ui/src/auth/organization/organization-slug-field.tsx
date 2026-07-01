@@ -1,6 +1,9 @@
 "use client"
 
-import { useCheckSlug } from "@workspace/auth/react"
+import {
+  isOrganizationSlugTakenError,
+  useCheckSlug,
+} from "@workspace/auth/react"
 import { Check, X } from "lucide-react"
 import { useEffect } from "react"
 import { Field, FieldError, FieldLabel } from "@workspace/ui/components/field"
@@ -24,6 +27,11 @@ export function isSameOrganizationSlug(
   )
 }
 
+export interface OrganizationSlugAvailabilityState {
+  checking: boolean
+  available: boolean | null
+}
+
 export interface OrganizationSlugFieldProps {
   id?: string
   value: string
@@ -33,6 +41,7 @@ export interface OrganizationSlugFieldProps {
   checkAvailability?: boolean
   disabled?: boolean
   error?: string
+  onAvailabilityChange?: (state: OrganizationSlugAvailabilityState) => void
 }
 
 function SlugAvailabilityIcon({
@@ -59,6 +68,7 @@ export function OrganizationSlugField({
   checkAvailability = true,
   disabled,
   error,
+  onAvailabilityChange,
 }: OrganizationSlugFieldProps) {
   const {
     mutate: checkSlug,
@@ -87,12 +97,54 @@ export function OrganizationSlugField({
 
   const slugTaken =
     shouldCheckAvailability &&
-    (!!checkSlugError || checkSlugData?.status === false)
+    !isCheckingSlug &&
+    checkSlugData?.available === false
+
+  const availabilityError =
+    shouldCheckAvailability &&
+    !isCheckingSlug &&
+    checkSlugError &&
+    !isOrganizationSlugTakenError(checkSlugError)
+      ? "Could not verify slug availability"
+      : undefined
+
   const validationError =
-    error ?? (slugTaken ? "This slug is already taken" : undefined)
+    error ??
+    availabilityError ??
+    (slugTaken ? "This slug is already taken" : undefined)
+
+  useEffect(() => {
+    if (!onAvailabilityChange) return
+
+    if (!shouldCheckAvailability) {
+      onAvailabilityChange({ checking: false, available: true })
+      return
+    }
+
+    if (isCheckingSlug) {
+      onAvailabilityChange({ checking: true, available: null })
+      return
+    }
+
+    if (checkSlugError && !isOrganizationSlugTakenError(checkSlugError)) {
+      onAvailabilityChange({ checking: false, available: null })
+      return
+    }
+
+    onAvailabilityChange({
+      checking: false,
+      available: checkSlugData?.available ?? null,
+    })
+  }, [
+    checkSlugData?.available,
+    checkSlugError,
+    isCheckingSlug,
+    onAvailabilityChange,
+    shouldCheckAvailability,
+  ])
 
   return (
-    <Field invalid={!!validationError}>
+    <Field data-invalid={!!validationError}>
       <FieldLabel htmlFor={id}>Slug</FieldLabel>
       <InputGroup>
         <InputGroupInput
@@ -112,7 +164,7 @@ export function OrganizationSlugField({
           <InputGroupAddon align="inline-end">
             <SlugAvailabilityIcon
               hasError={slugTaken}
-              isAvailable={checkSlugData?.status}
+              isAvailable={checkSlugData?.available}
               isChecking={isCheckingSlug}
             />
           </InputGroupAddon>

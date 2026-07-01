@@ -89,9 +89,18 @@ export type {
 export { authQueryKeys } from "./query-keys"
 export {
   buildOrganizationSlug,
+  buildOrganizationSlugBase,
+  buildOrganizationSlugCandidates,
+  buildUniqueOrganizationSlugSuffix,
+  resolveAvailableOrganizationSlug,
   sanitizeOrganizationSlug,
 } from "../lib/organization-slug"
+export {
+  isOrganizationSlugAvailable,
+  isOrganizationSlugTakenError,
+} from "../lib/organization-slug-availability"
+export type { OrganizationSlugAvailability } from "../lib/organization-slug-availability"
 export { DEFAULT_JWT_STORAGE_KEY } from "../lib/constants"
-export { clearStoredAuthJwt, refreshAuthToken } from "./utils/auth-token"
+export { checkOrganizationSlugAvailable } from "./utils/organization-slug"
 export { getEmailProviderLink } from "./utils/email-provider"
 export type { EmailProviderLink } from "./utils/email-provider"

@@ -1,13 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom"
-import { useForm } from "react-hook-form"
+import { useForm, useFormState } from "react-hook-form"
 import { signInSchema, type SignInInput } from "@workspace/contracts"
 import { AuthDivider, AuthPageBody, AuthPageHeader } from "@workspace/ui/auth"
 import { Button } from "@workspace/ui/components/button"
 import { Field, FieldError, FieldLabel } from "@workspace/ui/components/field"
 import { Input } from "@workspace/ui/components/input"
 import { PageLoading } from "@workspace/ui/components/page-loading"
-import { toastManager } from "@workspace/ui/components/toast"
 import { AuthButtons } from "@/features/auth/components/auth-buttons"
 import { useSignInEmail, useAuthSession } from "@workspace/auth/react"
 import { defaultAuthenticatedRoute, routes } from "@/config/routes"
@@ -41,6 +40,7 @@ export function SignInPage() {
     resolver: zodResolver(signInSchema),
     defaultValues: { email: "", password: "" },
   })
+  const { errors } = useFormState({ control: form.control })
 
   if (isPending) {
     return <PageLoading />
@@ -65,16 +65,14 @@ export function SignInPage() {
       navigate(redirectPath)
     } catch (error) {
       const message = getSignInErrorMessage(error)
-      toastManager.add({
-        title: "Sign in failed",
-        description: message,
-        type: "error",
-      })
       if (message.includes("Verify your email")) {
+        form.setError("email", { message })
         navigate(
           `${routes.verifyEmail}?email=${encodeURIComponent(values.email)}`
         )
+        return
       }
+      form.setError("password", { message })
     }
   }
 
@@ -106,31 +104,32 @@ export function SignInPage() {
 
       <form
         className="flex flex-col gap-4"
+        noValidate
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <Field>
-          <FieldLabel>Email</FieldLabel>
+        <Field data-invalid={!!errors.email}>
+          <FieldLabel htmlFor="sign-in-email">Email</FieldLabel>
           <Input
             autoComplete="email"
+            id="sign-in-email"
+            placeholder="you@example.com"
             type="email"
             {...form.register("email")}
-            aria-invalid={!!form.formState.errors.email}
+            aria-invalid={!!errors.email}
           />
-          {form.formState.errors.email ? (
-            <FieldError>{form.formState.errors.email.message}</FieldError>
-          ) : null}
+          <FieldError>{errors.email?.message}</FieldError>
         </Field>
-        <Field>
-          <FieldLabel>Password</FieldLabel>
+        <Field data-invalid={!!errors.password}>
+          <FieldLabel htmlFor="sign-in-password">Password</FieldLabel>
           <Input
             autoComplete="current-password"
+            id="sign-in-password"
+            placeholder="Enter your password"
             type="password"
             {...form.register("password")}
-            aria-invalid={!!form.formState.errors.password}
+            aria-invalid={!!errors.password}
           />
-          {form.formState.errors.password ? (
-            <FieldError>{form.formState.errors.password.message}</FieldError>
-          ) : null}
+          <FieldError>{errors.password?.message}</FieldError>
         </Field>
         <div className="flex justify-end">
           <Link

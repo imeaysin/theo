@@ -7,7 +7,7 @@ import {
 } from "@workspace/auth/react"
 import type { InviteMemberDialogProps } from "@workspace/ui/auth"
 import { useEffect, useState } from "react"
-import { useForm, useWatch } from "react-hook-form"
+import { useForm, useFormState, useWatch } from "react-hook-form"
 import { toastManager } from "@workspace/ui/components/toast"
 import {
   inviteMemberSchema,
@@ -31,6 +31,7 @@ export function useInviteMemberDialog() {
 
   const email = useWatch({ control: form.control, name: "email" })
   const role = useWatch({ control: form.control, name: "role" })
+  const { errors } = useFormState({ control: form.control })
 
   useEffect(() => {
     if (!open || roles.length === 0) return
@@ -56,11 +57,11 @@ export function useInviteMemberDialog() {
     email,
     onEmailChange: (value) =>
       form.setValue("email", value, { shouldValidate: true }),
-    emailError: form.formState.errors.email?.message,
+    emailError: errors.email?.message,
     role,
     onRoleChange: (value) =>
       form.setValue("role", value, { shouldValidate: true }),
-    roleError: form.formState.errors.role?.message,
+    roleError: errors.role?.message,
     onSubmit: form.handleSubmit((values) => {
       inviteMember(values, {
         onSuccess: () => {
@@ -69,6 +70,11 @@ export function useInviteMemberDialog() {
             type: "success",
           })
           handleOpenChange(false)
+        },
+        onError: () => {
+          form.setError("email", {
+            message: "Could not send the invitation. Please try again.",
+          })
         },
       })
     }),

@@ -126,12 +126,8 @@ function ChangePasswordForm({
     e.preventDefault()
 
     if (newPassword !== confirmPassword) {
-      setCurrentPassword("")
-      setNewPassword("")
-      setConfirmPassword("")
-      toastManager.add({
-        title: "Passwords do not match",
-        type: "error",
+      setFieldErrors({
+        confirmPassword: "Passwords do not match",
       })
       return
     }
@@ -144,9 +140,10 @@ function ChangePasswordForm({
       },
       {
         onError: () => {
+          setFieldErrors({
+            currentPassword: "Check your current password and try again.",
+          })
           setCurrentPassword("")
-          setNewPassword("")
-          setConfirmPassword("")
         },
         onSuccess: () => {
           setCurrentPassword("")

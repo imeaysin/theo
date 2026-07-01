@@ -8,7 +8,7 @@ import {
 } from "@workspace/auth/react"
 import type { ChangeEmailProps } from "@workspace/ui/auth"
 import { useEffect } from "react"
-import { useForm, useWatch } from "react-hook-form"
+import { useForm, useFormState, useWatch } from "react-hook-form"
 import { toastManager } from "@workspace/ui/components/toast"
 import {
   changeEmailSchema,
@@ -26,6 +26,7 @@ export function useChangeEmailForm(): ChangeEmailProps {
   })
 
   const email = useWatch({ control: form.control, name: "email" })
+  const { errors } = useFormState({ control: form.control })
 
   useEffect(() => {
     if (session?.user.email) {
@@ -39,7 +40,7 @@ export function useChangeEmailForm(): ChangeEmailProps {
     email,
     onEmailChange: (value) =>
       form.setValue("email", value, { shouldValidate: true }),
-    emailError: form.formState.errors.email?.message,
+    emailError: errors.email?.message,
     onSubmit: form.handleSubmit((values) => {
       changeEmail(
         {

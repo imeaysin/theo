@@ -45,7 +45,7 @@ export function UserProfile({
                   disabled={isPending}
                   id="name"
                   onChange={(event) => onNameChange?.(event.target.value)}
-                  placeholder="Name"
+                  placeholder="Your name"
                   type="text"
                   value={name}
                 />

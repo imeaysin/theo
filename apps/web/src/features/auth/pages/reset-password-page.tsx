@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
-import { useForm } from "react-hook-form"
+import { useForm, useFormState } from "react-hook-form"
 import {
   resetPasswordSchema,
   type ResetPasswordInput,
@@ -22,13 +22,12 @@ export function ResetPasswordPage() {
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: { password: "", confirmPassword: "" },
   })
+  const { errors } = useFormState({ control: form.control })
 
   async function onSubmit(values: ResetPasswordInput) {
     if (!token) {
-      toastManager.add({
-        title: "Invalid link",
-        description: "This reset link is missing or expired.",
-        type: "error",
+      form.setError("password", {
+        message: "This reset link is missing or expired.",
       })
       return
     }
@@ -42,10 +41,8 @@ export function ResetPasswordPage() {
       })
       navigate(routes.signIn)
     } catch {
-      toastManager.add({
-        title: "Reset failed",
-        description: "Could not reset your password. Request a new link.",
-        type: "error",
+      form.setError("password", {
+        message: "Could not reset your password. Request a new link.",
       })
     }
   }
@@ -68,33 +65,34 @@ export function ResetPasswordPage() {
 
       <form
         className="flex flex-col gap-4"
+        noValidate
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <Field>
-          <FieldLabel>New password</FieldLabel>
+        <Field data-invalid={!!errors.password}>
+          <FieldLabel htmlFor="reset-password">New password</FieldLabel>
           <Input
             autoComplete="new-password"
+            id="reset-password"
+            placeholder="Enter a new password"
             type="password"
             {...form.register("password")}
-            aria-invalid={!!form.formState.errors.password}
+            aria-invalid={!!errors.password}
           />
-          {form.formState.errors.password ? (
-            <FieldError>{form.formState.errors.password.message}</FieldError>
-          ) : null}
+          <FieldError>{errors.password?.message}</FieldError>
         </Field>
-        <Field>
-          <FieldLabel>Confirm password</FieldLabel>
+        <Field data-invalid={!!errors.confirmPassword}>
+          <FieldLabel htmlFor="reset-password-confirm">
+            Confirm password
+          </FieldLabel>
           <Input
             autoComplete="new-password"
+            id="reset-password-confirm"
+            placeholder="Confirm your password"
             type="password"
             {...form.register("confirmPassword")}
-            aria-invalid={!!form.formState.errors.confirmPassword}
+            aria-invalid={!!errors.confirmPassword}
           />
-          {form.formState.errors.confirmPassword ? (
-            <FieldError>
-              {form.formState.errors.confirmPassword.message}
-            </FieldError>
-          ) : null}
+          <FieldError>{errors.confirmPassword?.message}</FieldError>
         </Field>
         <Button
           className="w-full"

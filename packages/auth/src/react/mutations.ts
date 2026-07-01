@@ -15,6 +15,10 @@ import {
   DEFAULT_JWT_STORAGE_KEY,
   refreshAuthToken,
 } from "./utils/auth-token"
+import {
+  isOrganizationSlugTakenError,
+  type OrganizationSlugAvailability,
+} from "../lib/organization-slug-availability"
 import { unwrapClientResult } from "./utils/client-call"
 
 export type SignUpMutationInput = SignUpInput & {
@@ -605,8 +609,21 @@ export function useRejectInvitation(client: AuthClient = authClient) {
 
 export function useCheckSlug(client: AuthClient = authClient) {
   return useMutation({
-    mutationFn: async (input: { slug: string }) =>
-      unwrapClientResult(client.organization.checkSlug(input)),
+    mutationFn: async (input: {
+      slug: string
+    }): Promise<OrganizationSlugAvailability> => {
+      try {
+        const result = await unwrapClientResult(
+          client.organization.checkSlug(input)
+        )
+        return { available: result?.status === true }
+      } catch (error) {
+        if (isOrganizationSlugTakenError(error)) {
+          return { available: false }
+        }
+        throw error
+      }
+    },
   })
 }
 

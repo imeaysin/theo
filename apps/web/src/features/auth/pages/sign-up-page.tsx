@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom"
-import { useForm } from "react-hook-form"
+import { useForm, useFormState } from "react-hook-form"
 import { signUpSchema, type SignUpInput } from "@workspace/contracts"
 import { AuthDivider, AuthPageBody, AuthPageHeader } from "@workspace/ui/auth"
 import { Button } from "@workspace/ui/components/button"
@@ -39,6 +39,7 @@ export function SignUpPage() {
       confirmPassword: "",
     },
   })
+  const { errors } = useFormState({ control: form.control })
 
   if (isPending) {
     return <PageLoading />
@@ -63,10 +64,8 @@ export function SignUpPage() {
         `${routes.verifyEmail}?email=${encodeURIComponent(values.email)}`
       )
     } catch {
-      toastManager.add({
-        title: "Sign up failed",
-        description: "Could not create your account. Please try again.",
-        type: "error",
+      form.setError("email", {
+        message: "Could not create your account. Please try again.",
       })
     }
   }
@@ -99,57 +98,58 @@ export function SignUpPage() {
 
       <form
         className="flex flex-col gap-4"
+        noValidate
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <Field>
-          <FieldLabel>Name</FieldLabel>
+        <Field data-invalid={!!errors.name}>
+          <FieldLabel htmlFor="sign-up-name">Name</FieldLabel>
           <Input
             autoComplete="name"
+            id="sign-up-name"
+            placeholder="Your name"
             type="text"
             {...form.register("name")}
-            aria-invalid={!!form.formState.errors.name}
+            aria-invalid={!!errors.name}
           />
-          {form.formState.errors.name ? (
-            <FieldError>{form.formState.errors.name.message}</FieldError>
-          ) : null}
+          <FieldError>{errors.name?.message}</FieldError>
         </Field>
-        <Field>
-          <FieldLabel>Email</FieldLabel>
+        <Field data-invalid={!!errors.email}>
+          <FieldLabel htmlFor="sign-up-email">Email</FieldLabel>
           <Input
             autoComplete="email"
+            id="sign-up-email"
+            placeholder="you@example.com"
             type="email"
             {...form.register("email")}
-            aria-invalid={!!form.formState.errors.email}
+            aria-invalid={!!errors.email}
           />
-          {form.formState.errors.email ? (
-            <FieldError>{form.formState.errors.email.message}</FieldError>
-          ) : null}
+          <FieldError>{errors.email?.message}</FieldError>
         </Field>
-        <Field>
-          <FieldLabel>Password</FieldLabel>
+        <Field data-invalid={!!errors.password}>
+          <FieldLabel htmlFor="sign-up-password">Password</FieldLabel>
           <Input
             autoComplete="new-password"
+            id="sign-up-password"
+            placeholder="Create a password"
             type="password"
             {...form.register("password")}
-            aria-invalid={!!form.formState.errors.password}
+            aria-invalid={!!errors.password}
           />
-          {form.formState.errors.password ? (
-            <FieldError>{form.formState.errors.password.message}</FieldError>
-          ) : null}
+          <FieldError>{errors.password?.message}</FieldError>
         </Field>
-        <Field>
-          <FieldLabel>Confirm password</FieldLabel>
+        <Field data-invalid={!!errors.confirmPassword}>
+          <FieldLabel htmlFor="sign-up-confirm-password">
+            Confirm password
+          </FieldLabel>
           <Input
             autoComplete="new-password"
+            id="sign-up-confirm-password"
+            placeholder="Confirm your password"
             type="password"
             {...form.register("confirmPassword")}
-            aria-invalid={!!form.formState.errors.confirmPassword}
+            aria-invalid={!!errors.confirmPassword}
           />
-          {form.formState.errors.confirmPassword ? (
-            <FieldError>
-              {form.formState.errors.confirmPassword.message}
-            </FieldError>
-          ) : null}
+          <FieldError>{errors.confirmPassword?.message}</FieldError>
         </Field>
         <Button
           className="w-full"

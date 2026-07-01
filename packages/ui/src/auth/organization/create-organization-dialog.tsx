@@ -1,6 +1,7 @@
 "use client"
 
 import type { SubmitEventHandler } from "react"
+import type { OrganizationSlugAvailabilityState } from "./organization-slug-field"
 import { Button } from "@workspace/ui/components/button"
 import {
   Dialog,
@@ -26,9 +27,11 @@ export interface CreateOrganizationDialogProps {
   slug: string
   onSlugChange: (value: string) => void
   onSlugBlur?: () => void
+  onSlugAvailabilityChange?: (state: OrganizationSlugAvailabilityState) => void
   slugError?: string
   onSubmit: SubmitEventHandler<HTMLFormElement>
   isPending?: boolean
+  canSubmit?: boolean
   required?: boolean
   showSlug?: boolean
   title?: string
@@ -45,9 +48,11 @@ export function CreateOrganizationDialog({
   slug,
   onSlugChange,
   onSlugBlur,
+  onSlugAvailabilityChange,
   slugError,
   onSubmit,
   isPending = false,
+  canSubmit = true,
   required = false,
   showSlug = true,
   title = "Create workspace",
@@ -95,6 +100,7 @@ export function CreateOrganizationDialog({
                 disabled={isPending}
                 error={slugError}
                 id="create-organization-slug"
+                onAvailabilityChange={onSlugAvailabilityChange}
                 onBlur={onSlugBlur}
                 onChange={onSlugChange}
                 value={slug}
@@ -116,7 +122,7 @@ export function CreateOrganizationDialog({
                 Cancel
               </DialogClose>
             )}
-            <Button loading={isPending} type="submit">
+            <Button disabled={!canSubmit} loading={isPending} type="submit">
               {submitLabel}
             </Button>
           </DialogFooter>

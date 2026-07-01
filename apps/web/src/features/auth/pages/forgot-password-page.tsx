@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Link } from "react-router-dom"
-import { useForm } from "react-hook-form"
+import { useForm, useFormState } from "react-hook-form"
 import {
   forgotPasswordSchema,
   type ForgotPasswordInput,
@@ -19,6 +19,7 @@ export function ForgotPasswordPage() {
     resolver: zodResolver(forgotPasswordSchema),
     defaultValues: { email: "" },
   })
+  const { errors } = useFormState({ control: form.control })
 
   async function onSubmit(values: ForgotPasswordInput) {
     try {
@@ -32,10 +33,8 @@ export function ForgotPasswordPage() {
         type: "success",
       })
     } catch {
-      toastManager.add({
-        title: "Request failed",
-        description: "Could not send a reset link. Please try again.",
-        type: "error",
+      form.setError("email", {
+        message: "Could not send a reset link. Please try again.",
       })
     }
   }
@@ -58,19 +57,20 @@ export function ForgotPasswordPage() {
 
       <form
         className="flex flex-col gap-4"
+        noValidate
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <Field>
-          <FieldLabel>Email</FieldLabel>
+        <Field data-invalid={!!errors.email}>
+          <FieldLabel htmlFor="forgot-password-email">Email</FieldLabel>
           <Input
             autoComplete="email"
+            id="forgot-password-email"
+            placeholder="you@example.com"
             type="email"
             {...form.register("email")}
-            aria-invalid={!!form.formState.errors.email}
+            aria-invalid={!!errors.email}
           />
-          {form.formState.errors.email ? (
-            <FieldError>{form.formState.errors.email.message}</FieldError>
-          ) : null}
+          <FieldError>{errors.email?.message}</FieldError>
         </Field>
         <Button
           className="w-full"

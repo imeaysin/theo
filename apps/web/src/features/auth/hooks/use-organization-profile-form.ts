@@ -4,8 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useUpdateOrganization } from "@workspace/auth/react"
 import type { Organization } from "@workspace/auth/types/organization"
 import type { OrganizationProfileProps } from "@workspace/ui/auth"
+import type { OrganizationSlugAvailabilityState } from "@workspace/ui/auth"
 import { isSameOrganizationSlug } from "@workspace/ui/auth"
-import { useCallback, useEffect, useRef } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { useForm, useFormState, useWatch } from "react-hook-form"
 import { toastManager } from "@workspace/ui/components/toast"
 import {
@@ -13,10 +14,17 @@ import {
   type UpdateOrganizationInput,
 } from "@/features/auth/schemas"
 
+const defaultSlugAvailability: OrganizationSlugAvailabilityState = {
+  checking: false,
+  available: true,
+}
+
 export function useOrganizationProfileForm(
   organization: Organization
 ): OrganizationProfileProps {
   const slugEdited = useRef(false)
+  const [slugAvailability, setSlugAvailability] =
+    useState<OrganizationSlugAvailabilityState>(defaultSlugAvailability)
   const { mutate: updateOrganization, isPending } = useUpdateOrganization()
 
   const form = useForm<UpdateOrganizationInput>({
@@ -31,6 +39,7 @@ export function useOrganizationProfileForm(
   const slug = useWatch({ control: form.control, name: "slug" })
   const { errors } = useFormState({ control: form.control })
   const savedSlug = organization.slug ?? ""
+  const slugUnchanged = isSameOrganizationSlug(slug, savedSlug)
 
   useEffect(() => {
     form.reset({
@@ -48,7 +57,14 @@ export function useOrganizationProfileForm(
     [form]
   )
 
+  const canSubmit =
+    !isPending &&
+    !slugAvailability.checking &&
+    (slugUnchanged || slugAvailability.available !== false)
+
   const onSubmit = form.handleSubmit((values) => {
+    if (!canSubmit) return
+
     updateOrganization(values, {
       onSuccess: () => {
         toastManager.add({
@@ -57,11 +73,19 @@ export function useOrganizationProfileForm(
         })
         form.reset(values)
       },
+      onError: () => {
+        toastManager.add({
+          title: "Could not update workspace",
+          description: "That slug may already be taken. Try a different slug.",
+          type: "error",
+        })
+      },
     })
   })
 
   return {
     isPending,
+    canSubmit,
     name,
     onNameChange: (value) =>
       form.setValue("name", value, { shouldValidate: true }),
@@ -70,11 +94,12 @@ export function useOrganizationProfileForm(
     currentSlug: savedSlug,
     onSlugChange: handleSlugChange,
     onSlugBlur: () => {
-      if (isSameOrganizationSlug(slug, savedSlug)) return
+      if (slugUnchanged) return
       void form.trigger("slug")
     },
+    onSlugAvailabilityChange: setSlugAvailability,
     slugError: errors.slug?.message,
-    checkSlugAvailability: !isSameOrganizationSlug(slug, savedSlug),
+    checkSlugAvailability: !slugUnchanged,
     onSubmit,
   }
 }

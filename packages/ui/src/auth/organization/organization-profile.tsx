@@ -1,6 +1,7 @@
 "use client"
 
 import type { SubmitEventHandler } from "react"
+import type { OrganizationSlugAvailabilityState } from "./organization-slug-field"
 import {
   useActiveOrganization,
   useOrganizationPermission,
@@ -26,8 +27,10 @@ export interface OrganizationProfileProps {
   onSlugBlur?: () => void
   slugError?: string
   checkSlugAvailability?: boolean
+  onSlugAvailabilityChange?: (state: OrganizationSlugAvailabilityState) => void
   onSubmit?: SubmitEventHandler<HTMLFormElement>
   isPending?: boolean
+  canSubmit?: boolean
 }
 
 function OrganizationProfileSkeleton({ className }: { className?: string }) {
@@ -62,8 +65,10 @@ export function OrganizationProfile({
   onSlugBlur,
   slugError,
   checkSlugAvailability = true,
+  onSlugAvailabilityChange,
   onSubmit,
   isPending = false,
+  canSubmit = true,
 }: OrganizationProfileProps) {
   const { data: activeOrganization } = useActiveOrganization()
   const { data: canUpdateOrganization, isPending: permissionPending } =
@@ -116,6 +121,7 @@ export function OrganizationProfile({
               disabled={isPending || readOnly}
               error={slugError}
               id={slugInputId}
+              onAvailabilityChange={onSlugAvailabilityChange}
               onBlur={onSlugBlur}
               onChange={(value) => onSlugChange?.(value)}
               value={slug}
@@ -124,6 +130,7 @@ export function OrganizationProfile({
             {readOnly ? null : (
               <Button
                 className="w-fit"
+                disabled={!canSubmit}
                 loading={isPending}
                 size="sm"
                 type="submit"

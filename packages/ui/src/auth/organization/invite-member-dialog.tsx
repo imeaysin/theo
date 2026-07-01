@@ -99,7 +99,11 @@ export function InviteMemberDialog({
                 onValueChange={(item) => onRoleChange(item?.value ?? "")}
                 value={roleItems.find((item) => item.value === role) ?? null}
               >
-                <SelectTrigger className="w-full" id="invite-member-role">
+                <SelectTrigger
+                  aria-invalid={!!roleError}
+                  className="w-full"
+                  id="invite-member-role"
+                >
                   <SelectValue placeholder="Select a role" />
                 </SelectTrigger>
                 <SelectPopup alignItemWithTrigger={false}>

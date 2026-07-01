@@ -76,7 +76,10 @@ export {
   OrganizationSlugField,
   isSameOrganizationSlug,
 } from "./organization/organization-slug-field"
-export type { OrganizationSlugFieldProps } from "./organization/organization-slug-field"
+export type {
+  OrganizationSlugFieldProps,
+  OrganizationSlugAvailabilityState,
+} from "./organization/organization-slug-field"
 
 export { CreateOrganizationDialog } from "./organization/create-organization-dialog"
 export type { CreateOrganizationDialogProps } from "./organization/create-organization-dialog"
