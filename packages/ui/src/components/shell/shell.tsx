@@ -33,6 +33,7 @@ export interface ShellMainProps {
   backPath?: string | boolean
   onBack?: () => void
   flexChildrenContainer?: boolean
+  contentClassName?: string
   children: React.ReactNode
 }
 
@@ -49,6 +50,7 @@ export function ShellMain({
   backPath,
   onBack,
   flexChildrenContainer,
+  contentClassName,
   children,
 }: ShellMainProps): React.ReactElement {
   const backButton =
@@ -108,7 +110,12 @@ export function ShellMain({
         </div>
       )}
       {afterHeading}
-      <div className={cn(flexChildrenContainer && "flex flex-1 flex-col")}>
+      <div
+        className={cn(
+          flexChildrenContainer && "flex flex-1 flex-col",
+          contentClassName
+        )}
+      >
         {children}
       </div>
     </>

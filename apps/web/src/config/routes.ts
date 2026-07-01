@@ -15,6 +15,7 @@ export const routeSegments = {
     dashboard: "dashboard",
     notes: "notes",
     settings: "settings",
+    organization: "organization",
   },
 } as const
 
@@ -51,12 +52,17 @@ export const routes = {
     routeSegments.app.settings,
     "security"
   ),
+  organization: toPath(routeSegments.app.root, routeSegments.app.organization),
   organizationSettings: toPath(
     routeSegments.app.root,
-    "organization",
+    routeSegments.app.organization,
     "settings"
   ),
-  organizationPeople: toPath(routeSegments.app.root, "organization", "people"),
+  organizationPeople: toPath(
+    routeSegments.app.root,
+    routeSegments.app.organization,
+    "people"
+  ),
 } as const
 
 export const defaultAuthenticatedRoute = routes.dashboard
