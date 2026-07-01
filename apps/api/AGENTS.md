@@ -17,6 +17,8 @@ modules/<feature>/
 
 **Uploads** follows the same pattern with `StorageRepository` instead of Mongo.
 
+**Health** and **Me** use a thin controller + service (no CQRS) — simple reads with no domain logic.
+
 ## Cross-cutting (`src/common/`)
 
 | Path                        | Role                                                                       |

@@ -1,11 +1,9 @@
 import { Module } from "@nestjs/common"
-import { CqrsModule } from "@nestjs/cqrs"
 import { MeController } from "./me.controller"
-import { GetMeHandler } from "./queries/get-me.handler"
+import { MeService } from "./me.service"
 
 @Module({
-  imports: [CqrsModule],
   controllers: [MeController],
-  providers: [GetMeHandler],
+  providers: [MeService],
 })
 export class MeModule {}

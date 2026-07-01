@@ -20,11 +20,13 @@ export function getSafeRedirectPath(
 /** Appends `?redirect=` when returning to an auth page should preserve post-login navigation. */
 export function withAuthRedirectQuery(
   path: string,
-  redirect: string | null | undefined,
-  fallback: string
+  options: {
+    redirect?: string | null
+    fallback: string
+  }
 ): string {
-  const safeRedirect = getSafeRedirectPath(redirect, fallback)
-  if (safeRedirect === fallback) return path
+  const safeRedirect = getSafeRedirectPath(options.redirect, options.fallback)
+  if (safeRedirect === options.fallback) return path
 
   return `${path}?redirect=${encodeURIComponent(safeRedirect)}`
 }

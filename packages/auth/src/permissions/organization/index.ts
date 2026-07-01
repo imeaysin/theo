@@ -21,7 +21,7 @@ export type OrganizationAction<R extends OrganizationResource> = ActionName<
   R
 >
 export type OrganizationPermissionMap = PermissionMapFor<OrganizationStatement>
-export type OrganizationPermissionCheck = {
+export interface OrganizationPermissionCheck {
   permissions: OrganizationPermissionMap
 }
 export type OrganizationRequiredPermission<

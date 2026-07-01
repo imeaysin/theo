@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -19,7 +20,6 @@ import {
   ApiTags,
 } from "@nestjs/swagger"
 import type { JwtClaims } from "@workspace/auth/types"
-import { NotesListResponseSchema } from "@workspace/contracts"
 import { CurrentUser } from "../../common/decorators"
 import { ApiAuthErrorResponses } from "../../common/decorators/api-error-responses.decorator"
 import { BulkDeleteNotesCommand } from "./commands/bulk-delete-notes.command"
@@ -53,11 +53,11 @@ export class NotesController {
   })
   @ApiOkResponse({ type: NotesListApiResponseDto })
   async list(@CurrentUser() user: JwtClaims) {
-    const items = await this.queryBus.execute(new ListNotesQuery(user.id))
-    return NotesListResponseSchema.parse({ items })
+    return this.queryBus.execute(new ListNotesQuery(user.id))
   }
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   @ApiBearerAuth("bearer")
   @ApiOperation({
     summary: "Create a note",

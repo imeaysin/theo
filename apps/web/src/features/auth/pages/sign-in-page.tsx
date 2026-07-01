@@ -54,11 +54,10 @@ export function SignInPage() {
       const data = await signIn.mutateAsync(values)
       if (data && "twoFactorRedirect" in data && data.twoFactorRedirect) {
         navigate(
-          withAuthRedirectQuery(
-            routes.twoFactor,
-            searchParams.get("redirect"),
-            defaultAuthenticatedRoute
-          )
+          withAuthRedirectQuery(routes.twoFactor, {
+            redirect: searchParams.get("redirect"),
+            fallback: defaultAuthenticatedRoute,
+          })
         )
         return
       }
@@ -85,11 +84,10 @@ export function SignInPage() {
           Don&apos;t have an account?{" "}
           <Link
             className="text-foreground underline underline-offset-2 transition-colors hover:text-foreground/80"
-            to={withAuthRedirectQuery(
-              routes.signUp,
-              searchParams.get("redirect"),
-              defaultAuthenticatedRoute
-            )}
+            to={withAuthRedirectQuery(routes.signUp, {
+              redirect: searchParams.get("redirect"),
+              fallback: defaultAuthenticatedRoute,
+            })}
           >
             Sign up
           </Link>

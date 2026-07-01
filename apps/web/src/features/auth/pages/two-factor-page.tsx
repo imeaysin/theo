@@ -41,11 +41,10 @@ export function TwoFactorPage() {
       footer={
         <Link
           className="font-sans text-sm text-muted-foreground underline underline-offset-2 transition-colors hover:text-foreground"
-          to={withAuthRedirectQuery(
-            routes.signIn,
-            searchParams.get("redirect"),
-            defaultAuthenticatedRoute
-          )}
+          to={withAuthRedirectQuery(routes.signIn, {
+            redirect: searchParams.get("redirect"),
+            fallback: defaultAuthenticatedRoute,
+          })}
         >
           Back to sign in
         </Link>

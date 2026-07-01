@@ -1,5 +1,8 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs"
-import type { BulkDeleteNotesResponse } from "@workspace/contracts"
+import {
+  BulkDeleteNotesResponseSchema,
+  type BulkDeleteNotesResponse,
+} from "@workspace/contracts"
 import { NotesRepository } from "../repositories/notes.repository"
 import { BulkDeleteNotesCommand } from "./bulk-delete-notes.command"
 
@@ -14,6 +17,6 @@ export class BulkDeleteNotesHandler implements ICommandHandler<BulkDeleteNotesCo
       command.input.ids,
       command.userId
     )
-    return { deletedCount }
+    return BulkDeleteNotesResponseSchema.parse({ deletedCount })
   }
 }

@@ -7,7 +7,7 @@ import { absoluteAppUrl, defaultAuthenticatedRoute } from "@/config/routes"
 
 const providers: AuthOAuthProvider[] = ["google", "github"]
 
-type AuthButtonsProps = {
+interface AuthButtonsProps {
   callbackPath?: string
 }
 

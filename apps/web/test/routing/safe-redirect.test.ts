@@ -32,11 +32,10 @@ describe("getSafeRedirectPath", () => {
 
   it("adds redirect query for auth cross-links", () => {
     expect(
-      withAuthRedirectQuery(
-        "/auth/sign-in",
-        "/accept-invitation?id=abc",
-        defaultAuthenticatedRoute
-      )
+      withAuthRedirectQuery("/auth/sign-in", {
+        redirect: "/accept-invitation?id=abc",
+        fallback: defaultAuthenticatedRoute,
+      })
     ).toBe("/auth/sign-in?redirect=%2Faccept-invitation%3Fid%3Dabc")
   })
 })

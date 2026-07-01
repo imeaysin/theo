@@ -1,4 +1,11 @@
-import { Controller, Post, UploadedFile, UseInterceptors } from "@nestjs/common"
+import {
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from "@nestjs/common"
 import { CommandBus } from "@nestjs/cqrs"
 import { FileInterceptor } from "@nestjs/platform-express"
 import {
@@ -26,6 +33,7 @@ export class UploadsController {
   constructor(private readonly commandBus: CommandBus) {}
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   @ApiBearerAuth("bearer")
   @ApiOperation({
     summary: "Upload a file",

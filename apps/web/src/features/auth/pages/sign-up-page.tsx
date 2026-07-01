@@ -78,11 +78,10 @@ export function SignUpPage() {
           Already have an account?{" "}
           <Link
             className="text-foreground underline underline-offset-2 transition-colors hover:text-foreground/80"
-            to={withAuthRedirectQuery(
-              routes.signIn,
-              searchParams.get("redirect"),
-              defaultAuthenticatedRoute
-            )}
+            to={withAuthRedirectQuery(routes.signIn, {
+              redirect: searchParams.get("redirect"),
+              fallback: defaultAuthenticatedRoute,
+            })}
           >
             Sign in
           </Link>

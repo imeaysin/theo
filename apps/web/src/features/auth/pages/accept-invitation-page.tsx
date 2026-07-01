@@ -75,11 +75,10 @@ export function AcceptInvitationPage() {
             New here?{" "}
             <Link
               className="text-foreground underline underline-offset-2 transition-colors hover:text-foreground/80"
-              to={withAuthRedirectQuery(
-                routes.signUp,
-                returnPath,
-                defaultAuthenticatedRoute
-              )}
+              to={withAuthRedirectQuery(routes.signUp, {
+                redirect: returnPath,
+                fallback: defaultAuthenticatedRoute,
+              })}
             >
               Create an account
             </Link>
@@ -94,11 +93,10 @@ export function AcceptInvitationPage() {
           className="w-full"
           render={
             <Link
-              to={withAuthRedirectQuery(
-                routes.signIn,
-                returnPath,
-                defaultAuthenticatedRoute
-              )}
+              to={withAuthRedirectQuery(routes.signIn, {
+                redirect: returnPath,
+                fallback: defaultAuthenticatedRoute,
+              })}
             />
           }
           size="lg"
