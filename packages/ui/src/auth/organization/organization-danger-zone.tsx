@@ -28,14 +28,14 @@ export function OrganizationDangerZone({
       </h2>
 
       <Card>
-        <CardPanel>
+        <CardPanel className="p-4">
           <LeaveOrganization />
 
           {deletePermissionPending ? <DangerZoneRowSkeleton /> : null}
 
           {!deletePermissionPending && canDelete ? (
             <>
-              <Separator className="my-4" />
+              <Separator className="my-3" />
               <DeleteOrganization />
             </>
           ) : null}

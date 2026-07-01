@@ -17,7 +17,7 @@ export function OrganizationSettings({
   profile,
 }: OrganizationSettingsProps) {
   return (
-    <div className={cn("flex flex-col gap-4 md:gap-6", className)}>
+    <div className={cn("flex flex-col gap-4", className)}>
       <OrganizationProfile {...profile} />
       <OrganizationDangerZone />
     </div>

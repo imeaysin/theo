@@ -6,7 +6,7 @@ import {
   useOrganizationPermission,
 } from "@workspace/auth/react"
 import { Button } from "@workspace/ui/components/button"
-import { Card, CardFooter, CardPanel } from "@workspace/ui/components/card"
+import { Card, CardPanel } from "@workspace/ui/components/card"
 import { Field, FieldError, FieldLabel } from "@workspace/ui/components/field"
 import { Form } from "@workspace/ui/components/form"
 import { Input } from "@workspace/ui/components/input"
@@ -33,7 +33,7 @@ export interface OrganizationProfileProps {
 function OrganizationProfileSkeleton({ className }: { className?: string }) {
   return (
     <Card className={cn(className)}>
-      <CardPanel className="flex flex-col gap-4">
+      <CardPanel className="flex flex-col gap-4 p-4">
         <Field>
           <FieldLabel>Name</FieldLabel>
           <Skeleton>
@@ -94,7 +94,7 @@ export function OrganizationProfile({
         }}
       >
         <Card className={cn(className)}>
-          <CardPanel className="flex flex-col gap-4">
+          <CardPanel className="flex flex-col gap-4 p-4">
             <Field data-invalid={!!nameError}>
               <FieldLabel htmlFor={nameInputId}>Name</FieldLabel>
               <Input
@@ -120,15 +120,18 @@ export function OrganizationProfile({
               onChange={(value) => onSlugChange?.(value)}
               value={slug}
             />
-          </CardPanel>
 
-          <CardFooter>
             {readOnly ? null : (
-              <Button loading={isPending} size="sm" type="submit">
+              <Button
+                className="w-fit"
+                loading={isPending}
+                size="sm"
+                type="submit"
+              >
                 Save changes
               </Button>
             )}
-          </CardFooter>
+          </CardPanel>
         </Card>
       </Form>
     </div>

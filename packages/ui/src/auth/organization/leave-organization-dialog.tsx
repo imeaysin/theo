@@ -1,19 +1,20 @@
 "use client"
 
 import { useAuthUiConfig, useLeaveOrganization } from "@workspace/auth/react"
-import {
-  AlertDialog,
-  AlertDialogClose,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogPopup,
-  AlertDialogTitle,
-} from "@workspace/ui/components/alert-dialog"
-import { Button } from "@workspace/ui/components/button"
-import { Card, CardPanel } from "@workspace/ui/components/card"
-import { toastManager } from "@workspace/ui/components/toast"
 import type { Organization } from "@workspace/auth/types/organization"
+import { LogOut } from "lucide-react"
+import { Button } from "@workspace/ui/components/button"
+import {
+  Dialog,
+  DialogClose,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogPanel,
+  DialogPopup,
+  DialogTitle,
+} from "@workspace/ui/components/dialog"
+import { toastManager } from "@workspace/ui/components/toast"
 import { OrganizationView } from "./organization-view"
 
 export interface LeaveOrganizationDialogProps {
@@ -31,31 +32,29 @@ export function LeaveOrganizationDialog({
   const { mutate: leaveOrganization, isPending } = useLeaveOrganization()
 
   return (
-    <AlertDialog onOpenChange={onOpenChange} open={open}>
-      <AlertDialogPopup>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Leave workspace</AlertDialogTitle>
-          <AlertDialogDescription>
+    <Dialog onOpenChange={onOpenChange} open={open}>
+      <DialogPopup>
+        <DialogHeader>
+          <DialogTitle>Leave workspace</DialogTitle>
+          <DialogDescription>
             You will lose access to this workspace and its resources.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
+          </DialogDescription>
+        </DialogHeader>
 
-        <div className="px-6 pb-2">
-          <Card>
-            <CardPanel>
-              <OrganizationView organization={organization} />
-            </CardPanel>
-          </Card>
-        </div>
+        <DialogPanel>
+          <div className="rounded-lg border bg-muted/30 px-3 py-2.5">
+            <OrganizationView organization={organization} />
+          </div>
+        </DialogPanel>
 
-        <AlertDialogFooter>
-          <AlertDialogClose
+        <DialogFooter>
+          <DialogClose
             render={
               <Button disabled={isPending} type="button" variant="outline" />
             }
           >
             Cancel
-          </AlertDialogClose>
+          </DialogClose>
           <Button
             loading={isPending}
             onClick={() =>
@@ -78,10 +77,11 @@ export function LeaveOrganizationDialog({
             type="button"
             variant="destructive"
           >
+            <LogOut />
             Leave workspace
           </Button>
-        </AlertDialogFooter>
-      </AlertDialogPopup>
-    </AlertDialog>
+        </DialogFooter>
+      </DialogPopup>
+    </Dialog>
   )
 }
