@@ -1,5 +1,9 @@
 import { authClient } from "@workspace/auth/client"
-import { DEFAULT_JWT_STORAGE_KEY } from "@workspace/auth/react"
+import {
+  DEFAULT_JWT_STORAGE_KEY,
+  isJwtExpired,
+  refreshAuthToken,
+} from "@workspace/auth/react"
 import { env } from "@/config/env"
 import {
   HttpErrorCode,
@@ -10,11 +14,24 @@ import {
 } from "@workspace/contracts"
 
 const JWT_STORAGE_KEY = DEFAULT_JWT_STORAGE_KEY
+const RETRYABLE_AUTH_STATUSES = new Set([401, 403])
 
-async function getBearerToken(): Promise<string | null> {
-  if (typeof sessionStorage !== "undefined") {
+type InternalFetchInit = RequestInit & { __retried?: boolean }
+
+async function getBearerToken(options?: {
+  forceRefresh?: boolean
+}): Promise<string | null> {
+  if (!options?.forceRefresh && typeof sessionStorage !== "undefined") {
     const cached = sessionStorage.getItem(JWT_STORAGE_KEY)
-    if (cached) return cached
+    if (cached && !isJwtExpired(cached)) return cached
+    if (cached) sessionStorage.removeItem(JWT_STORAGE_KEY)
+  } else if (options?.forceRefresh) {
+    try {
+      const refreshed = await refreshAuthToken(authClient, JWT_STORAGE_KEY)
+      return refreshed?.token ?? null
+    } catch {
+      return null
+    }
   }
 
   const { data, error } = await authClient.token()
@@ -69,14 +86,15 @@ function isSuccessEnvelope<T>(value: unknown): value is ApiSuccessResponse<T> {
   return "success" in value && value.success === true && "data" in value
 }
 
-export async function apiFetch<T>(
+async function executeFetch<T>(
   path: string,
-  init?: RequestInit
+  init: InternalFetchInit = {}
 ): Promise<T> {
+  const { __retried, ...requestInit } = init
   const token = await getBearerToken()
-  const headers = new Headers(init?.headers)
+  const headers = new Headers(requestInit.headers)
 
-  if (!headers.has("Content-Type") && init?.body) {
+  if (!headers.has("Content-Type") && requestInit.body) {
     headers.set("Content-Type", "application/json")
   }
   if (token) {
@@ -84,7 +102,7 @@ export async function apiFetch<T>(
   }
 
   const response = await fetch(`${env.apiUrl}${path}`, {
-    ...init,
+    ...requestInit,
     headers,
     credentials: "include",
   })
@@ -93,12 +111,21 @@ export async function apiFetch<T>(
     const body = (await response.json().catch(() => null)) as unknown
 
     if (isApiErrorBody(body)) {
-      throw new ApiError({
+      const apiError = new ApiError({
         message: body.message,
         status: body.statusCode,
         code: body.code as ApiErrorCode,
         errors: body.errors ?? null,
       })
+
+      if (!__retried && RETRYABLE_AUTH_STATUSES.has(apiError.status) && token) {
+        const refreshed = await getBearerToken({ forceRefresh: true })
+        if (refreshed && refreshed !== token) {
+          return executeFetch<T>(path, { ...requestInit, __retried: true })
+        }
+      }
+
+      throw apiError
     }
 
     throw new ApiError({
@@ -123,4 +150,8 @@ export async function apiFetch<T>(
   }
 
   return json.data
+}
+
+export function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
+  return executeFetch<T>(path, init)
 }

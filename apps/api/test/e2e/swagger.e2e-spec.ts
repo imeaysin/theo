@@ -1,43 +1,7 @@
-jest.mock("@workspace/auth", () => ({
-  auth: {},
-}))
-
-jest.mock("@thallesp/nestjs-better-auth", () => ({
-  AuthModule: {
-    forRootAsync: () => ({
-      module: class AuthModuleStub {},
-    }),
-  },
-}))
-
-jest.mock("@workspace/auth/nestjs", () => ({
-  Public: () => () => undefined,
-  CurrentUser: () => () => undefined,
-  RequirePermission: () => () => undefined,
-  RequireOrgPermission: () => () => undefined,
-  JwksGuard: class JwksGuard {
-    canActivate() {
-      return true
-    }
-  },
-  RbacGuard: class RbacGuard {
-    canActivate() {
-      return true
-    }
-  },
-  OrgRbacGuard: class OrgRbacGuard {
-    async canActivate() {
-      return true
-    }
-  },
-}))
-
-import { INestApplication } from "@nestjs/common"
+import { type INestApplication } from "@nestjs/common"
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger"
-import { Test } from "@nestjs/testing"
 import { cleanupOpenApiDoc } from "nestjs-zod"
-import { AppModule } from "../../src/app.module"
-import { configureApp } from "../../src/common/configure-app"
+import { createE2eApp } from "./support/create-e2e-app"
 
 function getJsonSchemaRef(ref: unknown): string | undefined {
   if (!ref || typeof ref !== "object" || !("$ref" in ref)) return undefined
@@ -59,13 +23,7 @@ describe("Swagger (e2e)", () => {
   let document: ReturnType<typeof cleanupOpenApiDoc>
 
   beforeAll(async () => {
-    const moduleFixture = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile()
-
-    app = moduleFixture.createNestApplication({ bodyParser: false })
-    configureApp(app)
-    await app.init()
+    ;({ app } = await createE2eApp())
 
     const config = new DocumentBuilder().setTitle("API").setVersion("1").build()
     document = cleanupOpenApiDoc(SwaggerModule.createDocument(app, config))

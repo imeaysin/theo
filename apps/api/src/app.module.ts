@@ -1,11 +1,5 @@
 import { Module } from "@nestjs/common"
-import {
-  APP_FILTER,
-  APP_GUARD,
-  APP_INTERCEPTOR,
-  APP_PIPE,
-  Reflector,
-} from "@nestjs/core"
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from "@nestjs/core"
 import { ZodValidationPipe } from "nestjs-zod"
 import { CqrsModule } from "@nestjs/cqrs"
 import { AuthModule } from "@thallesp/nestjs-better-auth"
@@ -52,20 +46,20 @@ import { UploadsModule } from "./modules/uploads/uploads.module"
   controllers: [AppController],
   providers: [
     AppService,
+    JwksGuard,
+    RbacGuard,
+    OrgRbacGuard,
     {
       provide: APP_GUARD,
-      useFactory: (reflector: Reflector) => new JwksGuard(reflector),
-      inject: [Reflector],
+      useExisting: JwksGuard,
     },
     {
       provide: APP_GUARD,
-      useFactory: (reflector: Reflector) => new RbacGuard(reflector),
-      inject: [Reflector],
+      useExisting: RbacGuard,
     },
     {
       provide: APP_GUARD,
-      useFactory: (reflector: Reflector) => new OrgRbacGuard(reflector),
-      inject: [Reflector],
+      useExisting: OrgRbacGuard,
     },
     { provide: APP_PIPE, useClass: ZodValidationPipe },
     { provide: APP_FILTER, useClass: AllExceptionsFilter },

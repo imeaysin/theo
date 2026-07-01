@@ -76,6 +76,12 @@ export function createAuth() {
       origin.trim()
     ),
 
+    user: {
+      deleteUser: {
+        enabled: true,
+      },
+    },
+
     database: mongodbAdapter(getAuthDb(), { client: getAuthMongoClient() }),
 
     databaseHooks: {

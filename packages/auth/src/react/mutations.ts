@@ -189,13 +189,16 @@ export function useVerifyEmail(client: AuthClient = authClient) {
 export function useVerifyTotp(client: AuthClient = authClient) {
   const invalidate = useInvalidateAuthQueries()
   return useMutation({
-    mutationFn: async (input: TwoFactorInput) =>
-      unwrapClientResult(
+    mutationFn: async (input: TwoFactorInput) => {
+      const result = await unwrapClientResult(
         client.twoFactor.verifyTotp({
           code: input.code,
           trustDevice: true,
         })
-      ),
+      )
+      await refreshAuthToken(client)
+      return result
+    },
     onSuccess: () => invalidate(),
   })
 }
@@ -403,15 +406,21 @@ export function useInviteMember(client: AuthClient = authClient) {
 export function useRemoveMember(client: AuthClient = authClient) {
   const invalidate = useInvalidateAuthQueries()
   return useMutation({
-    mutationFn: async (input: { memberId: string; organizationId?: string }) =>
-      unwrapClientResult(
+    mutationFn: async (input: {
+      memberId: string
+      organizationId?: string
+    }) => {
+      const result = await unwrapClientResult(
         client.organization.removeMember({
           memberIdOrEmail: input.memberId,
           ...(input.organizationId
             ? { organizationId: input.organizationId }
             : {}),
         })
-      ),
+      )
+      await refreshAuthToken(client)
+      return result
+    },
     onSuccess: () => invalidate(),
   })
 }
@@ -423,8 +432,8 @@ export function useUpdateMemberRole(client: AuthClient = authClient) {
       memberId: string
       role: string
       organizationId?: string
-    }) =>
-      unwrapClientResult(
+    }) => {
+      const result = await unwrapClientResult(
         client.organization.updateMemberRole({
           memberId: input.memberId,
           role: input.role,
@@ -432,7 +441,10 @@ export function useUpdateMemberRole(client: AuthClient = authClient) {
             ? { organizationId: input.organizationId }
             : {}),
         })
-      ),
+      )
+      await refreshAuthToken(client)
+      return result
+    },
     onSuccess: () => invalidate(),
   })
 }

@@ -220,6 +220,45 @@ if [ "$VERIFIED" = true ]; then
     if [ -n "$JWT" ]; then
       ME=$(curl -s -H "Authorization: Bearer $JWT" "$BASE/v1/me")
       check "JWT includes activeOrganizationId" "echo '$ME' | grep -q 'activeOrganizationId'"
+
+      # --- Workspace switch + notes isolation ---
+      ORG_ID=$(echo "$ORG" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4 || true)
+      SLUG_B="edge-org-b-$(date +%s)"
+      ORG_B=$(curl -s -b "$COOKIE" -c "$COOKIE" -X POST "$BASE/api/auth/organization/create" \
+        -H 'Content-Type: application/json' \
+        -H "Origin: $ORIGIN" \
+        -d "{\"name\":\"Edge Org B\",\"slug\":\"$SLUG_B\"}")
+      ORG_B_ID=$(echo "$ORG_B" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4 || true)
+      if [ -n "$ORG_ID" ] && [ -n "$ORG_B_ID" ]; then
+        curl -sf -b "$COOKIE" -c "$COOKIE" -X POST "$BASE/api/auth/organization/set-active" \
+          -H 'Content-Type: application/json' -H "Origin: $ORIGIN" \
+          -d "{\"organizationId\":\"$ORG_ID\"}" >/dev/null
+        JWT_A=$(curl -s -b "$COOKIE" -H "Origin: $ORIGIN" "$BASE/api/auth/token" | grep -o '"token":"[^"]*"' | head -1 | cut -d'"' -f4 || true)
+        NOTE=$(curl -s -X POST "$BASE/v1/notes" \
+          -H "Authorization: Bearer $JWT_A" \
+          -H 'Content-Type: application/json' \
+          -d '{"title":"Edge note","body":"workspace A"}')
+        NOTE_ID=$(echo "$NOTE" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4 || true)
+        check "create note in workspace A" "echo '$NOTE' | grep -q '\"title\":\"Edge note\"'"
+
+        curl -sf -b "$COOKIE" -c "$COOKIE" -X POST "$BASE/api/auth/organization/set-active" \
+          -H 'Content-Type: application/json' -H "Origin: $ORIGIN" \
+          -d "{\"organizationId\":\"$ORG_B_ID\"}" >/dev/null
+        JWT_B=$(curl -s -b "$COOKIE" -H "Origin: $ORIGIN" "$BASE/api/auth/token" | grep -o '"token":"[^"]*"' | head -1 | cut -d'"' -f4 || true)
+        LIST_B=$(curl -s -H "Authorization: Bearer $JWT_B" "$BASE/v1/notes")
+        check "notes list empty in workspace B" "echo '$LIST_B' | grep -q '\"items\":\\[\\]'"
+        if [ -n "$NOTE_ID" ] && [ -n "$JWT_B" ]; then
+          check "cross-workspace note update blocked" "curl -s -o /dev/null -w '%{http_code}' -X PATCH '$BASE/v1/notes/$NOTE_ID' -H \"Authorization: Bearer $JWT_B\" -H 'Content-Type: application/json' -d '{\"title\":\"Hacked\"}' | grep -q '404'"
+        else
+          skip_test "cross-workspace note update blocked"
+        fi
+        check "notes without bearer rejected" "curl -s '$BASE/v1/notes' | grep -q 'Missing bearer token'"
+      else
+        skip_test "create note in workspace A"
+        skip_test "notes list empty in workspace B"
+        skip_test "cross-workspace note update blocked"
+        skip_test "notes without bearer rejected"
+      fi
     else
       skip_test "JWT includes activeOrganizationId"
     fi

@@ -1,55 +1,13 @@
-jest.mock("@workspace/auth", () => ({
-  auth: {},
-}))
-
-jest.mock("@thallesp/nestjs-better-auth", () => ({
-  AuthModule: {
-    forRootAsync: () => ({
-      module: class AuthModuleStub {},
-    }),
-  },
-}))
-
-jest.mock("@workspace/auth/nestjs", () => ({
-  Public: () => () => undefined,
-  CurrentUser: () => () => undefined,
-  RequirePermission: () => () => undefined,
-  RequireOrgPermission: () => () => undefined,
-  JwksGuard: class JwksGuard {
-    canActivate() {
-      return true
-    }
-  },
-  RbacGuard: class RbacGuard {
-    canActivate() {
-      return true
-    }
-  },
-  OrgRbacGuard: class OrgRbacGuard {
-    async canActivate() {
-      return true
-    }
-  },
-}))
-
-import { INestApplication } from "@nestjs/common"
-import { Test, TestingModule } from "@nestjs/testing"
+import { type INestApplication } from "@nestjs/common"
 import request from "supertest"
-import { App } from "supertest/types"
-import { AppModule } from "../../src/app.module"
-import { configureApp } from "../../src/common/configure-app"
+import { type App } from "supertest/types"
+import { createE2eApp } from "./support/create-e2e-app"
 
 describe("AppController (e2e)", () => {
   let app: INestApplication<App>
 
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile()
-
-    app = moduleFixture.createNestApplication({ bodyParser: false })
-    configureApp(app)
-    await app.init()
+    ;({ app } = await createE2eApp())
   })
 
   afterAll(async () => {

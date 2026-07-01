@@ -18,11 +18,17 @@ import { apiFetch } from "@/lib/api"
 export const notesQueryKey = (organizationId?: string | null) =>
   ["notes", organizationId ?? null] as const
 
-function patchNotesList(
-  queryClient: ReturnType<typeof useQueryClient>,
-  organizationId: string | null | undefined,
+interface PatchNotesListOptions {
+  queryClient: ReturnType<typeof useQueryClient>
+  organizationId: string | null | undefined
   updater: (items: NoteResponse[]) => NoteResponse[]
-) {
+}
+
+function patchNotesList({
+  queryClient,
+  organizationId,
+  updater,
+}: PatchNotesListOptions) {
   queryClient.setQueryData<NotesListResponse>(
     notesQueryKey(organizationId),
     (current) => {
@@ -96,9 +102,12 @@ export function useUpdateNoteMutation() {
       return data as NoteResponse
     },
     onSuccess: (note) => {
-      patchNotesList(queryClient, organizationId, (items) =>
-        items.map((item) => (item.id === note.id ? note : item))
-      )
+      patchNotesList({
+        queryClient,
+        organizationId,
+        updater: (items) =>
+          items.map((item) => (item.id === note.id ? note : item)),
+      })
       toastManager.add({
         title: "Note updated",
         type: "success",
@@ -129,9 +138,11 @@ export function useDeleteNoteMutation() {
       await queryClient.cancelQueries({
         queryKey: notesQueryKey(organizationId),
       })
-      patchNotesList(queryClient, organizationId, (items) =>
-        items.filter((item) => item.id !== noteId)
-      )
+      patchNotesList({
+        queryClient,
+        organizationId,
+        updater: (items) => items.filter((item) => item.id !== noteId),
+      })
     },
     onSuccess: () => {
       toastManager.add({
@@ -170,9 +181,11 @@ export function useBulkDeleteNotesMutation() {
         queryKey: notesQueryKey(organizationId),
       })
       const ids = new Set(input.ids)
-      patchNotesList(queryClient, organizationId, (items) =>
-        items.filter((item) => !ids.has(item.id))
-      )
+      patchNotesList({
+        queryClient,
+        organizationId,
+        updater: (items) => items.filter((item) => !ids.has(item.id)),
+      })
     },
     onSuccess: (result) => {
       toastManager.add({

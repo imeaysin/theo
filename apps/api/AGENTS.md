@@ -32,10 +32,21 @@ modules/<feature>/
 
 ## Testing
 
-- **Unit:** `test/unit/**/*.spec.ts` — run via `pnpm test` in this app.
-- **E2e:** `test/e2e/**/*.e2e-spec.ts` — run via `pnpm test:e2e` (needs MongoDB).
-- **Auth smoke (optional, local):** `bash apps/api/scripts/auth-flow-test.sh` with `pnpm dev:api` running.
-- Shared setup: `test/jest-setup.ts`.
+Follow the [NestJS testing guide](https://docs.nestjs.com/fundamentals/testing): `Test.createTestingModule()`, `overrideGuard()` / `overrideProvider()`, `createNestApplication()`, and Supertest.
+
+| Layer                      | Location                                    | Command                                     |
+| -------------------------- | ------------------------------------------- | ------------------------------------------- |
+| **Unit**                   | `test/unit/**/*.spec.ts`                    | `pnpm test`                                 |
+| **E2E**                    | `test/e2e/**/*.e2e-spec.ts`                 | `pnpm test:e2e` (MongoDB required)          |
+| **Integration (live API)** | `test/integration/**/*.integration-spec.ts` | `pnpm test:integration` with `pnpm dev:api` |
+| **Auth smoke**             | `scripts/auth-flow-test.sh`                 | optional, against running API               |
+
+**E2E helpers**
+
+- `test/e2e/support/create-e2e-app.ts` — boots `AppModule` with `overrideGuard()` test doubles
+- `test/e2e/jest-e2e.setup.ts` — stubs ESM-only Better Auth Nest module for Jest
+
+Global guards use `useExisting` in `app.module.ts` so e2e tests can override `JwksGuard`, `RbacGuard`, and `OrgRbacGuard` per the Nest docs.
 
 ## Adding an endpoint
 
