@@ -1,10 +1,6 @@
 "use client"
 
-import {
-  useActiveOrganization,
-  useAuthUiConfig,
-  useAuthSession,
-} from "@workspace/auth/react"
+import { useAuthUiConfig, useAuthSession } from "@workspace/auth/react"
 import type { LucideIcon } from "lucide-react"
 import { ChevronsUpDown, LogOut, Settings } from "lucide-react"
 import { useState } from "react"
@@ -22,7 +18,6 @@ import { cn } from "@workspace/ui/lib/utils"
 import { AuthUserAvatar, type AuthUserAvatarUser } from "./auth-user-avatar"
 import { AuthUserView } from "./auth-user-view"
 import { OrganizationSwitcherMenu } from "./organization/organization-switcher-menu"
-import { OrganizationView } from "./organization/organization-view"
 
 export interface AuthUserButtonMenuItem {
   label: string
@@ -49,7 +44,7 @@ function getTriggerClassName(
 ) {
   if (size === "sidebar") {
     return cn(
-      "flex h-8 w-full min-w-0 cursor-pointer appearance-none items-center gap-2 overflow-hidden rounded-lg px-2 text-left text-sm font-medium text-sidebar-foreground ring-sidebar-ring transition outline-none",
+      "flex min-h-8 w-full min-w-0 cursor-pointer appearance-none items-center gap-2 overflow-hidden rounded-lg px-2 py-1.5 text-left text-sm font-medium text-sidebar-foreground ring-sidebar-ring transition outline-none",
       "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
       "focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground",
       "in-data-[collapsed]:size-8 in-data-[collapsed]:w-8 in-data-[collapsed]:shrink-0 in-data-[collapsed]:justify-center in-data-[collapsed]:gap-0 in-data-[collapsed]:p-2",
@@ -76,52 +71,25 @@ function TriggerContent({
   isPending,
   size,
   user,
-  activeOrganization,
-  organizationPending,
-  showWorkspaceMenu,
 }: {
   isPending: boolean
   size: AuthUserButtonProps["size"]
   user: AuthUserAvatarUser | null
-  activeOrganization?: { name: string; slug: string } | null
-  organizationPending?: boolean
-  showWorkspaceMenu: boolean
 }) {
-  if (showWorkspaceMenu && size === "sidebar") {
-    if (organizationPending || activeOrganization) {
-      return (
-        <>
-          <OrganizationView
-            className="min-w-0 flex-1 in-data-[collapsed]:hidden"
-            loading={organizationPending}
-            organization={activeOrganization}
-          />
-          <OrganizationView
-            className="hidden min-w-0 in-data-[collapsed]:flex"
-            hideSlug
-            loading={organizationPending}
-            organization={activeOrganization}
-          />
-          <ChevronsUpDown className="ml-auto size-4 shrink-0 text-sidebar-foreground/60 in-data-[collapsed]:hidden" />
-        </>
-      )
-    }
-  }
-
   if (size === "sidebar") {
     return (
       <>
-        <AuthUserAvatar
-          className="size-6 shrink-0 rounded-lg"
+        <AuthUserView
+          className="min-w-0 flex-1 in-data-[collapsed]:hidden"
           loading={isPending}
           user={user}
         />
-        <span className="flex min-w-0 flex-1 items-center gap-2 truncate transition-[margin,opacity] duration-200 ease-linear in-data-[collapsed]:w-0 in-data-[collapsed]:flex-0 in-data-[collapsed]:opacity-0">
-          <span className="min-w-0 truncate text-sm font-medium">
-            {isPending ? "Loading..." : (user?.name ?? "User")}
-          </span>
-          <ChevronsUpDown className="ml-auto size-4 shrink-0 text-sidebar-foreground/60 in-data-[collapsed]:hidden" />
-        </span>
+        <AuthUserAvatar
+          className="hidden size-6 shrink-0 rounded-lg in-data-[collapsed]:flex"
+          loading={isPending}
+          user={user}
+        />
+        <ChevronsUpDown className="ml-auto size-4 shrink-0 text-sidebar-foreground/60 in-data-[collapsed]:hidden" />
       </>
     )
   }
@@ -154,8 +122,6 @@ export function AuthUserButton({
 }: AuthUserButtonProps) {
   const config = useAuthUiConfig()
   const { data: session, isPending } = useAuthSession()
-  const { data: activeOrganization, isPending: organizationPending } =
-    useActiveOrganization()
   const [open, setOpen] = useState(false)
   const { Link } = config
 
@@ -171,11 +137,7 @@ export function AuthUserButton({
 
   const isIconOnly = size === "icon"
   const isSidebar = size === "sidebar"
-  const isSidebarWorkspaceSwitcher = showWorkspaceMenu && isSidebar
-  const triggerLabel =
-    isSidebarWorkspaceSwitcher && activeOrganization
-      ? activeOrganization.name
-      : (user?.name ?? "Account menu")
+  const triggerLabel = user?.name ?? user?.email ?? "Account menu"
   const hasAccountSection = menuItems.length > 0 || !hideSettings
 
   return (
@@ -186,14 +148,7 @@ export function AuthUserButton({
         disabled={isPending && !user}
         render={<button type="button" />}
       >
-        <TriggerContent
-          activeOrganization={activeOrganization}
-          isPending={isPending}
-          organizationPending={organizationPending}
-          showWorkspaceMenu={showWorkspaceMenu}
-          size={size}
-          user={user}
-        />
+        <TriggerContent isPending={isPending} size={size} user={user} />
       </MenuTrigger>
 
       <MenuPopup
@@ -202,7 +157,14 @@ export function AuthUserButton({
       >
         {user ? (
           <>
-            {isSidebarWorkspaceSwitcher ? null : (
+            {showWorkspaceMenu ? (
+              <OrganizationSwitcherMenu
+                hideHeader
+                hidePersonal
+                onClose={() => setOpen(false)}
+                onCreateOrganization={onCreateOrganization}
+              />
+            ) : (
               <>
                 <MenuGroup>
                   <MenuGroupLabel className="p-0 font-normal">
@@ -213,15 +175,6 @@ export function AuthUserButton({
                 <MenuSeparator className="my-1.5" />
               </>
             )}
-
-            {showWorkspaceMenu ? (
-              <OrganizationSwitcherMenu
-                hideHeader
-                hidePersonal
-                onClose={() => setOpen(false)}
-                onCreateOrganization={onCreateOrganization}
-              />
-            ) : null}
 
             {showWorkspaceMenu && hasAccountSection ? (
               <MenuSeparator className="my-1.5" />

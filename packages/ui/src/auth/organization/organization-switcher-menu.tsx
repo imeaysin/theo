@@ -8,7 +8,7 @@ import {
   useSetActiveOrganization,
 } from "@workspace/auth/react"
 import type { OrganizationSummary } from "@workspace/auth/types/organization"
-import { PlusCircle, Settings } from "lucide-react"
+import { Check, PlusCircle, Settings } from "lucide-react"
 import type { ReactNode } from "react"
 import {
   MenuGroup,
@@ -16,6 +16,7 @@ import {
   MenuSeparator,
 } from "@workspace/ui/components/menu"
 import { toastManager } from "@workspace/ui/components/toast"
+import { cn } from "@workspace/ui/lib/utils"
 import { AuthUserView } from "../auth-user-view"
 import { OrganizationView } from "./organization-view"
 
@@ -44,9 +45,6 @@ export function OrganizationSwitcherMenu({
   const activeOrganizationId = session?.session.activeOrganizationId ?? null
   const activeOrg = activeOrganization
   const orgList = organizations ?? []
-  const otherOrganizations = activeOrganizationId
-    ? orgList.filter((organization) => organization.id !== activeOrganizationId)
-    : orgList
 
   function handleSetActive(organization: OrganizationSummary | null) {
     const organizationId = organization?.id ?? null
@@ -98,8 +96,7 @@ export function OrganizationSwitcherMenu({
   }
 
   const showPersonalSwitcher = Boolean(activeOrg && !hidePersonal)
-  const hasSwitcherEntries =
-    showPersonalSwitcher || otherOrganizations.length > 0
+  const hasSwitcherEntries = showPersonalSwitcher || orgList.length > 0
   const hasWorkspaceActions = Boolean(activeOrg) || !hideCreate
 
   return (
@@ -118,15 +115,23 @@ export function OrganizationSwitcherMenu({
             </MenuItem>
           ) : null}
 
-          {otherOrganizations.map((organization) => (
-            <MenuItem
-              key={organization.id}
-              disabled={isPending}
-              onClick={() => handleSetActive(organization)}
-            >
-              <OrganizationView organization={organization} />
-            </MenuItem>
-          ))}
+          {orgList.map((organization) => {
+            const isActive = organization.id === activeOrganizationId
+
+            return (
+              <MenuItem
+                key={organization.id}
+                className={cn(isActive && "bg-accent")}
+                disabled={isPending || isActive}
+                onClick={() => handleSetActive(organization)}
+              >
+                <OrganizationView organization={organization} />
+                {isActive ? (
+                  <Check className="ml-auto size-4 text-muted-foreground" />
+                ) : null}
+              </MenuItem>
+            )
+          })}
         </>
       ) : null}
 
