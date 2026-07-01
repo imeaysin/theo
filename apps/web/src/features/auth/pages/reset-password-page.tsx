@@ -8,7 +8,7 @@ import {
 import { AuthPageBody, AuthPageHeader } from "@workspace/ui/auth"
 import { Button } from "@workspace/ui/components/button"
 import { Field, FieldError, FieldLabel } from "@workspace/ui/components/field"
-import { Input } from "@workspace/ui/components/input"
+import { PasswordInput } from "@workspace/ui/components/password-input"
 import { toastManager } from "@workspace/ui/components/toast"
 import { useResetPassword } from "@workspace/auth/react"
 import { routes } from "@/config/routes"
@@ -70,11 +70,10 @@ export function ResetPasswordPage() {
       >
         <Field data-invalid={!!errors.password}>
           <FieldLabel htmlFor="reset-password">New password</FieldLabel>
-          <Input
+          <PasswordInput
             autoComplete="new-password"
             id="reset-password"
             placeholder="Enter a new password"
-            type="password"
             {...form.register("password")}
             aria-invalid={!!errors.password}
           />
@@ -84,11 +83,10 @@ export function ResetPasswordPage() {
           <FieldLabel htmlFor="reset-password-confirm">
             Confirm password
           </FieldLabel>
-          <Input
+          <PasswordInput
             autoComplete="new-password"
             id="reset-password-confirm"
             placeholder="Confirm your password"
-            type="password"
             {...form.register("confirmPassword")}
             aria-invalid={!!errors.confirmPassword}
           />

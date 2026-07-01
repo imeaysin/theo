@@ -6,6 +6,7 @@ import { AuthDivider, AuthPageBody, AuthPageHeader } from "@workspace/ui/auth"
 import { Button } from "@workspace/ui/components/button"
 import { Field, FieldError, FieldLabel } from "@workspace/ui/components/field"
 import { Input } from "@workspace/ui/components/input"
+import { PasswordInput } from "@workspace/ui/components/password-input"
 import { PageLoading } from "@workspace/ui/components/page-loading"
 import { AuthButtons } from "@/features/auth/components/auth-buttons"
 import { useSignInEmail, useAuthSession } from "@workspace/auth/react"
@@ -121,11 +122,10 @@ export function SignInPage() {
         </Field>
         <Field data-invalid={!!errors.password}>
           <FieldLabel htmlFor="sign-in-password">Password</FieldLabel>
-          <Input
+          <PasswordInput
             autoComplete="current-password"
             id="sign-in-password"
             placeholder="Enter your password"
-            type="password"
             {...form.register("password")}
             aria-invalid={!!errors.password}
           />

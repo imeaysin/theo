@@ -6,6 +6,7 @@ import { AuthDivider, AuthPageBody, AuthPageHeader } from "@workspace/ui/auth"
 import { Button } from "@workspace/ui/components/button"
 import { Field, FieldError, FieldLabel } from "@workspace/ui/components/field"
 import { Input } from "@workspace/ui/components/input"
+import { PasswordInput } from "@workspace/ui/components/password-input"
 import { PageLoading } from "@workspace/ui/components/page-loading"
 import { toastManager } from "@workspace/ui/components/toast"
 import { AuthButtons } from "@/features/auth/components/auth-buttons"
@@ -127,11 +128,10 @@ export function SignUpPage() {
         </Field>
         <Field data-invalid={!!errors.password}>
           <FieldLabel htmlFor="sign-up-password">Password</FieldLabel>
-          <Input
+          <PasswordInput
             autoComplete="new-password"
             id="sign-up-password"
             placeholder="Create a password"
-            type="password"
             {...form.register("password")}
             aria-invalid={!!errors.password}
           />
@@ -141,11 +141,10 @@ export function SignUpPage() {
           <FieldLabel htmlFor="sign-up-confirm-password">
             Confirm password
           </FieldLabel>
-          <Input
+          <PasswordInput
             autoComplete="new-password"
             id="sign-up-confirm-password"
             placeholder="Confirm your password"
-            type="password"
             {...form.register("confirmPassword")}
             aria-invalid={!!errors.confirmPassword}
           />

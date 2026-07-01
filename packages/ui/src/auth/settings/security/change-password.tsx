@@ -7,18 +7,13 @@ import {
   useRequestPasswordReset,
   useAuthSession,
 } from "@workspace/auth/react"
-import { Eye, EyeOff } from "lucide-react"
 import { type SyntheticEvent, useState } from "react"
 import { Button } from "@workspace/ui/components/button"
 import { Card, CardFooter, CardPanel } from "@workspace/ui/components/card"
 import { Field, FieldError, FieldLabel } from "@workspace/ui/components/field"
 import { Form } from "@workspace/ui/components/form"
 import { Input } from "@workspace/ui/components/input"
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@workspace/ui/components/input-group"
+import { PasswordInput } from "@workspace/ui/components/password-input"
 import { Skeleton } from "@workspace/ui/components/skeleton"
 import { toastManager } from "@workspace/ui/components/toast"
 import { cn } from "@workspace/ui/lib/utils"
@@ -111,9 +106,6 @@ function ChangePasswordForm({
   const [currentPassword, setCurrentPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
-  const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false)
-  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
-    useState(false)
   const [fieldErrors, setFieldErrors] = useState<{
     currentPassword?: string
     newPassword?: string
@@ -171,7 +163,7 @@ function ChangePasswordForm({
               </FieldLabel>
 
               {session ? (
-                <Input
+                <PasswordInput
                   aria-invalid={!!fieldErrors.currentPassword}
                   autoComplete="current-password"
                   disabled={isPending}
@@ -194,7 +186,6 @@ function ChangePasswordForm({
                   }}
                   placeholder="Enter your current password"
                   required
-                  type="password"
                   value={currentPassword}
                 />
               ) : (
@@ -210,52 +201,32 @@ function ChangePasswordForm({
               <FieldLabel htmlFor="newPassword">New password</FieldLabel>
 
               {session ? (
-                <InputGroup>
-                  <InputGroupInput
-                    aria-invalid={!!fieldErrors.newPassword}
-                    autoComplete="new-password"
-                    disabled={isPending}
-                    id="newPassword"
-                    minLength={MIN_PASSWORD_LENGTH}
-                    name="newPassword"
-                    onChange={(e) => {
-                      setNewPassword(e.target.value)
-                      setFieldErrors((prev) => ({
-                        ...prev,
-                        newPassword: undefined,
-                      }))
-                    }}
-                    onInvalid={(e) => {
-                      e.preventDefault()
-                      setFieldErrors((prev) => ({
-                        ...prev,
-                        newPassword: (e.target as HTMLInputElement)
-                          .validationMessage,
-                      }))
-                    }}
-                    placeholder="Enter a new password"
-                    required
-                    type={isNewPasswordVisible ? "text" : "password"}
-                    value={newPassword}
-                  />
-
-                  <InputGroupAddon align="inline-end">
-                    <Button
-                      aria-label={
-                        isNewPasswordVisible ? "Hide password" : "Show password"
-                      }
-                      disabled={isPending}
-                      onClick={() =>
-                        setIsNewPasswordVisible(!isNewPasswordVisible)
-                      }
-                      size="icon-xs"
-                      type="button"
-                      variant="ghost"
-                    >
-                      {isNewPasswordVisible ? <EyeOff /> : <Eye />}
-                    </Button>
-                  </InputGroupAddon>
-                </InputGroup>
+                <PasswordInput
+                  aria-invalid={!!fieldErrors.newPassword}
+                  autoComplete="new-password"
+                  disabled={isPending}
+                  id="newPassword"
+                  minLength={MIN_PASSWORD_LENGTH}
+                  name="newPassword"
+                  onChange={(e) => {
+                    setNewPassword(e.target.value)
+                    setFieldErrors((prev) => ({
+                      ...prev,
+                      newPassword: undefined,
+                    }))
+                  }}
+                  onInvalid={(e) => {
+                    e.preventDefault()
+                    setFieldErrors((prev) => ({
+                      ...prev,
+                      newPassword: (e.target as HTMLInputElement)
+                        .validationMessage,
+                    }))
+                  }}
+                  placeholder="Enter a new password"
+                  required
+                  value={newPassword}
+                />
               ) : (
                 <Skeleton>
                   <Input className="invisible" nativeInput />
@@ -271,54 +242,32 @@ function ChangePasswordForm({
               </FieldLabel>
 
               {session ? (
-                <InputGroup>
-                  <InputGroupInput
-                    aria-invalid={!!fieldErrors.confirmPassword}
-                    autoComplete="new-password"
-                    disabled={isPending}
-                    id="confirmPassword"
-                    minLength={MIN_PASSWORD_LENGTH}
-                    name="confirmPassword"
-                    onChange={(e) => {
-                      setConfirmPassword(e.target.value)
-                      setFieldErrors((prev) => ({
-                        ...prev,
-                        confirmPassword: undefined,
-                      }))
-                    }}
-                    onInvalid={(e) => {
-                      e.preventDefault()
-                      setFieldErrors((prev) => ({
-                        ...prev,
-                        confirmPassword: (e.target as HTMLInputElement)
-                          .validationMessage,
-                      }))
-                    }}
-                    placeholder="Confirm your password"
-                    required
-                    type={isConfirmPasswordVisible ? "text" : "password"}
-                    value={confirmPassword}
-                  />
-
-                  <InputGroupAddon align="inline-end">
-                    <Button
-                      aria-label={
-                        isConfirmPasswordVisible
-                          ? "Hide password"
-                          : "Show password"
-                      }
-                      disabled={isPending}
-                      onClick={() =>
-                        setIsConfirmPasswordVisible(!isConfirmPasswordVisible)
-                      }
-                      size="icon-xs"
-                      type="button"
-                      variant="ghost"
-                    >
-                      {isConfirmPasswordVisible ? <EyeOff /> : <Eye />}
-                    </Button>
-                  </InputGroupAddon>
-                </InputGroup>
+                <PasswordInput
+                  aria-invalid={!!fieldErrors.confirmPassword}
+                  autoComplete="new-password"
+                  disabled={isPending}
+                  id="confirmPassword"
+                  minLength={MIN_PASSWORD_LENGTH}
+                  name="confirmPassword"
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value)
+                    setFieldErrors((prev) => ({
+                      ...prev,
+                      confirmPassword: undefined,
+                    }))
+                  }}
+                  onInvalid={(e) => {
+                    e.preventDefault()
+                    setFieldErrors((prev) => ({
+                      ...prev,
+                      confirmPassword: (e.target as HTMLInputElement)
+                        .validationMessage,
+                    }))
+                  }}
+                  placeholder="Confirm your password"
+                  required
+                  value={confirmPassword}
+                />
               ) : (
                 <Skeleton>
                   <Input className="invisible" nativeInput />
