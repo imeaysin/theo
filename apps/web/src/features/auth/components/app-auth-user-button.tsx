@@ -1,8 +1,10 @@
 import {
   AuthUserButton,
+  CreateOrganizationDialog,
   type AuthUserButtonMenuItem,
   type AuthUserButtonProps,
 } from "@workspace/ui/auth"
+import { useCreateOrganizationDialog } from "@/features/auth/hooks/use-create-organization-dialog"
 import { useAppShellConfig } from "@/features/shell/use-app-shell-config"
 
 type AppAuthUserButtonProps = Pick<
@@ -19,16 +21,21 @@ function AppAuthUserButton({
   size,
 }: AppAuthUserButtonProps) {
   const { onSignOut } = useAppShellConfig()
+  const createOrganization = useCreateOrganizationDialog()
 
   return (
-    <AuthUserButton
-      className={className}
-      hideSettings={hideSettings}
-      menuItems={menuItems}
-      onSignOut={onSignOut}
-      showWorkspaceMenu
-      size={size}
-    />
+    <>
+      <AuthUserButton
+        className={className}
+        hideSettings={hideSettings}
+        menuItems={menuItems}
+        onCreateOrganization={createOrganization.openDialog}
+        onSignOut={onSignOut}
+        showWorkspaceMenu
+        size={size}
+      />
+      <CreateOrganizationDialog {...createOrganization.dialogProps} />
+    </>
   )
 }
 

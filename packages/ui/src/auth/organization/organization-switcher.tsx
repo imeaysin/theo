@@ -13,7 +13,6 @@ import { Menu, MenuPopup, MenuTrigger } from "@workspace/ui/components/menu"
 import { cn } from "@workspace/ui/lib/utils"
 import { AuthUserView } from "../auth-user-view"
 import { OrganizationLogo } from "./organization-logo"
-import { CreateOrganizationDialog } from "./create-organization-dialog"
 import { OrganizationSwitcherMenu } from "./organization-switcher-menu"
 import { OrganizationView } from "./organization-view"
 
@@ -22,6 +21,7 @@ export interface OrganizationSwitcherProps {
   collapsed?: boolean
   hideCreate?: boolean
   hidePersonal?: boolean
+  onCreateOrganization?: () => void
 }
 
 function SwitcherTriggerContent({
@@ -83,6 +83,7 @@ export function OrganizationSwitcher({
   collapsed = false,
   hideCreate = false,
   hidePersonal = false,
+  onCreateOrganization,
 }: OrganizationSwitcherProps) {
   const { data: session, isPending: sessionPending } = useSession()
   const { data: activeOrganization, isPending: activeOrganizationPending } =
@@ -90,7 +91,6 @@ export function OrganizationSwitcher({
   const { isPending: organizationsPending } = useListOrganizations()
 
   const [menuOpen, setMenuOpen] = useState(false)
-  const [createOrganizationOpen, setCreateOrganizationOpen] = useState(false)
 
   const isPending =
     sessionPending ||
@@ -143,14 +143,9 @@ export function OrganizationSwitcher({
           hideCreate={hideCreate}
           hidePersonal={hidePersonal}
           onClose={() => setMenuOpen(false)}
-          onCreateOrganization={() => setCreateOrganizationOpen(true)}
+          onCreateOrganization={onCreateOrganization}
         />
       </MenuPopup>
-
-      <CreateOrganizationDialog
-        onOpenChange={setCreateOrganizationOpen}
-        open={createOrganizationOpen}
-      />
     </Menu>
   )
 }

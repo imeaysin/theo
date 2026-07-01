@@ -113,10 +113,10 @@ export function OrganizationMemberRow({ member }: OrganizationMemberRowProps) {
           {isCurrentUser ? (
             <Button
               aria-label="Leave workspace"
-              className="size-8 text-destructive"
               onClick={() => setLeaveOpen(true)}
               size="icon"
-              variant="outline"
+              type="button"
+              variant="destructive-outline"
             >
               <LogOut className="size-4" />
             </Button>
@@ -124,10 +124,10 @@ export function OrganizationMemberRow({ member }: OrganizationMemberRowProps) {
           {!isCurrentUser && hasDeletePermission?.success ? (
             <Button
               aria-label="Remove member"
-              className="size-8 text-destructive"
               onClick={() => setRemoveOpen(true)}
               size="icon"
-              variant="outline"
+              type="button"
+              variant="destructive-outline"
             >
               <Trash2 className="size-4" />
             </Button>

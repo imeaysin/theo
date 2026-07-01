@@ -1,7 +1,11 @@
+"use client"
+
 import { Navigate, useParams } from "react-router-dom"
-import { ShellMain } from "@workspace/ui/components/shell"
 import { Settings, type SettingsView } from "@workspace/ui/auth"
+import { ShellMain } from "@workspace/ui/components/shell"
 import { routes } from "@/config/routes"
+import { useChangeEmailForm } from "@/features/auth/hooks/use-change-email-form"
+import { useUserProfileForm } from "@/features/auth/hooks/use-user-profile-form"
 
 function isSettingsView(value: string | undefined): value is SettingsView {
   return value === "account" || value === "security"
@@ -9,6 +13,8 @@ function isSettingsView(value: string | undefined): value is SettingsView {
 
 export function SettingsPage() {
   const { section } = useParams<{ section?: string }>()
+  const profile = useUserProfileForm()
+  const changeEmail = useChangeEmailForm()
 
   if (!section) {
     return <Navigate replace to={routes.settingsAccount} />
@@ -21,7 +27,7 @@ export function SettingsPage() {
   return (
     <ShellMain heading="Account" subtitle="Manage your account settings.">
       <div className="max-w-2xl">
-        <Settings view={section} />
+        <Settings account={{ profile, changeEmail }} view={section} />
       </div>
     </ShellMain>
   )

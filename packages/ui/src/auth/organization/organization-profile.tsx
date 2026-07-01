@@ -3,25 +3,28 @@
 import {
   useActiveOrganization,
   useOrganizationPermission,
-  useUpdateOrganization,
 } from "@workspace/auth/react"
-import type { Organization } from "@workspace/auth/types/organization"
-import { type SyntheticEvent, useState } from "react"
 import { Button } from "@workspace/ui/components/button"
 import { Card, CardFooter, CardPanel } from "@workspace/ui/components/card"
-import { Field, FieldError } from "@workspace/ui/components/field"
+import { Field, FieldError, FieldLabel } from "@workspace/ui/components/field"
+import { Form } from "@workspace/ui/components/form"
 import { Input } from "@workspace/ui/components/input"
-import { Label } from "@workspace/ui/components/label"
 import { Skeleton } from "@workspace/ui/components/skeleton"
-import { Spinner } from "@workspace/ui/components/spinner"
-import { toastManager } from "@workspace/ui/components/toast"
 import { cn } from "@workspace/ui/lib/utils"
 import { OrganizationSlugField } from "./organization-slug-field"
 import { organizationUiPermissions } from "./ui-permissions"
 
-interface OrganizationProfileFormProps {
-  organization: Organization
+export interface OrganizationProfileProps {
   className?: string
+  name?: string
+  onNameChange?: (value: string) => void
+  nameError?: string
+  slug?: string
+  onSlugChange?: (value: string) => void
+  onSlugBlur?: () => void
+  slugError?: string
+  onSubmit?: () => void
+  isPending?: boolean
 }
 
 function OrganizationProfileSkeleton({ className }: { className?: string }) {
@@ -29,15 +32,15 @@ function OrganizationProfileSkeleton({ className }: { className?: string }) {
     <Card className={cn(className)}>
       <CardPanel className="flex flex-col gap-4">
         <Field>
-          <Label>Name</Label>
+          <FieldLabel>Name</FieldLabel>
           <Skeleton>
-            <Input className="invisible" />
+            <Input className="invisible" nativeInput />
           </Skeleton>
         </Field>
         <Field>
-          <Label>Slug</Label>
+          <FieldLabel>Slug</FieldLabel>
           <Skeleton>
-            <Input className="invisible" />
+            <Input className="invisible" nativeInput />
           </Skeleton>
         </Field>
       </CardPanel>
@@ -45,95 +48,25 @@ function OrganizationProfileSkeleton({ className }: { className?: string }) {
   )
 }
 
-function OrganizationProfileForm({
-  organization,
+export function OrganizationProfile({
   className,
-  readOnly = false,
-}: OrganizationProfileFormProps & { readOnly?: boolean }) {
-  const { mutate: updateOrganization, isPending } = useUpdateOrganization()
-  const [slug, setSlug] = useState(organization.slug ?? "")
-  const [nameError, setNameError] = useState<string>()
-
-  function handleSubmit(event: SyntheticEvent<HTMLFormElement>) {
-    event.preventDefault()
-
-    const formData = new FormData(event.currentTarget)
-    updateOrganization(
-      {
-        name: formData.get("name") as string,
-        slug,
-      },
-      {
-        onSuccess: () => {
-          toastManager.add({
-            title: "Workspace updated",
-            type: "success",
-          })
-        },
-      }
-    )
-  }
-
-  const nameInputId = `${organization.id}-name`
-  const slugInputId = `${organization.id}-slug`
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <Card className={cn(className)}>
-        <CardPanel className="flex flex-col gap-4">
-          <Field data-invalid={!!nameError}>
-            <Label htmlFor={nameInputId}>Name</Label>
-            <Input
-              aria-invalid={!!nameError}
-              autoComplete="organization"
-              defaultValue={organization.name ?? ""}
-              disabled={isPending || readOnly}
-              id={nameInputId}
-              name="name"
-              onChange={() => setNameError(undefined)}
-              onInvalid={(event) => {
-                event.preventDefault()
-                setNameError("Name is required")
-              }}
-              placeholder="Acme Inc."
-              required
-            />
-            <FieldError>{nameError}</FieldError>
-          </Field>
-
-          <OrganizationSlugField
-            currentSlug={organization.slug}
-            disabled={isPending || readOnly}
-            id={slugInputId}
-            onChange={setSlug}
-            value={slug}
-          />
-        </CardPanel>
-
-        <CardFooter>
-          {readOnly ? null : (
-            <Button disabled={isPending} size="sm" type="submit">
-              {isPending ? <Spinner /> : null}
-              Save changes
-            </Button>
-          )}
-        </CardFooter>
-      </Card>
-    </form>
-  )
-}
-
-export interface OrganizationProfileProps {
-  className?: string
-}
-
-export function OrganizationProfile({ className }: OrganizationProfileProps) {
+  name = "",
+  onNameChange,
+  nameError,
+  slug = "",
+  onSlugChange,
+  onSlugBlur,
+  slugError,
+  onSubmit,
+  isPending = false,
+}: OrganizationProfileProps) {
   const { data: activeOrganization } = useActiveOrganization()
   const { data: canUpdateOrganization, isPending: permissionPending } =
     useOrganizationPermission(organizationUiPermissions.updateOrganization)
   const readOnly = !canUpdateOrganization?.success
+  const wired = onSubmit != null
 
-  if (!activeOrganization || permissionPending) {
+  if (!activeOrganization || permissionPending || !wired) {
     return (
       <div>
         <h2 className="mb-3 text-sm font-semibold">Profile</h2>
@@ -142,15 +75,50 @@ export function OrganizationProfile({ className }: OrganizationProfileProps) {
     )
   }
 
+  const nameInputId = `${activeOrganization.id}-name`
+  const slugInputId = `${activeOrganization.id}-slug`
+
   return (
     <div>
       <h2 className="mb-3 text-sm font-semibold">Profile</h2>
-      <OrganizationProfileForm
-        key={activeOrganization.id}
-        className={className}
-        organization={activeOrganization}
-        readOnly={readOnly}
-      />
+      <Form key={activeOrganization.id} onSubmit={onSubmit}>
+        <Card className={cn(className)}>
+          <CardPanel className="flex flex-col gap-4">
+            <Field data-invalid={!!nameError}>
+              <FieldLabel htmlFor={nameInputId}>Name</FieldLabel>
+              <Input
+                aria-invalid={!!nameError}
+                autoComplete="organization"
+                disabled={isPending || readOnly}
+                id={nameInputId}
+                onChange={(event) => onNameChange?.(event.target.value)}
+                placeholder="Acme Inc."
+                type="text"
+                value={name}
+              />
+              <FieldError>{nameError}</FieldError>
+            </Field>
+
+            <OrganizationSlugField
+              currentSlug={activeOrganization.slug}
+              disabled={isPending || readOnly}
+              error={slugError}
+              id={slugInputId}
+              onBlur={onSlugBlur}
+              onChange={(value) => onSlugChange?.(value)}
+              value={slug}
+            />
+          </CardPanel>
+
+          <CardFooter>
+            {readOnly ? null : (
+              <Button loading={isPending} size="sm" type="submit">
+                Save changes
+              </Button>
+            )}
+          </CardFooter>
+        </Card>
+      </Form>
     </div>
   )
 }

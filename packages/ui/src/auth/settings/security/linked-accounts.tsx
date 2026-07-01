@@ -70,14 +70,12 @@ export function LinkedAccounts({ className }: LinkedAccountsProps) {
 
 function AccountRowSkeleton() {
   return (
-    <Card className="border-0 bg-transparent shadow-none ring-0">
-      <CardPanel className="flex items-center gap-3">
-        <Skeleton className="size-10 rounded-md" />
-        <div className="flex flex-col gap-1">
-          <Skeleton className="h-4 w-20" />
-          <Skeleton className="h-3 w-32" />
-        </div>
-      </CardPanel>
-    </Card>
+    <div className="flex items-center gap-3 p-4">
+      <Skeleton className="size-10 rounded-md" />
+      <div className="flex flex-col gap-1">
+        <Skeleton className="h-4 w-20" />
+        <Skeleton className="h-3 w-32" />
+      </div>
+    </div>
   )
 }

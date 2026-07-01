@@ -1,24 +1,19 @@
 "use client"
 
-import {
-  useAssignableOrganizationRoles,
-  useInviteMember,
-} from "@workspace/auth/react"
-import { UserPlus } from "lucide-react"
-import { type SyntheticEvent, useState } from "react"
-import {
-  AlertDialog,
-  AlertDialogClose,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogPopup,
-  AlertDialogTitle,
-} from "@workspace/ui/components/alert-dialog"
 import { Button } from "@workspace/ui/components/button"
-import { Field, FieldError } from "@workspace/ui/components/field"
+import {
+  Dialog,
+  DialogClose,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogPanel,
+  DialogPopup,
+  DialogTitle,
+} from "@workspace/ui/components/dialog"
+import { Field, FieldError, FieldLabel } from "@workspace/ui/components/field"
+import { Form } from "@workspace/ui/components/form"
 import { Input } from "@workspace/ui/components/input"
-import { Label } from "@workspace/ui/components/label"
 import {
   Select,
   SelectButton,
@@ -26,102 +21,73 @@ import {
   SelectPopup,
   SelectValue,
 } from "@workspace/ui/components/select"
-import { Spinner } from "@workspace/ui/components/spinner"
-import { toastManager } from "@workspace/ui/components/toast"
 
 export interface InviteMemberDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
+  email: string
+  onEmailChange: (value: string) => void
+  emailError?: string
+  role: string
+  onRoleChange: (value: string) => void
+  roleError?: string
+  roles: string[]
+  formatRoleLabel: (role: string) => string
+  rolesPending?: boolean
+  onSubmit: () => void
+  isPending?: boolean
 }
 
 export function InviteMemberDialog({
   open,
   onOpenChange,
+  email,
+  onEmailChange,
+  emailError,
+  role,
+  onRoleChange,
+  roleError,
+  roles,
+  formatRoleLabel,
+  rolesPending = false,
+  onSubmit,
+  isPending = false,
 }: InviteMemberDialogProps) {
-  const {
-    roles,
-    formatOrganizationRoleLabel,
-    isPending: rolesPending,
-  } = useAssignableOrganizationRoles()
-  const { mutate: inviteMember, isPending } = useInviteMember()
-  const [role, setRole] = useState<string>("member")
-  const [emailError, setEmailError] = useState<string>()
-
-  const defaultRole = roles.includes("member")
-    ? "member"
-    : (roles.at(-1) ?? "member")
-  const selectedRole = roles.includes(role) ? role : defaultRole
-
-  function handleOpenChange(nextOpen: boolean) {
-    if (!nextOpen) {
-      setRole(defaultRole)
-      setEmailError(undefined)
-    }
-    onOpenChange(nextOpen)
-  }
-
-  function handleSubmit(event: SyntheticEvent<HTMLFormElement>) {
-    event.preventDefault()
-
-    const formData = new FormData(event.currentTarget)
-    inviteMember(
-      {
-        email: (formData.get("email") as string).trim(),
-        role: selectedRole,
-      },
-      {
-        onSuccess: () => {
-          toastManager.add({
-            title: "Invitation sent",
-            type: "success",
-          })
-          handleOpenChange(false)
-        },
-      }
-    )
-  }
+  const fieldsDisabled = isPending || rolesPending
 
   return (
-    <AlertDialog onOpenChange={handleOpenChange} open={open}>
-      <AlertDialogPopup>
-        <form className="flex flex-col" onSubmit={handleSubmit}>
-          <AlertDialogHeader>
-            <div className="mx-auto flex size-10 items-center justify-center rounded-full bg-muted sm:mx-0">
-              <UserPlus aria-hidden="true" className="size-5" />
-            </div>
-            <AlertDialogTitle>Invite member</AlertDialogTitle>
-            <AlertDialogDescription>
-              Send an invitation to join this workspace.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
+    <Dialog onOpenChange={onOpenChange} open={open}>
+      <DialogPopup>
+        <DialogHeader>
+          <DialogTitle>Invite member</DialogTitle>
+          <DialogDescription>
+            Send an invitation to join this workspace.
+          </DialogDescription>
+        </DialogHeader>
 
-          <div className="flex flex-col gap-4 px-6 pb-2">
+        <Form className="contents" onSubmit={onSubmit}>
+          <DialogPanel className="flex flex-col gap-4">
             <Field data-invalid={!!emailError}>
-              <Label htmlFor="invite-member-email">Email</Label>
+              <FieldLabel htmlFor="invite-member-email">Email</FieldLabel>
               <Input
                 aria-invalid={!!emailError}
                 autoFocus
-                disabled={isPending}
+                disabled={fieldsDisabled}
                 id="invite-member-email"
-                name="email"
-                onChange={() => setEmailError(undefined)}
-                onInvalid={(event) => {
-                  event.preventDefault()
-                  setEmailError("Enter a valid email address")
-                }}
+                onChange={(event) => onEmailChange(event.target.value)}
                 placeholder="name@example.com"
-                required
                 type="email"
+                value={email}
               />
               <FieldError>{emailError}</FieldError>
             </Field>
 
-            <Field>
-              <Label htmlFor="invite-member-role">Role</Label>
+            <Field data-invalid={!!roleError}>
+              <FieldLabel htmlFor="invite-member-role">Role</FieldLabel>
               <Select
-                disabled={isPending || rolesPending}
-                onValueChange={(value) => setRole(value ?? defaultRole)}
-                value={selectedRole}
+                disabled={fieldsDisabled}
+                onValueChange={(value) => onRoleChange(value ?? role)}
+                value={role}
               >
                 <SelectButton className="w-full" id="invite-member-role">
                   <SelectValue />
@@ -129,29 +95,29 @@ export function InviteMemberDialog({
                 <SelectPopup>
                   {roles.map((roleName) => (
                     <SelectItem key={roleName} value={roleName}>
-                      {formatOrganizationRoleLabel(roleName)}
+                      {formatRoleLabel(roleName)}
                     </SelectItem>
                   ))}
                 </SelectPopup>
               </Select>
+              <FieldError>{roleError}</FieldError>
             </Field>
-          </div>
+          </DialogPanel>
 
-          <AlertDialogFooter>
-            <AlertDialogClose
+          <DialogFooter>
+            <DialogClose
               render={
                 <Button disabled={isPending} type="button" variant="outline" />
               }
             >
               Cancel
-            </AlertDialogClose>
-            <Button disabled={isPending} type="submit">
-              {isPending ? <Spinner /> : null}
+            </DialogClose>
+            <Button loading={isPending} type="submit">
               Invite member
             </Button>
-          </AlertDialogFooter>
-        </form>
-      </AlertDialogPopup>
-    </AlertDialog>
+          </DialogFooter>
+        </Form>
+      </DialogPopup>
+    </Dialog>
   )
 }

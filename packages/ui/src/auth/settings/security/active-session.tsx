@@ -7,9 +7,8 @@ import {
 } from "@workspace/auth/react"
 import { LogOut, Monitor, Smartphone, X } from "lucide-react"
 import type { ReactNode } from "react"
+import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
-import { Card, CardPanel } from "@workspace/ui/components/card"
-import { Spinner } from "@workspace/ui/components/spinner"
 import { toastManager } from "@workspace/ui/components/toast"
 import { parseUserAgent } from "../../utils/parse-user-agent"
 
@@ -62,11 +61,7 @@ export function ActiveSession({ activeSession }: ActiveSessionProps) {
 
   let sessionMeta: ReactNode = null
   if (isCurrentSession) {
-    sessionMeta = (
-      <span className="w-fit rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
-        Current session
-      </span>
-    )
+    sessionMeta = <Badge variant="secondary">Current session</Badge>
   } else if (createdAt) {
     sessionMeta = (
       <span className="text-xs text-muted-foreground capitalize">
@@ -75,58 +70,52 @@ export function ActiveSession({ activeSession }: ActiveSessionProps) {
     )
   }
 
-  let actionIcon: ReactNode = <X />
-  if (isRevoking) actionIcon = <Spinner />
-  else if (isCurrentSession) actionIcon = <LogOut />
-
   const actionLabel = isCurrentSession ? "Sign out" : "Revoke"
 
   return (
-    <Card className="border-0 bg-transparent shadow-none ring-0">
-      <CardPanel className="flex items-center justify-between gap-3">
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-md bg-muted">
-          {ua.isMobile ? (
-            <Smartphone className="size-4.5" />
-          ) : (
-            <Monitor className="size-4.5" />
-          )}
-        </div>
+    <div className="flex items-center justify-between gap-3 p-4">
+      <div className="flex size-10 shrink-0 items-center justify-center rounded-md bg-muted">
+        {ua.isMobile ? (
+          <Smartphone className="size-4.5" />
+        ) : (
+          <Monitor className="size-4.5" />
+        )}
+      </div>
 
-        <div className="flex min-w-0 flex-col">
-          <span className="truncate text-sm font-medium">
-            {ua.browserName}
-            {ua.osName ? `, ${ua.osName}` : ""}
-          </span>
+      <div className="flex min-w-0 flex-col">
+        <span className="truncate text-sm font-medium">
+          {ua.browserName}
+          {ua.osName ? `, ${ua.osName}` : ""}
+        </span>
 
-          {sessionMeta}
-        </div>
+        {sessionMeta}
+      </div>
 
-        <Button
-          aria-label={isCurrentSession ? "Sign out" : "Revoke session"}
-          className="ml-auto shrink-0"
-          disabled={isRevoking}
-          onClick={() =>
-            isCurrentSession
-              ? config.navigate(config.routes.signOut)
-              : revokeSession(
-                  { token: activeSession.token },
-                  {
-                    onSuccess: () => {
-                      toastManager.add({
-                        title: "Session revoked",
-                        type: "success",
-                      })
-                    },
-                  }
-                )
-          }
-          size="sm"
-          variant="outline"
-        >
-          {actionIcon}
-          {actionLabel}
-        </Button>
-      </CardPanel>
-    </Card>
+      <Button
+        aria-label={isCurrentSession ? "Sign out" : "Revoke session"}
+        className="ml-auto shrink-0"
+        loading={isRevoking}
+        onClick={() =>
+          isCurrentSession
+            ? config.navigate(config.routes.signOut)
+            : revokeSession(
+                { token: activeSession.token },
+                {
+                  onSuccess: () => {
+                    toastManager.add({
+                      title: "Session revoked",
+                      type: "success",
+                    })
+                  },
+                }
+              )
+        }
+        size="sm"
+        variant="outline"
+      >
+        {isCurrentSession ? <LogOut /> : <X />}
+        {actionLabel}
+      </Button>
+    </div>
   )
 }

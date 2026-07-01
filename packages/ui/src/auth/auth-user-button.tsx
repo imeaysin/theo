@@ -17,7 +17,6 @@ import {
 import { cn } from "@workspace/ui/lib/utils"
 import { AuthUserAvatar, type AuthUserAvatarUser } from "./auth-user-avatar"
 import { AuthUserView } from "./auth-user-view"
-import { CreateOrganizationDialog } from "./organization/create-organization-dialog"
 import { OrganizationSwitcherMenu } from "./organization/organization-switcher-menu"
 
 export interface AuthUserButtonMenuItem {
@@ -36,6 +35,7 @@ export interface AuthUserButtonProps {
   hideSettings?: boolean
   showWorkspaceMenu?: boolean
   onSignOut?: () => void
+  onCreateOrganization?: () => void
 }
 
 function getTriggerClassName(
@@ -118,11 +118,11 @@ export function AuthUserButton({
   hideSettings = false,
   showWorkspaceMenu = false,
   onSignOut,
+  onCreateOrganization,
 }: AuthUserButtonProps) {
   const config = useAuthUiConfig()
   const { data: session, isPending } = useSession()
   const [open, setOpen] = useState(false)
-  const [createOrganizationOpen, setCreateOrganizationOpen] = useState(false)
   const { Link } = config
 
   const user = session?.user ?? null
@@ -168,7 +168,7 @@ export function AuthUserButton({
                 <OrganizationSwitcherMenu
                   hideHeader
                   onClose={() => setOpen(false)}
-                  onCreateOrganization={() => setCreateOrganizationOpen(true)}
+                  onCreateOrganization={onCreateOrganization}
                 />
                 <MenuSeparator />
               </>
@@ -229,13 +229,6 @@ export function AuthUserButton({
           </>
         ) : null}
       </MenuPopup>
-
-      {showWorkspaceMenu ? (
-        <CreateOrganizationDialog
-          onOpenChange={setCreateOrganizationOpen}
-          open={createOrganizationOpen}
-        />
-      ) : null}
     </Menu>
   )
 }

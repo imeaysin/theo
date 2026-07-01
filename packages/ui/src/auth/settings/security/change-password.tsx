@@ -11,16 +11,15 @@ import { Eye, EyeOff } from "lucide-react"
 import { type SyntheticEvent, useState } from "react"
 import { Button } from "@workspace/ui/components/button"
 import { Card, CardFooter, CardPanel } from "@workspace/ui/components/card"
-import { Field, FieldError } from "@workspace/ui/components/field"
+import { Field, FieldError, FieldLabel } from "@workspace/ui/components/field"
+import { Form } from "@workspace/ui/components/form"
 import { Input } from "@workspace/ui/components/input"
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from "@workspace/ui/components/input-group"
-import { Label } from "@workspace/ui/components/label"
 import { Skeleton } from "@workspace/ui/components/skeleton"
-import { Spinner } from "@workspace/ui/components/spinner"
 import { toastManager } from "@workspace/ui/components/toast"
 import { cn } from "@workspace/ui/lib/utils"
 
@@ -88,11 +87,12 @@ function SetPassword({ className }: { className?: string }) {
           </div>
 
           <Button
-            disabled={isPending || !session?.user.email}
+            disabled={!session?.user.email}
+            loading={isPending}
             onClick={handleSetPassword}
             size="sm"
+            type="button"
           >
-            {isPending ? <Spinner /> : null}
             Send reset link
           </Button>
         </CardPanel>
@@ -165,11 +165,13 @@ function ChangePasswordForm({
     <div>
       <h2 className="mb-3 text-sm font-semibold">Change password</h2>
 
-      <form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit}>
         <Card className={cn(className)}>
           <CardPanel className="flex flex-col gap-6">
             <Field data-invalid={!!fieldErrors.currentPassword}>
-              <Label htmlFor="currentPassword">Current password</Label>
+              <FieldLabel htmlFor="currentPassword">
+                Current password
+              </FieldLabel>
 
               {session ? (
                 <Input
@@ -200,7 +202,7 @@ function ChangePasswordForm({
                 />
               ) : (
                 <Skeleton>
-                  <Input className="invisible" />
+                  <Input className="invisible" nativeInput />
                 </Skeleton>
               )}
 
@@ -208,7 +210,7 @@ function ChangePasswordForm({
             </Field>
 
             <Field data-invalid={!!fieldErrors.newPassword}>
-              <Label htmlFor="newPassword">New password</Label>
+              <FieldLabel htmlFor="newPassword">New password</FieldLabel>
 
               {session ? (
                 <InputGroup>
@@ -259,7 +261,7 @@ function ChangePasswordForm({
                 </InputGroup>
               ) : (
                 <Skeleton>
-                  <Input className="invisible" />
+                  <Input className="invisible" nativeInput />
                 </Skeleton>
               )}
 
@@ -267,7 +269,9 @@ function ChangePasswordForm({
             </Field>
 
             <Field data-invalid={!!fieldErrors.confirmPassword}>
-              <Label htmlFor="confirmPassword">Confirm password</Label>
+              <FieldLabel htmlFor="confirmPassword">
+                Confirm password
+              </FieldLabel>
 
               {session ? (
                 <InputGroup>
@@ -320,7 +324,7 @@ function ChangePasswordForm({
                 </InputGroup>
               ) : (
                 <Skeleton>
-                  <Input className="invisible" />
+                  <Input className="invisible" nativeInput />
                 </Skeleton>
               )}
 
@@ -329,13 +333,17 @@ function ChangePasswordForm({
           </CardPanel>
 
           <CardFooter>
-            <Button disabled={isPending || !session} size="sm" type="submit">
-              {isPending ? <Spinner /> : null}
+            <Button
+              disabled={!session}
+              loading={isPending}
+              size="sm"
+              type="submit"
+            >
               Update password
             </Button>
           </CardFooter>
         </Card>
-      </form>
+      </Form>
     </div>
   )
 }

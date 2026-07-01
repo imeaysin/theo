@@ -14,7 +14,9 @@ import {
   TabsTab,
 } from "@workspace/ui/components/tabs"
 import { cn } from "@workspace/ui/lib/utils"
+import type { OrganizationPeopleProps } from "./organization-people"
 import { OrganizationPeople } from "./organization-people"
+import type { OrganizationSettingsProps } from "./organization-settings"
 import { OrganizationSettings } from "./organization-settings"
 
 export type OrganizationTabView = "settings" | "people"
@@ -23,9 +25,17 @@ export interface OrganizationProps {
   className?: string
   hideNav?: boolean
   view: OrganizationTabView
+  settings?: OrganizationSettingsProps
+  people?: OrganizationPeopleProps
 }
 
-export function Organization({ className, hideNav, view }: OrganizationProps) {
+export function Organization({
+  className,
+  hideNav,
+  view,
+  settings,
+  people,
+}: OrganizationProps) {
   const config = useAuthUiConfig()
   useAuthenticate()
 
@@ -66,11 +76,11 @@ export function Organization({ className, hideNav, view }: OrganizationProps) {
       </div>
 
       <TabsContent tabIndex={-1} value="settings">
-        <OrganizationSettings />
+        <OrganizationSettings {...settings} />
       </TabsContent>
 
       <TabsContent tabIndex={-1} value="people">
-        <OrganizationPeople />
+        <OrganizationPeople {...people} />
       </TabsContent>
     </Tabs>
   )

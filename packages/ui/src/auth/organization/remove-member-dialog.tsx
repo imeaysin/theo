@@ -5,7 +5,6 @@ import {
   useRemoveMember,
 } from "@workspace/auth/react"
 import type { OrganizationMember } from "@workspace/auth/types/organization"
-import { Trash2 } from "lucide-react"
 import {
   AlertDialog,
   AlertDialogClose,
@@ -18,7 +17,6 @@ import {
 import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
 import { Card, CardPanel } from "@workspace/ui/components/card"
-import { Spinner } from "@workspace/ui/components/spinner"
 import { toastManager } from "@workspace/ui/components/toast"
 import { AuthUserView } from "../auth-user-view"
 
@@ -39,9 +37,6 @@ export function RemoveMemberDialog({
     <AlertDialog onOpenChange={onOpenChange} open={open}>
       <AlertDialogPopup>
         <AlertDialogHeader>
-          <div className="mx-auto flex size-10 items-center justify-center rounded-full bg-destructive/10 text-destructive sm:mx-0">
-            <Trash2 aria-hidden="true" className="size-5" />
-          </div>
           <AlertDialogTitle>Remove member</AlertDialogTitle>
           <AlertDialogDescription>
             This member will lose access to the workspace.
@@ -68,7 +63,7 @@ export function RemoveMemberDialog({
             Cancel
           </AlertDialogClose>
           <Button
-            disabled={isPending}
+            loading={isPending}
             onClick={() =>
               removeMember(
                 { memberId: member.id },
@@ -83,9 +78,9 @@ export function RemoveMemberDialog({
                 }
               )
             }
+            type="button"
             variant="destructive"
           >
-            {isPending ? <Spinner /> : null}
             Remove member
           </Button>
         </AlertDialogFooter>

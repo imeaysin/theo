@@ -1,7 +1,6 @@
 "use client"
 
 import { useAuthUiConfig, useDeleteOrganization } from "@workspace/auth/react"
-import { TriangleAlert } from "lucide-react"
 import { type SyntheticEvent } from "react"
 import {
   AlertDialog,
@@ -14,7 +13,6 @@ import {
 } from "@workspace/ui/components/alert-dialog"
 import { Button } from "@workspace/ui/components/button"
 import { Card, CardPanel } from "@workspace/ui/components/card"
-import { Spinner } from "@workspace/ui/components/spinner"
 import { toastManager } from "@workspace/ui/components/toast"
 import type { Organization } from "@workspace/auth/types/organization"
 import { OrganizationView } from "./organization-view"
@@ -53,11 +51,8 @@ export function DeleteOrganizationDialog({
   return (
     <AlertDialog onOpenChange={onOpenChange} open={open}>
       <AlertDialogPopup>
-        <form className="flex flex-col" onSubmit={handleSubmit}>
+        <form className="contents" onSubmit={handleSubmit}>
           <AlertDialogHeader>
-            <div className="mx-auto flex size-10 items-center justify-center rounded-full bg-destructive/10 text-destructive sm:mx-0">
-              <TriangleAlert aria-hidden="true" className="size-5" />
-            </div>
             <AlertDialogTitle>Delete workspace</AlertDialogTitle>
             <AlertDialogDescription>
               This action is permanent and cannot be undone.
@@ -80,8 +75,7 @@ export function DeleteOrganizationDialog({
             >
               Cancel
             </AlertDialogClose>
-            <Button disabled={isPending} type="submit" variant="destructive">
-              {isPending ? <Spinner /> : null}
+            <Button loading={isPending} type="submit" variant="destructive">
               Delete workspace
             </Button>
           </AlertDialogFooter>

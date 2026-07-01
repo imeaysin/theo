@@ -9,21 +9,19 @@ import type { OrganizationInvitation } from "@workspace/auth/types/organization"
 import { X } from "lucide-react"
 import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
-import { Spinner } from "@workspace/ui/components/spinner"
 import { TableCell, TableRow } from "@workspace/ui/components/table"
-import { cn } from "@workspace/ui/lib/utils"
 import { organizationUiPermissions } from "./ui-permissions"
 
 export interface OrganizationInvitationRowProps {
   invitation: OrganizationInvitation
 }
 
-const statusBadgeClasses: Record<string, string> = {
-  pending: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
-  accepted: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
-  rejected: "bg-destructive/10 text-destructive",
-  canceled: "bg-muted text-muted-foreground",
-}
+const invitationStatusVariant = {
+  pending: "warning",
+  accepted: "success",
+  rejected: "error",
+  canceled: "secondary",
+} as const
 
 export function OrganizationInvitationRow({
   invitation,
@@ -43,6 +41,11 @@ export function OrganizationInvitationRow({
     )
   }
 
+  const statusVariant =
+    invitationStatusVariant[
+      invitation.status as keyof typeof invitationStatusVariant
+    ] ?? "secondary"
+
   return (
     <TableRow>
       <TableCell className="text-sm font-medium">{invitation.email}</TableCell>
@@ -56,24 +59,19 @@ export function OrganizationInvitationRow({
         {formatOrganizationRoleLabel(invitation.role)}
       </TableCell>
       <TableCell className="text-sm">
-        <Badge
-          className={cn(statusBadgeClasses[invitation.status])}
-          variant="secondary"
-        >
-          {invitation.status}
-        </Badge>
+        <Badge variant={statusVariant}>{invitation.status}</Badge>
       </TableCell>
       <TableCell className="text-end">
         {cancelPermission?.success && invitation.status === "pending" ? (
           <Button
             aria-label="Cancel invitation"
-            className="size-8 text-destructive"
             disabled={cancelPending}
+            loading={cancelPending}
             onClick={() => cancelInvitation({ invitationId: invitation.id })}
             size="icon"
-            variant="outline"
+            variant="destructive-outline"
           >
-            {cancelPending ? <Spinner /> : <X className="size-4" />}
+            <X className="size-4" />
           </Button>
         ) : null}
       </TableCell>

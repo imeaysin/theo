@@ -22,11 +22,11 @@ export function DangerZoneRow({
       </div>
 
       <Button
-        className="text-destructive"
         disabled={disabled}
         onClick={onAction}
         size="sm"
-        variant="outline"
+        type="button"
+        variant="destructive-outline"
       >
         {actionLabel}
       </Button>

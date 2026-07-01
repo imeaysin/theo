@@ -23,7 +23,7 @@ export function OrganizationDangerZone({
 
   return (
     <div className={cn("flex w-full flex-col", className)}>
-      <h2 className="mb-3 text-sm font-semibold text-destructive">
+      <h2 className="mb-3 text-sm font-semibold text-destructive-foreground">
         Danger zone
       </h2>
 

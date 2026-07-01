@@ -2,16 +2,23 @@
 
 import { cn } from "@workspace/ui/lib/utils"
 import { OrganizationInvitations } from "./organization-invitations"
-import { OrganizationMembers } from "./organization-members"
+import {
+  OrganizationMembers,
+  type OrganizationMembersProps,
+} from "./organization-members"
 
 export interface OrganizationPeopleProps {
   className?: string
+  members?: Omit<OrganizationMembersProps, "className">
 }
 
-export function OrganizationPeople({ className }: OrganizationPeopleProps) {
+export function OrganizationPeople({
+  className,
+  members,
+}: OrganizationPeopleProps) {
   return (
     <div className={cn("flex flex-col gap-4 md:gap-6", className)}>
-      <OrganizationMembers />
+      <OrganizationMembers {...members} />
       <OrganizationInvitations />
     </div>
   )
