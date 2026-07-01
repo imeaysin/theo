@@ -91,20 +91,20 @@ export function InviteMemberDialog({
               <FieldError>{emailError}</FieldError>
             </Field>
 
-            <Field data-invalid={!!roleError}>
+            <Field className="w-full" data-invalid={!!roleError}>
               <FieldLabel htmlFor="invite-member-role">Role</FieldLabel>
               <Select
                 disabled={fieldsDisabled || roleItems.length === 0}
                 items={roleItems}
-                onValueChange={(value) => onRoleChange(value ?? "")}
-                value={role || null}
+                onValueChange={(item) => onRoleChange(item?.value ?? "")}
+                value={roleItems.find((item) => item.value === role) ?? null}
               >
                 <SelectTrigger className="w-full" id="invite-member-role">
                   <SelectValue placeholder="Select a role" />
                 </SelectTrigger>
-                <SelectPopup>
+                <SelectPopup alignItemWithTrigger={false}>
                   {roleItems.map((item) => (
-                    <SelectItem key={item.value} value={item.value}>
+                    <SelectItem key={item.value} value={item}>
                       {item.label}
                     </SelectItem>
                   ))}
