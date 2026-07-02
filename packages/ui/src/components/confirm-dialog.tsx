@@ -36,7 +36,7 @@ export function ConfirmDialog({
             <Pane.Alert.Description>{description}</Pane.Alert.Description>
           ) : null}
         </Pane.Alert.Header>
-        <Pane.Alert.Footer>
+        <Pane.Alert.Footer variant="bare">
           <Pane.Alert.Close
             render={<Button disabled={pending} variant="outline" />}
           >
