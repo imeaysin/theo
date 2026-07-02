@@ -1,8 +1,10 @@
 "use client"
 
+import { mergeProps } from "@base-ui/react/merge-props"
 import { EyeIcon, EyeOffIcon } from "lucide-react"
 import { forwardRef, useState } from "react"
 import { Button } from "@workspace/ui/components/button"
+import { FieldControl } from "@workspace/ui/components/field"
 import type { InputProps } from "@workspace/ui/components/input"
 import {
   InputGroup,
@@ -24,11 +26,20 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
 
     return (
       <InputGroup>
-        <InputGroupInput
-          disabled={disabled}
+        <FieldControl
           ref={ref}
-          type={showPassword ? "text" : "password"}
-          {...props}
+          defaultValue={props.defaultValue}
+          disabled={disabled}
+          id={props.id}
+          name={props.name}
+          value={props.value}
+          render={(controlProps) => (
+            <InputGroupInput
+              disabled={disabled}
+              type={showPassword ? "text" : "password"}
+              {...mergeProps(controlProps, props)}
+            />
+          )}
         />
         <InputGroupAddon align="inline-end">
           <Tooltip>

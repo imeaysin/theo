@@ -4,7 +4,12 @@ import { useForm, useFormState } from "react-hook-form"
 import { signUpSchema, type SignUpInput } from "@workspace/contracts"
 import { AuthDivider, AuthPageBody, AuthPageHeader } from "@workspace/ui/auth"
 import { Button } from "@workspace/ui/components/button"
-import { Field, FieldError, FieldLabel } from "@workspace/ui/components/field"
+import {
+  Field,
+  FieldControl,
+  FieldError,
+  FieldLabel,
+} from "@workspace/ui/components/field"
 import { Input } from "@workspace/ui/components/input"
 import { PasswordInput } from "@workspace/ui/components/password-input"
 import { PageLoading } from "@workspace/ui/components/page-loading"
@@ -102,7 +107,7 @@ export function SignUpPage() {
         noValidate
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <Field data-invalid={!!errors.name}>
+        <Field invalid={Boolean(errors.name)}>
           <FieldLabel htmlFor="sign-up-name">Name</FieldLabel>
           <Input
             autoComplete="name"
@@ -110,11 +115,10 @@ export function SignUpPage() {
             placeholder="Your name"
             type="text"
             {...form.register("name")}
-            aria-invalid={!!errors.name}
           />
           <FieldError>{errors.name?.message}</FieldError>
         </Field>
-        <Field data-invalid={!!errors.email}>
+        <Field invalid={Boolean(errors.email)}>
           <FieldLabel htmlFor="sign-up-email">Email</FieldLabel>
           <Input
             autoComplete="email"
@@ -122,31 +126,38 @@ export function SignUpPage() {
             placeholder="you@example.com"
             type="email"
             {...form.register("email")}
-            aria-invalid={!!errors.email}
           />
           <FieldError>{errors.email?.message}</FieldError>
         </Field>
-        <Field data-invalid={!!errors.password}>
+        <Field invalid={Boolean(errors.password)}>
           <FieldLabel htmlFor="sign-up-password">Password</FieldLabel>
-          <PasswordInput
-            autoComplete="new-password"
-            id="sign-up-password"
-            placeholder="Create a password"
+          <FieldControl
             {...form.register("password")}
-            aria-invalid={!!errors.password}
+            render={(controlProps) => (
+              <PasswordInput
+                {...controlProps}
+                autoComplete="new-password"
+                id="sign-up-password"
+                placeholder="Create a password"
+              />
+            )}
           />
           <FieldError>{errors.password?.message}</FieldError>
         </Field>
-        <Field data-invalid={!!errors.confirmPassword}>
+        <Field invalid={Boolean(errors.confirmPassword)}>
           <FieldLabel htmlFor="sign-up-confirm-password">
             Confirm password
           </FieldLabel>
-          <PasswordInput
-            autoComplete="new-password"
-            id="sign-up-confirm-password"
-            placeholder="Confirm your password"
+          <FieldControl
             {...form.register("confirmPassword")}
-            aria-invalid={!!errors.confirmPassword}
+            render={(controlProps) => (
+              <PasswordInput
+                {...controlProps}
+                autoComplete="new-password"
+                id="sign-up-confirm-password"
+                placeholder="Confirm your password"
+              />
+            )}
           />
           <FieldError>{errors.confirmPassword?.message}</FieldError>
         </Field>

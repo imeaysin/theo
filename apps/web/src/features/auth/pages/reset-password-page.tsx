@@ -7,7 +7,12 @@ import {
 } from "@workspace/contracts"
 import { AuthPageBody, AuthPageHeader } from "@workspace/ui/auth"
 import { Button } from "@workspace/ui/components/button"
-import { Field, FieldError, FieldLabel } from "@workspace/ui/components/field"
+import {
+  Field,
+  FieldControl,
+  FieldError,
+  FieldLabel,
+} from "@workspace/ui/components/field"
 import { PasswordInput } from "@workspace/ui/components/password-input"
 import { toastManager } from "@workspace/ui/components/toast"
 import { useResetPassword } from "@workspace/auth/react"
@@ -68,27 +73,35 @@ export function ResetPasswordPage() {
         noValidate
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <Field data-invalid={!!errors.password}>
+        <Field invalid={Boolean(errors.password)}>
           <FieldLabel htmlFor="reset-password">New password</FieldLabel>
-          <PasswordInput
-            autoComplete="new-password"
-            id="reset-password"
-            placeholder="Enter a new password"
+          <FieldControl
             {...form.register("password")}
-            aria-invalid={!!errors.password}
+            render={(controlProps) => (
+              <PasswordInput
+                {...controlProps}
+                autoComplete="new-password"
+                id="reset-password"
+                placeholder="Enter a new password"
+              />
+            )}
           />
           <FieldError>{errors.password?.message}</FieldError>
         </Field>
-        <Field data-invalid={!!errors.confirmPassword}>
+        <Field invalid={Boolean(errors.confirmPassword)}>
           <FieldLabel htmlFor="reset-password-confirm">
             Confirm password
           </FieldLabel>
-          <PasswordInput
-            autoComplete="new-password"
-            id="reset-password-confirm"
-            placeholder="Confirm your password"
+          <FieldControl
             {...form.register("confirmPassword")}
-            aria-invalid={!!errors.confirmPassword}
+            render={(controlProps) => (
+              <PasswordInput
+                {...controlProps}
+                autoComplete="new-password"
+                id="reset-password-confirm"
+                placeholder="Confirm your password"
+              />
+            )}
           />
           <FieldError>{errors.confirmPassword?.message}</FieldError>
         </Field>

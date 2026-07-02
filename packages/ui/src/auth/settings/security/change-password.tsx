@@ -10,7 +10,12 @@ import {
 import { type SyntheticEvent, useState } from "react"
 import { Button } from "@workspace/ui/components/button"
 import { Card, CardFooter, CardPanel } from "@workspace/ui/components/card"
-import { Field, FieldError, FieldLabel } from "@workspace/ui/components/field"
+import {
+  Field,
+  FieldControl,
+  FieldError,
+  FieldLabel,
+} from "@workspace/ui/components/field"
 import { Form } from "@workspace/ui/components/form"
 import { Input } from "@workspace/ui/components/input"
 import { PasswordInput } from "@workspace/ui/components/password-input"
@@ -157,36 +162,40 @@ function ChangePasswordForm({
       <Form onSubmit={handleSubmit}>
         <Card className={cn(className)}>
           <CardPanel className="flex flex-col gap-6">
-            <Field data-invalid={!!fieldErrors.currentPassword}>
+            <Field invalid={Boolean(fieldErrors.currentPassword)}>
               <FieldLabel htmlFor="currentPassword">
                 Current password
               </FieldLabel>
 
               {session ? (
-                <PasswordInput
-                  aria-invalid={!!fieldErrors.currentPassword}
-                  autoComplete="current-password"
-                  disabled={isPending}
-                  id="currentPassword"
-                  name="currentPassword"
-                  onChange={(e) => {
-                    setCurrentPassword(e.target.value)
-                    setFieldErrors((prev) => ({
-                      ...prev,
-                      currentPassword: undefined,
-                    }))
-                  }}
-                  onInvalid={(e) => {
-                    e.preventDefault()
-                    setFieldErrors((prev) => ({
-                      ...prev,
-                      currentPassword: (e.target as HTMLInputElement)
-                        .validationMessage,
-                    }))
-                  }}
-                  placeholder="Enter your current password"
-                  required
-                  value={currentPassword}
+                <FieldControl
+                  render={(controlProps) => (
+                    <PasswordInput
+                      {...controlProps}
+                      autoComplete="current-password"
+                      disabled={isPending}
+                      id="currentPassword"
+                      name="currentPassword"
+                      onChange={(e) => {
+                        setCurrentPassword(e.target.value)
+                        setFieldErrors((prev) => ({
+                          ...prev,
+                          currentPassword: undefined,
+                        }))
+                      }}
+                      onInvalid={(e) => {
+                        e.preventDefault()
+                        setFieldErrors((prev) => ({
+                          ...prev,
+                          currentPassword: (e.target as HTMLInputElement)
+                            .validationMessage,
+                        }))
+                      }}
+                      placeholder="Enter your current password"
+                      required
+                      value={currentPassword}
+                    />
+                  )}
                 />
               ) : (
                 <Skeleton>
@@ -197,35 +206,39 @@ function ChangePasswordForm({
               <FieldError>{fieldErrors.currentPassword}</FieldError>
             </Field>
 
-            <Field data-invalid={!!fieldErrors.newPassword}>
+            <Field invalid={Boolean(fieldErrors.newPassword)}>
               <FieldLabel htmlFor="newPassword">New password</FieldLabel>
 
               {session ? (
-                <PasswordInput
-                  aria-invalid={!!fieldErrors.newPassword}
-                  autoComplete="new-password"
-                  disabled={isPending}
-                  id="newPassword"
-                  minLength={MIN_PASSWORD_LENGTH}
-                  name="newPassword"
-                  onChange={(e) => {
-                    setNewPassword(e.target.value)
-                    setFieldErrors((prev) => ({
-                      ...prev,
-                      newPassword: undefined,
-                    }))
-                  }}
-                  onInvalid={(e) => {
-                    e.preventDefault()
-                    setFieldErrors((prev) => ({
-                      ...prev,
-                      newPassword: (e.target as HTMLInputElement)
-                        .validationMessage,
-                    }))
-                  }}
-                  placeholder="Enter a new password"
-                  required
-                  value={newPassword}
+                <FieldControl
+                  render={(controlProps) => (
+                    <PasswordInput
+                      {...controlProps}
+                      autoComplete="new-password"
+                      disabled={isPending}
+                      id="newPassword"
+                      minLength={MIN_PASSWORD_LENGTH}
+                      name="newPassword"
+                      onChange={(e) => {
+                        setNewPassword(e.target.value)
+                        setFieldErrors((prev) => ({
+                          ...prev,
+                          newPassword: undefined,
+                        }))
+                      }}
+                      onInvalid={(e) => {
+                        e.preventDefault()
+                        setFieldErrors((prev) => ({
+                          ...prev,
+                          newPassword: (e.target as HTMLInputElement)
+                            .validationMessage,
+                        }))
+                      }}
+                      placeholder="Enter a new password"
+                      required
+                      value={newPassword}
+                    />
+                  )}
                 />
               ) : (
                 <Skeleton>
@@ -236,37 +249,41 @@ function ChangePasswordForm({
               <FieldError>{fieldErrors.newPassword}</FieldError>
             </Field>
 
-            <Field data-invalid={!!fieldErrors.confirmPassword}>
+            <Field invalid={Boolean(fieldErrors.confirmPassword)}>
               <FieldLabel htmlFor="confirmPassword">
                 Confirm password
               </FieldLabel>
 
               {session ? (
-                <PasswordInput
-                  aria-invalid={!!fieldErrors.confirmPassword}
-                  autoComplete="new-password"
-                  disabled={isPending}
-                  id="confirmPassword"
-                  minLength={MIN_PASSWORD_LENGTH}
-                  name="confirmPassword"
-                  onChange={(e) => {
-                    setConfirmPassword(e.target.value)
-                    setFieldErrors((prev) => ({
-                      ...prev,
-                      confirmPassword: undefined,
-                    }))
-                  }}
-                  onInvalid={(e) => {
-                    e.preventDefault()
-                    setFieldErrors((prev) => ({
-                      ...prev,
-                      confirmPassword: (e.target as HTMLInputElement)
-                        .validationMessage,
-                    }))
-                  }}
-                  placeholder="Confirm your password"
-                  required
-                  value={confirmPassword}
+                <FieldControl
+                  render={(controlProps) => (
+                    <PasswordInput
+                      {...controlProps}
+                      autoComplete="new-password"
+                      disabled={isPending}
+                      id="confirmPassword"
+                      minLength={MIN_PASSWORD_LENGTH}
+                      name="confirmPassword"
+                      onChange={(e) => {
+                        setConfirmPassword(e.target.value)
+                        setFieldErrors((prev) => ({
+                          ...prev,
+                          confirmPassword: undefined,
+                        }))
+                      }}
+                      onInvalid={(e) => {
+                        e.preventDefault()
+                        setFieldErrors((prev) => ({
+                          ...prev,
+                          confirmPassword: (e.target as HTMLInputElement)
+                            .validationMessage,
+                        }))
+                      }}
+                      placeholder="Confirm your password"
+                      required
+                      value={confirmPassword}
+                    />
+                  )}
                 />
               ) : (
                 <Skeleton>

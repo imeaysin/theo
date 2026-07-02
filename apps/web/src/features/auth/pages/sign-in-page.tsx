@@ -4,7 +4,12 @@ import { useForm, useFormState } from "react-hook-form"
 import { signInSchema, type SignInInput } from "@workspace/contracts"
 import { AuthDivider, AuthPageBody, AuthPageHeader } from "@workspace/ui/auth"
 import { Button } from "@workspace/ui/components/button"
-import { Field, FieldError, FieldLabel } from "@workspace/ui/components/field"
+import {
+  Field,
+  FieldControl,
+  FieldError,
+  FieldLabel,
+} from "@workspace/ui/components/field"
 import { Input } from "@workspace/ui/components/input"
 import { PasswordInput } from "@workspace/ui/components/password-input"
 import { PageLoading } from "@workspace/ui/components/page-loading"
@@ -107,7 +112,7 @@ export function SignInPage() {
         noValidate
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <Field data-invalid={!!errors.email}>
+        <Field invalid={Boolean(errors.email)}>
           <FieldLabel htmlFor="sign-in-email">Email</FieldLabel>
           <Input
             autoComplete="email"
@@ -115,18 +120,21 @@ export function SignInPage() {
             placeholder="you@example.com"
             type="email"
             {...form.register("email")}
-            aria-invalid={!!errors.email}
           />
           <FieldError>{errors.email?.message}</FieldError>
         </Field>
-        <Field data-invalid={!!errors.password}>
+        <Field invalid={Boolean(errors.password)}>
           <FieldLabel htmlFor="sign-in-password">Password</FieldLabel>
-          <PasswordInput
-            autoComplete="current-password"
-            id="sign-in-password"
-            placeholder="Enter your password"
+          <FieldControl
             {...form.register("password")}
-            aria-invalid={!!errors.password}
+            render={(controlProps) => (
+              <PasswordInput
+                {...controlProps}
+                autoComplete="current-password"
+                id="sign-in-password"
+                placeholder="Enter your password"
+              />
+            )}
           />
           <FieldError>{errors.password?.message}</FieldError>
         </Field>
