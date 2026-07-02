@@ -5,7 +5,7 @@ import {
   AlertTitle,
 } from "@workspace/ui/components/alert"
 import { Button } from "@workspace/ui/components/button"
-import { Checkbox } from "@workspace/ui/components/checkbox"
+import { ConfirmDialog } from "@workspace/ui/components/confirm-dialog"
 import {
   Empty,
   EmptyContent,
@@ -18,7 +18,6 @@ import {
   ShellMain,
   shellPageStackClassName,
 } from "@workspace/ui/components/shell"
-import { ConfirmDialog } from "@workspace/ui/components/confirm-dialog"
 import { Skeleton } from "@workspace/ui/components/skeleton"
 import { useDebouncedValue } from "@workspace/ui/hooks/use-debounced-value"
 import {
@@ -30,7 +29,7 @@ import {
 } from "lucide-react"
 import { useMemo, useState } from "react"
 import { NoteFormSheet } from "@/features/notes/components/note-form-sheet"
-import { NotesListItem } from "@/features/notes/components/notes-list-item"
+import { NotesTable } from "@/features/notes/components/notes-table"
 import {
   useBulkDeleteNotesMutation,
   useDeleteNoteMutation,
@@ -52,7 +51,7 @@ function sortNotes(items: NoteResponse[], sort: SortOption) {
     case "oldest":
       return sorted.sort(
         (a, b) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime()
       )
     case "title-asc":
       return sorted.sort((a, b) => a.title.localeCompare(b.title))
@@ -62,7 +61,7 @@ function sortNotes(items: NoteResponse[], sort: SortOption) {
     default:
       return sorted.sort(
         (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
       )
   }
 }
@@ -99,15 +98,6 @@ export function NotesPage() {
     return sortNotes(filtered, sort)
   }, [data?.items, debouncedSearch, sort])
 
-  const visibleIds = filteredNotes.map((note) => note.id)
-  const selectedVisibleCount = visibleIds.filter((id) =>
-    selectedIds.has(id)
-  ).length
-  const allVisibleSelected =
-    visibleIds.length > 0 && selectedVisibleCount === visibleIds.length
-  const someVisibleSelected =
-    selectedVisibleCount > 0 && selectedVisibleCount < visibleIds.length
-
   const isMutating = deleteNote.isPending || bulkDeleteNotes.isPending
 
   function openCreateSheet() {
@@ -129,13 +119,13 @@ export function NotesPage() {
     })
   }
 
-  function toggleSelectAll(checked: boolean) {
+  function toggleSelectAll(checked: boolean, noteIds: string[]) {
     setSelectedIds((current) => {
       const next = new Set(current)
       if (checked) {
-        for (const id of visibleIds) next.add(id)
+        for (const id of noteIds) next.add(id)
       } else {
-        for (const id of visibleIds) next.delete(id)
+        for (const id of noteIds) next.delete(id)
       }
       return next
     })
@@ -147,8 +137,7 @@ export function NotesPage() {
     if (deleteTarget.type === "single") {
       await deleteNote.mutateAsync(deleteTarget.id)
     } else {
-      const ids = [...selectedIds]
-      await bulkDeleteNotes.mutateAsync({ ids })
+      await bulkDeleteNotes.mutateAsync({ ids: [...selectedIds] })
       setSelectedIds(new Set())
     }
 
@@ -156,7 +145,6 @@ export function NotesPage() {
   }
 
   const hasNotes = (data?.items.length ?? 0) > 0
-  const hasSearch = debouncedSearch.trim().length > 0
   const showEmptySearch =
     !isLoading && !isError && hasNotes && filteredNotes.length === 0
   const showEmptyInitial = !isLoading && !isError && !hasNotes
@@ -295,44 +283,21 @@ export function NotesPage() {
           ) : null}
 
           {!isLoading && !isError && filteredNotes.length > 0 ? (
-            <div className="overflow-hidden rounded-lg border">
-              <div className="flex items-center gap-3 border-b bg-muted/30 px-4 py-3">
-                <Checkbox
-                  aria-label="Select all visible notes"
-                  checked={allVisibleSelected}
-                  disabled={isMutating}
-                  indeterminate={someVisibleSelected}
-                  onCheckedChange={(checked) =>
-                    toggleSelectAll(checked === true)
-                  }
-                />
-                <p className="text-sm text-muted-foreground">
-                  {filteredNotes.length} note
-                  {filteredNotes.length === 1 ? "" : "s"}
-                  {hasSearch ? " matching your search" : ""}
-                </p>
-              </div>
-
-              <ul className="divide-y divide-border">
-                {filteredNotes.map((note) => (
-                  <NotesListItem
-                    disabled={isMutating}
-                    key={note.id}
-                    note={note}
-                    onDelete={() =>
-                      setDeleteTarget({
-                        type: "single",
-                        id: note.id,
-                        title: note.title,
-                      })
-                    }
-                    onEdit={() => openEditSheet(note)}
-                    onSelect={(checked) => toggleSelection(note.id, checked)}
-                    selected={selectedIds.has(note.id)}
-                  />
-                ))}
-              </ul>
-            </div>
+            <NotesTable
+              disabled={isMutating}
+              notes={filteredNotes}
+              onDelete={(note) =>
+                setDeleteTarget({
+                  type: "single",
+                  id: note.id,
+                  title: note.title,
+                })
+              }
+              onEdit={openEditSheet}
+              onSelect={toggleSelection}
+              onSelectAll={toggleSelectAll}
+              selectedIds={selectedIds}
+            />
           ) : null}
         </div>
       </ShellMain>
