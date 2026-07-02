@@ -1,3 +1,4 @@
+export { AuthGuardsModule } from "./auth-guards.module"
 export { JwksGuard } from "./jwks.guard"
 export { RbacGuard } from "./rbac.guard"
 export { OrgRbacGuard } from "./org-rbac.guard"

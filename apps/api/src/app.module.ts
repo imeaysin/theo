@@ -1,10 +1,10 @@
 import { Module } from "@nestjs/common"
-import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from "@nestjs/core"
+import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from "@nestjs/core"
 import { ZodValidationPipe } from "nestjs-zod"
 import { CqrsModule } from "@nestjs/cqrs"
 import { AuthModule } from "@thallesp/nestjs-better-auth"
 import { getAuth } from "@workspace/auth"
-import { JwksGuard, OrgRbacGuard, RbacGuard } from "@workspace/auth/nestjs"
+import { AuthGuardsModule } from "@workspace/auth/nestjs"
 import { AppController } from "./app.controller"
 import { AppService } from "./app.service"
 import {
@@ -23,6 +23,7 @@ import { UploadsModule } from "./modules/uploads/uploads.module"
 @Module({
   imports: [
     CqrsModule.forRoot(),
+    AuthGuardsModule.register(),
     DatabaseModule,
     StorageModule,
     HealthModule,
@@ -46,21 +47,6 @@ import { UploadsModule } from "./modules/uploads/uploads.module"
   controllers: [AppController],
   providers: [
     AppService,
-    JwksGuard,
-    RbacGuard,
-    OrgRbacGuard,
-    {
-      provide: APP_GUARD,
-      useExisting: JwksGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useExisting: RbacGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useExisting: OrgRbacGuard,
-    },
     { provide: APP_PIPE, useClass: ZodValidationPipe },
     { provide: APP_FILTER, useClass: AllExceptionsFilter },
     { provide: APP_INTERCEPTOR, useClass: LoggingInterceptor },

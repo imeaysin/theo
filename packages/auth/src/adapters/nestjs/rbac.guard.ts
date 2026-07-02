@@ -9,8 +9,8 @@ import {
   checkPlatformPermission,
   type PlatformRequiredPermission,
 } from "../../permissions/platform"
-import { PERMISSION_KEY } from "./require-permission.decorator"
 import type { JwtClaims } from "../../types/auth"
+import { PERMISSION_KEY } from "./require-permission.decorator"
 
 @Injectable()
 export class RbacGuard implements CanActivate {

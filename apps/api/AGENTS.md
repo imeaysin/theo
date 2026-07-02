@@ -32,7 +32,7 @@ modules/<feature>/
 
 ## Testing
 
-Follow the [NestJS testing guide](https://docs.nestjs.com/fundamentals/testing): `Test.createTestingModule()`, `overrideGuard()` / `overrideProvider()`, `createNestApplication()`, and Supertest.
+Follow the [NestJS testing guide](https://docs.nestjs.com/fundamentals/testing): `Test.createTestingModule()`, `overrideProvider()` / `overrideGuard()`, `createNestApplication()`, and Supertest.
 
 | Layer                      | Location                                    | Command                                     |
 | -------------------------- | ------------------------------------------- | ------------------------------------------- |
@@ -43,10 +43,10 @@ Follow the [NestJS testing guide](https://docs.nestjs.com/fundamentals/testing):
 
 **E2E helpers**
 
-- `test/e2e/support/create-e2e-app.ts` — boots `AppModule` with `overrideGuard()` test doubles
+- `test/e2e/support/create-e2e-app.ts` — boots `AppModule` with `overrideProvider()` test doubles
 - `test/e2e/jest-e2e.setup.ts` — stubs ESM-only Better Auth Nest module for Jest
 
-Global guards use `useExisting` in `app.module.ts` so e2e tests can override `JwksGuard`, `RbacGuard`, and `OrgRbacGuard` per the Nest docs.
+Global guards live in `AuthGuardsModule` from `@workspace/auth/nestjs` (`APP_GUARD` + `useExisting`; e2e tests use `overrideProvider()` per the [Nest testing guide](https://docs.nestjs.com/fundamentals/testing#overriding-globally-registered-enhancers)).
 
 ## Adding an endpoint
 

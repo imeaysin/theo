@@ -16,7 +16,9 @@ export async function createE2eApp(): Promise<{
   })
 
   for (const guard of AUTH_GUARDS) {
-    moduleBuilder = moduleBuilder.overrideGuard(guard).useClass(PermissiveGuard)
+    moduleBuilder = moduleBuilder
+      .overrideProvider(guard)
+      .useClass(PermissiveGuard)
   }
 
   const moduleFixture = await moduleBuilder.compile()
