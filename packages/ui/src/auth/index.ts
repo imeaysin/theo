@@ -51,6 +51,9 @@ export type { UserProfileProps } from "./settings/account/user-profile"
 export { ChangeEmail } from "./settings/account/change-email"
 export type { ChangeEmailProps } from "./settings/account/change-email"
 
+export { ThemeSettings } from "../components/theme-settings"
+export type { ThemeSettingsProps } from "../components/theme-settings"
+
 export { SecuritySettings } from "./settings/security/security-settings"
 export type { SecuritySettingsProps } from "./settings/security/security-settings"
 
