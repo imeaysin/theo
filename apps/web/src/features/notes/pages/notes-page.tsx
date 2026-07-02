@@ -13,18 +13,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@workspace/ui/components/empty"
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@workspace/ui/components/input-group"
-import {
-  Select,
-  SelectButton,
-  SelectItem,
-  SelectPopup,
-  SelectValue,
-} from "@workspace/ui/components/select"
+import { Filter } from "@workspace/ui/components/filter"
 import {
   ShellMain,
   shellPageStackClassName,
@@ -198,37 +187,20 @@ export function NotesPage() {
         }}
       >
         <div className={shellPageStackClassName}>
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-            <InputGroup className="max-w-md flex-1">
-              <InputGroupAddon align="inline-start">
-                <SearchIcon className="size-4 text-muted-foreground" />
-              </InputGroupAddon>
-              <InputGroupInput
-                aria-label="Search notes"
-                onChange={(event) => setSearch(event.target.value)}
-                placeholder="Search notes…"
-                value={search}
-              />
-            </InputGroup>
-
-            <Select
-              onValueChange={(value) => {
-                if (value) setSort(value as SortOption)
-              }}
+          <Filter>
+            <Filter.Search
+              aria-label="Search notes"
+              onValueChange={setSearch}
+              placeholder="Search notes…"
+              value={search}
+            />
+            <Filter.Select
+              aria-label="Sort notes"
+              onValueChange={setSort}
+              options={sortOptions}
               value={sort}
-            >
-              <SelectButton className="w-full sm:w-44">
-                <SelectValue />
-              </SelectButton>
-              <SelectPopup>
-                {sortOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectPopup>
-            </Select>
-          </div>
+            />
+          </Filter>
 
           {selectedIds.size > 0 ? (
             <div className="flex flex-wrap items-center gap-3 rounded-lg border bg-muted/40 px-4 py-3">

@@ -8,7 +8,7 @@ export type PaneOverlayMode = "drawer" | "dialog" | "alert-dialog" | "sheet"
 
 export type PaneLayout = "dialog" | "side"
 
-export type PaneRootProps = {
+export interface PaneRootProps {
   open?: boolean
   defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void
