@@ -24,7 +24,7 @@ const defaultApiUrl = clientDefaults.apiUrl
 const defaultAppName = clientDefaults.appName
 const defaultMarketingUrl = clientDefaults.marketingUrl
 
-export interface ClientPublicEnv {
+export type ClientPublicEnv = {
   apiUrl: string
   authUrl: string
   appName: string

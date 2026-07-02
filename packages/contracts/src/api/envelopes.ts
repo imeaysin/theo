@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-interface ApiEnvelopeMeta {
+type ApiEnvelopeMeta = {
   id: string
   title?: string
   description?: string
@@ -77,7 +77,7 @@ export function apiSuccessResponse<T extends z.ZodType>(
 export type ApiFieldError = z.infer<typeof ApiFieldErrorSchema>
 export type ApiErrorResponse = z.infer<typeof ApiErrorResponseSchema>
 
-export interface ApiSuccessResponse<T> {
+export type ApiSuccessResponse<T> = {
   success: true
   statusCode: number
   message: string

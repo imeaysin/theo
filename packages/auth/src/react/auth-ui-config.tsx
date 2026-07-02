@@ -17,11 +17,11 @@ export type AuthLinkProps = PropsWithChildren<{
 
 export type AuthLinkComponent = ComponentType<AuthLinkProps>
 
-export interface AuthNavigateOptions {
+export type AuthNavigateOptions = {
   replace?: boolean
 }
 
-export interface AuthRoutes {
+export type AuthRoutes = {
   signIn: string
   signUp: string
   signOut: string
@@ -37,7 +37,7 @@ export interface AuthRoutes {
   defaultAuthenticated: string
 }
 
-export interface AuthUiConfig {
+export type AuthUiConfig = {
   routes: AuthRoutes
   navigate: (to: string, options?: AuthNavigateOptions) => void
   Link: AuthLinkComponent
@@ -54,7 +54,7 @@ const defaultAbsoluteAppUrl = (path: string) => {
 
 const AuthUiConfigContext = createContext<AuthUiConfig | null>(null)
 
-export interface AuthUiConfigProviderProps {
+export type AuthUiConfigProviderProps = {
   children: ReactNode
   routes: AuthRoutes
   navigate: AuthUiConfig["navigate"]

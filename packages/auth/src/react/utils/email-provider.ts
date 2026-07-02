@@ -1,4 +1,4 @@
-export interface EmailProviderLink {
+export type EmailProviderLink = {
   loginUrl: string
   providerName: string
 }

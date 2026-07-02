@@ -22,7 +22,7 @@ export type StorageErrorCode =
 
 export type StorageUploadBody = Buffer | Uint8Array
 
-export interface StorageUploadInput {
+export type StorageUploadInput = {
   path: string
   body: StorageUploadBody
   contentType: string
@@ -31,7 +31,7 @@ export interface StorageUploadInput {
   metadata?: Record<string, string>
 }
 
-export interface StorageUploadResult {
+export type StorageUploadResult = {
   path: string
   url: string
   etag?: string
@@ -40,48 +40,48 @@ export interface StorageUploadResult {
 
 // ── Delete ──────────────────────────────────────────
 
-export interface StorageDeleteInput {
+export type StorageDeleteInput = {
   path: string
 }
 
 // ── Copy / Move ─────────────────────────────────────
 
-export interface StorageCopyInput {
+export type StorageCopyInput = {
   sourcePath: string
   destinationPath: string
 }
 
-export interface StorageCopyResult {
+export type StorageCopyResult = {
   path: string
   url: string
 }
 
-export interface StorageMoveInput {
+export type StorageMoveInput = {
   sourcePath: string
   destinationPath: string
 }
 
-export interface StorageMoveResult {
+export type StorageMoveResult = {
   path: string
   url: string
 }
 
 // ── List ────────────────────────────────────────────
 
-export interface StorageListInput {
+export type StorageListInput = {
   prefix?: string
   delimiter?: string
   maxKeys?: number
 }
 
-export interface StorageListEntry {
+export type StorageListEntry = {
   path: string
   size: number
   lastModified: Date
   etag?: string
 }
 
-export interface StorageListResult {
+export type StorageListResult = {
   files: StorageListEntry[]
   prefixes: string[]
   isTruncated: boolean
@@ -89,7 +89,7 @@ export interface StorageListResult {
 
 // ── Metadata ────────────────────────────────────────
 
-export interface StorageFileMetadata {
+export type StorageFileMetadata = {
   size: number
   contentType: string
   lastModified: Date
@@ -99,14 +99,14 @@ export interface StorageFileMetadata {
 
 // ── Signed URLs ─────────────────────────────────────
 
-export interface SignedUrlOptions {
+export type SignedUrlOptions = {
   expiresInSeconds?: number
   contentType?: string
 }
 
 // ── Provider interface ──────────────────────────────
 
-export interface StorageProvider {
+export type StorageProvider = {
   upload(input: StorageUploadInput): Promise<StorageUploadResult>
   delete(input: StorageDeleteInput): Promise<void>
   getUrl(path: string): string
@@ -124,13 +124,13 @@ export interface StorageProvider {
 
 // ── Config ──────────────────────────────────────────
 
-export interface LocalStorageConfig {
+export type LocalStorageConfig = {
   provider: "local"
   basePath: string
   baseUrl: string
 }
 
-export interface S3StorageConfig {
+export type S3StorageConfig = {
   provider: "s3"
   bucket: string
   region: string

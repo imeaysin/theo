@@ -6,7 +6,7 @@ import {
 import { AuthProviderButtons, type AuthOAuthProvider } from "@workspace/ui/auth"
 import { absoluteAppUrl, defaultAuthenticatedRoute } from "@/config/routes"
 
-interface AuthButtonsProps {
+type AuthButtonsProps = {
   callbackPath?: string
 }
 

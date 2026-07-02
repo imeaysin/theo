@@ -44,7 +44,7 @@ async function getBearerToken(options?: {
   return data.token
 }
 
-export interface ApiErrorOptions {
+export type ApiErrorOptions = {
   message: string
   status: number
   code: ApiErrorCode

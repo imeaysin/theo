@@ -1,7 +1,7 @@
 import type { ObjectId } from "mongodb"
 
 /** Persistence shape stored in MongoDB. */
-export interface NoteRecord {
+export type NoteRecord = {
   _id: ObjectId
   organizationId: string
   userId: string
@@ -12,7 +12,7 @@ export interface NoteRecord {
 }
 
 /** Feature entity returned from the repository layer. */
-export interface NoteEntity {
+export type NoteEntity = {
   id: string
   organizationId: string
   userId: string

@@ -11,10 +11,10 @@ export type ActionName<
   R extends ResourceName<S>,
 > = S[R][number]
 
-export interface RequiredPermission<
+export type RequiredPermission<
   S extends AccessStatement,
   R extends ResourceName<S> = ResourceName<S>,
-> {
+> = {
   resource: R
   action: ActionName<S, R>
 }

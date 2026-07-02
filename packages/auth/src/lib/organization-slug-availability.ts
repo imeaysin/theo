@@ -3,7 +3,7 @@ export const ORGANIZATION_SLUG_TAKEN_ERROR_CODES = [
   "ORGANIZATION_ALREADY_EXISTS",
 ] as const
 
-export interface OrganizationSlugAvailability {
+export type OrganizationSlugAvailability = {
   available: boolean
 }
 

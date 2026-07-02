@@ -21,7 +21,7 @@ const noteFormSchema = z.object({
 
 type NoteFormValues = z.infer<typeof noteFormSchema>
 
-interface NoteFormSheetProps {
+type NoteFormSheetProps = {
   open: boolean
   onOpenChange: (open: boolean) => void
   note?: NoteResponse | null

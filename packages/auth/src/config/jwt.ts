@@ -1,6 +1,6 @@
 import type { PlatformRoleName } from "./admin-plugin"
 
-export interface JwtPayload {
+export type JwtPayload = {
   id: string
   email: string
   role: PlatformRoleName

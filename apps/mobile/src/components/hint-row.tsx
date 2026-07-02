@@ -6,7 +6,7 @@ import { ThemedView } from "./themed-view"
 
 import { Spacing } from "@/constants/theme"
 
-interface HintRowProps {
+type HintRowProps = {
   title?: string
   hint?: ReactNode
 }

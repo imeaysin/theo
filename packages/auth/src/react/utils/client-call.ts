@@ -1,4 +1,4 @@
-export interface ClientResult<T> {
+export type ClientResult<T> = {
   data: T | null
   error: { code?: string; message?: string } | null
 }

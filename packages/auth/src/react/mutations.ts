@@ -29,26 +29,26 @@ export type ForgotPasswordMutationInput = ForgotPasswordInput & {
   redirectTo: string
 }
 
-export interface SendVerificationEmailInput {
+export type SendVerificationEmailInput = {
   email: string
   callbackURL: string
 }
 
-export interface SocialSignInInput {
+export type SocialSignInInput = {
   provider: "google" | "github"
   callbackURL: string
 }
 
-export interface SignOutOptions {
+export type SignOutOptions = {
   jwtStorageKey?: string
 }
 
-export interface ChangeEmailInput {
+export type ChangeEmailInput = {
   newEmail: string
   callbackURL: string
 }
 
-export interface UpdateUserInput {
+export type UpdateUserInput = {
   name?: string
   image?: string | null
   [key: string]: unknown

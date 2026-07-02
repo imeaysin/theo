@@ -18,7 +18,7 @@ import { apiFetch } from "@/lib/api"
 export const notesQueryKey = (organizationId?: string | null) =>
   ["notes", organizationId ?? null] as const
 
-interface PatchNotesListOptions {
+type PatchNotesListOptions = {
   queryClient: ReturnType<typeof useQueryClient>
   organizationId: string | null | undefined
   updater: (items: NoteResponse[]) => NoteResponse[]
