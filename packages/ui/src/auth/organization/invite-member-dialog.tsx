@@ -76,10 +76,9 @@ export function InviteMemberDialog({
           }}
         >
           <DialogPanel className="flex flex-col gap-4">
-            <Field data-invalid={!!emailError}>
+            <Field invalid={Boolean(emailError)}>
               <FieldLabel htmlFor="invite-member-email">Email</FieldLabel>
               <Input
-                aria-invalid={!!emailError}
                 autoFocus
                 disabled={fieldsDisabled}
                 id="invite-member-email"
@@ -88,10 +87,10 @@ export function InviteMemberDialog({
                 type="email"
                 value={email}
               />
-              <FieldError>{emailError}</FieldError>
+              <FieldError match={Boolean(emailError)}>{emailError}</FieldError>
             </Field>
 
-            <Field className="w-full" data-invalid={!!roleError}>
+            <Field className="w-full" invalid={Boolean(roleError)}>
               <FieldLabel htmlFor="invite-member-role">Role</FieldLabel>
               <Select
                 disabled={fieldsDisabled || roleItems.length === 0}
@@ -99,11 +98,7 @@ export function InviteMemberDialog({
                 onValueChange={(item) => onRoleChange(item?.value ?? "")}
                 value={roleItems.find((item) => item.value === role) ?? null}
               >
-                <SelectTrigger
-                  aria-invalid={!!roleError}
-                  className="w-full"
-                  id="invite-member-role"
-                >
+                <SelectTrigger className="w-full" id="invite-member-role">
                   <SelectValue placeholder="Select a role" />
                 </SelectTrigger>
                 <SelectPopup alignItemWithTrigger={false}>
@@ -114,7 +109,7 @@ export function InviteMemberDialog({
                   ))}
                 </SelectPopup>
               </Select>
-              <FieldError>{roleError}</FieldError>
+              <FieldError match={Boolean(roleError)}>{roleError}</FieldError>
             </Field>
           </DialogPanel>
 

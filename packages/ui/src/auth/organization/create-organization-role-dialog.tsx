@@ -61,12 +61,11 @@ export function CreateOrganizationRoleDialog({
           }}
         >
           <DialogPanel className="flex flex-col gap-4">
-            <Field data-invalid={!!roleError}>
+            <Field invalid={Boolean(roleError)}>
               <FieldLabel htmlFor="create-organization-role-name">
                 Role name
               </FieldLabel>
               <Input
-                aria-invalid={!!roleError}
                 autoFocus
                 disabled={isPending}
                 id="create-organization-role-name"
@@ -74,17 +73,19 @@ export function CreateOrganizationRoleDialog({
                 placeholder="moderator"
                 value={role}
               />
-              <FieldError>{roleError}</FieldError>
+              <FieldError match={Boolean(roleError)}>{roleError}</FieldError>
             </Field>
 
-            <Field data-invalid={!!permissionError}>
+            <Field invalid={Boolean(permissionError)}>
               <FieldLabel>Permissions</FieldLabel>
               <OrganizationRolePermissions
                 disabled={isPending}
                 onChange={onPermissionsChange}
                 permissions={permissions}
               />
-              <FieldError>{permissionError}</FieldError>
+              <FieldError match={Boolean(permissionError)}>
+                {permissionError}
+              </FieldError>
             </Field>
           </DialogPanel>
 

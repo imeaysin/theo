@@ -35,12 +35,11 @@ export function UserProfile({
       <Form onSubmit={onSubmit ?? ((event) => event.preventDefault())}>
         <Card className={cn(className)}>
           <CardPanel className="flex flex-col gap-6">
-            <Field data-invalid={!!nameError}>
+            <Field invalid={Boolean(nameError)}>
               <FieldLabel htmlFor="name">Name</FieldLabel>
 
               {hasSession && wired ? (
                 <Input
-                  aria-invalid={!!nameError}
                   autoComplete="name"
                   disabled={isPending}
                   id="name"
@@ -55,7 +54,7 @@ export function UserProfile({
                 </Skeleton>
               )}
 
-              <FieldError>{nameError}</FieldError>
+              <FieldError match={Boolean(nameError)}>{nameError}</FieldError>
             </Field>
           </CardPanel>
 

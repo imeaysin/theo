@@ -80,10 +80,9 @@ export function CreateOrganizationDialog({
           }}
         >
           <DialogPanel className="flex flex-col gap-4">
-            <Field data-invalid={!!nameError}>
+            <Field invalid={Boolean(nameError)}>
               <FieldLabel htmlFor="create-organization-name">Name</FieldLabel>
               <Input
-                aria-invalid={!!nameError}
                 autoFocus
                 disabled={isPending}
                 id="create-organization-name"
@@ -92,7 +91,7 @@ export function CreateOrganizationDialog({
                 type="text"
                 value={name}
               />
-              <FieldError>{nameError}</FieldError>
+              <FieldError match={Boolean(nameError)}>{nameError}</FieldError>
             </Field>
 
             {showSlug ? (

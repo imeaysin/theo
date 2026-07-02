@@ -203,7 +203,9 @@ function ChangePasswordForm({
                 </Skeleton>
               )}
 
-              <FieldError>{fieldErrors.currentPassword}</FieldError>
+              <FieldError match={Boolean(fieldErrors.currentPassword)}>
+                {fieldErrors.currentPassword}
+              </FieldError>
             </Field>
 
             <Field invalid={Boolean(fieldErrors.newPassword)}>
@@ -246,7 +248,9 @@ function ChangePasswordForm({
                 </Skeleton>
               )}
 
-              <FieldError>{fieldErrors.newPassword}</FieldError>
+              <FieldError match={Boolean(fieldErrors.newPassword)}>
+                {fieldErrors.newPassword}
+              </FieldError>
             </Field>
 
             <Field invalid={Boolean(fieldErrors.confirmPassword)}>
@@ -291,7 +295,9 @@ function ChangePasswordForm({
                 </Skeleton>
               )}
 
-              <FieldError>{fieldErrors.confirmPassword}</FieldError>
+              <FieldError match={Boolean(fieldErrors.confirmPassword)}>
+                {fieldErrors.confirmPassword}
+              </FieldError>
             </Field>
           </CardPanel>
 

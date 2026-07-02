@@ -180,7 +180,9 @@ export function OrganizationSlugField({
           </InputGroupAddon>
         ) : null}
       </InputGroup>
-      <FieldError>{validationError}</FieldError>
+      <FieldError match={Boolean(validationError)}>
+        {validationError}
+      </FieldError>
     </Field>
   )
 }

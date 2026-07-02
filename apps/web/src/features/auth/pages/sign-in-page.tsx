@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom"
-import { useForm, useFormState } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { signInSchema, type SignInInput } from "@workspace/contracts"
 import { AuthDivider, AuthPageBody, AuthPageHeader } from "@workspace/ui/auth"
 import { Button } from "@workspace/ui/components/button"
@@ -45,7 +45,6 @@ export function SignInPage() {
     resolver: zodResolver(signInSchema),
     defaultValues: { email: "", password: "" },
   })
-  const { errors } = useFormState({ control: form.control })
 
   if (isPending) {
     return <PageLoading />
@@ -112,32 +111,44 @@ export function SignInPage() {
         noValidate
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <Field invalid={Boolean(errors.email)}>
-          <FieldLabel htmlFor="sign-in-email">Email</FieldLabel>
-          <Input
-            autoComplete="email"
-            id="sign-in-email"
-            placeholder="you@example.com"
-            type="email"
-            {...form.register("email")}
-          />
-          <FieldError>{errors.email?.message}</FieldError>
-        </Field>
-        <Field invalid={Boolean(errors.password)}>
-          <FieldLabel htmlFor="sign-in-password">Password</FieldLabel>
-          <FieldControl
-            {...form.register("password")}
-            render={(controlProps) => (
-              <PasswordInput
-                {...controlProps}
-                autoComplete="current-password"
-                id="sign-in-password"
-                placeholder="Enter your password"
+        <Controller
+          control={form.control}
+          name="email"
+          render={({ field, fieldState: { invalid, error } }) => (
+            <Field invalid={invalid}>
+              <FieldLabel htmlFor="sign-in-email">Email</FieldLabel>
+              <Input
+                {...field}
+                autoComplete="email"
+                id="sign-in-email"
+                placeholder="you@example.com"
+                type="email"
               />
-            )}
-          />
-          <FieldError>{errors.password?.message}</FieldError>
-        </Field>
+              <FieldError match={Boolean(error)}>{error?.message}</FieldError>
+            </Field>
+          )}
+        />
+        <Controller
+          control={form.control}
+          name="password"
+          render={({ field, fieldState: { invalid, error } }) => (
+            <Field invalid={invalid}>
+              <FieldLabel htmlFor="sign-in-password">Password</FieldLabel>
+              <FieldControl
+                {...field}
+                render={(controlProps) => (
+                  <PasswordInput
+                    {...controlProps}
+                    autoComplete="current-password"
+                    id="sign-in-password"
+                    placeholder="Enter your password"
+                  />
+                )}
+              />
+              <FieldError match={Boolean(error)}>{error?.message}</FieldError>
+            </Field>
+          )}
+        />
         <div className="flex justify-end">
           <Link
             className="font-sans text-sm text-muted-foreground underline underline-offset-2 transition-colors hover:text-foreground"

@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Link } from "react-router-dom"
-import { useForm, useFormState } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import {
   forgotPasswordSchema,
   type ForgotPasswordInput,
@@ -19,7 +19,6 @@ export function ForgotPasswordPage() {
     resolver: zodResolver(forgotPasswordSchema),
     defaultValues: { email: "" },
   })
-  const { errors } = useFormState({ control: form.control })
 
   async function onSubmit(values: ForgotPasswordInput) {
     try {
@@ -60,18 +59,23 @@ export function ForgotPasswordPage() {
         noValidate
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <Field data-invalid={!!errors.email}>
-          <FieldLabel htmlFor="forgot-password-email">Email</FieldLabel>
-          <Input
-            autoComplete="email"
-            id="forgot-password-email"
-            placeholder="you@example.com"
-            type="email"
-            {...form.register("email")}
-            aria-invalid={!!errors.email}
-          />
-          <FieldError>{errors.email?.message}</FieldError>
-        </Field>
+        <Controller
+          control={form.control}
+          name="email"
+          render={({ field, fieldState: { invalid, error } }) => (
+            <Field invalid={invalid}>
+              <FieldLabel htmlFor="forgot-password-email">Email</FieldLabel>
+              <Input
+                {...field}
+                autoComplete="email"
+                id="forgot-password-email"
+                placeholder="you@example.com"
+                type="email"
+              />
+              <FieldError match={Boolean(error)}>{error?.message}</FieldError>
+            </Field>
+          )}
+        />
         <Button
           className="w-full"
           loading={forgotPassword.isPending}

@@ -63,7 +63,7 @@ export function TwoFactorPage() {
         title="Verify your identity"
       />
 
-      <Field data-invalid={!!codeError}>
+      <Field invalid={Boolean(codeError)}>
         <FieldLabel htmlFor="two-factor-code">Verification code</FieldLabel>
         <AuthOtpInput
           id="two-factor-code"
@@ -80,7 +80,7 @@ export function TwoFactorPage() {
           Open your authenticator app (1Password, Authy, etc.) to get a 6-digit
           code.
         </FieldDescription>
-        <FieldError>{codeError}</FieldError>
+        <FieldError match={Boolean(codeError)}>{codeError}</FieldError>
       </Field>
     </AuthPageBody>
   )

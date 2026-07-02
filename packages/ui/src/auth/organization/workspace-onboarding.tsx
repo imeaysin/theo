@@ -120,12 +120,11 @@ export function WorkspaceOnboarding({
                 onSubmit(event)
               }}
             >
-              <Field data-invalid={!!nameError}>
+              <Field invalid={Boolean(nameError)}>
                 <FieldLabel htmlFor="workspace-onboarding-name">
                   Workspace name
                 </FieldLabel>
                 <Input
-                  aria-invalid={!!nameError}
                   autoFocus
                   disabled={isPending}
                   id="workspace-onboarding-name"
@@ -134,7 +133,7 @@ export function WorkspaceOnboarding({
                   type="text"
                   value={name}
                 />
-                <FieldError>{nameError}</FieldError>
+                <FieldError match={Boolean(nameError)}>{nameError}</FieldError>
               </Field>
 
               <Button className="w-full" loading={isPending} type="submit">

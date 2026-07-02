@@ -100,10 +100,9 @@ export function OrganizationProfile({
       >
         <Card className={cn(className)}>
           <CardPanel className="flex flex-col gap-4 p-4">
-            <Field data-invalid={!!nameError}>
+            <Field invalid={Boolean(nameError)}>
               <FieldLabel htmlFor={nameInputId}>Name</FieldLabel>
               <Input
-                aria-invalid={!!nameError}
                 autoComplete="organization"
                 disabled={isPending || readOnly}
                 id={nameInputId}
@@ -112,7 +111,7 @@ export function OrganizationProfile({
                 type="text"
                 value={name}
               />
-              <FieldError>{nameError}</FieldError>
+              <FieldError match={Boolean(nameError)}>{nameError}</FieldError>
             </Field>
 
             <OrganizationSlugField

@@ -35,12 +35,11 @@ export function ChangeEmail({
       <Form onSubmit={onSubmit ?? ((event) => event.preventDefault())}>
         <Card className={cn(className)}>
           <CardPanel className="flex flex-col gap-6">
-            <Field data-invalid={!!emailError}>
+            <Field invalid={Boolean(emailError)}>
               <FieldLabel htmlFor="email">Email</FieldLabel>
 
               {hasSession && wired ? (
                 <Input
-                  aria-invalid={!!emailError}
                   autoComplete="email"
                   disabled={isPending}
                   id="email"
@@ -55,7 +54,7 @@ export function ChangeEmail({
                 </Skeleton>
               )}
 
-              <FieldError>{emailError}</FieldError>
+              <FieldError match={Boolean(emailError)}>{emailError}</FieldError>
             </Field>
           </CardPanel>
 

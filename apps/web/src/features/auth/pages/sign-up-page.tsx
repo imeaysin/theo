@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom"
-import { useForm, useFormState } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { signUpSchema, type SignUpInput } from "@workspace/contracts"
 import { AuthDivider, AuthPageBody, AuthPageHeader } from "@workspace/ui/auth"
 import { Button } from "@workspace/ui/components/button"
@@ -45,7 +45,6 @@ export function SignUpPage() {
       confirmPassword: "",
     },
   })
-  const { errors } = useFormState({ control: form.control })
 
   if (isPending) {
     return <PageLoading />
@@ -107,60 +106,84 @@ export function SignUpPage() {
         noValidate
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <Field invalid={Boolean(errors.name)}>
-          <FieldLabel htmlFor="sign-up-name">Name</FieldLabel>
-          <Input
-            autoComplete="name"
-            id="sign-up-name"
-            placeholder="Your name"
-            type="text"
-            {...form.register("name")}
-          />
-          <FieldError>{errors.name?.message}</FieldError>
-        </Field>
-        <Field invalid={Boolean(errors.email)}>
-          <FieldLabel htmlFor="sign-up-email">Email</FieldLabel>
-          <Input
-            autoComplete="email"
-            id="sign-up-email"
-            placeholder="you@example.com"
-            type="email"
-            {...form.register("email")}
-          />
-          <FieldError>{errors.email?.message}</FieldError>
-        </Field>
-        <Field invalid={Boolean(errors.password)}>
-          <FieldLabel htmlFor="sign-up-password">Password</FieldLabel>
-          <FieldControl
-            {...form.register("password")}
-            render={(controlProps) => (
-              <PasswordInput
-                {...controlProps}
-                autoComplete="new-password"
-                id="sign-up-password"
-                placeholder="Create a password"
+        <Controller
+          control={form.control}
+          name="name"
+          render={({ field, fieldState: { invalid, error } }) => (
+            <Field invalid={invalid}>
+              <FieldLabel htmlFor="sign-up-name">Name</FieldLabel>
+              <Input
+                {...field}
+                autoComplete="name"
+                id="sign-up-name"
+                placeholder="Your name"
+                type="text"
               />
-            )}
-          />
-          <FieldError>{errors.password?.message}</FieldError>
-        </Field>
-        <Field invalid={Boolean(errors.confirmPassword)}>
-          <FieldLabel htmlFor="sign-up-confirm-password">
-            Confirm password
-          </FieldLabel>
-          <FieldControl
-            {...form.register("confirmPassword")}
-            render={(controlProps) => (
-              <PasswordInput
-                {...controlProps}
-                autoComplete="new-password"
-                id="sign-up-confirm-password"
-                placeholder="Confirm your password"
+              <FieldError match={Boolean(error)}>{error?.message}</FieldError>
+            </Field>
+          )}
+        />
+        <Controller
+          control={form.control}
+          name="email"
+          render={({ field, fieldState: { invalid, error } }) => (
+            <Field invalid={invalid}>
+              <FieldLabel htmlFor="sign-up-email">Email</FieldLabel>
+              <Input
+                {...field}
+                autoComplete="email"
+                id="sign-up-email"
+                placeholder="you@example.com"
+                type="email"
               />
-            )}
-          />
-          <FieldError>{errors.confirmPassword?.message}</FieldError>
-        </Field>
+              <FieldError match={Boolean(error)}>{error?.message}</FieldError>
+            </Field>
+          )}
+        />
+        <Controller
+          control={form.control}
+          name="password"
+          render={({ field, fieldState: { invalid, error } }) => (
+            <Field invalid={invalid}>
+              <FieldLabel htmlFor="sign-up-password">Password</FieldLabel>
+              <FieldControl
+                {...field}
+                render={(controlProps) => (
+                  <PasswordInput
+                    {...controlProps}
+                    autoComplete="new-password"
+                    id="sign-up-password"
+                    placeholder="Create a password"
+                  />
+                )}
+              />
+              <FieldError match={Boolean(error)}>{error?.message}</FieldError>
+            </Field>
+          )}
+        />
+        <Controller
+          control={form.control}
+          name="confirmPassword"
+          render={({ field, fieldState: { invalid, error } }) => (
+            <Field invalid={invalid}>
+              <FieldLabel htmlFor="sign-up-confirm-password">
+                Confirm password
+              </FieldLabel>
+              <FieldControl
+                {...field}
+                render={(controlProps) => (
+                  <PasswordInput
+                    {...controlProps}
+                    autoComplete="new-password"
+                    id="sign-up-confirm-password"
+                    placeholder="Confirm your password"
+                  />
+                )}
+              />
+              <FieldError match={Boolean(error)}>{error?.message}</FieldError>
+            </Field>
+          )}
+        />
         <Button
           className="w-full"
           loading={signUp.isPending}

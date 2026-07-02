@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
-import { useForm, useFormState } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import {
   resetPasswordSchema,
   type ResetPasswordInput,
@@ -27,7 +27,6 @@ export function ResetPasswordPage() {
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: { password: "", confirmPassword: "" },
   })
-  const { errors } = useFormState({ control: form.control })
 
   async function onSubmit(values: ResetPasswordInput) {
     if (!token) {
@@ -73,38 +72,50 @@ export function ResetPasswordPage() {
         noValidate
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <Field invalid={Boolean(errors.password)}>
-          <FieldLabel htmlFor="reset-password">New password</FieldLabel>
-          <FieldControl
-            {...form.register("password")}
-            render={(controlProps) => (
-              <PasswordInput
-                {...controlProps}
-                autoComplete="new-password"
-                id="reset-password"
-                placeholder="Enter a new password"
+        <Controller
+          control={form.control}
+          name="password"
+          render={({ field, fieldState: { invalid, error } }) => (
+            <Field invalid={invalid}>
+              <FieldLabel htmlFor="reset-password">New password</FieldLabel>
+              <FieldControl
+                {...field}
+                render={(controlProps) => (
+                  <PasswordInput
+                    {...controlProps}
+                    autoComplete="new-password"
+                    id="reset-password"
+                    placeholder="Enter a new password"
+                  />
+                )}
               />
-            )}
-          />
-          <FieldError>{errors.password?.message}</FieldError>
-        </Field>
-        <Field invalid={Boolean(errors.confirmPassword)}>
-          <FieldLabel htmlFor="reset-password-confirm">
-            Confirm password
-          </FieldLabel>
-          <FieldControl
-            {...form.register("confirmPassword")}
-            render={(controlProps) => (
-              <PasswordInput
-                {...controlProps}
-                autoComplete="new-password"
-                id="reset-password-confirm"
-                placeholder="Confirm your password"
+              <FieldError match={Boolean(error)}>{error?.message}</FieldError>
+            </Field>
+          )}
+        />
+        <Controller
+          control={form.control}
+          name="confirmPassword"
+          render={({ field, fieldState: { invalid, error } }) => (
+            <Field invalid={invalid}>
+              <FieldLabel htmlFor="reset-password-confirm">
+                Confirm password
+              </FieldLabel>
+              <FieldControl
+                {...field}
+                render={(controlProps) => (
+                  <PasswordInput
+                    {...controlProps}
+                    autoComplete="new-password"
+                    id="reset-password-confirm"
+                    placeholder="Confirm your password"
+                  />
+                )}
               />
-            )}
-          />
-          <FieldError>{errors.confirmPassword?.message}</FieldError>
-        </Field>
+              <FieldError match={Boolean(error)}>{error?.message}</FieldError>
+            </Field>
+          )}
+        />
         <Button
           className="w-full"
           loading={resetPassword.isPending}

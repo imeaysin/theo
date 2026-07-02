@@ -101,7 +101,9 @@ export function NoteFormSheet({
                 aria-invalid={Boolean(form.formState.errors.title)}
                 disabled={isPending}
               />
-              <FieldError>{form.formState.errors.title?.message}</FieldError>
+              <FieldError match={Boolean(form.formState.errors.title?.message)}>
+                {form.formState.errors.title?.message}
+              </FieldError>
             </Field>
 
             <Field>
