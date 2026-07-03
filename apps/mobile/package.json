@@ -10,8 +10,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "eslint . --max-warnings 0",
-    "typecheck": "tsc --noEmit",
-    "reset-project": "node ./scripts/reset-project.js"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@expo/ui": "~56.0.18",

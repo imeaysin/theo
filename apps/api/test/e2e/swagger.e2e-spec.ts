@@ -30,7 +30,7 @@ describe("Swagger (e2e)", () => {
   })
 
   afterAll(async () => {
-    await app.close()
+    await app?.close()
   })
 
   it("registers operations for all controller tags", () => {

@@ -21,8 +21,8 @@ Shared packages live in `packages/` (`auth`, `config`, `contracts`, `db`, `email
 git clone <your-repo-url> my-app && cd my-app
 pnpm install
 cp .env.example .env
-pnpm db:up          # start MongoDB replica set
-pnpm dev            # all apps in parallel (or use dev:api, dev:web, dev:marketing)
+pnpm db:up          # start MongoDB
+pnpm dev            # all apps in parallel (first run builds shared packages)
 ```
 
 Open:
@@ -60,6 +60,7 @@ Set `BETTER_AUTH_SECRET` to the output. OAuth providers are optional — leave b
 | `pnpm lint`              | ESLint                                      |
 | `pnpm typecheck`         | TypeScript                                  |
 | `pnpm test`              | Tests                                       |
+| `pnpm test:e2e`          | API e2e tests (requires MongoDB)            |
 | `pnpm setup`             | Copy `.env.example`, install, start MongoDB |
 | `pnpm --filter api seed` | Demo notes for first user (after sign-up)   |
 
@@ -139,7 +140,7 @@ This template follows official patterns for each layer of the stack.
 | ------------------------------------------------------------------------------ | ------------------- |
 | Feature modules under `src/modules/`                                           | `app.module.ts`     |
 | URI versioning (`/v1/...`)                                                     | `configure-app.ts`  |
-| Global `ValidationPipe` (whitelist, transform)                                 | `configure-app.ts`  |
+| Global `ZodValidationPipe` (contracts-backed validation)                       | `app.module.ts`     |
 | Swagger in non-production                                                      | `configure-app.ts`  |
 | `bodyParser: false` for Better Auth (required by nestjs-better-auth)           | `main.ts`           |
 | Shared env via `@workspace/config` (Zod) instead of duplicating `.env` per app | Monorepo convention |
@@ -172,10 +173,15 @@ This template follows official patterns for each layer of the stack.
 | `@workspace/contracts` | Zod schemas shared by API + clients                                                                |
 | `@workspace/auth`      | Better Auth config + Nest/Next/Expo adapters — **[authorization docs](./packages/auth/README.md)** |
 | `@workspace/ui`        | Components consumed as source (`transpilePackages` in Next, direct import in Vite)                 |
+| `@workspace/db`        | Shared Mongoose connection for API and auth                                                        |
+| `@workspace/email`     | Resend + React Email templates for auth emails                                                     |
+| `@workspace/storage`   | File upload providers (local / S3)                                                                 |
+| `@workspace/logger`    | Structured logging (pino)                                                                          |
+| `@workspace/dates`     | Shared date formatting helpers                                                                     |
 
 ## CI
 
-GitHub Actions runs lint, typecheck, test, and build on every push/PR. Set `SKIP_ENV_VALIDATION=true` in CI — no real `.env` required for builds.
+GitHub Actions runs lint, typecheck, test, API e2e, and build on every push/PR. Set `SKIP_ENV_VALIDATION=true` in CI — no real `.env` required for builds.
 
 ## License
 

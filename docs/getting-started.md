@@ -10,9 +10,12 @@
 2. **Configure** root `.env` — set `BETTER_AUTH_SECRET` (`openssl rand -base64 32`).
 
 3. **Run** everything:
+
    ```bash
    pnpm dev
    ```
+
+   The first run builds shared packages (`@workspace/auth`, `@workspace/contracts`, etc.) before starting apps.
 
 | App        | URL                        |
 | ---------- | -------------------------- |

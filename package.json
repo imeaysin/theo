@@ -16,6 +16,7 @@
     "format": "prettier --write .",
     "typecheck": "turbo typecheck",
     "test": "turbo test",
+    "test:e2e": "turbo test:e2e --filter=api",
     "prepare": "husky"
   },
   "devDependencies": {
