@@ -20,6 +20,10 @@ export const createOrganizationSchema = z.object({
   slug: organizationSlugSchema,
 })
 
+export const workspaceOnboardingSchema = createOrganizationSchema.pick({
+  name: true,
+})
+
 export const updateOrganizationSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100),
   slug: organizationSlugSchema,

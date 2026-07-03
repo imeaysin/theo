@@ -7,26 +7,10 @@ import { Form } from "@workspace/ui/components/form"
 import { Input } from "@workspace/ui/components/input"
 import { Controller, useFormState, type Control } from "react-hook-form"
 import { AuthBrandLogo } from "../auth-brand-logo"
-import type { AuthLinkComponent } from "../auth-shell"
+import { DefaultAuthLink, type AuthLinkComponent } from "../auth-shell"
 import { AuthPageBody } from "../auth-form"
 import { AuthPageHeader } from "../auth-page-header"
 import { AuthUserView } from "../auth-user-view"
-
-function DefaultLink({
-  href,
-  className,
-  children,
-}: {
-  href: string
-  className?: string
-  children: React.ReactNode
-}) {
-  return (
-    <a className={className} href={href}>
-      {children}
-    </a>
-  )
-}
 
 type WorkspaceOnboardingValues = { name: string }
 
@@ -48,7 +32,7 @@ export function WorkspaceOnboarding({
   isPending = false,
   onSignOut,
   homeHref = "/",
-  linkComponent: Link = DefaultLink,
+  linkComponent: Link = DefaultAuthLink,
   title = "Create your workspace",
   description = "Pick a name to get started. You can invite teammates later.",
   submitLabel = "Continue",

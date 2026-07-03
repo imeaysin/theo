@@ -1,5 +1,5 @@
 export type { AuthLinkComponent, AuthLinkProps } from "./auth-shell"
-export { AuthShell } from "./auth-shell"
+export { AuthShell, DefaultAuthLink } from "./auth-shell"
 export type { AuthShellProps } from "./auth-shell"
 
 export { AuthPageHeader } from "./auth-page-header"

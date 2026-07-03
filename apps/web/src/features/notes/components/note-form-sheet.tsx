@@ -8,18 +8,13 @@ import { Pane } from "@workspace/ui/components/pane"
 import { Textarea } from "@workspace/ui/components/textarea"
 import { useEffect } from "react"
 import { Controller, useForm, useFormState } from "react-hook-form"
-import { z } from "zod"
+import type { z } from "zod"
 import {
   useCreateNoteMutation,
   useUpdateNoteMutation,
 } from "@/features/notes/hooks/use-notes"
 
-const noteFormSchema = z.object({
-  title: z.string().trim().min(1, "Title is required").max(200),
-  body: z.string().max(5000),
-})
-
-type NoteFormValues = z.infer<typeof noteFormSchema>
+type NoteFormValues = z.input<typeof CreateNoteSchema>
 
 type NoteFormSheetProps = {
   open: boolean
@@ -38,7 +33,7 @@ export function NoteFormSheet({
   const isPending = createNote.isPending || updateNote.isPending
 
   const form = useForm<NoteFormValues>({
-    resolver: zodResolver(noteFormSchema),
+    resolver: zodResolver(CreateNoteSchema),
     defaultValues: { title: "", body: "" },
   })
   const { errors } = useFormState({ control: form.control })

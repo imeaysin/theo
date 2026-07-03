@@ -23,7 +23,7 @@ export type AuthShellProps = {
 const logoLinkClassName =
   "pointer-events-auto flex items-center gap-2 transition-opacity duration-200 hover:opacity-80 active:opacity-80"
 
-function DefaultAuthLink({ href, className, children }: AuthLinkProps) {
+export function DefaultAuthLink({ href, className, children }: AuthLinkProps) {
   return (
     <a className={className} href={href}>
       {children}

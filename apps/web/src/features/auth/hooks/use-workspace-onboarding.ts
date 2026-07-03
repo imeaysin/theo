@@ -7,15 +7,12 @@ import {
   useCreateOrganization,
   useAuthSession,
 } from "@workspace/auth/react"
+import { workspaceOnboardingSchema } from "@workspace/auth/forms"
 import { useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
-import { z } from "zod"
+import type { z } from "zod"
 import { toastManager } from "@workspace/ui/components/toast"
 import { routes } from "@/config/routes"
-
-const workspaceOnboardingSchema = z.object({
-  name: z.string().trim().min(1, "Name is required").max(100),
-})
 
 export function useWorkspaceOnboarding() {
   const navigate = useNavigate()
