@@ -9,6 +9,7 @@ import { routes } from "@/config/routes"
 import { site } from "@/config/site"
 import { usePlatformPermission, useSignOut } from "@workspace/auth/react"
 import { platformUiPermissions } from "@workspace/ui/auth"
+import { useUnreadCountQuery } from "@/features/notifications/hooks/use-notifications"
 
 export function useAppShellConfig() {
   const navigate = useNavigate()
@@ -16,11 +17,18 @@ export function useAppShellConfig() {
   const { data: adminPermission } = usePlatformPermission(
     platformUiPermissions.listUsers
   )
+  const { data: unreadCount } = useUnreadCountQuery()
 
   const navigation = useMemo(() => {
-    if (!adminPermission?.success) return appNavigation
-    return [...appNavigation, adminNavigationItem]
-  }, [adminPermission?.success])
+    const items = appNavigation.map((item) => {
+      if (item.href !== routes.notifications) return item
+      const count = unreadCount?.count ?? 0
+      if (count === 0) return item
+      return { ...item, badge: count > 99 ? "99+" : String(count) }
+    })
+    if (!adminPermission?.success) return items
+    return [...items, adminNavigationItem]
+  }, [adminPermission?.success, unreadCount?.count])
 
   const userMenuItems = useMemo<AuthUserButtonMenuItem[]>(
     () => [

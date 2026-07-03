@@ -10,6 +10,7 @@ import { AcceptInvitationPage } from "@/features/auth/pages/accept-invitation-pa
 import { authRoutes } from "@/features/auth/routes"
 import { dashboardRoutes } from "@/features/dashboard/routes"
 import { notesRoutes } from "@/features/notes/routes"
+import { notificationRoutes } from "@/features/notifications/routes"
 import { uploadsRoutes } from "@/features/uploads/routes"
 import { organizationRoutes } from "@/features/organization/routes"
 import { adminRoutes } from "@/features/admin/routes"
@@ -49,6 +50,7 @@ export const router = createBrowserRouter([
               },
               ...dashboardRoutes,
               ...notesRoutes,
+              ...notificationRoutes,
               ...uploadsRoutes,
               ...accountRoutes,
               ...organizationRoutes,

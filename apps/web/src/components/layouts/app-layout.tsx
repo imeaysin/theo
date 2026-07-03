@@ -14,6 +14,7 @@ import {
 import { WorkspaceOnboardingGate } from "@/features/auth/components/workspace-onboarding-gate"
 import type { AppOutletContext } from "@/features/auth/app-outlet-context"
 import { useCreateOrganizationDialog } from "@/features/auth/hooks/use-create-organization-dialog"
+import { useEventStream } from "@/features/notifications/hooks/use-event-stream"
 import { useAppShellConfig } from "@/features/shell/use-app-shell-config"
 
 const ShellLink: ShellLinkComponent = ({
@@ -30,6 +31,7 @@ export function AppLayout() {
   const location = useLocation()
   const shell = useAppShellConfig()
   const createOrganization = useCreateOrganizationDialog()
+  useEventStream()
   const outletContext: AppOutletContext = {
     openCreateOrganization: createOrganization.openDialog,
   }

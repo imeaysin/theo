@@ -12,8 +12,8 @@ export function toNotificationResponse(
     userId: record.userId,
     title: record.title,
     body: record.body,
-    type: record.type,
-    read: record.read,
+    type: record.type ?? "general",
+    read: record.read ?? false,
     actionUrl: record.actionUrl,
     createdAt: record.createdAt.toISOString(),
   })

@@ -16,6 +16,7 @@ export const routeSegments = {
     dashboard: "dashboard",
     notes: "notes",
     uploads: "uploads",
+    notifications: "notifications",
     settings: "settings",
     organization: "organization",
     admin: "admin",
@@ -46,6 +47,10 @@ export const routes = {
   dashboard: toPath(routeSegments.app.root, routeSegments.app.dashboard),
   notes: toPath(routeSegments.app.root, routeSegments.app.notes),
   uploads: toPath(routeSegments.app.root, routeSegments.app.uploads),
+  notifications: toPath(
+    routeSegments.app.root,
+    routeSegments.app.notifications
+  ),
   settings: toPath(routeSegments.app.root, routeSegments.app.settings),
   settingsAccount: toPath(
     routeSegments.app.root,

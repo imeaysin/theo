@@ -12,4 +12,10 @@ export const apiRoutes = {
   notesBulkDelete: apiPath("notes/bulk-delete"),
   note: (id: string) => apiPath(`notes/${id}`),
   uploads: apiPath("uploads"),
+  notifications: apiPath("notifications"),
+  notificationUnreadCount: apiPath("notifications/unread-count"),
+  notificationMarkRead: (id: string) => apiPath(`notifications/${id}/read`),
+  notificationMarkAllRead: apiPath("notifications/read-all"),
+  notification: (id: string) => apiPath(`notifications/${id}`),
+  eventsStream: apiPath("events/stream"),
 } as const

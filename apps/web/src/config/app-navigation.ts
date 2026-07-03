@@ -1,4 +1,5 @@
 import {
+  BellIcon,
   Building2Icon,
   LayoutDashboardIcon,
   ShieldIcon,
@@ -26,6 +27,13 @@ export const appNavigation: NavItem[] = [
     href: routes.uploads,
     icon: UploadIcon,
     isCurrent: ({ pathname }) => pathname?.startsWith(routes.uploads) ?? false,
+  },
+  {
+    name: "Notifications",
+    href: routes.notifications,
+    icon: BellIcon,
+    isCurrent: ({ pathname }) =>
+      pathname?.startsWith(routes.notifications) ?? false,
   },
   {
     name: "Workspace",
