@@ -1,6 +1,7 @@
 export * from "./auth"
 export * from "./health"
 export * from "./notes"
+export * from "./notifications"
 export * from "./profile"
 export * from "./root"
 export * from "./uploads"

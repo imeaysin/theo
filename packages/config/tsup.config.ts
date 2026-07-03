@@ -8,6 +8,7 @@ export default defineConfig((options) => ({
     "server/email": "src/server/email.ts",
     "server/storage": "src/server/storage.ts",
     "server/jobs": "src/server/jobs.ts",
+    "server/push": "src/server/push.ts",
     "server/cache": "src/server/cache.ts",
     "client/index": "src/client/index.ts",
   },

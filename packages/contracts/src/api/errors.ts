@@ -19,6 +19,8 @@ export const DomainErrorCode = {
   FILE_REQUIRED: "FILE_REQUIRED",
   INVALID_FILE_PATH: "INVALID_FILE_PATH",
   FILE_NOT_FOUND: "FILE_NOT_FOUND",
+  NOTIFICATION_NOT_FOUND: "NOTIFICATION_NOT_FOUND",
+  INVALID_PUSH_TOKEN: "INVALID_PUSH_TOKEN",
 } as const
 
 export type HttpErrorCode = (typeof HttpErrorCode)[keyof typeof HttpErrorCode]

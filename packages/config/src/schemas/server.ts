@@ -67,6 +67,11 @@ export const jobsSchema = z.object({
   JOBS_QUEUE_NAME: z.string().min(1).default("theo"),
 })
 
+export const pushSchema = z.object({
+  PUSH_PROVIDER: z.enum(["expo", "console"]).default("console"),
+  EXPO_ACCESS_TOKEN: z.string().default(""),
+})
+
 export const cacheSchema = z.object({
   CACHE_PROVIDER: z.enum(["memory", "redis"]).default("memory"),
 })
@@ -87,6 +92,7 @@ export const serverSchema = sharedSchema
   .extend(emailSchema.shape)
   .extend(storageSchema.shape)
   .extend(jobsSchema.shape)
+  .extend(pushSchema.shape)
   .extend(cacheSchema.shape)
   .extend(rateLimitSchema.shape)
 
@@ -129,6 +135,8 @@ export const serverDefaults = {
   JOBS_PROVIDER: "inline",
   REDIS_URL: "redis://localhost:6379",
   JOBS_QUEUE_NAME: "theo",
+  PUSH_PROVIDER: "console",
+  EXPO_ACCESS_TOKEN: "",
   CACHE_PROVIDER: "memory",
 } as const satisfies z.input<typeof serverSchema>
 
@@ -160,6 +168,11 @@ export const jobsEnvSchema = serverSchema.pick({
   JOBS_QUEUE_NAME: true,
 })
 
+export const pushEnvSchema = serverSchema.pick({
+  PUSH_PROVIDER: true,
+  EXPO_ACCESS_TOKEN: true,
+})
+
 export const cacheEnvSchema = serverSchema.pick({
   CACHE_PROVIDER: true,
   REDIS_URL: true,
@@ -170,6 +183,7 @@ export type DatabaseEnv = z.infer<typeof databaseEnvSchema>
 export type EmailEnv = z.infer<typeof emailEnvSchema>
 export type StorageEnv = z.infer<typeof storageEnvSchema>
 export type JobsEnv = z.infer<typeof jobsEnvSchema>
+export type PushEnv = z.infer<typeof pushEnvSchema>
 export type CacheEnv = z.infer<typeof cacheEnvSchema>
 
 export function pickServerDefaults<const K extends keyof typeof serverDefaults>(

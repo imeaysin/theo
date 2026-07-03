@@ -36,6 +36,7 @@
     "@workspace/db": "workspace:*",
     "@workspace/jobs": "workspace:*",
     "@workspace/logger": "workspace:*",
+    "@workspace/notifications": "workspace:*",
     "@workspace/storage": "workspace:*",
     "compression": "^1.8.1",
     "helmet": "^8.2.0",
