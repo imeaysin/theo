@@ -1,27 +1,19 @@
 import type { NoteResponse } from "@workspace/contracts"
+import { relativeTime } from "@workspace/dates"
 import { Button } from "@workspace/ui/components/button"
 import { Card } from "@workspace/ui/components/card"
-import { Checkbox } from "@workspace/ui/components/checkbox"
 import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationNext,
-  PaginationPrevious,
-} from "@workspace/ui/components/pagination"
+  DataList,
+  type DataListColumn,
+} from "@workspace/ui/components/data-list"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@workspace/ui/components/table"
-import { useMemo, useState } from "react"
-import { NotesTableRow } from "@/features/notes/components/notes-table-row"
-
-const PAGE_SIZE = 10
+  Menu,
+  MenuItem,
+  MenuPopup,
+  MenuSeparator,
+  MenuTrigger,
+} from "@workspace/ui/components/menu"
+import { MoreHorizontalIcon, PencilIcon, Trash2Icon } from "lucide-react"
 
 type NotesTableProps = {
   notes: NoteResponse[]
@@ -33,6 +25,113 @@ type NotesTableProps = {
   onSelectAll: (checked: boolean, noteIds: string[]) => void
 }
 
+const columns: DataListColumn<NoteResponse>[] = [
+  {
+    key: "title",
+    header: "Title",
+    className: "font-medium",
+    render: (note) => <span className="block truncate">{note.title}</span>,
+  },
+  {
+    key: "body",
+    header: "Preview",
+    className: "whitespace-normal",
+    render: (note) =>
+      note.body ? (
+        <span className="line-clamp-2 text-muted-foreground">{note.body}</span>
+      ) : (
+        <span className="text-muted-foreground">—</span>
+      ),
+  },
+  {
+    key: "updatedAt",
+    header: "Updated",
+    className: "text-muted-foreground tabular-nums",
+    render: (note) => relativeTime(note.updatedAt),
+  },
+]
+
+function NoteActions({
+  note,
+  disabled,
+  onEdit,
+  onDelete,
+}: {
+  note: NoteResponse
+  disabled?: boolean
+  onEdit: (note: NoteResponse) => void
+  onDelete: (note: NoteResponse) => void
+}) {
+  return (
+    <Menu>
+      <MenuTrigger
+        aria-label={`Actions for ${note.title}`}
+        disabled={disabled}
+        render={<Button size="icon-sm" type="button" variant="ghost" />}
+      >
+        <MoreHorizontalIcon className="size-4" />
+      </MenuTrigger>
+      <MenuPopup align="end">
+        <MenuItem onClick={() => onEdit(note)}>
+          <PencilIcon className="size-4" />
+          Edit
+        </MenuItem>
+        <MenuSeparator />
+        <MenuItem onClick={() => onDelete(note)}>
+          <Trash2Icon className="size-4 text-destructive" />
+          <span className="text-destructive">Delete</span>
+        </MenuItem>
+      </MenuPopup>
+    </Menu>
+  )
+}
+
+function NoteCard({
+  note,
+  selected,
+  disabled,
+  onEdit,
+  onDelete,
+}: {
+  note: NoteResponse
+  selected: boolean
+  disabled?: boolean
+  onEdit: (note: NoteResponse) => void
+  onDelete: (note: NoteResponse) => void
+}) {
+  return (
+    <Card
+      className={["gap-0 p-0 transition-colors", selected && "ring-2 ring-ring"]
+        .filter(Boolean)
+        .join(" ")}
+    >
+      <button
+        className="flex min-w-0 flex-1 flex-col gap-1 p-4 ps-10 text-left"
+        onClick={() => onEdit(note)}
+        type="button"
+      >
+        <span className="truncate text-sm font-medium">{note.title}</span>
+        {note.body ? (
+          <span className="line-clamp-2 text-xs text-muted-foreground">
+            {note.body}
+          </span>
+        ) : null}
+      </button>
+      <div className="flex items-center justify-between border-t px-4 py-2">
+        <span className="text-xs text-muted-foreground tabular-nums">
+          {relativeTime(note.updatedAt)}
+        </span>
+        <NoteActions
+          disabled={disabled}
+          note={note}
+          onDelete={onDelete}
+          onEdit={onEdit}
+        />
+      </div>
+    </Card>
+  )
+}
+
 export function NotesTable({
   notes,
   disabled,
@@ -42,130 +141,33 @@ export function NotesTable({
   onSelect,
   onSelectAll,
 }: NotesTableProps) {
-  const [pageIndex, setPageIndex] = useState(0)
-
-  const pageCount = Math.max(1, Math.ceil(notes.length / PAGE_SIZE))
-  const safePageIndex = Math.min(pageIndex, pageCount - 1)
-
-  const pageNotes = useMemo(() => {
-    const start = safePageIndex * PAGE_SIZE
-    return notes.slice(start, start + PAGE_SIZE)
-  }, [notes, safePageIndex])
-
-  const visibleIds = pageNotes.map((note) => note.id)
-  const selectedVisibleCount = visibleIds.filter((id) =>
-    selectedIds.has(id)
-  ).length
-  const allVisibleSelected =
-    visibleIds.length > 0 && selectedVisibleCount === visibleIds.length
-  const someVisibleSelected =
-    selectedVisibleCount > 0 && selectedVisibleCount < visibleIds.length
-
   return (
-    <Card className="p-0">
-      <Table aria-label="Notes" variant="card">
-        <TableHeader>
-          <TableRow>
-            <TableHead>
-              <Checkbox
-                aria-label="Select all notes on this page"
-                checked={allVisibleSelected}
-                disabled={disabled || pageNotes.length === 0}
-                indeterminate={someVisibleSelected}
-                onCheckedChange={(value) =>
-                  onSelectAll(value === true, visibleIds)
-                }
-              />
-            </TableHead>
-            <TableHead>Title</TableHead>
-            <TableHead>Preview</TableHead>
-            <TableHead>Updated</TableHead>
-            <TableHead className="text-end">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-
-        <TableBody>
-          {pageNotes.length > 0 ? (
-            pageNotes.map((note) => (
-              <NotesTableRow
-                disabled={disabled}
-                key={note.id}
-                note={note}
-                onDelete={onDelete}
-                onEdit={onEdit}
-                onSelect={(checked) => onSelect(note.id, checked)}
-                selected={selectedIds.has(note.id)}
-              />
-            ))
-          ) : (
-            <TableRow>
-              <TableCell className="h-24 text-center" colSpan={5}>
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-
-        {notes.length > PAGE_SIZE ? (
-          <TableFooter>
-            <TableRow>
-              <TableCell className="py-3" colSpan={5}>
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <p className="text-sm text-muted-foreground">
-                    Showing{" "}
-                    <strong className="font-medium text-foreground">
-                      {safePageIndex * PAGE_SIZE + 1}–
-                      {Math.min((safePageIndex + 1) * PAGE_SIZE, notes.length)}
-                    </strong>{" "}
-                    of{" "}
-                    <strong className="font-medium text-foreground">
-                      {notes.length}
-                    </strong>{" "}
-                    notes
-                  </p>
-
-                  <Pagination className="mx-0 w-auto justify-end">
-                    <PaginationContent>
-                      <PaginationItem>
-                        <PaginationPrevious
-                          className="sm:*:[svg]:hidden"
-                          render={
-                            <Button
-                              disabled={safePageIndex === 0}
-                              onClick={() =>
-                                setPageIndex((current) => current - 1)
-                              }
-                              size="sm"
-                              type="button"
-                              variant="outline"
-                            />
-                          }
-                        />
-                      </PaginationItem>
-                      <PaginationItem>
-                        <PaginationNext
-                          className="sm:*:[svg]:hidden"
-                          render={
-                            <Button
-                              disabled={safePageIndex >= pageCount - 1}
-                              onClick={() =>
-                                setPageIndex((current) => current + 1)
-                              }
-                              size="sm"
-                              type="button"
-                              variant="outline"
-                            />
-                          }
-                        />
-                      </PaginationItem>
-                    </PaginationContent>
-                  </Pagination>
-                </div>
-              </TableCell>
-            </TableRow>
-          </TableFooter>
-        ) : null}
-      </Table>
-    </Card>
+    <DataList
+      columns={columns}
+      items={notes}
+      keyExtractor={(note) => note.id}
+      onItemClick={onEdit}
+      onSelect={onSelect}
+      onSelectAll={onSelectAll}
+      renderActions={(note) => (
+        <NoteActions
+          disabled={disabled}
+          note={note}
+          onDelete={onDelete}
+          onEdit={onEdit}
+        />
+      )}
+      renderCard={(note, { selected }) => (
+        <NoteCard
+          disabled={disabled}
+          note={note}
+          onDelete={onDelete}
+          onEdit={onEdit}
+          selected={selected}
+        />
+      )}
+      selectable
+      selectedIds={selectedIds}
+    />
   )
 }
