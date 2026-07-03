@@ -42,6 +42,11 @@
       "import": "./dist/server/push.js",
       "require": "./dist/server/push.cjs"
     },
+    "./realtime": {
+      "types": "./dist/server/realtime.d.ts",
+      "import": "./dist/server/realtime.js",
+      "require": "./dist/server/realtime.cjs"
+    },
     "./cache": {
       "types": "./dist/server/cache.d.ts",
       "import": "./dist/server/cache.js",

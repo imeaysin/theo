@@ -15,12 +15,14 @@ import {
 } from "./common/database/database.module"
 import { JobsModule } from "./common/jobs/jobs.module"
 import { PushModule } from "./common/push/push.module"
+import { RealtimeModule } from "./common/realtime/realtime.module"
 import { StorageModule } from "./common/storage/storage.module"
 import { AllExceptionsFilter } from "./common/filters/all-exceptions.filter"
 import { LoggingInterceptor } from "./common/interceptors/logging.interceptor"
 import { TransformResponseInterceptor } from "./common/interceptors/transform-response.interceptor"
 import { HealthModule } from "./modules/health/health.module"
 import { MeModule } from "./modules/me/me.module"
+import { EventsModule } from "./modules/events/events.module"
 import { NotesModule } from "./modules/notes/notes.module"
 import { NotificationsModule } from "./modules/notifications/notifications.module"
 import { UploadsModule } from "./modules/uploads/uploads.module"
@@ -33,7 +35,9 @@ import { UploadsModule } from "./modules/uploads/uploads.module"
     DatabaseModule,
     JobsModule,
     PushModule,
+    RealtimeModule,
     StorageModule,
+    EventsModule,
     HealthModule,
     MeModule,
     NotesModule,

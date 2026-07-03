@@ -1,9 +1,9 @@
 {
-  "name": "@workspace/cache",
+  "name": "@workspace/redis",
   "version": "0.0.0",
   "type": "module",
   "private": true,
-  "description": "Cache abstraction — memory (dev) and Redis (production)",
+  "description": "Redis client factory — single source of truth for ioredis",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -23,21 +23,17 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "lint": "eslint . --max-warnings 0",
-    "typecheck": "tsc --noEmit",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@workspace/redis": "workspace:*"
+    "ioredis": "catalog:"
   },
   "devDependencies": {
     "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
-    "@workspace/vitest-config": "workspace:*",
     "@types/node": "catalog:",
     "eslint": "catalog:",
     "tsup": "catalog:",
-    "typescript": "catalog:",
-    "vitest": "catalog:"
+    "typescript": "catalog:"
   }
 }

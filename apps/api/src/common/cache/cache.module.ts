@@ -13,10 +13,7 @@ export const CACHE_PROVIDER = Symbol("CACHE_PROVIDER")
 
 function createCacheProvider(): CacheProvider {
   if (cacheEnv.CACHE_PROVIDER === "redis") {
-    return createCache({
-      provider: "redis",
-      redisUrl: cacheEnv.REDIS_URL,
-    })
+    return createCache({ provider: "redis", redisUrl: cacheEnv.REDIS_URL })
   }
 
   return createCache({ provider: "memory" })

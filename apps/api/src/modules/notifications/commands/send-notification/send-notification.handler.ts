@@ -7,7 +7,9 @@ import {
   type ExpoPushMessage,
   type PushProvider,
 } from "@workspace/notifications"
+import type { EventBus } from "@workspace/realtime"
 import { PUSH_PROVIDER } from "../../../../common/push/push.module"
+import { EVENT_BUS } from "../../../../common/realtime/realtime.module"
 import { DeviceTokenRepository } from "../../repositories/device-token.repository"
 import { NotificationRepository } from "../../repositories/notification.repository"
 import { SendNotificationCommand } from "./send-notification.command"
@@ -19,7 +21,8 @@ export class SendNotificationHandler implements ICommandHandler<SendNotification
   constructor(
     private readonly deviceTokens: DeviceTokenRepository,
     private readonly notifications: NotificationRepository,
-    @Inject(PUSH_PROVIDER) private readonly push: PushProvider
+    @Inject(PUSH_PROVIDER) private readonly push: PushProvider,
+    @Inject(EVENT_BUS) private readonly eventBus: EventBus
   ) {}
 
   async execute(
@@ -68,6 +71,19 @@ export class SendNotificationHandler implements ICommandHandler<SendNotification
           )
         }
       }
+    }
+
+    for (const userId of input.userIds) {
+      this.eventBus
+        .publish(
+          `user:${userId}`,
+          JSON.stringify({
+            type: "notification.created",
+            title: input.title,
+            notificationType: input.type,
+          })
+        )
+        .catch((err) => logger.error({ err, userId }, "event publish failed"))
     }
 
     return { sent, pushDelivered, invalidTokensRemoved }

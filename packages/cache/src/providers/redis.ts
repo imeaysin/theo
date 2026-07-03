@@ -1,10 +1,10 @@
-import Redis from "ioredis"
+import { createRedisClient } from "@workspace/redis"
 import type { CacheProvider, RedisCacheConfig } from "../types"
 
 const DEFAULT_KEY_PREFIX = "cache:"
 
 export function createRedisCache(config: RedisCacheConfig): CacheProvider {
-  const client = new Redis(config.redisUrl)
+  const client = createRedisClient(config.redisUrl)
   const prefix = config.keyPrefix ?? DEFAULT_KEY_PREFIX
 
   function prefixKey(key: string): string {

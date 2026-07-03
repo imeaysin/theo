@@ -1,4 +1,3 @@
-/** Provider interface — same role as `StorageProvider` / `JobQueue` in sibling packages. */
 export type CacheProvider = {
   get(key: string): Promise<string | null>
   set(key: string, value: string, ttl?: number): Promise<void>

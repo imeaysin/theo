@@ -1,9 +1,9 @@
 {
-  "name": "@workspace/cache",
+  "name": "@workspace/realtime",
   "version": "0.0.0",
   "type": "module",
   "private": true,
-  "description": "Cache abstraction — memory (dev) and Redis (production)",
+  "description": "Event bus — in-memory (dev) and Redis pub/sub (production)",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -28,6 +28,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@workspace/logger": "workspace:*",
     "@workspace/redis": "workspace:*"
   },
   "devDependencies": {

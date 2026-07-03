@@ -9,6 +9,7 @@ export default defineConfig((options) => ({
     "server/storage": "src/server/storage.ts",
     "server/jobs": "src/server/jobs.ts",
     "server/push": "src/server/push.ts",
+    "server/realtime": "src/server/realtime.ts",
     "server/cache": "src/server/cache.ts",
     "client/index": "src/client/index.ts",
   },

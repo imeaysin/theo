@@ -72,6 +72,10 @@ export const pushSchema = z.object({
   EXPO_ACCESS_TOKEN: z.string().default(""),
 })
 
+export const realtimeSchema = z.object({
+  REALTIME_PROVIDER: z.enum(["memory", "redis"]).default("memory"),
+})
+
 export const cacheSchema = z.object({
   CACHE_PROVIDER: z.enum(["memory", "redis"]).default("memory"),
 })
@@ -93,6 +97,7 @@ export const serverSchema = sharedSchema
   .extend(storageSchema.shape)
   .extend(jobsSchema.shape)
   .extend(pushSchema.shape)
+  .extend(realtimeSchema.shape)
   .extend(cacheSchema.shape)
   .extend(rateLimitSchema.shape)
 
@@ -137,6 +142,7 @@ export const serverDefaults = {
   JOBS_QUEUE_NAME: "theo",
   PUSH_PROVIDER: "console",
   EXPO_ACCESS_TOKEN: "",
+  REALTIME_PROVIDER: "memory",
   CACHE_PROVIDER: "memory",
 } as const satisfies z.input<typeof serverSchema>
 
@@ -173,6 +179,11 @@ export const pushEnvSchema = serverSchema.pick({
   EXPO_ACCESS_TOKEN: true,
 })
 
+export const realtimeEnvSchema = serverSchema.pick({
+  REALTIME_PROVIDER: true,
+  REDIS_URL: true,
+})
+
 export const cacheEnvSchema = serverSchema.pick({
   CACHE_PROVIDER: true,
   REDIS_URL: true,
@@ -184,6 +195,7 @@ export type EmailEnv = z.infer<typeof emailEnvSchema>
 export type StorageEnv = z.infer<typeof storageEnvSchema>
 export type JobsEnv = z.infer<typeof jobsEnvSchema>
 export type PushEnv = z.infer<typeof pushEnvSchema>
+export type RealtimeEnv = z.infer<typeof realtimeEnvSchema>
 export type CacheEnv = z.infer<typeof cacheEnvSchema>
 
 export function pickServerDefaults<const K extends keyof typeof serverDefaults>(

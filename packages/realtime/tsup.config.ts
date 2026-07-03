@@ -9,4 +9,5 @@ export default defineConfig((options) => ({
   sourcemap: true,
   minify: false,
   treeshake: true,
+  external: [],
 }))
