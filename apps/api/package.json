@@ -89,6 +89,9 @@
     "testEnvironment": "node",
     "setupFilesAfterEnv": [
       "<rootDir>/test/jest-setup.ts"
-    ]
+    ],
+    "moduleNameMapper": {
+      "^expo-server-sdk$": "<rootDir>/test/mocks/expo-server-sdk.ts"
+    }
   }
 }

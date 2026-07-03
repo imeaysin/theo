@@ -7,5 +7,8 @@
   "setupFilesAfterEnv": ["<rootDir>/e2e/jest-e2e.setup.ts"],
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "^expo-server-sdk$": "<rootDir>/mocks/expo-server-sdk.ts"
   }
 }
