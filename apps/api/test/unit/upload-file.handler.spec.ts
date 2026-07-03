@@ -1,3 +1,4 @@
+import { BadRequestException } from "@nestjs/common"
 import { Test, type TestingModule } from "@nestjs/testing"
 import type { UploadResponse } from "@workspace/contracts"
 import { UploadFileHandler } from "../../src/modules/uploads/commands/upload-file.handler"
@@ -49,5 +50,13 @@ describe("UploadFileHandler", () => {
       url: "/uploads/org-1/user-1/uuid-hello.png",
       contentLength: 4,
     } satisfies UploadResponse)
+  })
+
+  it("rejects when no file is provided", async () => {
+    await expect(
+      handler.execute(new UploadFileCommand("org-1", "user-1"))
+    ).rejects.toBeInstanceOf(BadRequestException)
+
+    expect(storage.upload).not.toHaveBeenCalled()
   })
 })

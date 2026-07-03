@@ -21,14 +21,15 @@ modules/<feature>/
 
 ## Cross-cutting (`src/common/`)
 
-| Path                        | Role                                                                       |
-| --------------------------- | -------------------------------------------------------------------------- |
-| `configure-app.ts`          | CORS, helmet, versioning, swagger (`cleanupOpenApiDoc`), static uploads    |
-| `interceptors/`             | HTTP logging, success envelope transform                                   |
-| `filters/`                  | Global exception handler (machine-readable `code`)                         |
-| `decorators/`               | Auth re-exports, `@ApiAuthErrorResponses()` / `@ApiPublicErrorResponses()` |
-| `exceptions/`               | `apiNotFound` / `apiForbidden` / `apiBadRequest` (typed `DomainErrorCode`) |
-| `storage/storage.module.ts` | `STORAGE` provider from `@workspace/storage`                               |
+| Path                          | Role                                                                       |
+| ----------------------------- | -------------------------------------------------------------------------- |
+| `configure-app.ts`            | CORS, helmet, versioning, swagger (`cleanupOpenApiDoc`), static uploads    |
+| `interceptors/`               | HTTP logging, success envelope transform                                   |
+| `filters/`                    | Global exception handler (machine-readable `code`)                         |
+| `decorators/`                 | Auth re-exports, `@ApiAuthErrorResponses()` / `@ApiPublicErrorResponses()` |
+| `exceptions/`                 | `apiNotFound` / `apiForbidden` / `apiBadRequest` (typed `DomainErrorCode`) |
+| `storage/storage.module.ts`   | `STORAGE` provider from `@workspace/storage`                               |
+| `database/database.module.ts` | Global `DATABASE_READY` + injectable `MONGO_DB` (native driver `Db`)       |
 
 ## Testing
 
@@ -44,9 +45,9 @@ Follow the [NestJS testing guide](https://docs.nestjs.com/fundamentals/testing):
 **E2E helpers**
 
 - `test/e2e/support/create-e2e-app.ts` — `Test.createTestingModule({ imports: [AppModule] })`, `createNestApplication()`, `configureApp()` (see [Nest testing](https://docs.nestjs.com/fundamentals/testing))
-- `test/e2e/jest-e2e.setup.ts` — stubs Better Auth ESM deps (`jose`, `better-auth` plugins) so real `AuthGuardsModule` guards load in Jest
+- `test/e2e/jest-e2e.setup.ts` — stubs Better Auth ESM deps (`jose`, `better-auth` plugins) so real guards load in Jest
 
-Global guards use `APP_GUARD` + `useExisting` in `@workspace/auth/nestjs` (Nest pattern for globally registered enhancers). E2E runs the real guard chain; authenticated flows are covered by **integration** tests.
+Global guards use `APP_GUARD` + `useFactory` in `@workspace/auth/nestjs` (Reflector is wired explicitly because the nestjs bundle is built with tsup/esbuild, which does not emit DI metadata). E2E runs the real guard chain; authenticated flows are covered by **integration** tests.
 
 ## Adding an endpoint
 

@@ -17,14 +17,12 @@ import {
   ApiTags,
 } from "@nestjs/swagger"
 import type { JwtClaims } from "@workspace/auth/types"
-import { DomainErrorCode } from "@workspace/contracts"
 import {
   CurrentOrganization,
   CurrentUser,
   RequireOrgPermission,
 } from "../../common/decorators"
 import { ApiAuthErrorResponses } from "../../common/decorators/api-error-responses.decorator"
-import { apiBadRequest } from "../../common/exceptions/api.exception"
 import { UploadFileCommand } from "./commands/upload-file.command"
 import { UploadApiResponseDto } from "./uploads.dto"
 
@@ -75,13 +73,8 @@ export class UploadsController {
       size: number
     }
   ) {
-    const uploaded = file?.buffer?.length ? file : undefined
-    if (!uploaded) {
-      apiBadRequest("File is required", DomainErrorCode.FILE_REQUIRED)
-    }
-
     return this.commandBus.execute(
-      new UploadFileCommand(organizationId, user.id, uploaded)
+      new UploadFileCommand(organizationId, user.id, file)
     )
   }
 }

@@ -5,9 +5,8 @@ import { OrgRbacGuard } from "./org-rbac.guard"
 import { RbacGuard } from "./rbac.guard"
 
 /**
- * Global auth guards. Each guard is registered as a provider, then wired to
- * APP_GUARD with useExisting so Nest can inject dependencies and tests can
- * override providers when needed (see Nest testing docs).
+ * Guards are bundled with tsup/esbuild, which does not emit `design:paramtypes`
+ * metadata. `useFactory` wires Reflector explicitly (Nest APP_GUARD pattern).
  */
 @Module({})
 export class AuthGuardsModule {
@@ -16,23 +15,20 @@ export class AuthGuardsModule {
       module: AuthGuardsModule,
       providers: [
         {
-          provide: JwksGuard,
+          provide: APP_GUARD,
           useFactory: (reflector: Reflector) => new JwksGuard(reflector),
           inject: [Reflector],
         },
         {
-          provide: RbacGuard,
+          provide: APP_GUARD,
           useFactory: (reflector: Reflector) => new RbacGuard(reflector),
           inject: [Reflector],
         },
         {
-          provide: OrgRbacGuard,
+          provide: APP_GUARD,
           useFactory: (reflector: Reflector) => new OrgRbacGuard(reflector),
           inject: [Reflector],
         },
-        { provide: APP_GUARD, useExisting: JwksGuard },
-        { provide: APP_GUARD, useExisting: RbacGuard },
-        { provide: APP_GUARD, useExisting: OrgRbacGuard },
       ],
     }
   }

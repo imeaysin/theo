@@ -3,6 +3,7 @@ import { useActiveOrganizationId } from "@workspace/auth/react"
 import {
   BulkDeleteNotesSchema,
   CreateNoteSchema,
+  NoteResponseSchema,
   NotesListResponseSchema,
   UpdateNoteSchema,
   type BulkDeleteNotesInput,
@@ -69,7 +70,7 @@ export function useCreateNoteMutation() {
             method: "POST",
             body: JSON.stringify(body),
           })
-          return data as NoteResponse
+          return NoteResponseSchema.parse(data)
         })(),
         {
           error: {
@@ -116,7 +117,7 @@ export function useUpdateNoteMutation() {
             method: "PATCH",
             body: JSON.stringify(body),
           })
-          return data as NoteResponse
+          return NoteResponseSchema.parse(data)
         })(),
         {
           error: {

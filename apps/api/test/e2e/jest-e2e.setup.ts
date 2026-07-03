@@ -1,6 +1,5 @@
 import "reflect-metadata"
-import "./support/better-auth-mocks"
-import "../support/mocks/jose"
+import "../support/mocks/register"
 
 jest.mock("@workspace/auth", () => ({
   getAuth: jest.fn(() => ({})),

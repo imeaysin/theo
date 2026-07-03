@@ -1,12 +1,9 @@
 import { authClient } from "@workspace/auth/client"
-import {
-  DEFAULT_JWT_STORAGE_KEY,
-  isJwtExpired,
-  refreshAuthToken,
-} from "@workspace/auth/react"
+import { DEFAULT_JWT_STORAGE_KEY, getBearerToken } from "@workspace/auth/react"
 import { env } from "@/config/env"
 import {
   HttpErrorCode,
+  isApiErrorCode,
   type ApiErrorCode,
   type ApiErrorResponse,
   type ApiFieldError,
@@ -17,32 +14,6 @@ const JWT_STORAGE_KEY = DEFAULT_JWT_STORAGE_KEY
 const RETRYABLE_AUTH_STATUSES = new Set([401, 403])
 
 type InternalFetchInit = RequestInit & { __retried?: boolean }
-
-async function getBearerToken(options?: {
-  forceRefresh?: boolean
-}): Promise<string | null> {
-  if (!options?.forceRefresh && typeof sessionStorage !== "undefined") {
-    const cached = sessionStorage.getItem(JWT_STORAGE_KEY)
-    if (cached && !isJwtExpired(cached)) return cached
-    if (cached) sessionStorage.removeItem(JWT_STORAGE_KEY)
-  } else if (options?.forceRefresh) {
-    try {
-      const refreshed = await refreshAuthToken(authClient, JWT_STORAGE_KEY)
-      return refreshed?.token ?? null
-    } catch {
-      return null
-    }
-  }
-
-  const { data, error } = await authClient.token()
-  if (error || !data?.token) return null
-
-  if (typeof sessionStorage !== "undefined") {
-    sessionStorage.setItem(JWT_STORAGE_KEY, data.token)
-  }
-
-  return data.token
-}
 
 export type ApiErrorOptions = {
   message: string
@@ -91,7 +62,7 @@ async function executeFetch<T>(
   init: InternalFetchInit = {}
 ): Promise<T> {
   const { __retried, ...requestInit } = init
-  const token = await getBearerToken()
+  const token = await getBearerToken(authClient, JWT_STORAGE_KEY)
   const headers = new Headers(requestInit.headers)
 
   if (
@@ -118,12 +89,14 @@ async function executeFetch<T>(
       const apiError = new ApiError({
         message: body.message,
         status: body.statusCode,
-        code: body.code as ApiErrorCode,
+        code: isApiErrorCode(body.code) ? body.code : HttpErrorCode.HTTP_ERROR,
         errors: body.errors ?? null,
       })
 
       if (!__retried && RETRYABLE_AUTH_STATUSES.has(apiError.status) && token) {
-        const refreshed = await getBearerToken({ forceRefresh: true })
+        const refreshed = await getBearerToken(authClient, JWT_STORAGE_KEY, {
+          forceRefresh: true,
+        })
         if (refreshed && refreshed !== token) {
           return executeFetch<T>(path, { ...requestInit, __retried: true })
         }

@@ -1,10 +1,6 @@
 import { CommandHandler, ICommandHandler } from "@nestjs/cqrs"
-import { DomainErrorCode } from "@workspace/contracts"
-import {
-  apiForbidden,
-  apiNotFound,
-} from "../../../common/exceptions/api.exception"
 import { NotesRepository } from "../repositories/notes.repository"
+import { assertNoteAccessOrThrow } from "../notes-access.util"
 import { DeleteNoteCommand } from "./delete-note.command"
 
 @CommandHandler(DeleteNoteCommand)
@@ -20,12 +16,10 @@ export class DeleteNoteHandler implements ICommandHandler<DeleteNoteCommand> {
     if (deleted) return
 
     const existing = await this.notesRepository.findById(command.noteId)
-    if (!existing || existing.organizationId !== command.organizationId) {
-      apiNotFound("Note not found", DomainErrorCode.NOTE_NOT_FOUND)
-    }
-    apiForbidden(
-      "Not allowed to delete this note",
-      DomainErrorCode.NOTE_FORBIDDEN
+    assertNoteAccessOrThrow(
+      existing,
+      command.organizationId,
+      "Not allowed to delete this note"
     )
   }
 }
