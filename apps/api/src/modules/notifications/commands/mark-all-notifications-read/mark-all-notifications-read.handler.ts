@@ -6,7 +6,7 @@ import { MarkAllNotificationsReadCommand } from "./mark-all-notifications-read.c
 export class MarkAllNotificationsReadHandler implements ICommandHandler<MarkAllNotificationsReadCommand> {
   constructor(private readonly notifications: NotificationRepository) {}
 
-  async execute(command: MarkAllNotificationsReadCommand): Promise<number> {
-    return this.notifications.markAllAsRead(command.scope)
+  async execute(command: MarkAllNotificationsReadCommand): Promise<void> {
+    await this.notifications.markAllAsRead(command.scope)
   }
 }

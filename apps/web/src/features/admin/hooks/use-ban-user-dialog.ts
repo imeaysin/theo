@@ -1,5 +1,3 @@
-"use client"
-
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useBanUser, type AdminListedUser } from "@workspace/auth/react"
 import type { BanUserDialogProps } from "@workspace/ui/auth"

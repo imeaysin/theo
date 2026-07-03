@@ -1,5 +1,3 @@
-"use client"
-
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useUpdateOrganization } from "@workspace/auth/react"
 import type { Organization } from "@workspace/auth/types/organization"

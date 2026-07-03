@@ -1,4 +1,5 @@
 import type { NoteResponse } from "@workspace/contracts"
+import { parseISO } from "@workspace/dates"
 import {
   Alert,
   AlertDescription,
@@ -51,7 +52,7 @@ function sortNotes(items: NoteResponse[], sort: SortOption) {
     case "oldest":
       return sorted.sort(
         (a, b) =>
-          new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime()
+          parseISO(a.updatedAt).getTime() - parseISO(b.updatedAt).getTime()
       )
     case "title-asc":
       return sorted.sort((a, b) => a.title.localeCompare(b.title))
@@ -61,7 +62,7 @@ function sortNotes(items: NoteResponse[], sort: SortOption) {
     default:
       return sorted.sort(
         (a, b) =>
-          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+          parseISO(b.updatedAt).getTime() - parseISO(a.updatedAt).getTime()
       )
   }
 }

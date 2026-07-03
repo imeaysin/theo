@@ -1,5 +1,3 @@
-"use client"
-
 import type { OrganizationPermissionMap } from "@workspace/auth/permissions/organization"
 import {
   useCreateOrganizationRole,

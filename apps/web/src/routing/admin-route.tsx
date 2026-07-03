@@ -1,5 +1,3 @@
-"use client"
-
 import { Navigate, Outlet } from "react-router-dom"
 import { PageLoading } from "@workspace/ui/components/page-loading"
 import { usePlatformPermission } from "@workspace/auth/react"

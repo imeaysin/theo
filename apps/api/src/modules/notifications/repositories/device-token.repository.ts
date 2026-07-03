@@ -41,7 +41,11 @@ export class DeviceTokenRepository implements OnModuleInit {
       { upsert: true, returnDocument: "after" }
     )
 
-    return result!
+    if (!result) {
+      throw new Error("upsert returned null — concurrent delete race")
+    }
+
+    return result
   }
 
   async removeByToken(token: string): Promise<boolean> {

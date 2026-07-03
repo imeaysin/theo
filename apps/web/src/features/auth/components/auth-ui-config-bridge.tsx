@@ -5,6 +5,7 @@ import {
   defaultAuthenticatedRoute,
   routes,
 } from "@/config/routes"
+import { site } from "@/config/site"
 
 export function AuthUiConfigBridge({
   children,
@@ -38,7 +39,7 @@ export function AuthUiConfigBridge({
         adminUsers: routes.adminUsers,
         defaultAuthenticated: defaultAuthenticatedRoute,
       }}
-      siteName="Theo"
+      siteName={site.name}
     >
       {children}
     </AuthUiConfigProvider>

@@ -1,5 +1,3 @@
-"use client"
-
 import { useActiveOrganization } from "@workspace/auth/react"
 import { Organization } from "@workspace/ui/auth"
 import { ShellMain } from "@workspace/ui/components/shell"

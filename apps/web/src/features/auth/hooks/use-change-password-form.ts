@@ -1,5 +1,3 @@
-"use client"
-
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useChangePassword, useAuthSession } from "@workspace/auth/react"
 import {

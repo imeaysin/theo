@@ -1,5 +1,3 @@
-"use client"
-
 import { Navigate, Outlet, useOutletContext } from "react-router-dom"
 import type { OrganizationPermissionCheck } from "@workspace/auth/permissions/organization"
 import { useOrganizationPermission } from "@workspace/auth/react"

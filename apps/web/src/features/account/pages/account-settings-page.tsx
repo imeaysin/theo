@@ -1,5 +1,3 @@
-"use client"
-
 import { Settings } from "@workspace/ui/auth"
 import { ShellMain } from "@workspace/ui/components/shell"
 import { ApiProfileCard } from "@/features/account/components/api-profile-card"

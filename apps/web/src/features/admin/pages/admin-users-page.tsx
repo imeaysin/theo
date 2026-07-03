@@ -1,5 +1,3 @@
-"use client"
-
 import { usePlatformRoleOptions } from "@workspace/auth/react"
 import { Admin, BanUserDialog } from "@workspace/ui/auth"
 import { ShellMain } from "@workspace/ui/components/shell"
