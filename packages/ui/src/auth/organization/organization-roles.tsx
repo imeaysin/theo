@@ -22,8 +22,8 @@ import {
 import { cn } from "@workspace/ui/lib/utils"
 import type { CreateOrganizationRoleDialogProps } from "./create-organization-role-dialog"
 import { CreateOrganizationRoleDialog } from "./create-organization-role-dialog"
-import type { DeleteOrganizationRoleDialogProps } from "./delete-organization-role-dialog"
-import { DeleteOrganizationRoleDialog } from "./delete-organization-role-dialog"
+import type { ConfirmDeleteOrganizationRoleDialogProps } from "./confirm-delete-organization-role-dialog"
+import { ConfirmDeleteOrganizationRoleDialog } from "./confirm-delete-organization-role-dialog"
 import type { EditOrganizationRoleDialogProps } from "./edit-organization-role-dialog"
 import { EditOrganizationRoleDialog } from "./edit-organization-role-dialog"
 import { OrganizationRoleRow } from "./organization-role-row"
@@ -33,7 +33,7 @@ export type OrganizationRolesProps = {
   className?: string
   createDialog?: CreateOrganizationRoleDialogProps
   editDialog?: EditOrganizationRoleDialogProps
-  deleteDialog?: DeleteOrganizationRoleDialogProps
+  deleteDialog?: ConfirmDeleteOrganizationRoleDialogProps
   onCreateClick?: () => void
   onEditRole?: (role: OrganizationRole) => void
   onDeleteRole?: (role: OrganizationRole) => void
@@ -154,7 +154,9 @@ export function OrganizationRoles({
 
       {createDialog ? <CreateOrganizationRoleDialog {...createDialog} /> : null}
       {editDialog ? <EditOrganizationRoleDialog {...editDialog} /> : null}
-      {deleteDialog ? <DeleteOrganizationRoleDialog {...deleteDialog} /> : null}
+      {deleteDialog ? (
+        <ConfirmDeleteOrganizationRoleDialog {...deleteDialog} />
+      ) : null}
     </div>
   )
 }

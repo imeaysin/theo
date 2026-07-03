@@ -126,5 +126,5 @@ export type { CreateOrganizationRoleDialogProps } from "./organization/create-or
 export { EditOrganizationRoleDialog } from "./organization/edit-organization-role-dialog"
 export type { EditOrganizationRoleDialogProps } from "./organization/edit-organization-role-dialog"
 
-export { DeleteOrganizationRoleDialog } from "./organization/delete-organization-role-dialog"
-export type { DeleteOrganizationRoleDialogProps } from "./organization/delete-organization-role-dialog"
+export { ConfirmDeleteOrganizationRoleDialog } from "./organization/confirm-delete-organization-role-dialog"
+export type { ConfirmDeleteOrganizationRoleDialogProps } from "./organization/confirm-delete-organization-role-dialog"
