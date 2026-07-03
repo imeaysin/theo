@@ -1,6 +1,6 @@
 "use client"
 
-import { Navigate, Outlet } from "react-router-dom"
+import { Navigate, Outlet, useOutletContext } from "react-router-dom"
 import type { OrganizationPermissionCheck } from "@workspace/auth/permissions/organization"
 import { useOrganizationPermission } from "@workspace/auth/react"
 import { PageLoading } from "@workspace/ui/components/page-loading"
@@ -14,6 +14,7 @@ export function OrganizationPermissionRoute({
   permission,
 }: OrganizationPermissionRouteProps) {
   const { data: result, isPending } = useOrganizationPermission(permission)
+  const parentContext = useOutletContext()
 
   if (isPending) {
     return <PageLoading />
@@ -23,5 +24,5 @@ export function OrganizationPermissionRoute({
     return <Navigate replace to={routes.organizationSettings} />
   }
 
-  return <Outlet />
+  return <Outlet context={parentContext} />
 }

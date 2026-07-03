@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useBanUser, type AdminListedUser } from "@workspace/auth/react"
-import { BanUserDialog, type BanUserDialogProps } from "@workspace/ui/auth"
+import type { BanUserDialogProps } from "@workspace/ui/auth"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toastManager } from "@workspace/ui/components/toast"

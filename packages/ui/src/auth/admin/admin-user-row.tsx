@@ -2,7 +2,6 @@
 
 import {
   useAuthSession,
-  useBanUser,
   useImpersonateUser,
   usePlatformPermission,
   useSetUserRole,
@@ -170,49 +169,49 @@ export function AdminUserRow({
             </Button>
           ) : null}
 
-          {canBan?.success && !isCurrentUser ? (
-            isBanned ? (
-              <Button
-                aria-label="Unban user"
-                disabled={isUnbanning}
-                onClick={() =>
-                  unbanUser(
-                    { userId: user.id },
-                    {
-                      onSuccess: () => {
-                        toastManager.add({
-                          title: "User unbanned",
-                          description: "The user can sign in again.",
-                          type: "success",
-                        })
-                      },
-                      onError: () => {
-                        toastManager.add({
-                          title: "Could not unban user",
-                          description: "Please try again.",
-                          type: "error",
-                        })
-                      },
-                    }
-                  )
-                }
-                size="icon"
-                type="button"
-                variant="ghost"
-              >
-                {isUnbanning ? <Spinner /> : <ShieldOff className="size-4" />}
-              </Button>
-            ) : (
-              <Button
-                aria-label="Ban user"
-                onClick={() => onBanClick(user)}
-                size="icon"
-                type="button"
-                variant="ghost"
-              >
-                <ShieldOff className="size-4 text-destructive" />
-              </Button>
-            )
+          {canBan?.success && !isCurrentUser && isBanned ? (
+            <Button
+              aria-label="Unban user"
+              disabled={isUnbanning}
+              onClick={() =>
+                unbanUser(
+                  { userId: user.id },
+                  {
+                    onSuccess: () => {
+                      toastManager.add({
+                        title: "User unbanned",
+                        description: "The user can sign in again.",
+                        type: "success",
+                      })
+                    },
+                    onError: () => {
+                      toastManager.add({
+                        title: "Could not unban user",
+                        description: "Please try again.",
+                        type: "error",
+                      })
+                    },
+                  }
+                )
+              }
+              size="icon"
+              type="button"
+              variant="ghost"
+            >
+              {isUnbanning ? <Spinner /> : <ShieldOff className="size-4" />}
+            </Button>
+          ) : null}
+
+          {canBan?.success && !isCurrentUser && !isBanned ? (
+            <Button
+              aria-label="Ban user"
+              onClick={() => onBanClick(user)}
+              size="icon"
+              type="button"
+              variant="ghost"
+            >
+              <ShieldOff className="size-4 text-destructive" />
+            </Button>
           ) : null}
         </div>
       </TableCell>

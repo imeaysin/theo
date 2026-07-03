@@ -112,10 +112,10 @@ export function ShellSidebar({
   const { isIconSidebar } = useSidebarState()
 
   return (
-    <div className="relative my-2.5">
+    <div className="relative my-2.5 flex shrink-0">
       <aside
         className={cn(
-          "fixed left-0 hidden h-full max-h-screen flex-col overflow-x-hidden overflow-y-auto bg-sidebar p-2 font-sans text-sidebar-foreground transition-[width,min-width] duration-200 ease-linear md:sticky md:flex",
+          "hidden h-full flex-col overflow-x-hidden overflow-y-auto bg-sidebar p-2 font-sans text-sidebar-foreground transition-[width,min-width] duration-200 ease-linear md:sticky md:top-0 md:flex md:self-stretch",
           isIconSidebar
             ? "w-(--sidebar-width-icon) min-w-(--sidebar-width-icon)"
             : "w-(--sidebar-width) min-w-(--sidebar-width)"

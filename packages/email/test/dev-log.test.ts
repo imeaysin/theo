@@ -3,7 +3,7 @@ import { logDevEmail } from "../src/dev-log"
 
 describe("logDevEmail", () => {
   it("logs email payload to stdout in dev", () => {
-    const info = vi.spyOn(console, "info").mockImplementation(() => {})
+    const info = vi.spyOn(console, "info").mockImplementation(() => undefined)
 
     logDevEmail({
       to: "user@example.com",

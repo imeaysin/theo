@@ -36,25 +36,29 @@ export function AppLayout() {
 
   return (
     <WorkspaceOnboardingGate>
-      <ImpersonationBanner />
-      <Shell
-        brandLabel={shell.brandLabel}
-        commandActions={shell.commandActions}
-        linkComponent={ShellLink}
-        logo={<Logo />}
-        navigation={shell.navigation}
-        pathname={location.pathname}
-        sidebarUserControl={
-          <AppSidebarUser
-            onCreateOrganization={createOrganization.openDialog}
-          />
-        }
-        userControl={
-          <AppUserButton onCreateOrganization={createOrganization.openDialog} />
-        }
-      >
-        <Outlet context={outletContext} />
-      </Shell>
+      <div className="flex h-dvh flex-col overflow-hidden">
+        <ImpersonationBanner className="shrink-0" />
+        <Shell
+          brandLabel={shell.brandLabel}
+          commandActions={shell.commandActions}
+          linkComponent={ShellLink}
+          logo={<Logo />}
+          navigation={shell.navigation}
+          pathname={location.pathname}
+          sidebarUserControl={
+            <AppSidebarUser
+              onCreateOrganization={createOrganization.openDialog}
+            />
+          }
+          userControl={
+            <AppUserButton
+              onCreateOrganization={createOrganization.openDialog}
+            />
+          }
+        >
+          <Outlet context={outletContext} />
+        </Shell>
+      </div>
       <CreateOrganizationDialog {...createOrganization.dialogProps} />
     </WorkspaceOnboardingGate>
   )

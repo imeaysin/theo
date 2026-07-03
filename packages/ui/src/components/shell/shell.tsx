@@ -72,8 +72,11 @@ export function Shell({
       pathname={pathname}
     >
       <SidebarStateProvider>
-        <div className="flex min-h-screen flex-col bg-sidebar [--shell-mobile-bottom-nav-height:4.5rem] [--shell-mobile-fab-inset:1rem]">
-          <div className="flex min-h-0 flex-1" data-testid="dashboard-shell">
+        <div className="flex h-dvh min-h-0 flex-1 flex-col overflow-hidden bg-sidebar [--shell-mobile-bottom-nav-height:4.5rem] [--shell-mobile-fab-inset:1rem]">
+          <div
+            className="flex min-h-0 flex-1 overflow-hidden"
+            data-testid="dashboard-shell"
+          >
             <ShellSidebar
               brandLabel={brandLabel}
               homeHref={homeHref}
