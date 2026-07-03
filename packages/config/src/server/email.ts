@@ -17,4 +17,12 @@ export function getEmailFromAddress(config: EmailEnv = emailEnv): string {
   return `${config.APP_NAME} <no-reply@${domain}>`
 }
 
+/** True when a real Resend API key is configured (not empty / placeholder). */
+export function isResendConfigured(
+  apiKey: string = emailEnv.RESEND_API_KEY
+): boolean {
+  const trimmed = apiKey.trim()
+  return trimmed.length > 0 && trimmed !== "re_123456789"
+}
+
 export type { EmailEnv }

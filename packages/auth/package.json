@@ -64,8 +64,7 @@
     "lint": "eslint . --max-warnings 0",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest",
-    "db:migrate": "env SKIP_ENV_VALIDATION=true auth migrate --config ./src/lib/auth.cli.ts"
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@better-auth/passkey": "catalog:",

@@ -79,4 +79,4 @@ pnpm typecheck && pnpm test && pnpm build
 
 ## File uploads
 
-`apps/api/src/modules/uploads/` is the second reference module — same CQRS pattern with `StorageRepository` instead of MongoDB. See `packages/storage` for provider configuration (`STORAGE_PROVIDER=local` in dev, `s3` in production).
+`apps/api/src/modules/uploads/` is the second reference module — same CQRS pattern with `StorageRepository` instead of MongoDB. The web UI lives in `apps/web/src/features/uploads/`. See `packages/storage` for provider configuration (`STORAGE_PROVIDER=local` in dev, `s3` in production).

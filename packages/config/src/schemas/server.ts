@@ -44,7 +44,7 @@ export const authSchema = z.object({
 })
 
 export const emailSchema = z.object({
-  RESEND_API_KEY: z.string().min(1),
+  RESEND_API_KEY: z.string().default(""),
   EMAIL_FROM: z.string().min(1).optional(),
 })
 
@@ -80,7 +80,7 @@ export const serverDefaults = {
     "j6K#v9$e8f7037b453c8a6b455a6fe9cc7e5d1438af032e3bf8731affcea1e9967481d7!z8*Nq5&W3tY7uB9xCcE1",
   AUTH_JWT_EXPIRATION: "15m",
   AUTH_TOTP_ISSUER: DEFAULT_APP_NAME,
-  RESEND_API_KEY: "re_123456789",
+  RESEND_API_KEY: "",
   STORAGE_PROVIDER: "local",
   STORAGE_LOCAL_PATH: "./uploads",
   STORAGE_LOCAL_URL: `${DEV_URLS.API}/uploads`,

@@ -94,7 +94,11 @@ async function executeFetch<T>(
   const token = await getBearerToken()
   const headers = new Headers(requestInit.headers)
 
-  if (!headers.has("Content-Type") && requestInit.body) {
+  if (
+    !headers.has("Content-Type") &&
+    requestInit.body &&
+    !(requestInit.body instanceof FormData)
+  ) {
     headers.set("Content-Type", "application/json")
   }
   if (token) {

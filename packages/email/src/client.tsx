@@ -1,5 +1,10 @@
 import { Resend } from "resend"
-import { emailEnv, getEmailFromAddress } from "@workspace/config/email"
+import {
+  emailEnv,
+  getEmailFromAddress,
+  isResendConfigured,
+} from "@workspace/config/email"
+import { logDevEmail } from "./dev-log"
 import { WelcomeEmail } from "./templates/welcome"
 import { VerificationEmail } from "./templates/verification-email"
 import { ResetPasswordEmail } from "./templates/reset-password"
@@ -7,12 +12,28 @@ import { MagicLinkEmail } from "./templates/magic-link"
 import { OtpEmail } from "./templates/otp"
 import { OrganizationInvitationEmail } from "./templates/organization-invitation"
 
-export const resend = new Resend(emailEnv.RESEND_API_KEY)
-
 const FROM_ADDRESS = getEmailFromAddress()
 
+function getResendClient() {
+  if (!isResendConfigured()) {
+    throw new Error("Resend is not configured")
+  }
+  return new Resend(emailEnv.RESEND_API_KEY)
+}
+
+export const resend = isResendConfigured() ? getResendClient() : null
+
 export async function sendWelcomeEmail(to: string, name: string) {
-  return resend.emails.send({
+  if (!isResendConfigured()) {
+    logDevEmail({
+      to,
+      subject: `Welcome to ${emailEnv.APP_NAME}!`,
+      lines: [`Welcome, ${name}!`],
+    })
+    return
+  }
+
+  return resend!.emails.send({
     from: FROM_ADDRESS,
     to,
     subject: `Welcome to ${emailEnv.APP_NAME}!`,
@@ -21,7 +42,16 @@ export async function sendWelcomeEmail(to: string, name: string) {
 }
 
 export async function sendVerificationEmail(to: string, url: string) {
-  return resend.emails.send({
+  if (!isResendConfigured()) {
+    logDevEmail({
+      to,
+      subject: "Verify your email",
+      lines: [`Verification link: ${url}`],
+    })
+    return
+  }
+
+  return resend!.emails.send({
     from: FROM_ADDRESS,
     to,
     subject: "Verify your email",
@@ -30,7 +60,16 @@ export async function sendVerificationEmail(to: string, url: string) {
 }
 
 export async function sendResetPasswordEmail(to: string, url: string) {
-  return resend.emails.send({
+  if (!isResendConfigured()) {
+    logDevEmail({
+      to,
+      subject: "Reset your password",
+      lines: [`Reset link: ${url}`],
+    })
+    return
+  }
+
+  return resend!.emails.send({
     from: FROM_ADDRESS,
     to,
     subject: "Reset your password",
@@ -39,7 +78,16 @@ export async function sendResetPasswordEmail(to: string, url: string) {
 }
 
 export async function sendMagicLinkEmail(to: string, url: string) {
-  return resend.emails.send({
+  if (!isResendConfigured()) {
+    logDevEmail({
+      to,
+      subject: "Your sign-in link",
+      lines: [`Magic link: ${url}`],
+    })
+    return
+  }
+
+  return resend!.emails.send({
     from: FROM_ADDRESS,
     to,
     subject: "Your sign-in link",
@@ -54,7 +102,16 @@ export async function sendOtpEmail(
 ) {
   const subject = type === "sign-in" ? "Your sign-in code" : "Verify your email"
 
-  return resend.emails.send({
+  if (!isResendConfigured()) {
+    logDevEmail({
+      to,
+      subject,
+      lines: [`OTP (${type}): ${otp}`],
+    })
+    return
+  }
+
+  return resend!.emails.send({
     from: FROM_ADDRESS,
     to,
     subject,
@@ -68,7 +125,19 @@ export async function sendOrganizationInvitationEmail(
   inviterName: string,
   url: string
 ) {
-  return resend.emails.send({
+  if (!isResendConfigured()) {
+    logDevEmail({
+      to,
+      subject: `Join ${organizationName}`,
+      lines: [
+        `${inviterName} invited you to ${organizationName}.`,
+        `Accept: ${url}`,
+      ],
+    })
+    return
+  }
+
+  return resend!.emails.send({
     from: FROM_ADDRESS,
     to,
     subject: `Join ${organizationName}`,

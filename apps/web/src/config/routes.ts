@@ -15,6 +15,7 @@ export const routeSegments = {
     root: "app",
     dashboard: "dashboard",
     notes: "notes",
+    uploads: "uploads",
     settings: "settings",
     organization: "organization",
   },
@@ -43,6 +44,7 @@ export const routes = {
   acceptInvitation: "/accept-invitation",
   dashboard: toPath(routeSegments.app.root, routeSegments.app.dashboard),
   notes: toPath(routeSegments.app.root, routeSegments.app.notes),
+  uploads: toPath(routeSegments.app.root, routeSegments.app.uploads),
   settings: toPath(routeSegments.app.root, routeSegments.app.settings),
   settingsAccount: toPath(
     routeSegments.app.root,

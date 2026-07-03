@@ -2,6 +2,7 @@ import {
   Building2Icon,
   LayoutDashboardIcon,
   StickyNoteIcon,
+  UploadIcon,
 } from "lucide-react"
 import type { NavItem } from "@workspace/ui/components/shell"
 import { routes } from "@/config/routes"
@@ -18,6 +19,12 @@ export const appNavigation: NavItem[] = [
     href: routes.notes,
     icon: StickyNoteIcon,
     isCurrent: ({ pathname }) => pathname?.startsWith(routes.notes) ?? false,
+  },
+  {
+    name: "Uploads",
+    href: routes.uploads,
+    icon: UploadIcon,
+    isCurrent: ({ pathname }) => pathname?.startsWith(routes.uploads) ?? false,
   },
   {
     name: "Workspace",

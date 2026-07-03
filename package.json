@@ -9,7 +9,7 @@
     "dev:web": "turbo dev --filter=web",
     "dev:marketing": "turbo dev --filter=marketing",
     "dev:mobile": "turbo dev --filter=mobile",
-    "db:up": "docker compose up -d",
+    "db:up": "bash scripts/db-up.sh",
     "db:down": "docker compose down",
     "setup": "cp -n .env.example .env && pnpm install && pnpm db:up",
     "lint": "turbo lint",

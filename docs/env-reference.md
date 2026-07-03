@@ -34,6 +34,11 @@ All apps read the **root** `.env` via `@workspace/config`. Copy from [`.env.exam
 
 ## Email
 
-`RESEND_API_KEY`, `EMAIL_FROM` — required for verification emails in production.
+| Variable         | Required | Notes                                                                    |
+| ---------------- | -------- | ------------------------------------------------------------------------ |
+| `RESEND_API_KEY` | No       | Leave empty in dev — links are logged to the API console (`[email:dev]`) |
+| `EMAIL_FROM`     | No       | Defaults to `APP_NAME <no-reply@BETTER_AUTH_HOST>`                       |
+
+Set `RESEND_API_KEY` in production for real email delivery.
 
 See `.env.example` for the full list.

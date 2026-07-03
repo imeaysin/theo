@@ -16,6 +16,7 @@ pnpm --filter web dev
 | `/auth/*`        | Better Auth UI (sign-in, sign-up, password reset, 2FA, etc.) |
 | `/app/dashboard` | Protected shell overview                                     |
 | `/app/notes`     | **Reference CRUD** — TanStack Query + `lib/api.ts` + JWT     |
+| `/app/uploads`   | **Reference upload** — multipart FormData + `lib/api.ts`     |
 | `/app/settings`  | Signed-in profile                                            |
 
 See [docs/adding-a-feature.md](../../docs/adding-a-feature.md) and [AGENTS.md](./AGENTS.md).

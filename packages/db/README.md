@@ -12,8 +12,6 @@ await connectDb()
 
 `getDb()` and `getMongoClient()` expose the native MongoDB handle and client from the shared Mongoose connection (single pool per instance).
 
-## Auth migrations
+## Better Auth
 
-```bash
-pnpm --filter @workspace/auth db:migrate
-```
+Auth and business data share this connection. The MongoDB adapter creates collections on first use — no separate migration command is needed.

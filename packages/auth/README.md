@@ -195,18 +195,14 @@ With `dynamicAccessControl` enabled, **always use `hasPermission` hooks for UI**
 | `@workspace/auth/types/organization`       | Org entity types + role CRUD input types        |
 | `@workspace/auth/mobile`                   | Expo auth client                                |
 
-## DB migrate
+## DB schema (MongoDB)
 
-After plugin changes:
+Better Auth uses the **MongoDB adapter** — auth collections are created automatically on first request. The `auth migrate` CLI applies to SQL adapters only (Drizzle, Prisma, etc.), not this template.
 
-```bash
-pnpm --filter @workspace/auth db:migrate
-```
-
-## Serverless
+After plugin or schema changes, verify against a fresh local database or update documents manually as needed.
 
 - **Single DB pool:** `getAuthDb()` / `getAuthMongoClient()` delegate to `@workspace/db` — do not create a second `MongoClient`.
 - **Lazy init:** call `connectDb()` before `getAuth()` (API: `DatabaseModule` + `DATABASE_READY`; CLI: `auth.cli.ts`).
 - **Sessions & rate limits:** stored in MongoDB via Better Auth adapter — no in-memory session store.
 - **Business API:** stateless JWT verification (`JwksGuard`); workspace from token, not client input.
-- **Rate limiting:** avoid in-memory counters in Nest. Prefer edge/gateway limits; when on Better Auth versions that support it, use `rateLimit: { storage: "database" }` and re-run `db:migrate`.
+- **Rate limiting:** avoid in-memory counters in Nest. Prefer edge/gateway limits; when on Better Auth versions that support it, use `rateLimit: { storage: "database" }` (SQL adapters only for `auth migrate`).

@@ -16,12 +16,17 @@ export function DashboardPage() {
       }}
     >
       <p className="mb-4 text-sm text-muted-foreground">
-        This dashboard is a starting point. See the Notes example for a full
-        CRUD feature wired to the API.
+        This dashboard is a starting point. See Notes for CRUD or Uploads for
+        file uploads wired to the API.
       </p>
-      <Button render={<Link to={routes.notes} />} variant="outline">
-        Open notes
-      </Button>
+      <div className="flex flex-wrap gap-2">
+        <Button render={<Link to={routes.notes} />} variant="outline">
+          Open notes
+        </Button>
+        <Button render={<Link to={routes.uploads} />} variant="outline">
+          Open uploads
+        </Button>
+      </div>
     </ShellMain>
   )
 }
