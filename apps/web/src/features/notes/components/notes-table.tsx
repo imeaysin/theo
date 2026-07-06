@@ -1,6 +1,7 @@
 import type { NoteResponse } from "@workspace/contracts"
 import { dates } from "@/lib/dates"
 import { Button } from "@workspace/ui/components/button"
+import { TooltipHint } from "@workspace/ui/components/tooltip-hint"
 import { Card } from "@workspace/ui/components/card"
 import {
   DataList,
@@ -64,13 +65,15 @@ function NoteActions({
 }) {
   return (
     <Menu>
-      <MenuTrigger
-        aria-label={`Actions for ${note.title}`}
-        disabled={disabled}
-        render={<Button size="icon-sm" type="button" variant="ghost" />}
-      >
-        <MoreHorizontalIcon className="size-4" />
-      </MenuTrigger>
+      <TooltipHint content="Actions">
+        <MenuTrigger
+          aria-label={`Actions for ${note.title}`}
+          disabled={disabled}
+          render={<Button size="icon-sm" type="button" variant="ghost" />}
+        >
+          <MoreHorizontalIcon className="size-4" />
+        </MenuTrigger>
+      </TooltipHint>
       <MenuPopup align="end">
         <MenuItem onClick={() => onEdit(note)}>
           <PencilIcon className="size-4" />

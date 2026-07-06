@@ -1,6 +1,7 @@
 import type { NotificationResponse } from "@workspace/contracts"
 import { dates } from "@/lib/dates"
 import { Button } from "@workspace/ui/components/button"
+import { TooltipHint } from "@workspace/ui/components/tooltip-hint"
 import { cn } from "@workspace/ui/lib/utils"
 import { CheckIcon, ExternalLinkIcon, Trash2Icon } from "lucide-react"
 import { Link } from "react-router-dom"
@@ -56,25 +57,29 @@ function NotificationItem({
 
       <div className="flex shrink-0 items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
         {!notification.read ? (
+          <TooltipHint content="Mark as read">
+            <Button
+              aria-label="Mark as read"
+              disabled={disabled}
+              onClick={() => onMarkRead(notification.id)}
+              size="icon-sm"
+              variant="ghost"
+            >
+              <CheckIcon className="size-3.5" />
+            </Button>
+          </TooltipHint>
+        ) : null}
+        <TooltipHint content="Delete notification">
           <Button
-            aria-label="Mark as read"
+            aria-label="Delete notification"
             disabled={disabled}
-            onClick={() => onMarkRead(notification.id)}
+            onClick={() => onDelete(notification.id)}
             size="icon-sm"
             variant="ghost"
           >
-            <CheckIcon className="size-3.5" />
+            <Trash2Icon className="size-3.5" />
           </Button>
-        ) : null}
-        <Button
-          aria-label="Delete notification"
-          disabled={disabled}
-          onClick={() => onDelete(notification.id)}
-          size="icon-sm"
-          variant="ghost"
-        >
-          <Trash2Icon className="size-3.5" />
-        </Button>
+        </TooltipHint>
       </div>
     </div>
   )
