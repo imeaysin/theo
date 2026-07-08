@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   ForbiddenException,
   HttpException,
   NotFoundException,
@@ -29,4 +30,8 @@ export function apiForbidden(message: string, code: ApiErrorCode): never {
 
 export function apiNotFound(message: string, code: ApiErrorCode): never {
   throwWithCode(NotFoundException, message, code)
+}
+
+export function apiConflict(message: string, code: ApiErrorCode): never {
+  throwWithCode(ConflictException, message, code)
 }

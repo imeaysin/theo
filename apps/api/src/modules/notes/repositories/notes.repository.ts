@@ -2,6 +2,7 @@ import { Inject, Injectable } from "@nestjs/common"
 import { DomainErrorCode } from "@workspace/contracts"
 import { ObjectId, type Db } from "mongodb"
 import { MONGO_DB } from "@/common/database/database.module"
+import { BaseMongoRepository } from "@/common/database/repositories"
 import { apiNotFound } from "@/common/exceptions/api.exception"
 import type { NewNoteEntity, NoteEntity } from "../entities/note.entity"
 import { assertNoteAccessOrThrow } from "../notes-access.util"
@@ -10,12 +11,23 @@ import type {
   NoteActorScope,
   NoteMutationScope,
 } from "../note.scope"
+import type {
+  INotesReadRepository,
+  INotesWriteRepository,
+} from "./notes-repository.interface"
 
 const COLLECTION = "notes"
 
 @Injectable()
-export class NotesRepository {
-  constructor(@Inject(MONGO_DB) private readonly db: Db) {}
+export class NotesRepository
+  extends BaseMongoRepository
+  implements INotesReadRepository, INotesWriteRepository
+{
+  constructor(@Inject(MONGO_DB) private readonly db: Db) {
+    super()
+  }
+
+  // ─── Read side ──────────────────────────────────────────────────────────────
 
   async findMany(scope: NoteActorScope): Promise<NoteEntity[]> {
     return this.db
@@ -28,31 +40,10 @@ export class NotesRepository {
       .toArray()
   }
 
-  async insert(data: NewNoteEntity): Promise<NoteEntity> {
-    const now = new Date()
-
-    const { insertedId } = await this.db
-      .collection<Omit<NoteEntity, "_id">>(COLLECTION)
-      .insertOne({
-        organizationId: data.organizationId,
-        userId: data.userId,
-        title: data.title,
-        body: data.body,
-        createdAt: now,
-        updatedAt: now,
-      })
-
-    return {
-      _id: insertedId,
-      organizationId: data.organizationId,
-      userId: data.userId,
-      title: data.title,
-      body: data.body,
-      createdAt: now,
-      updatedAt: now,
-    }
-  }
-
+  /**
+   * Returns `null` when `id` is not a valid ObjectId or no document matches.
+   * Never throws a not-found error — callers decide whether a miss is an error.
+   */
   async findById(id: string): Promise<NoteEntity | null> {
     if (!ObjectId.isValid(id)) return null
 
@@ -61,6 +52,36 @@ export class NotesRepository {
     })
   }
 
+  // ─── Write side ─────────────────────────────────────────────────────────────
+
+  /**
+   * Inserts a new note. Unique constraint violations (E11000) are mapped to
+   * a `ConflictException` by `BaseMongoRepository.guardInsert`.
+   */
+  async insert(data: NewNoteEntity): Promise<NoteEntity> {
+    const now = new Date()
+
+    const doc = {
+      organizationId: data.organizationId,
+      userId: data.userId,
+      title: data.title,
+      body: data.body,
+      createdAt: now,
+      updatedAt: now,
+    } satisfies Omit<NoteEntity, "_id">
+
+    const { insertedId } = await this.guardInsert(() =>
+      this.db.collection<Omit<NoteEntity, "_id">>(COLLECTION).insertOne(doc)
+    )
+
+    return { _id: insertedId, ...doc }
+  }
+
+  /**
+   * Updates a note scoped to the exact org + user + noteId triple.
+   * Returns the updated entity or `null` when no document matched —
+   * callers use `rejectMutationMiss` to decide the error type.
+   */
   async update(
     scope: NoteMutationScope,
     data: Partial<Pick<NoteEntity, "title" | "body">>
@@ -84,6 +105,10 @@ export class NotesRepository {
     )
   }
 
+  /**
+   * Deletes the note identified by `scope`.
+   * Returns `false` when the id is invalid or no document matched.
+   */
   async delete(scope: NoteMutationScope): Promise<boolean> {
     if (!ObjectId.isValid(scope.noteId)) return false
 
@@ -95,6 +120,8 @@ export class NotesRepository {
 
     return result.deletedCount > 0
   }
+
+  // ─── Bulk write ─────────────────────────────────────────────────────────────
 
   async deleteMany(scope: BulkNoteMutationScope): Promise<number> {
     const objectIds = scope.ids
@@ -125,6 +152,8 @@ export class NotesRepository {
 
     return deletedCount
   }
+
+  // ─── Diagnostic helpers ──────────────────────────────────────────────────────
 
   async rejectBulkMutationMiss(scope: BulkNoteMutationScope): Promise<never> {
     for (const id of scope.ids) {
