@@ -11,6 +11,7 @@ export default defineConfig((options) => ({
     "server/push": "src/server/push.ts",
     "server/realtime": "src/server/realtime.ts",
     "server/cache": "src/server/cache.ts",
+    "server/payment": "src/server/payment.ts",
     "client/index": "src/client/index.ts",
   },
   format: ["esm", "cjs"],

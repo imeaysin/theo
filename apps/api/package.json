@@ -39,6 +39,7 @@
     "@workspace/db": "workspace:*",
     "@workspace/logger": "workspace:*",
     "@workspace/notifications": "workspace:*",
+    "@workspace/payment": "workspace:*",
     "@workspace/storage": "workspace:*",
     "bullmq": "catalog:",
     "compression": "^1.8.1",

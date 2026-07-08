@@ -52,6 +52,11 @@
       "import": "./dist/server/cache.js",
       "require": "./dist/server/cache.cjs"
     },
+    "./payment": {
+      "types": "./dist/server/payment.d.ts",
+      "import": "./dist/server/payment.js",
+      "require": "./dist/server/payment.cjs"
+    },
     "./client": {
       "types": "./dist/client/index.d.ts",
       "import": "./dist/client/index.js",

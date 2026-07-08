@@ -90,6 +90,20 @@ const rateLimitSchema = z.object({
   RATE_LIMIT_MAX: z.coerce.number().int().positive().default(120),
 })
 
+const paymentSchema = z.object({
+  PAYMENT_PROVIDER: z.enum(["bkash", "sslcommerz"]).default("bkash"),
+  PAYMENT_IS_SANDBOX: z
+    .enum(["true", "false"])
+    .default("true")
+    .transform((value) => value === "true"),
+  BKASH_APP_KEY: z.string().default(""),
+  BKASH_APP_SECRET: z.string().default(""),
+  BKASH_USERNAME: z.string().default(""),
+  BKASH_PASSWORD: z.string().default(""),
+  SSLCOMMERZ_STORE_ID: z.string().default(""),
+  SSLCOMMERZ_STORE_PASSWORD: z.string().default(""),
+})
+
 export const serverSchema = sharedSchema
   .extend(databaseSchema.shape)
   .extend(urlsSchema.shape)
@@ -101,6 +115,7 @@ export const serverSchema = sharedSchema
   .extend(realtimeSchema.shape)
   .extend(cacheSchema.shape)
   .extend(rateLimitSchema.shape)
+  .extend(paymentSchema.shape)
 
 export const serverDefaults = {
   NODE_ENV: "development",
@@ -146,6 +161,13 @@ export const serverDefaults = {
   EXPO_ACCESS_TOKEN: "",
   REALTIME_PROVIDER: "memory",
   CACHE_PROVIDER: "memory",
+  PAYMENT_PROVIDER: "bkash",
+  BKASH_APP_KEY: "",
+  BKASH_APP_SECRET: "",
+  BKASH_USERNAME: "",
+  BKASH_PASSWORD: "",
+  SSLCOMMERZ_STORE_ID: "",
+  SSLCOMMERZ_STORE_PASSWORD: "",
 } as const satisfies z.input<typeof serverSchema>
 
 /** Subset schemas — derived from the full server schema so keys stay in sync. */
@@ -192,6 +214,17 @@ export const cacheEnvSchema = serverSchema.pick({
   REDIS_URL: true,
 })
 
+export const paymentEnvSchema = serverSchema.pick({
+  PAYMENT_PROVIDER: true,
+  PAYMENT_IS_SANDBOX: true,
+  BKASH_APP_KEY: true,
+  BKASH_APP_SECRET: true,
+  BKASH_USERNAME: true,
+  BKASH_PASSWORD: true,
+  SSLCOMMERZ_STORE_ID: true,
+  SSLCOMMERZ_STORE_PASSWORD: true,
+})
+
 export type ServerEnv = z.infer<typeof serverSchema>
 export type DatabaseEnv = z.infer<typeof databaseEnvSchema>
 export type EmailEnv = z.infer<typeof emailEnvSchema>
@@ -200,6 +233,7 @@ export type JobsEnv = z.infer<typeof jobsEnvSchema>
 export type PushEnv = z.infer<typeof pushEnvSchema>
 export type RealtimeEnv = z.infer<typeof realtimeEnvSchema>
 export type CacheEnv = z.infer<typeof cacheEnvSchema>
+export type PaymentEnv = z.infer<typeof paymentEnvSchema>
 
 export function pickServerDefaults<const K extends keyof typeof serverDefaults>(
   keys: readonly K[]
