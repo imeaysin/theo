@@ -46,6 +46,9 @@ catalog:
   expo-server-sdk: 6.1.0
   "@fontsource-variable/geist-mono": 5.2.8
   "@fontsource/cal-sans": 5.2.3
+  ai: ^4.1.41
+  "@ai-sdk/react": ^1.1.13
+  "@ai-sdk/openai": ^1.1.10
 
 overrides:
   react: 19.2.7

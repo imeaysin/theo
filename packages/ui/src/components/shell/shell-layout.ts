@@ -7,7 +7,7 @@ export const shellMobileBottomNavHeight = "4.5rem"
 export const shellMobileFabInset = "1rem"
 
 export const shellContentClassName = cn(
-  "max-w-full flex-1 overflow-x-hidden overflow-y-auto",
+  "flex max-w-full flex-1 flex-col overflow-x-hidden overflow-y-auto",
   "px-4 pt-4 sm:px-6 md:px-8 md:pb-4 lg:py-6"
 )
 

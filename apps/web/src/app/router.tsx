@@ -15,6 +15,7 @@ import { uploadsRoutes } from "@/features/uploads/routes"
 import { organizationRoutes } from "@/features/organization/routes"
 import { adminRoutes } from "@/features/admin/routes"
 import { homeRoutes } from "@/features/home/routes"
+import { aiRoutes } from "@/features/ai/routes"
 import { ProtectedRoute } from "@/routing/protected-route"
 import { AdminRoute } from "@/routing/admin-route"
 import { routeSegments, routes } from "@/config/routes"
@@ -53,6 +54,7 @@ export const router = createBrowserRouter([
               ...notificationRoutes,
               ...uploadsRoutes,
               ...accountRoutes,
+              ...aiRoutes,
               ...organizationRoutes,
               {
                 element: <AdminRoute />,

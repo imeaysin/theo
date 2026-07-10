@@ -2,18 +2,12 @@
 
 import { useEffect, useRef } from "react"
 
-// Configuration constants for the audio analyzer
 const AUDIO_CONFIG = {
   FFT_SIZE: 512,
   SMOOTHING: 0.8,
   MIN_BAR_HEIGHT: 2,
   MIN_BAR_WIDTH: 2,
   BAR_SPACING: 1,
-  COLOR: {
-    MIN_INTENSITY: 100, // Minimum gray value (darker)
-    MAX_INTENSITY: 255, // Maximum gray value (brighter)
-    INTENSITY_RANGE: 155, // MAX_INTENSITY - MIN_INTENSITY
-  },
 } as const
 
 interface AudioVisualizerProps {
@@ -27,14 +21,12 @@ export function AudioVisualizer({
   isRecording,
   onClick,
 }: AudioVisualizerProps) {
-  // Refs for managing audio context and animation
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const audioContextRef = useRef<AudioContext | null>(null)
   const analyserRef = useRef<AnalyserNode | null>(null)
   const animationFrameRef = useRef<number>(0)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // Cleanup function to stop visualization and close audio context
   const cleanup = () => {
     if (animationFrameRef.current) {
       cancelAnimationFrame(animationFrameRef.current)
@@ -44,12 +36,10 @@ export function AudioVisualizer({
     }
   }
 
-  // Cleanup on unmount
   useEffect(() => {
     return cleanup
   }, [])
 
-  // Handle window resize
   useEffect(() => {
     const handleResize = () => {
       if (canvasRef.current && containerRef.current) {
@@ -57,26 +47,21 @@ export function AudioVisualizer({
         const canvas = canvasRef.current
         const dpr = window.devicePixelRatio || 1
 
-        // Set canvas size based on container and device pixel ratio
         const rect = container.getBoundingClientRect()
-        // Account for the 2px total margin (1px on each side)
         canvas.width = (rect.width - 2) * dpr
         canvas.height = (rect.height - 2) * dpr
 
-        // Scale canvas CSS size to match container minus margins
         canvas.style.width = `${rect.width - 2}px`
         canvas.style.height = `${rect.height - 2}px`
       }
     }
 
     window.addEventListener("resize", handleResize)
-    // Initial setup
     handleResize()
 
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
-  // Initialize audio context and start visualization
   const startVisualization = async () => {
     try {
       const audioContext = new AudioContext()
@@ -96,31 +81,17 @@ export function AudioVisualizer({
     }
   }
 
-  // Calculate the color intensity based on bar height
-  const getBarColor = (normalizedHeight: number) => {
-    const intensity =
-      Math.floor(normalizedHeight * AUDIO_CONFIG.COLOR.INTENSITY_RANGE) +
-      AUDIO_CONFIG.COLOR.MIN_INTENSITY
-    return `rgb(${intensity}, ${intensity}, ${intensity})`
-  }
-
-  // Draw a single bar of the visualizer
   const drawBar = (
     ctx: CanvasRenderingContext2D,
     x: number,
     centerY: number,
     width: number,
-    height: number,
-    color: string
+    height: number
   ) => {
-    ctx.fillStyle = color
-    // Draw upper bar (above center)
     ctx.fillRect(x, centerY - height, width, height)
-    // Draw lower bar (below center)
     ctx.fillRect(x, centerY, width, height)
   }
 
-  // Main drawing function
   const draw = () => {
     if (!isRecording) return
 
@@ -138,13 +109,9 @@ export function AudioVisualizer({
     const drawFrame = () => {
       animationFrameRef.current = requestAnimationFrame(drawFrame)
 
-      // Get current frequency data
       analyser.getByteFrequencyData(frequencyData)
-
-      // Clear canvas - use CSS pixels for clearing
       ctx.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr)
 
-      // Calculate dimensions in CSS pixels
       const barWidth = Math.max(
         AUDIO_CONFIG.MIN_BAR_WIDTH,
         canvas.width / dpr / bufferLength - AUDIO_CONFIG.BAR_SPACING
@@ -152,22 +119,21 @@ export function AudioVisualizer({
       const centerY = canvas.height / dpr / 2
       let x = 0
 
-      // Draw each frequency bar
+      // Use a standard CSS variable for color filling
+      const computedStyle = getComputedStyle(document.documentElement)
+      const primaryColor = computedStyle.getPropertyValue("--primary").trim()
+      ctx.fillStyle = primaryColor ? `oklch(${primaryColor})` : "currentColor"
+
       for (let i = 0; i < bufferLength; i++) {
-        const normalizedHeight = (frequencyData[i] || 0) / 255 // Convert to 0-1 range
+        const normalizedHeight = (frequencyData[i] || 0) / 255
         const barHeight = Math.max(
           AUDIO_CONFIG.MIN_BAR_HEIGHT,
           normalizedHeight * centerY
         )
 
-        drawBar(
-          ctx,
-          x,
-          centerY,
-          barWidth,
-          barHeight,
-          getBarColor(normalizedHeight)
-        )
+        ctx.globalAlpha = Math.max(0.2, normalizedHeight)
+        drawBar(ctx, x, centerY, barWidth, barHeight)
+        ctx.globalAlpha = 1.0
 
         x += barWidth + AUDIO_CONFIG.BAR_SPACING
       }
@@ -176,7 +142,6 @@ export function AudioVisualizer({
     drawFrame()
   }
 
-  // Start or stop visualization based on recording state
   useEffect(() => {
     if (stream && isRecording) {
       startVisualization()

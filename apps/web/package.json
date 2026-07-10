@@ -21,6 +21,7 @@
     "@workspace/config": "workspace:*",
     "@workspace/contracts": "workspace:*",
     "@workspace/dates": "workspace:*",
+    "@ai-sdk/react": "catalog:",
     "@workspace/ui": "workspace:*",
     "lucide-react": "catalog:",
     "react": "catalog:",

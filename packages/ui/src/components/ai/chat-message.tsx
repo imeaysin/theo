@@ -1,8 +1,7 @@
 "use client"
 
 import React, { useMemo, useState } from "react"
-import { cva, type VariantProps } from "class-variance-authority"
-import { motion } from "framer-motion"
+import { cva } from "class-variance-authority"
 import { Ban, ChevronRight, Code2, Loader2, Terminal } from "lucide-react"
 
 import { cn } from "@workspace/ui/lib/utils"
@@ -15,46 +14,16 @@ import { FilePreview } from "@workspace/ui/components/ai/file-preview"
 import { MarkdownRenderer } from "@workspace/ui/components/ai/markdown-renderer"
 
 const chatBubbleVariants = cva(
-  "group/message relative rounded-lg p-3 text-sm break-words sm:max-w-[70%]",
+  "relative animate-in rounded-lg p-3 text-sm break-words duration-200 fade-in sm:max-w-[70%]",
   {
     variants: {
       isUser: {
         true: "bg-primary text-primary-foreground",
         false: "bg-muted text-foreground",
       },
-      animation: {
-        none: "",
-        slide: "animate-in duration-300 fade-in-0",
-        scale: "animate-in duration-300 fade-in-0 zoom-in-75",
-        fade: "animate-in duration-500 fade-in-0",
-      },
     },
-    compoundVariants: [
-      {
-        isUser: true,
-        animation: "slide",
-        class: "slide-in-from-right",
-      },
-      {
-        isUser: false,
-        animation: "slide",
-        class: "slide-in-from-left",
-      },
-      {
-        isUser: true,
-        animation: "scale",
-        class: "origin-bottom-right",
-      },
-      {
-        isUser: false,
-        animation: "scale",
-        class: "origin-bottom-left",
-      },
-    ],
   }
 )
-
-type Animation = VariantProps<typeof chatBubbleVariants>["animation"]
 
 export interface Attachment {
   name?: string
@@ -64,21 +33,24 @@ export interface Attachment {
 
 export interface PartialToolCall {
   state: "partial-call"
+  toolCallId: string
   toolName: string
+  args: unknown
 }
 
 export interface ToolCall {
   state: "call"
+  toolCallId: string
   toolName: string
+  args: unknown
 }
 
 export interface ToolResult {
   state: "result"
+  toolCallId: string
   toolName: string
-  result: {
-    __cancelled?: boolean
-    [key: string]: unknown
-  }
+  args: unknown
+  result: unknown
 }
 
 export type ToolInvocation = PartialToolCall | ToolCall | ToolResult
@@ -98,7 +70,6 @@ export interface TextPart {
   text: string
 }
 
-// For compatibility with AI SDK types, not used
 export interface SourcePart {
   type: "source"
   source?: unknown
@@ -134,7 +105,6 @@ export interface Message {
 
 export interface ChatMessageProps extends Message {
   showTimeStamp?: boolean
-  animation?: Animation
   actions?: React.ReactNode
 }
 
@@ -143,7 +113,6 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
   content,
   createdAt,
   showTimeStamp = false,
-  animation = "scale",
   actions,
   experimental_attachments,
   toolInvocations,
@@ -169,7 +138,10 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
   if (isUser) {
     return (
       <div
-        className={cn("flex flex-col", isUser ? "items-end" : "items-start")}
+        className={cn(
+          "flex flex-col gap-1",
+          isUser ? "items-end" : "items-start"
+        )}
       >
         {files ? (
           <div className="mb-1 flex flex-wrap gap-2">
@@ -179,17 +151,14 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
           </div>
         ) : null}
 
-        <div className={cn(chatBubbleVariants({ isUser, animation }))}>
+        <div className={cn(chatBubbleVariants({ isUser }))}>
           <MarkdownRenderer>{content}</MarkdownRenderer>
         </div>
 
         {showTimeStamp && createdAt ? (
           <time
             dateTime={createdAt.toISOString()}
-            className={cn(
-              "mt-1 block px-1 text-xs opacity-50",
-              animation !== "none" && "animate-in duration-500 fade-in-0"
-            )}
+            className="mt-1 block animate-in px-1 text-xs opacity-50 duration-300 fade-in"
           >
             {formattedTime}
           </time>
@@ -204,15 +173,18 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
         return (
           <div
             className={cn(
-              "flex flex-col",
+              "flex flex-col gap-1",
               isUser ? "items-end" : "items-start"
             )}
             key={`text-${index}`}
           >
-            <div className={cn(chatBubbleVariants({ isUser, animation }))}>
+            <div
+              data-slot="message"
+              className={cn(chatBubbleVariants({ isUser }))}
+            >
               <MarkdownRenderer>{part.text}</MarkdownRenderer>
               {actions ? (
-                <div className="absolute right-2 -bottom-4 flex space-x-1 rounded-lg border bg-background p-1 text-foreground opacity-0 transition-opacity group-hover/message:opacity-100">
+                <div className="absolute right-2 -bottom-4 flex gap-1 rounded-lg border bg-background p-1 text-foreground opacity-0 transition-opacity in-[[data-slot=message]:hover]:opacity-100">
                   {actions}
                 </div>
               ) : null}
@@ -221,10 +193,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
             {showTimeStamp && createdAt ? (
               <time
                 dateTime={createdAt.toISOString()}
-                className={cn(
-                  "mt-1 block px-1 text-xs opacity-50",
-                  animation !== "none" && "animate-in duration-500 fade-in-0"
-                )}
+                className="mt-1 block animate-in px-1 text-xs opacity-50 duration-300 fade-in"
               >
                 {formattedTime}
               </time>
@@ -250,11 +219,16 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
   }
 
   return (
-    <div className={cn("flex flex-col", isUser ? "items-end" : "items-start")}>
-      <div className={cn(chatBubbleVariants({ isUser, animation }))}>
+    <div
+      className={cn(
+        "flex flex-col gap-1",
+        isUser ? "items-end" : "items-start"
+      )}
+    >
+      <div data-slot="message" className={cn(chatBubbleVariants({ isUser }))}>
         <MarkdownRenderer>{content}</MarkdownRenderer>
         {actions ? (
-          <div className="absolute right-2 -bottom-4 flex space-x-1 rounded-lg border bg-background p-1 text-foreground opacity-0 transition-opacity group-hover/message:opacity-100">
+          <div className="absolute right-2 -bottom-4 flex gap-1 rounded-lg border bg-background p-1 text-foreground opacity-0 transition-opacity in-[[data-slot=message]:hover]:opacity-100">
             {actions}
           </div>
         ) : null}
@@ -263,10 +237,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
       {showTimeStamp && createdAt ? (
         <time
           dateTime={createdAt.toISOString()}
-          className={cn(
-            "mt-1 block px-1 text-xs opacity-50",
-            animation !== "none" && "animate-in duration-500 fade-in-0"
-          )}
+          className="mt-1 block animate-in px-1 text-xs opacity-50 duration-300 fade-in"
         >
           {formattedTime}
         </time>
@@ -285,7 +256,7 @@ const ReasoningBlock = ({ part }: { part: ReasoningPart }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div className="mb-2 flex flex-col items-start sm:max-w-[70%]">
+    <div className="mb-2 flex flex-col items-start gap-1 sm:max-w-[70%]">
       <Collapsible
         open={isOpen}
         onOpenChange={setIsOpen}
@@ -297,23 +268,10 @@ const ReasoningBlock = ({ part }: { part: ReasoningPart }) => {
             <span>Thinking</span>
           </CollapsibleTrigger>
         </div>
-        <CollapsibleContent>
-          <motion.div
-            initial={false}
-            animate={isOpen ? "open" : "closed"}
-            variants={{
-              open: { height: "auto", opacity: 1 },
-              closed: { height: 0, opacity: 0 },
-            }}
-            transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
-            className="border-t"
-          >
-            <div className="p-2">
-              <div className="text-xs whitespace-pre-wrap">
-                {part.reasoning}
-              </div>
-            </div>
-          </motion.div>
+        <CollapsibleContent className="duration-200 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0">
+          <div className="border-t border-border p-2">
+            <div className="text-xs whitespace-pre-wrap">{part.reasoning}</div>
+          </div>
         </CollapsibleContent>
       </Collapsible>
     </div>
@@ -330,6 +288,9 @@ function ToolCall({
       {toolInvocations.map((invocation, index) => {
         const isCancelled =
           invocation.state === "result" &&
+          typeof invocation.result === "object" &&
+          invocation.result !== null &&
+          "__cancelled" in invocation.result &&
           invocation.result.__cancelled === true
 
         if (isCancelled) {

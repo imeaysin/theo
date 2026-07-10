@@ -41,6 +41,8 @@
     "@workspace/notifications": "workspace:*",
     "@workspace/payment": "workspace:*",
     "@workspace/storage": "workspace:*",
+    "@ai-sdk/openai": "catalog:",
+    "ai": "catalog:",
     "bullmq": "catalog:",
     "compression": "^1.8.1",
     "helmet": "^8.2.0",

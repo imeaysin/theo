@@ -26,7 +26,7 @@ import { PromptSuggestions } from "@workspace/ui/components/ai/prompt-suggestion
 
 interface ChatPropsBase {
   handleSubmit: (
-    event?: { preventDefault?: () => void },
+    event?: React.FormEvent<HTMLFormElement>,
     options?: { experimental_attachments?: FileList }
   ) => void
   messages: Message[]
@@ -78,7 +78,6 @@ export function Chat({
     messagesRef.current = messages
   }, [messages])
 
-  // Enhanced stop function that marks pending tool calls as cancelled
   const handleStop = useCallback(() => {
     stop?.()
 
@@ -105,7 +104,7 @@ export function Chat({
               state: "result",
               result: {
                 content: "Tool execution was cancelled",
-                __cancelled: true, // Special marker to indicate cancellation
+                __cancelled: true,
               },
             } as const
           }
@@ -170,7 +169,7 @@ export function Chat({
     (message: Message) => ({
       actions: onRateResponse ? (
         <>
-          <div className="border-r pr-1">
+          <div className="border-r border-border pr-1">
             <CopyButton
               content={message.content}
               copyMessage="Copied response to clipboard!"
@@ -274,7 +273,7 @@ export function ChatMessages({
           <div className="sticky bottom-0 left-0 flex w-full justify-end">
             <Button
               onClick={scrollToBottom}
-              className="pointer-events-auto h-8 w-8 animate-in rounded-full ease-in-out fade-in-0 slide-in-from-bottom-1"
+              className="pointer-events-auto h-8 w-8 animate-in rounded-full duration-200 fade-in"
               size="icon"
               variant="ghost"
             >
@@ -305,7 +304,7 @@ interface ChatFormProps {
   className?: string
   isPending: boolean
   handleSubmit: (
-    event?: { preventDefault?: () => void },
+    event?: React.FormEvent<HTMLFormElement>,
     options?: { experimental_attachments?: FileList }
   ) => void
   children: (props: {
@@ -318,7 +317,7 @@ export const ChatForm = forwardRef<HTMLFormElement, ChatFormProps>(
   ({ children, handleSubmit, isPending: _isPending, className }, ref) => {
     const [files, setFiles] = useState<File[] | null>(null)
 
-    const onSubmit = (event: React.FormEvent) => {
+    const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
       if (!files) {
         handleSubmit(event)
         return

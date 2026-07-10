@@ -27,6 +27,7 @@ import { EventsModule } from "./modules/events/events.module"
 import { NotesModule } from "./modules/notes/notes.module"
 import { NotificationsModule } from "./modules/notifications/notifications.module"
 import { UploadsModule } from "./modules/uploads/uploads.module"
+import { AiModule } from "./modules/ai/ai.module"
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { UploadsModule } from "./modules/uploads/uploads.module"
     NotesModule,
     NotificationsModule,
     UploadsModule,
+    AiModule,
     AuthModule.forRootAsync({
       imports: [DatabaseModule, CacheModule],
       inject: [DATABASE_READY, CACHE_PROVIDER],

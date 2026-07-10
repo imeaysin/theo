@@ -20,6 +20,7 @@ export const routeSegments = {
     settings: "settings",
     organization: "organization",
     admin: "admin",
+    ai: "ai",
   },
 } as const
 
@@ -80,6 +81,7 @@ export const routes = {
   ),
   admin: toPath(routeSegments.app.root, routeSegments.app.admin),
   adminUsers: toPath(routeSegments.app.root, routeSegments.app.admin, "users"),
+  ai: toPath(routeSegments.app.root, routeSegments.app.ai),
 } as const
 
 export const defaultAuthenticatedRoute = routes.dashboard

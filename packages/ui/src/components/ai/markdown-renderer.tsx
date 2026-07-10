@@ -11,7 +11,7 @@ interface MarkdownRendererProps {
 
 export function MarkdownRenderer({ children }: MarkdownRendererProps) {
   return (
-    <div className="space-y-3">
+    <div className="flex flex-col gap-3">
       <Markdown remarkPlugins={[remarkGfm]} components={COMPONENTS}>
         {children}
       </Markdown>
@@ -45,8 +45,8 @@ const HighlightedPre = React.memo(
       <pre {...props}>
         <code>
           {tokens.map((line, lineIndex) => (
-            <>
-              <span key={lineIndex}>
+            <React.Fragment key={lineIndex}>
+              <span>
                 {line.map((token, tokenIndex) => {
                   const style =
                     typeof token.htmlStyle === "string"
@@ -65,7 +65,7 @@ const HighlightedPre = React.memo(
                 })}
               </span>
               {lineIndex !== tokens.length - 1 && "\n"}
-            </>
+            </React.Fragment>
           ))}
         </code>
       </pre>
@@ -92,12 +92,12 @@ const CodeBlock = ({
       : childrenTakeAllStringContents(children)
 
   const preClass = cn(
-    "[scrollbar-width:none] overflow-x-scroll rounded-md border bg-background/50 p-4 font-mono text-sm",
+    "[scrollbar-width:none] overflow-x-scroll rounded-md border border-border bg-background/50 p-4 font-mono text-sm",
     className
   )
 
   return (
-    <div className="group/code relative mb-4">
+    <div data-slot="code-block" className="relative mb-4">
       <Suspense
         fallback={
           <pre className={preClass} {...restProps}>
@@ -110,7 +110,7 @@ const CodeBlock = ({
         </HighlightedPre>
       </Suspense>
 
-      <div className="invisible absolute top-2 right-2 flex space-x-1 rounded-lg p-1 opacity-0 transition-all duration-200 group-hover/code:visible group-hover/code:opacity-100">
+      <div className="invisible absolute top-2 right-2 flex gap-1 rounded-lg p-1 opacity-0 transition-all duration-200 in-[[data-slot=code-block]:hover]:visible in-[[data-slot=code-block]:hover]:opacity-100">
         <CopyButton content={code} copyMessage="Copied code to clipboard" />
       </div>
     </div>
@@ -166,25 +166,25 @@ const COMPONENTS: Components = {
       </code>
     )
   },
-  pre: ({ children }) => children,
-  ol: withClass("ol", "list-decimal space-y-2 pl-6"),
-  ul: withClass("ul", "list-disc space-y-2 pl-6"),
+  pre: ({ children }) => <>{children}</>,
+  ol: withClass("ol", "flex flex-col gap-2 list-decimal pl-6"),
+  ul: withClass("ul", "flex flex-col gap-2 list-disc pl-6"),
   li: withClass("li", "my-1.5"),
   table: withClass(
     "table",
-    "w-full border-collapse overflow-y-auto rounded-md border border-foreground/20"
+    "w-full border-collapse overflow-y-auto rounded-md border border-border"
   ),
   th: withClass(
     "th",
-    "border border-foreground/20 px-4 py-2 text-left font-bold [&[align=center]]:text-center [&[align=right]]:text-right"
+    "border border-border px-4 py-2 text-left font-bold [&[align=center]]:text-center [&[align=right]]:text-right"
   ),
   td: withClass(
     "td",
-    "border border-foreground/20 px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right"
+    "border border-border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right"
   ),
-  tr: withClass("tr", "m-0 border-t p-0 even:bg-muted"),
+  tr: withClass("tr", "m-0 border-t border-border p-0 even:bg-muted"),
   p: withClass("p", "whitespace-pre-wrap"),
-  hr: withClass("hr", "border-foreground/20"),
+  hr: withClass("hr", "border-border"),
 }
 
 function withClass<T extends keyof React.JSX.IntrinsicElements>(
