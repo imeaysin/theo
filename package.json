@@ -43,9 +43,13 @@
     "typecheck": "turbo typecheck",
     "test": "turbo test",
     "test:e2e": "turbo test:e2e --filter=api",
-    "prepare": "husky"
+    "prepare": "husky",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "changeset publish"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.31.0",
     "@workspace/typescript-config": "workspace:*",
     "husky": "^9.1.7",
     "lint-staged": "^17.0.8",
