@@ -23,6 +23,7 @@
     "@workspace/dates": "workspace:*",
     "@ai-sdk/react": "catalog:",
     "@workspace/ui": "workspace:*",
+    "@workspace/ui-shadcn": "workspace:*",
     "lucide-react": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
