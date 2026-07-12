@@ -1,10 +1,10 @@
 import {
   BellIcon,
-  Building2Icon,
   LayoutDashboardIcon,
   ShieldIcon,
   StickyNoteIcon,
   UploadIcon,
+  PieChartIcon,
   type LucideIcon,
 } from "lucide-react"
 import { routes } from "@/config/routes"
@@ -46,7 +46,7 @@ export const appNavigation: NavItem[] = [
   {
     name: "Workspace",
     href: routes.organizationSettings,
-    icon: Building2Icon,
+    icon: PieChartIcon,
     isCurrent: ({ pathname }) =>
       pathname?.startsWith(routes.organization) ?? false,
   },

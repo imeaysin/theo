@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { ChevronsUpDownIcon, PlusIcon, Building2Icon } from "lucide-react"
+import { ChevronsUpDownIcon, PlusIcon, PieChartIcon } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -57,16 +57,18 @@ export function TeamSwitcher({
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+              <>
                 {activeOrganization ? (
                   <OrganizationLogo
                     organization={activeOrganization}
-                    size="xs"
+                    className="size-8 rounded-lg"
                   />
                 ) : (
-                  <Building2Icon className="size-4" />
+                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg border bg-background text-foreground">
+                    <PieChartIcon className="size-4" />
+                  </div>
                 )}
-              </div>
+              </>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">
                   {activeOrganization?.name ?? "Personal Workspace"}

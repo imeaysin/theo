@@ -48,13 +48,19 @@ export function OrganizationLogo({
     )
   }
 
-  const initials = organization?.name?.slice(0, 2).toUpperCase()
+  const name = organization?.name?.trim() || ""
+  const words = name.split(/\s+/)
+  const initials =
+    words.length > 1 && words[0] && words[1]
+      ? (words[0].charAt(0) + words[1].charAt(0)).toUpperCase()
+      : name.charAt(0).toUpperCase()
+
   const logo = organization?.logo?.trim() || undefined
 
   return (
     <Avatar className={cn("rounded-full", sizeClasses[size], className)}>
       <AvatarImage alt={organization?.name ?? "Organization"} src={logo} />
-      <AvatarFallback className="text-xs text-muted-foreground">
+      <AvatarFallback className="bg-muted text-xs text-muted-foreground">
         {fallback ?? initials ?? (
           <Briefcase aria-hidden="true" className={fallbackIconClasses[size]} />
         )}
