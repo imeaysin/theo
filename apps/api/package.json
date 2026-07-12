@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "nest build",
+    "build": "nest build && tsc-alias",
     "dev": "nest start --watch",
     "start": "nest start",
     "start:debug": "nest start --debug --watch",
@@ -52,7 +52,6 @@
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "socket.io": "^4.8.3",
-    "tsconfig-paths": "^4.2.0",
     "zod": "catalog:"
   },
   "devDependencies": {
@@ -74,6 +73,8 @@
     "ts-jest": "^29.2.5",
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
+    "tsc-alias": "^1.9.0",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "catalog:",
     "webpack-node-externals": "^3.0.0"
   }
