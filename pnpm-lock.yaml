@@ -252,6 +252,9 @@ importers:
       socket.io:
         specifier: ^4.8.3
         version: 4.8.3
+      tsconfig-paths:
+        specifier: ^4.2.0
+        version: 4.2.0
       zod:
         specifier: 'catalog:'
         version: 4.4.3
@@ -313,9 +316,6 @@ importers:
       tsc-alias:
         specifier: ^1.9.0
         version: 1.9.0
-      tsconfig-paths:
-        specifier: ^4.2.0
-        version: 4.2.0
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
