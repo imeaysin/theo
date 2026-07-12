@@ -22,6 +22,7 @@
     "promote-admin": "SKIP_ENV_VALIDATION=true ts-node --transpile-only scripts/promote-admin.ts"
   },
   "dependencies": {
+    "@ai-sdk/openai": "catalog:",
     "@nestjs/bullmq": "^11.0.4",
     "@nestjs/common": "catalog:",
     "@nestjs/core": "catalog:",
@@ -41,7 +42,6 @@
     "@workspace/notifications": "workspace:*",
     "@workspace/payment": "workspace:*",
     "@workspace/storage": "workspace:*",
-    "@ai-sdk/openai": "catalog:",
     "ai": "catalog:",
     "bullmq": "catalog:",
     "compression": "^1.8.1",
@@ -52,6 +52,7 @@
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "socket.io": "^4.8.3",
+    "tsconfig-paths": "^4.2.0",
     "zod": "catalog:"
   },
   "devDependencies": {
@@ -73,7 +74,6 @@
     "ts-jest": "^29.2.5",
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
-    "tsconfig-paths": "^4.2.0",
     "typescript": "catalog:",
     "webpack-node-externals": "^3.0.0"
   }
