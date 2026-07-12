@@ -27,6 +27,7 @@ import {
 
 export function NavProjects({
   projects,
+  linkComponent: LinkComponent = "a",
 }: {
   projects: {
     name: string
@@ -34,6 +35,7 @@ export function NavProjects({
     icon: LucideIcon
     isActive?: boolean
   }[]
+  linkComponent?: React.ElementType
 }) {
   const { isMobile } = useSidebar()
 
@@ -44,10 +46,10 @@ export function NavProjects({
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild isActive={item.isActive}>
-              <a href={item.url}>
+              <LinkComponent href={item.url}>
                 <item.icon />
                 <span>{item.name}</span>
-              </a>
+              </LinkComponent>
             </SidebarMenuButton>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

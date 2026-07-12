@@ -46,7 +46,7 @@ export const AppLayout = () => {
         <AppSidebar />
         <SidebarInset>
           <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-            <div className="flex items-center gap-2 px-4">
+            <div className="flex items-center gap-2 px-6">
               <SidebarTrigger className="-ml-1" />
               <Separator
                 orientation="vertical"
@@ -71,7 +71,7 @@ export const AppLayout = () => {
               </Breadcrumb>
             </div>
           </header>
-          <main className="flex flex-1 flex-col gap-4 p-4 pt-0">
+          <main className="flex flex-1 flex-col gap-6 p-6 pt-0">
             <Outlet context={outletContext} />
           </main>
         </SidebarInset>

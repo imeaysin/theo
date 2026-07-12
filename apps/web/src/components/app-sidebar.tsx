@@ -13,6 +13,16 @@ import {
   SidebarRail,
 } from "@workspace/ui-shadcn/components/sidebar"
 import { useAppShellConfig } from "@/features/shell/use-app-shell-config"
+import { Link } from "react-router-dom"
+
+const RouterLink = React.forwardRef<
+  HTMLAnchorElement,
+  Omit<React.ComponentProps<typeof Link>, "to"> & { href?: string; to?: string }
+>((props, ref) => {
+  const { href, to, ...rest } = props
+  return <Link ref={ref} to={to || href || "#"} {...rest} />
+})
+RouterLink.displayName = "RouterLink"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { navMain, projects, user, teams, onSignOut, userMenuItems } =
@@ -24,11 +34,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <TeamSwitcher teams={teams} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={navMain} />
-        <NavProjects projects={projects} />
+        <NavMain items={navMain} linkComponent={RouterLink} />
+        <NavProjects projects={projects} linkComponent={RouterLink} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={user} menuItems={userMenuItems} onSignOut={onSignOut} />
+        <NavUser
+          user={user}
+          menuItems={userMenuItems}
+          onSignOut={onSignOut}
+          linkComponent={RouterLink}
+        />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

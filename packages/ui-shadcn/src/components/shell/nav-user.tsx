@@ -27,6 +27,7 @@ export function NavUser({
   user,
   menuItems,
   onSignOut,
+  linkComponent: LinkComponent = "a",
 }: {
   user: {
     name: string
@@ -39,6 +40,7 @@ export function NavUser({
     icon?: React.ElementType
   }[]
   onSignOut?: () => void
+  linkComponent?: React.ElementType
 }) {
   const { isMobile } = useSidebar()
 
@@ -87,10 +89,13 @@ export function NavUser({
                 <DropdownMenuGroup>
                   {menuItems.map((item, index) => (
                     <DropdownMenuItem key={index} asChild>
-                      <a href={item.href} className="flex w-full items-center">
+                      <LinkComponent
+                        href={item.href}
+                        className="flex w-full items-center"
+                      >
                         {item.icon && <item.icon className="mr-2 size-4" />}
                         {item.label}
-                      </a>
+                      </LinkComponent>
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuGroup>

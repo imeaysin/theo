@@ -20,6 +20,7 @@ import {
 
 export function NavMain({
   items,
+  linkComponent: LinkComponent = "a",
 }: {
   items: {
     title: string
@@ -32,6 +33,7 @@ export function NavMain({
       isActive?: boolean
     }[]
   }[]
+  linkComponent?: React.ElementType
 }) {
   return (
     <SidebarGroup>
@@ -70,9 +72,9 @@ export function NavMain({
                             asChild
                             isActive={subItem.isActive}
                           >
-                            <a href={subItem.url}>
+                            <LinkComponent href={subItem.url}>
                               <span>{subItem.title}</span>
-                            </a>
+                            </LinkComponent>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       ))}
