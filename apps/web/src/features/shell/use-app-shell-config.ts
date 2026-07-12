@@ -17,37 +17,25 @@ import {
   useSignOut,
 } from "@workspace/auth/react"
 import { platformUiPermissions } from "@workspace/ui-shadcn/auth"
-import { useUnreadCountQuery } from "@/features/notifications/hooks/use-notifications"
 
 export function useAppShellConfig() {
   const signOut = useSignOut()
   const { data: adminPermission } = usePlatformPermission(
     platformUiPermissions.listUsers
   )
-  const { data: unreadCount } = useUnreadCountQuery()
 
   const { data: session } = useAuthSession()
   const { data: activeOrganization } = useActiveOrganization()
   const { data: organizations } = useListOrganizations()
 
   const navMain = useMemo(() => {
-    let items = appNavigation.navMain.map((item) => {
-      // Check if it's the Notifications tab if you eventually wire up real routes
-      if (item.title === "Notifications") {
-        const count = unreadCount?.count ?? 0
-        if (count > 0) {
-          // If you add badge support to NavMain later, you can add it here.
-          // return { ...item, badge: count > 99 ? "99+" : String(count) }
-        }
-      }
-      return item
-    })
+    let items = appNavigation.navMain
 
     if (adminPermission?.success) {
       items = [...items, adminNavigationItem]
     }
     return items
-  }, [adminPermission?.success, unreadCount?.count])
+  }, [adminPermission?.success])
 
   const projects = appNavigation.projects
 
