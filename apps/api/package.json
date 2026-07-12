@@ -4,7 +4,6 @@
   "description": "",
   "author": "",
   "private": true,
-  "type": "module",
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
@@ -23,6 +22,7 @@
     "promote-admin": "SKIP_ENV_VALIDATION=true ts-node --transpile-only scripts/promote-admin.ts"
   },
   "dependencies": {
+    "@ai-sdk/openai": "catalog:",
     "@nestjs/bullmq": "^11.0.4",
     "@nestjs/common": "catalog:",
     "@nestjs/core": "catalog:",
@@ -42,10 +42,10 @@
     "@workspace/notifications": "workspace:*",
     "@workspace/payment": "workspace:*",
     "@workspace/storage": "workspace:*",
-    "@ai-sdk/openai": "catalog:",
     "ai": "catalog:",
     "bullmq": "catalog:",
     "compression": "^1.8.1",
+    "express": "^5.2.1",
     "helmet": "^8.2.0",
     "mongodb": "^7.2.0",
     "nestjs-zod": "^5.4.0",
@@ -74,6 +74,7 @@
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "webpack-node-externals": "^3.0.0"
   }
 }
