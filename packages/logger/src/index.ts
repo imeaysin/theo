@@ -36,14 +36,14 @@ function isPrettyEnabled(): boolean {
   if (env.LOG_PRETTY === "false") return false
   if (env.CI === "true") return false
   if (env.JEST_WORKER_ID !== undefined) return false
-  return env.NODE_ENV !== "production"
+  return env.NODE_ENV === "development"
 }
 
 function createRootLogger(): Logger {
   const level = resolveLogLevel()
 
   if (isPrettyEnabled()) {
-    // https://getpino.io/#/docs/pretty — transport loads pino-pretty in a worker thread
+    // https://getpino.io/#/docs/pretty — transport loads pino-pretty in a worker thread (development only)
     return pino({
       level,
       transport: {
