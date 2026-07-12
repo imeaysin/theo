@@ -6,7 +6,6 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "vercel-build": "nest build",
     "build": "nest build",
     "dev": "nest start --watch",
     "start": "nest start",
