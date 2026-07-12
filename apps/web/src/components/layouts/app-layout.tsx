@@ -71,7 +71,9 @@ export const AppLayout = () => {
               </Breadcrumb>
             </div>
           </header>
-          <Outlet context={outletContext} />
+          <main className="flex flex-1 flex-col gap-4 p-4 pt-0">
+            <Outlet context={outletContext} />
+          </main>
         </SidebarInset>
       </SidebarProvider>
     </WorkspaceOnboardingGate>

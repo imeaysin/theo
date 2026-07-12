@@ -38,7 +38,6 @@ export function NavMain({
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => {
-          // Check if any subitem is active to open collapsible
           const isItemActive =
             item.isActive || item.items?.some((sub) => sub.isActive)
 
