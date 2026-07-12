@@ -1,13 +1,26 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { CreateNoteSchema, type NoteResponse } from "@workspace/contracts"
-import { Button } from "@workspace/ui/components/button"
-import { Field, FieldError, FieldLabel } from "@workspace/ui/components/field"
-import { Form } from "@workspace/ui/components/form"
-import { Input } from "@workspace/ui/components/input"
-import { Pane } from "@workspace/ui/components/pane"
-import { Textarea } from "@workspace/ui/components/textarea"
+import { Button } from "@workspace/ui-shadcn/components/button"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@workspace/ui-shadcn/components/form"
+import { Input } from "@workspace/ui-shadcn/components/input"
+import { Textarea } from "@workspace/ui-shadcn/components/textarea"
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from "@workspace/ui-shadcn/components/sheet"
 import { useEffect } from "react"
-import { Controller, useForm, useFormState } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import type { z } from "zod"
 import {
   useCreateNoteMutation,
@@ -36,7 +49,6 @@ export function NoteFormSheet({
     resolver: zodResolver(CreateNoteSchema),
     defaultValues: { title: "", body: "" },
   })
-  const { errors } = useFormState({ control: form.control })
 
   useEffect(() => {
     if (!open) return
@@ -63,80 +75,74 @@ export function NoteFormSheet({
     form.reset({ title: "", body: "" })
   }
 
-  const formErrors: Record<string, string> = {}
-  if (errors.title?.message) formErrors.title = errors.title.message
-  if (errors.body?.message) formErrors.body = errors.body.message
+  function handleOpenChange(nextOpen: boolean) {
+    if (!nextOpen) form.reset({ title: "", body: "" })
+    onOpenChange(nextOpen)
+  }
 
   return (
-    <Pane onOpenChange={onOpenChange} open={open}>
-      <Pane.Content>
-        <Pane.Header>
-          <Pane.Title>{isEditing ? "Edit note" : "New note"}</Pane.Title>
-          <Pane.Description>
+    <Sheet onOpenChange={handleOpenChange} open={open}>
+      <SheetContent side="right" className="flex flex-col sm:max-w-md">
+        <SheetHeader>
+          <SheetTitle>{isEditing ? "Edit note" : "New note"}</SheetTitle>
+          <SheetDescription>
             {isEditing
               ? "Update the title or body of your note."
               : "Add a title and optional details."}
-          </Pane.Description>
-        </Pane.Header>
+          </SheetDescription>
+        </SheetHeader>
 
-        <Form
-          className="flex min-h-0 flex-1 flex-col"
-          errors={Object.keys(formErrors).length > 0 ? formErrors : undefined}
-          onSubmit={form.handleSubmit(handleSubmit)}
-        >
-          <Pane.Panel className="space-y-4">
-            <Controller
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <Field name="title">
-                  <FieldLabel htmlFor="note-title">Title</FieldLabel>
-                  <Input
-                    {...field}
-                    disabled={isPending}
-                    id="note-title"
-                    nativeInput
-                    placeholder="What is this note about?"
-                  />
-                  <FieldError />
-                </Field>
-              )}
-            />
-
-            <Controller
-              control={form.control}
-              name="body"
-              render={({ field }) => (
-                <Field name="body">
-                  <FieldLabel htmlFor="note-body">Body</FieldLabel>
-                  <Textarea
-                    {...field}
-                    disabled={isPending}
-                    id="note-body"
-                    placeholder="Optional details…"
-                    rows={8}
-                  />
-                  <FieldError />
-                </Field>
-              )}
-            />
-          </Pane.Panel>
-
-          <Pane.Footer>
-            <Button
-              disabled={isPending}
-              onClick={() => onOpenChange(false)}
-              type="button"
-              variant="outline"
-            >
-              Cancel
-            </Button>
-            <Button disabled={isPending} type="submit">
-              {isEditing ? "Save changes" : "Create note"}
-            </Button>
-          </Pane.Footer>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto py-6"
+          >
+            <div className="flex-1 space-y-4 px-1">
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Title</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={isPending}
+                        placeholder="What is this note about?"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="body"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Details (optional)</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        className="min-h-[120px]"
+                        disabled={isPending}
+                        placeholder="Add some details..."
+                        {...field}
+                        value={field.value ?? ""}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <SheetFooter>
+              <Button disabled={isPending} type="submit" className="w-full">
+                {isEditing ? "Save changes" : "Create note"}
+              </Button>
+            </SheetFooter>
+          </form>
         </Form>
-      </Pane.Content>
-    </Pane>
+      </SheetContent>
+    </Sheet>
   )
 }

@@ -110,16 +110,10 @@ export function BanUserDialog({
             </div>
 
             <SheetFooter className="border-t px-6 py-4">
-              <SheetClose
-                render={
-                  <Button
-                    disabled={isSubmitting}
-                    type="button"
-                    variant="outline"
-                  />
-                }
-              >
-                Cancel
+              <SheetClose asChild>
+                <Button disabled={isSubmitting} type="button" variant="outline">
+                  Cancel
+                </Button>
               </SheetClose>
               <Button
                 disabled={isSubmitting}

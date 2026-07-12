@@ -1,8 +1,8 @@
 import type { NotificationResponse } from "@workspace/contracts"
 import { dates } from "@/lib/dates"
-import { Button } from "@workspace/ui/components/button"
-import { TooltipHint } from "@workspace/ui/components/tooltip-hint"
-import { cn } from "@workspace/ui/lib/utils"
+import { Button } from "@workspace/ui-shadcn/components/button"
+import { TooltipHint } from "@workspace/ui-shadcn/components/tooltip-hint"
+import { cn } from "@workspace/ui-shadcn/lib/utils"
 import { CheckIcon, ExternalLinkIcon, Trash2Icon } from "lucide-react"
 import { Link } from "react-router-dom"
 

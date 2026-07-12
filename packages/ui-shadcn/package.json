@@ -21,6 +21,7 @@
     "@shadcn/react": "^0.2.1",
     "@tanstack/react-pacer": "^0.22.1",
     "@tanstack/react-query": "^5.101.1",
+    "@tanstack/react-table": "^8.21.3",
     "@workspace/auth": "workspace:*",
     "bowser": "^2.14.1",
     "class-variance-authority": "^0.7.1",
@@ -67,6 +68,7 @@
     "./globals.css": "./src/styles/globals.css",
     "./lib/*": "./src/lib/*.ts",
     "./components/*": "./src/components/*.tsx",
-    "./hooks/*": "./src/hooks/*.ts"
+    "./hooks/*": "./src/hooks/*.ts",
+    "./auth": "./src/components/auth/index.ts"
   }
 }

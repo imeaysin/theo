@@ -4,8 +4,8 @@ import {
   useSetActiveOrganization,
   useSignOut,
 } from "@workspace/auth/react"
-import { WorkspaceOnboarding } from "@workspace/ui/auth"
-import { PageLoading } from "@workspace/ui/components/page-loading"
+import { WorkspaceOnboarding } from "@workspace/ui-shadcn/auth"
+import { PageLoading } from "@workspace/ui-shadcn/components/page-loading"
 import { useEffect, useRef, type ReactNode } from "react"
 import { Link as RouterLink } from "react-router-dom"
 import { useWorkspaceOnboarding } from "@/features/auth/hooks/use-workspace-onboarding"

@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom"
 import type { RouteObject } from "react-router-dom"
-import { organizationUiPermissions } from "@workspace/ui/auth"
+import { organizationUiPermissions } from "@workspace/ui-shadcn/auth"
 import { routes, routeSegments } from "@/config/routes"
 import { OrganizationPermissionRoute } from "@/routing/organization-permission-route"
 

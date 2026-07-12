@@ -90,16 +90,18 @@ export function AdminUserRow({
         <div className="flex items-center justify-end gap-1">
           {canSetRole?.success && !isCurrentUser ? (
             <DropdownMenu>
-              <DropdownMenuTrigger
-                aria-label="Change platform role"
-                className={cn(
-                  buttonVariants({ size: "icon", variant: "ghost" }),
-                  "size-8"
-                )}
-                disabled={isUpdatingRole}
-                render={<button type="button" />}
-              >
-                {isUpdatingRole ? <Spinner /> : <Pencil className="size-4" />}
+              <DropdownMenuTrigger asChild>
+                <button
+                  type="button"
+                  aria-label="Change platform role"
+                  className={cn(
+                    buttonVariants({ size: "icon", variant: "ghost" }),
+                    "size-8"
+                  )}
+                  disabled={isUpdatingRole}
+                >
+                  {isUpdatingRole ? <Spinner /> : <Pencil className="size-4" />}
+                </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 {roles.map((role) => (

@@ -1,6 +1,6 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom"
 import type { AuthUser } from "@workspace/auth/types"
-import { PageLoading } from "@workspace/ui/components/page-loading"
+import { PageLoading } from "@workspace/ui-shadcn/components/page-loading"
 import { useAuthSession } from "@workspace/auth/react"
 import { routes } from "@/config/routes"
 

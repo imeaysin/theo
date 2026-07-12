@@ -1,16 +1,15 @@
 import { useRef, useState, type ChangeEvent } from "react"
 import type { UploadResponse } from "@workspace/contracts"
 import { UPLOAD_MAX_BYTES } from "@workspace/contracts"
-import { Button } from "@workspace/ui/components/button"
+import { Button } from "@workspace/ui-shadcn/components/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@workspace/ui/components/card"
-import { Input } from "@workspace/ui/components/input"
-import { ShellMain } from "@workspace/ui/components/shell"
+} from "@workspace/ui-shadcn/components/card"
+import { Input } from "@workspace/ui-shadcn/components/input"
 import { UploadIcon } from "lucide-react"
 import { useUploadFileMutation } from "@/features/uploads/hooks/use-upload"
 
@@ -44,13 +43,15 @@ export function UploadsPage() {
   }
 
   return (
-    <ShellMain
-      header={{
-        heading: "Uploads",
-        subtitle:
-          "Upload files to the API (max 5 MB). Uses local storage in dev.",
-      }}
-    >
+    <div>
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+        <div className="space-y-1">
+          <h2 className="text-2xl font-bold tracking-tight">Uploads</h2>
+          <p className="text-muted-foreground">
+            Upload files to the API (max 5 MB). Uses local storage in dev.
+          </p>
+        </div>
+      </div>
       <Card className="max-w-lg">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
@@ -102,6 +103,6 @@ export function UploadsPage() {
           ) : null}
         </CardContent>
       </Card>
-    </ShellMain>
+    </div>
   )
 }

@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom"
-import { PageLoading } from "@workspace/ui/components/page-loading"
+import { PageLoading } from "@workspace/ui-shadcn/components/page-loading"
 import { usePlatformPermission } from "@workspace/auth/react"
-import { platformUiPermissions } from "@workspace/ui/auth"
+import { platformUiPermissions } from "@workspace/ui-shadcn/auth"
 import { routes } from "@/config/routes"
 
 export function AdminRoute() {

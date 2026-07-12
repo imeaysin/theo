@@ -1,6 +1,6 @@
 import { createBrowserRouter, Link, Navigate } from "react-router-dom"
-import { Button } from "@workspace/ui/components/button"
-import { PageNotFound } from "@workspace/ui/components/page-not-found"
+import { Button } from "@workspace/ui-shadcn/components/button"
+import { PageNotFound } from "@workspace/ui-shadcn/components/page-not-found"
 import { AuthLayout } from "@/components/layouts/auth-layout"
 import { AppLayout } from "@/components/layouts/app-layout"
 import { RootLayout } from "@/components/layouts/root-layout"
@@ -15,7 +15,6 @@ import { uploadsRoutes } from "@/features/uploads/routes"
 import { organizationRoutes } from "@/features/organization/routes"
 import { adminRoutes } from "@/features/admin/routes"
 import { homeRoutes } from "@/features/home/routes"
-import { aiRoutes } from "@/features/ai/routes"
 import { ProtectedRoute } from "@/routing/protected-route"
 import { AdminRoute } from "@/routing/admin-route"
 import { routeSegments, routes } from "@/config/routes"
@@ -54,7 +53,6 @@ export const router = createBrowserRouter([
               ...notificationRoutes,
               ...uploadsRoutes,
               ...accountRoutes,
-              ...aiRoutes,
               ...organizationRoutes,
               {
                 element: <AdminRoute />,
@@ -68,7 +66,11 @@ export const router = createBrowserRouter([
         path: "*",
         element: (
           <PageNotFound
-            action={<Button render={<Link to={routes.home} />}>Go home</Button>}
+            action={
+              <Button asChild>
+                <Link to={routes.home}>Go home</Link>
+              </Button>
+            }
           />
         ),
       },

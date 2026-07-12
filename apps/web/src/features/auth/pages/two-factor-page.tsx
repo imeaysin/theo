@@ -1,15 +1,21 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
-import { Controller, useForm, useFormState } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { TwoFactorSchema, type TwoFactorInput } from "@workspace/contracts"
-import { AuthOtpInput, AuthPageBody, AuthPageHeader } from "@workspace/ui/auth"
 import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldLabel,
-} from "@workspace/ui/components/field"
-import { Form } from "@workspace/ui/components/form"
+  AuthOtpInput,
+  AuthPageBody,
+  AuthPageHeader,
+} from "@workspace/ui-shadcn/auth"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@workspace/ui-shadcn/components/form"
 import { useVerifyTotp } from "@workspace/auth/react"
 import { routes, defaultAuthenticatedRoute } from "@/config/routes"
 import {
@@ -30,9 +36,8 @@ export function TwoFactorPage() {
     resolver: zodResolver(TwoFactorSchema),
     defaultValues: { code: "" },
   })
-  const { errors } = useFormState({ control: form.control })
 
-  const onSubmit = form.handleSubmit(async (values) => {
+  async function onSubmit(values: TwoFactorInput) {
     try {
       await verifyTotp.mutateAsync(values)
       navigate(redirectPath)
@@ -42,10 +47,7 @@ export function TwoFactorPage() {
       })
       form.setValue("code", "")
     }
-  })
-
-  const formErrors: Record<string, string> = {}
-  if (errors.code?.message) formErrors.code = errors.code.message
+  }
 
   return (
     <AuthPageBody
@@ -66,37 +68,35 @@ export function TwoFactorPage() {
         title="Verify your identity"
       />
 
-      <Form
-        errors={Object.keys(formErrors).length > 0 ? formErrors : undefined}
-        onSubmit={onSubmit}
-      >
-        <Controller
-          control={form.control}
-          name="code"
-          render={({ field }) => (
-            <Field name="code">
-              <FieldLabel htmlFor="two-factor-code">
-                Verification code
-              </FieldLabel>
-              <AuthOtpInput
-                id="two-factor-code"
-                invalid={Boolean(errors.code)}
-                onComplete={(value) => {
-                  form.setValue("code", value, { shouldValidate: true })
-                  void onSubmit()
-                }}
-                onValueChange={field.onChange}
-                value={field.value}
-                verifying={verifyTotp.isPending}
-              />
-              <FieldDescription>
-                Open your authenticator app (1Password, Authy, etc.) to get a
-                6-digit code.
-              </FieldDescription>
-              <FieldError />
-            </Field>
-          )}
-        />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <FormField
+            control={form.control}
+            name="code"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Verification code</FormLabel>
+                <FormControl>
+                  <AuthOtpInput
+                    invalid={Boolean(form.formState.errors.code)}
+                    onComplete={(value) => {
+                      form.setValue("code", value, { shouldValidate: true })
+                      void form.handleSubmit(onSubmit)()
+                    }}
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    verifying={verifyTotp.isPending}
+                  />
+                </FormControl>
+                <FormDescription>
+                  Open your authenticator app (1Password, Authy, etc.) to get a
+                  6-digit code.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </form>
       </Form>
     </AuthPageBody>
   )

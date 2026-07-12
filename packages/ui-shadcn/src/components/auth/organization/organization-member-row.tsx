@@ -73,16 +73,18 @@ export function OrganizationMemberRow({
         <div className="flex items-center justify-end gap-1">
           {hasUpdatePermission?.success ? (
             <DropdownMenu>
-              <DropdownMenuTrigger
-                aria-label="Change member role"
-                className={cn(
-                  buttonVariants({ size: "icon", variant: "ghost" }),
-                  "size-8"
-                )}
-                disabled={isUpdatingRole}
-                render={<button type="button" />}
-              >
-                {isUpdatingRole ? <Spinner /> : <Pencil className="size-4" />}
+              <DropdownMenuTrigger asChild>
+                <button
+                  type="button"
+                  aria-label="Change member role"
+                  className={cn(
+                    buttonVariants({ size: "icon", variant: "ghost" }),
+                    "size-8"
+                  )}
+                  disabled={isUpdatingRole}
+                >
+                  {isUpdatingRole ? <Spinner /> : <Pencil className="size-4" />}
+                </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 {assignableRoles.map((role) => (

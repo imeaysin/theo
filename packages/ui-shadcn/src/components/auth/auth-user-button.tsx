@@ -206,13 +206,15 @@ export function AuthUserButton({
 
   return (
     <DropdownMenu onOpenChange={setOpen} open={open}>
-      <DropdownMenuTrigger
-        aria-label={isIconOnly ? "Account menu" : triggerLabel}
-        className={getTriggerClassName(size, className)}
-        disabled={isPending && !user}
-        render={<button type="button" />}
-      >
-        <TriggerContent isPending={isPending} size={size} user={user} />
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          aria-label={isIconOnly ? "Account menu" : triggerLabel}
+          className={getTriggerClassName(size, className)}
+          disabled={isPending && !user}
+        >
+          <TriggerContent isPending={isPending} size={size} user={user} />
+        </button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
@@ -255,15 +257,19 @@ export function AuthUserButton({
                 return (
                   <DropdownMenuItem
                     key={item.label}
-                    render={
-                      <Link
-                        className="flex w-full items-center gap-2"
-                        to={item.href}
-                      />
+                    asChild
+                    className={
+                      item.variant === "destructive"
+                        ? "text-destructive focus:bg-destructive/10 focus:text-destructive"
+                        : ""
                     }
-                    variant={menuItemVariant}
                   >
-                    {content}
+                    <Link
+                      className="flex w-full items-center gap-2"
+                      to={item.href}
+                    >
+                      {content}
+                    </Link>
                   </DropdownMenuItem>
                 )
               }

@@ -1,19 +1,20 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom"
-import { Controller, useForm, useFormState } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { SignInSchema, type SignInInput } from "@workspace/contracts"
-import { AuthPageBody, AuthPageHeader } from "@workspace/ui/auth"
-import { Button } from "@workspace/ui/components/button"
+import { AuthPageBody, AuthPageHeader } from "@workspace/ui-shadcn/auth"
+import { Button } from "@workspace/ui-shadcn/components/button"
 import {
-  Field,
-  FieldControl,
-  FieldError,
-  FieldLabel,
-} from "@workspace/ui/components/field"
-import { Form } from "@workspace/ui/components/form"
-import { Input } from "@workspace/ui/components/input"
-import { PasswordInput } from "@workspace/ui/components/password-input"
-import { PageLoading } from "@workspace/ui/components/page-loading"
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@workspace/ui-shadcn/components/form"
+import { Input } from "@workspace/ui-shadcn/components/input"
+import { PasswordInput } from "@workspace/ui-shadcn/components/password-input"
+import { PageLoading } from "@workspace/ui-shadcn/components/page-loading"
 import { AuthButtons } from "@/features/auth/components/auth-buttons"
 import { useSignInEmail, useAuthSession } from "@workspace/auth/react"
 import { defaultAuthenticatedRoute, routes } from "@/config/routes"
@@ -46,7 +47,6 @@ export function SignInPage() {
     resolver: zodResolver(SignInSchema),
     defaultValues: { email: "", password: "" },
   })
-  const { errors } = useFormState({ control: form.control })
 
   if (isPending) {
     return <PageLoading />
@@ -82,10 +82,6 @@ export function SignInPage() {
     }
   }
 
-  const formErrors: Record<string, string> = {}
-  if (errors.email?.message) formErrors.email = errors.email.message
-  if (errors.password?.message) formErrors.password = errors.password.message
-
   return (
     <AuthPageBody
       footer={
@@ -110,67 +106,64 @@ export function SignInPage() {
 
       <AuthButtons callbackPath={redirectPath} />
 
-      <Form
-        className="flex flex-col gap-4"
-        errors={Object.keys(formErrors).length > 0 ? formErrors : undefined}
-        noValidate
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
-        <Controller
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <Field name="email">
-              <FieldLabel htmlFor="sign-in-email">Email</FieldLabel>
-              <Input
-                {...field}
-                autoComplete="email"
-                id="sign-in-email"
-                placeholder="you@example.com"
-                type="email"
-              />
-              <FieldError />
-            </Field>
-          )}
-        />
-        <Controller
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <Field name="password">
-              <FieldLabel htmlFor="sign-in-password">Password</FieldLabel>
-              <FieldControl
-                {...field}
-                render={(controlProps) => (
+      <Form {...form}>
+        <form
+          className="flex flex-col gap-4"
+          onSubmit={form.handleSubmit(onSubmit)}
+          noValidate
+        >
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    autoComplete="email"
+                    placeholder="you@example.com"
+                    type="email"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
                   <PasswordInput
-                    {...controlProps}
+                    {...field}
                     autoComplete="current-password"
-                    id="sign-in-password"
                     placeholder="Enter your password"
                   />
-                )}
-              />
-              <FieldError />
-            </Field>
-          )}
-        />
-        <div className="flex justify-end">
-          <Link
-            className="font-sans text-sm text-muted-foreground underline underline-offset-2 transition-colors hover:text-foreground"
-            to={routes.forgotPassword}
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="flex justify-end">
+            <Link
+              className="font-sans text-sm text-muted-foreground underline underline-offset-2 transition-colors hover:text-foreground"
+              to={routes.forgotPassword}
+            >
+              Forgot password?
+            </Link>
+          </div>
+          <Button
+            className="w-full"
+            disabled={signIn.isPending}
+            size="lg"
+            type="submit"
           >
-            Forgot password?
-          </Link>
-        </div>
-        <Button
-          className="w-full"
-          loading={signIn.isPending}
-          size="lg"
-          type="submit"
-          variant="default"
-        >
-          Sign in
-        </Button>
+            Sign in
+          </Button>
+        </form>
       </Form>
     </AuthPageBody>
   )

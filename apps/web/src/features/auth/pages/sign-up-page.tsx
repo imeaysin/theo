@@ -1,20 +1,21 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom"
-import { Controller, useForm, useFormState } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { SignUpSchema, type SignUpInput } from "@workspace/contracts"
-import { AuthPageBody, AuthPageHeader } from "@workspace/ui/auth"
-import { Button } from "@workspace/ui/components/button"
+import { AuthPageBody, AuthPageHeader } from "@workspace/ui-shadcn/auth"
+import { Button } from "@workspace/ui-shadcn/components/button"
 import {
-  Field,
-  FieldControl,
-  FieldError,
-  FieldLabel,
-} from "@workspace/ui/components/field"
-import { Form } from "@workspace/ui/components/form"
-import { Input } from "@workspace/ui/components/input"
-import { PasswordInput } from "@workspace/ui/components/password-input"
-import { PageLoading } from "@workspace/ui/components/page-loading"
-import { toastManager } from "@workspace/ui/components/toast"
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@workspace/ui-shadcn/components/form"
+import { Input } from "@workspace/ui-shadcn/components/input"
+import { PasswordInput } from "@workspace/ui-shadcn/components/password-input"
+import { PageLoading } from "@workspace/ui-shadcn/components/page-loading"
+import { toastManager } from "@workspace/ui-shadcn/components/toast"
 import { AuthButtons } from "@/features/auth/components/auth-buttons"
 import { useAuthSession, useSignUpEmail } from "@workspace/auth/react"
 import {
@@ -46,7 +47,6 @@ export function SignUpPage() {
       confirmPassword: "",
     },
   })
-  const { errors } = useFormState({ control: form.control })
 
   if (isPending) {
     return <PageLoading />
@@ -77,14 +77,6 @@ export function SignUpPage() {
     }
   }
 
-  const formErrors: Record<string, string> = {}
-  if (errors.name?.message) formErrors.name = errors.name.message
-  if (errors.email?.message) formErrors.email = errors.email.message
-  if (errors.password?.message) formErrors.password = errors.password.message
-  if (errors.confirmPassword?.message) {
-    formErrors.confirmPassword = errors.confirmPassword.message
-  }
-
   return (
     <AuthPageBody
       footer={
@@ -109,99 +101,91 @@ export function SignUpPage() {
 
       <AuthButtons callbackPath={redirectPath} />
 
-      <Form
-        className="flex flex-col gap-4"
-        errors={Object.keys(formErrors).length > 0 ? formErrors : undefined}
-        noValidate
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
-        <Controller
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <Field name="name">
-              <FieldLabel htmlFor="sign-up-name">Name</FieldLabel>
-              <Input
-                {...field}
-                autoComplete="name"
-                id="sign-up-name"
-                placeholder="Your name"
-                type="text"
-              />
-              <FieldError />
-            </Field>
-          )}
-        />
-        <Controller
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <Field name="email">
-              <FieldLabel htmlFor="sign-up-email">Email</FieldLabel>
-              <Input
-                {...field}
-                autoComplete="email"
-                id="sign-up-email"
-                placeholder="you@example.com"
-                type="email"
-              />
-              <FieldError />
-            </Field>
-          )}
-        />
-        <Controller
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <Field name="password">
-              <FieldLabel htmlFor="sign-up-password">Password</FieldLabel>
-              <FieldControl
-                {...field}
-                render={(controlProps) => (
+      <Form {...form}>
+        <form
+          className="flex flex-col gap-4"
+          onSubmit={form.handleSubmit(onSubmit)}
+          noValidate
+        >
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    autoComplete="name"
+                    placeholder="Your name"
+                    type="text"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    autoComplete="email"
+                    placeholder="you@example.com"
+                    type="email"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
                   <PasswordInput
-                    {...controlProps}
+                    {...field}
                     autoComplete="new-password"
-                    id="sign-up-password"
                     placeholder="Create a password"
                   />
-                )}
-              />
-              <FieldError />
-            </Field>
-          )}
-        />
-        <Controller
-          control={form.control}
-          name="confirmPassword"
-          render={({ field }) => (
-            <Field name="confirmPassword">
-              <FieldLabel htmlFor="sign-up-confirm-password">
-                Confirm password
-              </FieldLabel>
-              <FieldControl
-                {...field}
-                render={(controlProps) => (
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirm password</FormLabel>
+                <FormControl>
                   <PasswordInput
-                    {...controlProps}
+                    {...field}
                     autoComplete="new-password"
-                    id="sign-up-confirm-password"
                     placeholder="Confirm your password"
                   />
-                )}
-              />
-              <FieldError />
-            </Field>
-          )}
-        />
-        <Button
-          className="w-full"
-          loading={signUp.isPending}
-          size="lg"
-          type="submit"
-          variant="default"
-        >
-          Create account
-        </Button>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button
+            className="w-full"
+            disabled={signUp.isPending}
+            size="lg"
+            type="submit"
+          >
+            Create account
+          </Button>
+        </form>
       </Form>
     </AuthPageBody>
   )

@@ -3,7 +3,10 @@ import {
   useAuthUiConfig,
   type SocialSignInInput,
 } from "@workspace/auth/react"
-import { AuthProviderButtons, type AuthOAuthProvider } from "@workspace/ui/auth"
+import {
+  AuthProviderButtons,
+  type AuthOAuthProvider,
+} from "@workspace/ui-shadcn/auth"
 import { absoluteAppUrl, defaultAuthenticatedRoute } from "@/config/routes"
 
 type AuthButtonsProps = {

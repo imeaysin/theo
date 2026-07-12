@@ -1,21 +1,22 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
-import { Controller, useForm, useFormState } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import {
   ResetPasswordSchema,
   type ResetPasswordInput,
 } from "@workspace/contracts"
-import { AuthPageBody, AuthPageHeader } from "@workspace/ui/auth"
-import { Button } from "@workspace/ui/components/button"
+import { AuthPageBody, AuthPageHeader } from "@workspace/ui-shadcn/auth"
+import { Button } from "@workspace/ui-shadcn/components/button"
 import {
-  Field,
-  FieldControl,
-  FieldError,
-  FieldLabel,
-} from "@workspace/ui/components/field"
-import { Form } from "@workspace/ui/components/form"
-import { PasswordInput } from "@workspace/ui/components/password-input"
-import { toastManager } from "@workspace/ui/components/toast"
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@workspace/ui-shadcn/components/form"
+import { PasswordInput } from "@workspace/ui-shadcn/components/password-input"
+import { toastManager } from "@workspace/ui-shadcn/components/toast"
 import { useResetPassword } from "@workspace/auth/react"
 import { routes } from "@/config/routes"
 
@@ -28,7 +29,6 @@ export function ResetPasswordPage() {
     resolver: zodResolver(ResetPasswordSchema),
     defaultValues: { password: "", confirmPassword: "" },
   })
-  const { errors } = useFormState({ control: form.control })
 
   async function onSubmit(values: ResetPasswordInput) {
     if (!token) {
@@ -53,12 +53,6 @@ export function ResetPasswordPage() {
     }
   }
 
-  const formErrors: Record<string, string> = {}
-  if (errors.password?.message) formErrors.password = errors.password.message
-  if (errors.confirmPassword?.message) {
-    formErrors.confirmPassword = errors.confirmPassword.message
-  }
-
   return (
     <AuthPageBody
       footer={
@@ -75,65 +69,55 @@ export function ResetPasswordPage() {
         title="Reset password"
       />
 
-      <Form
-        className="flex flex-col gap-4"
-        errors={Object.keys(formErrors).length > 0 ? formErrors : undefined}
-        noValidate
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
-        <Controller
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <Field name="password">
-              <FieldLabel htmlFor="reset-password">New password</FieldLabel>
-              <FieldControl
-                {...field}
-                render={(controlProps) => (
+      <Form {...form}>
+        <form
+          className="flex flex-col gap-4"
+          onSubmit={form.handleSubmit(onSubmit)}
+          noValidate
+        >
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>New password</FormLabel>
+                <FormControl>
                   <PasswordInput
-                    {...controlProps}
+                    {...field}
                     autoComplete="new-password"
-                    id="reset-password"
                     placeholder="Enter a new password"
                   />
-                )}
-              />
-              <FieldError />
-            </Field>
-          )}
-        />
-        <Controller
-          control={form.control}
-          name="confirmPassword"
-          render={({ field }) => (
-            <Field name="confirmPassword">
-              <FieldLabel htmlFor="reset-password-confirm">
-                Confirm password
-              </FieldLabel>
-              <FieldControl
-                {...field}
-                render={(controlProps) => (
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirm password</FormLabel>
+                <FormControl>
                   <PasswordInput
-                    {...controlProps}
+                    {...field}
                     autoComplete="new-password"
-                    id="reset-password-confirm"
                     placeholder="Confirm your password"
                   />
-                )}
-              />
-              <FieldError />
-            </Field>
-          )}
-        />
-        <Button
-          className="w-full"
-          loading={resetPassword.isPending}
-          size="lg"
-          type="submit"
-          variant="default"
-        >
-          Update password
-        </Button>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button
+            className="w-full"
+            disabled={resetPassword.isPending}
+            size="lg"
+            type="submit"
+          >
+            Update password
+          </Button>
+        </form>
       </Form>
     </AuthPageBody>
   )

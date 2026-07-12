@@ -5,18 +5,8 @@ import {
   useUpdateOrganizationRole,
 } from "@workspace/auth/react"
 import type { OrganizationRole } from "@workspace/auth/types/organization"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { toastManager } from "@workspace/ui/components/toast"
-import {
-  createOrganizationRoleSchema,
-  editOrganizationRoleSchema,
-  type CreateOrganizationRoleInput,
-  type EditOrganizationRoleInput,
-} from "@workspace/auth/forms"
-
-const emptyPermissions: OrganizationPermissionMap = {}
+import { toastManager } from "@workspace/ui-shadcn/components/toast"
 
 export function useOrganizationRoleDialogs() {
   const [createOpen, setCreateOpen] = useState(false)
@@ -26,18 +16,6 @@ export function useOrganizationRoleDialogs() {
     null
   )
 
-  const createForm = useForm<CreateOrganizationRoleInput>({
-    resolver: zodResolver(createOrganizationRoleSchema),
-    defaultValues: { role: "", permission: emptyPermissions },
-    mode: "onSubmit",
-    reValidateMode: "onChange",
-  })
-
-  const editForm = useForm<EditOrganizationRoleInput>({
-    resolver: zodResolver(editOrganizationRoleSchema),
-    defaultValues: { permission: emptyPermissions },
-  })
-
   const { mutateAsync: createRole, isPending: isCreating } =
     useCreateOrganizationRole()
   const { mutateAsync: updateRole, isPending: isUpdating } =
@@ -45,31 +23,21 @@ export function useOrganizationRoleDialogs() {
   const { mutateAsync: deleteRole, isPending: isDeleting } =
     useDeleteOrganizationRole()
 
-  function resetCreateForm() {
-    createForm.reset({ role: "", permission: emptyPermissions })
-  }
-
   function openCreateDialog() {
-    resetCreateForm()
     setCreateOpen(true)
   }
 
   function handleCreateOpenChange(open: boolean) {
-    if (!open) resetCreateForm()
     setCreateOpen(open)
   }
 
   function openEditDialog(role: OrganizationRole) {
     setSelectedRole(role)
-    editForm.reset({ permission: role.permission ?? emptyPermissions })
     setEditOpen(true)
   }
 
   function handleEditOpenChange(open: boolean) {
-    if (!open) {
-      setSelectedRole(null)
-      editForm.reset({ permission: emptyPermissions })
-    }
+    if (!open) setSelectedRole(null)
     setEditOpen(open)
   }
 
@@ -83,8 +51,11 @@ export function useOrganizationRoleDialogs() {
     setDeleteOpen(open)
   }
 
-  const handleCreateSubmit = createForm.handleSubmit((values) => {
-    void toastManager
+  async function handleCreateSubmit(values: {
+    role: string
+    permission: OrganizationPermissionMap
+  }) {
+    await toastManager
       .promise(
         createRole({
           role: values.role.trim().toLowerCase(),
@@ -110,12 +81,14 @@ export function useOrganizationRoleDialogs() {
       )
       .then(() => handleCreateOpenChange(false))
       .catch(() => undefined)
-  })
+  }
 
-  const handleEditSubmit = editForm.handleSubmit((values) => {
+  async function handleEditSubmit(values: {
+    permission: OrganizationPermissionMap
+  }) {
     if (!selectedRole) return
 
-    void toastManager
+    await toastManager
       .promise(
         updateRole({
           roleId: selectedRole.id,
@@ -141,7 +114,7 @@ export function useOrganizationRoleDialogs() {
       )
       .then(() => handleEditOpenChange(false))
       .catch(() => undefined)
-  })
+  }
 
   function handleDeleteSubmit() {
     if (!selectedRole) return
@@ -176,7 +149,7 @@ export function useOrganizationRoleDialogs() {
       createDialog: {
         open: createOpen,
         onOpenChange: handleCreateOpenChange,
-        control: createForm.control,
+        defaultPermissions: {},
         isPending: isCreating,
         onSubmit: handleCreateSubmit,
       },
@@ -184,7 +157,6 @@ export function useOrganizationRoleDialogs() {
         open: editOpen,
         onOpenChange: handleEditOpenChange,
         role: selectedRole,
-        control: editForm.control,
         isPending: isUpdating,
         onSubmit: handleEditSubmit,
       },

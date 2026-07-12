@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom"
-import { ShellMain } from "@workspace/ui/components/shell"
-import { Button } from "@workspace/ui/components/button"
+import { Button } from "@workspace/ui-shadcn/components/button"
 import { useAuthSession } from "@workspace/auth/react"
 import { routes } from "@/config/routes"
 
@@ -9,24 +8,27 @@ export function DashboardPage() {
   const name = session?.user.name
 
   return (
-    <ShellMain
-      header={{
-        heading: "Overview",
-        subtitle: name ? `Welcome back, ${name}.` : "Welcome back.",
-      }}
-    >
-      <p className="mb-4 text-sm text-muted-foreground">
+    <div className="space-y-6">
+      <div className="space-y-1">
+        <h2 className="text-2xl font-bold tracking-tight">Overview</h2>
+        <p className="text-muted-foreground">
+          {name ? `Welcome back, ${name}.` : "Welcome back."}
+        </p>
+      </div>
+
+      <p className="text-sm text-muted-foreground">
         This dashboard is a starting point. See Notes for CRUD or Uploads for
         file uploads wired to the API.
       </p>
+
       <div className="flex flex-wrap gap-2">
-        <Button render={<Link to={routes.notes} />} variant="outline">
-          Open notes
+        <Button asChild variant="outline">
+          <Link to={routes.notes}>Open notes</Link>
         </Button>
-        <Button render={<Link to={routes.uploads} />} variant="outline">
-          Open uploads
+        <Button asChild variant="outline">
+          <Link to={routes.uploads}>Open uploads</Link>
         </Button>
       </div>
-    </ShellMain>
+    </div>
   )
 }

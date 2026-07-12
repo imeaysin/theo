@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react"
 import { Link, Navigate, useSearchParams } from "react-router-dom"
-import { AuthPageBody, AuthPageHeader } from "@workspace/ui/auth"
-import { Button } from "@workspace/ui/components/button"
-import { PageLoading } from "@workspace/ui/components/page-loading"
-import { toastManager } from "@workspace/ui/components/toast"
+import { AuthPageBody, AuthPageHeader } from "@workspace/ui-shadcn/auth"
+import { Button } from "@workspace/ui-shadcn/components/button"
+import { PageLoading } from "@workspace/ui-shadcn/components/page-loading"
+import { toastManager } from "@workspace/ui-shadcn/components/toast"
 import {
   useSendVerificationEmail,
   useVerifyEmail,
   useAuthSession,
 } from "@workspace/auth/react"
-import { OpenEmailButton } from "@workspace/ui/auth"
+import { OpenEmailButton } from "@workspace/ui-shadcn/auth"
 import {
   absoluteAppUrl,
   routes,
@@ -113,7 +113,7 @@ export function VerifyEmailPage() {
             <OpenEmailButton email={email} />
             <Button
               className="w-full"
-              loading={sendVerification.isPending}
+              disabled={sendVerification.isPending}
               onClick={() => void resendEmail()}
               size="lg"
               type="button"
@@ -124,13 +124,13 @@ export function VerifyEmailPage() {
           </>
         ) : null}
         <Button
+          asChild
           className="w-full"
-          render={<Link to={routes.signIn} />}
           size="lg"
           type="button"
           variant="default"
         >
-          {copy.buttonLabel}
+          <Link to={routes.signIn}>{copy.buttonLabel}</Link>
         </Button>
       </div>
     </AuthPageBody>

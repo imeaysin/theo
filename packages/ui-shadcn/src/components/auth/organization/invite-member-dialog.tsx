@@ -135,23 +135,17 @@ export function InviteMemberDialog({
                     <FormLabel>Role</FormLabel>
                     <Select
                       disabled={isSubmitting || roleItems.length === 0}
-                      items={roleItems}
-                      onValueChange={(item) =>
-                        field.onChange(item?.value ?? "")
-                      }
-                      value={
-                        roleItems.find((item) => item.value === field.value) ??
-                        null
-                      }
+                      onValueChange={field.onChange}
+                      value={field.value}
                     >
                       <FormControl>
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select a role" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent alignItemWithTrigger={false}>
+                      <SelectContent>
                         {roleItems.map((item) => (
-                          <SelectItem key={item.value} value={item}>
+                          <SelectItem key={item.value} value={item.value}>
                             {item.label}
                           </SelectItem>
                         ))}
@@ -164,16 +158,10 @@ export function InviteMemberDialog({
             </div>
 
             <SheetFooter className="border-t px-6 py-4">
-              <SheetClose
-                render={
-                  <Button
-                    disabled={isSubmitting}
-                    type="button"
-                    variant="outline"
-                  />
-                }
-              >
-                Cancel
+              <SheetClose asChild>
+                <Button disabled={isSubmitting} type="button" variant="outline">
+                  Cancel
+                </Button>
               </SheetClose>
               <Button disabled={isSubmitting} type="submit">
                 {isSubmitting ? <Spinner data-icon="inline-start" /> : null}

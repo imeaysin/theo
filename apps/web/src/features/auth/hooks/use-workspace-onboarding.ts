@@ -1,15 +1,11 @@
-import { zodResolver } from "@hookform/resolvers/zod"
 import {
   checkOrganizationSlugAvailable,
   resolveAvailableOrganizationSlug,
   useCreateOrganization,
   useAuthSession,
 } from "@workspace/auth/react"
-import { workspaceOnboardingSchema } from "@workspace/auth/forms"
 import { useNavigate } from "react-router-dom"
-import { useForm } from "react-hook-form"
-import type { z } from "zod"
-import { toastManager } from "@workspace/ui/components/toast"
+import { toastManager } from "@workspace/ui-shadcn/components/toast"
 import { routes } from "@/config/routes"
 
 export function useWorkspaceOnboarding() {
@@ -17,12 +13,7 @@ export function useWorkspaceOnboarding() {
   const { data: session } = useAuthSession()
   const { mutateAsync: createOrganization, isPending } = useCreateOrganization()
 
-  const form = useForm<z.infer<typeof workspaceOnboardingSchema>>({
-    resolver: zodResolver(workspaceOnboardingSchema),
-    defaultValues: { name: "" },
-  })
-
-  const onSubmit = form.handleSubmit(async (values) => {
+  const onSubmit = async (values: { name: string }) => {
     const userId = session?.user.id
     if (!userId) return
 
@@ -32,7 +23,7 @@ export function useWorkspaceOnboarding() {
       checkOrganizationSlugAvailable
     )
 
-    void toastManager
+    await toastManager
       .promise(createOrganization({ name: values.name, slug }), {
         error: {
           description: "Please try again or choose a different name.",
@@ -52,11 +43,10 @@ export function useWorkspaceOnboarding() {
       })
       .then(() => navigate(routes.dashboard, { replace: true }))
       .catch(() => undefined)
-  })
+  }
 
   return {
     props: {
-      control: form.control,
       isPending,
       onSubmit,
     },

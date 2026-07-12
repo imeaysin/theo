@@ -1,5 +1,5 @@
 import { Link, Outlet } from "react-router-dom"
-import { AuthShell } from "@workspace/ui/auth"
+import { AuthShell } from "@workspace/ui-shadcn/auth"
 import { routes } from "@/config/routes"
 import { site } from "@/config/site"
 

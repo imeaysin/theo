@@ -5,10 +5,17 @@ import {
   ShieldIcon,
   StickyNoteIcon,
   UploadIcon,
-  BotIcon,
+  type LucideIcon,
 } from "lucide-react"
-import type { NavItem } from "@workspace/ui/components/shell"
 import { routes } from "@/config/routes"
+
+export type NavItem = {
+  name: string
+  href: string
+  icon: LucideIcon
+  badge?: string
+  isCurrent?: (params: { pathname: string }) => boolean
+}
 
 export const appNavigation: NavItem[] = [
   {
@@ -22,12 +29,6 @@ export const appNavigation: NavItem[] = [
     href: routes.notes,
     icon: StickyNoteIcon,
     isCurrent: ({ pathname }) => pathname?.startsWith(routes.notes) ?? false,
-  },
-  {
-    name: "AI Assistant",
-    href: routes.ai,
-    icon: BotIcon,
-    isCurrent: ({ pathname }) => pathname?.startsWith(routes.ai) ?? false,
   },
   {
     name: "Uploads",

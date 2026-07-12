@@ -1,31 +1,13 @@
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useChangePassword, useAuthSession } from "@workspace/auth/react"
-import {
-  ChangePasswordSchema,
-  type ChangePasswordInput,
-} from "@workspace/contracts"
-import type { ChangePasswordFormProps } from "@workspace/ui/auth"
-import { useForm } from "react-hook-form"
-import { toastManager } from "@workspace/ui/components/toast"
+import { useChangePassword } from "@workspace/auth/react"
+import type { ChangePasswordFormProps } from "@workspace/ui-shadcn/auth"
+import { toastManager } from "@workspace/ui-shadcn/components/toast"
 
 export function useChangePasswordForm(): ChangePasswordFormProps {
-  const { data: session } = useAuthSession()
   const { mutate: changePassword, isPending } = useChangePassword()
 
-  const form = useForm<ChangePasswordInput>({
-    resolver: zodResolver(ChangePasswordSchema),
-    defaultValues: {
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-    },
-  })
-
   return {
-    control: form.control,
-    hasSession: !!session,
     isPending,
-    onSubmit: form.handleSubmit((values) => {
+    onSubmit: (values) => {
       changePassword(
         {
           currentPassword: values.currentPassword,
@@ -34,13 +16,13 @@ export function useChangePasswordForm(): ChangePasswordFormProps {
         },
         {
           onError: () => {
-            form.setError("currentPassword", {
-              message: "Check your current password and try again.",
+            toastManager.add({
+              title: "Update failed",
+              description: "Check your current password and try again.",
+              type: "error",
             })
-            form.setValue("currentPassword", "")
           },
           onSuccess: () => {
-            form.reset()
             toastManager.add({
               title: "Password updated",
               description: "Your password has been updated.",
@@ -49,6 +31,6 @@ export function useChangePasswordForm(): ChangePasswordFormProps {
           },
         }
       )
-    }),
+    },
   }
 }

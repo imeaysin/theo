@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
-import { Button } from "@workspace/ui/components/button"
+import { Button } from "@workspace/ui-shadcn/components/button"
 import { useAuthSession } from "@workspace/auth/react"
-import { defaultAuthenticatedRoute, routes } from "@/config/routes"
+import { routes } from "@/config/routes"
 
 export function NavbarAuth() {
   const { data: session, isPending } = useAuthSession()
@@ -12,19 +12,15 @@ export function NavbarAuth() {
 
   if (session) {
     return (
-      <Button
-        render={<Link to={defaultAuthenticatedRoute} />}
-        size="sm"
-        variant="outline"
-      >
+      <Button asChild size="sm" variant="outline">
         Dashboard
       </Button>
     )
   }
 
   return (
-    <Button render={<Link to={routes.signIn} />} size="sm">
-      Sign in
+    <Button asChild size="sm">
+      <Link to={routes.signIn}>Sign in</Link>
     </Button>
   )
 }

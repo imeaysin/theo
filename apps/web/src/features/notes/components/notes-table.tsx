@@ -1,19 +1,17 @@
+import { useMemo } from "react"
 import type { NoteResponse } from "@workspace/contracts"
 import { dates } from "@/lib/dates"
-import { Button } from "@workspace/ui/components/button"
-import { TooltipHint } from "@workspace/ui/components/tooltip-hint"
-import { Card } from "@workspace/ui/components/card"
+import { Button } from "@workspace/ui-shadcn/components/button"
+import { Checkbox } from "@workspace/ui-shadcn/components/checkbox"
+import { DataTable } from "@workspace/ui-shadcn/components/data-table"
+import { type ColumnDef } from "@tanstack/react-table"
 import {
-  DataList,
-  type DataListColumn,
-} from "@workspace/ui/components/data-list"
-import {
-  Menu,
-  MenuItem,
-  MenuPopup,
-  MenuSeparator,
-  MenuTrigger,
-} from "@workspace/ui/components/menu"
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@workspace/ui-shadcn/components/dropdown-menu"
 import { MoreHorizontalIcon, PencilIcon, Trash2Icon } from "lucide-react"
 
 type NotesTableProps = {
@@ -25,32 +23,6 @@ type NotesTableProps = {
   onSelect: (noteId: string, checked: boolean) => void
   onSelectAll: (checked: boolean, noteIds: string[]) => void
 }
-
-const columns: DataListColumn<NoteResponse>[] = [
-  {
-    key: "title",
-    header: "Title",
-    className: "font-medium",
-    render: (note) => <span className="block truncate">{note.title}</span>,
-  },
-  {
-    key: "body",
-    header: "Preview",
-    className: "whitespace-normal",
-    render: (note) =>
-      note.body ? (
-        <span className="line-clamp-2 text-muted-foreground">{note.body}</span>
-      ) : (
-        <span className="text-muted-foreground">—</span>
-      ),
-  },
-  {
-    key: "updatedAt",
-    header: "Updated",
-    className: "text-muted-foreground tabular-nums",
-    render: (note) => dates.relativeTime(note.updatedAt),
-  },
-]
 
 function NoteActions({
   note,
@@ -64,74 +36,30 @@ function NoteActions({
   onDelete: (note: NoteResponse) => void
 }) {
   return (
-    <Menu>
-      <TooltipHint content="Actions">
-        <MenuTrigger
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
           aria-label={`Actions for ${note.title}`}
           disabled={disabled}
-          render={<Button size="icon-sm" type="button" variant="ghost" />}
+          size="icon-sm"
+          type="button"
+          variant="ghost"
         >
           <MoreHorizontalIcon className="size-4" />
-        </MenuTrigger>
-      </TooltipHint>
-      <MenuPopup align="end">
-        <MenuItem onClick={() => onEdit(note)}>
-          <PencilIcon className="size-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => onEdit(note)}>
+          <PencilIcon />
           Edit
-        </MenuItem>
-        <MenuSeparator />
-        <MenuItem onClick={() => onDelete(note)}>
-          <Trash2Icon className="size-4 text-destructive" />
-          <span className="text-destructive">Delete</span>
-        </MenuItem>
-      </MenuPopup>
-    </Menu>
-  )
-}
-
-function NoteCard({
-  note,
-  selected,
-  disabled,
-  onEdit,
-  onDelete,
-}: {
-  note: NoteResponse
-  selected: boolean
-  disabled?: boolean
-  onEdit: (note: NoteResponse) => void
-  onDelete: (note: NoteResponse) => void
-}) {
-  return (
-    <Card
-      className={["gap-0 p-0 transition-colors", selected && "ring-2 ring-ring"]
-        .filter(Boolean)
-        .join(" ")}
-    >
-      <button
-        className="flex min-w-0 flex-1 flex-col gap-1 p-4 ps-10 text-left"
-        onClick={() => onEdit(note)}
-        type="button"
-      >
-        <span className="truncate text-sm font-medium">{note.title}</span>
-        {note.body ? (
-          <span className="line-clamp-2 text-xs text-muted-foreground">
-            {note.body}
-          </span>
-        ) : null}
-      </button>
-      <div className="flex items-center justify-between border-t px-4 py-2">
-        <span className="text-xs text-muted-foreground tabular-nums">
-          {dates.relativeTime(note.updatedAt)}
-        </span>
-        <NoteActions
-          disabled={disabled}
-          note={note}
-          onDelete={onDelete}
-          onEdit={onEdit}
-        />
-      </div>
-    </Card>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem variant="destructive" onClick={() => onDelete(note)}>
+          <Trash2Icon />
+          Delete
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
 
@@ -144,33 +72,90 @@ export function NotesTable({
   onSelect,
   onSelectAll,
 }: NotesTableProps) {
-  return (
-    <DataList
-      columns={columns}
-      items={notes}
-      keyExtractor={(note) => note.id}
-      onItemClick={onEdit}
-      onSelect={onSelect}
-      onSelectAll={onSelectAll}
-      renderActions={(note) => (
-        <NoteActions
-          disabled={disabled}
-          note={note}
-          onDelete={onDelete}
-          onEdit={onEdit}
-        />
-      )}
-      renderCard={(note, { selected }) => (
-        <NoteCard
-          disabled={disabled}
-          note={note}
-          onDelete={onDelete}
-          onEdit={onEdit}
-          selected={selected}
-        />
-      )}
-      selectable
-      selectedIds={selectedIds}
-    />
+  const columns = useMemo<ColumnDef<NoteResponse>[]>(
+    () => [
+      {
+        id: "select",
+        header: () => {
+          let checkedState: boolean | "indeterminate" = false
+          if (notes.length > 0 && selectedIds.size === notes.length) {
+            checkedState = true
+          } else if (selectedIds.size > 0) {
+            checkedState = "indeterminate"
+          }
+
+          return (
+            <Checkbox
+              checked={checkedState}
+              onCheckedChange={(value) =>
+                onSelectAll(
+                  value === true,
+                  notes.map((n) => n.id)
+                )
+              }
+              aria-label="Select all"
+              disabled={notes.length === 0}
+            />
+          )
+        },
+        cell: ({ row }) => (
+          <Checkbox
+            checked={selectedIds.has(row.original.id)}
+            onCheckedChange={(value) =>
+              onSelect(row.original.id, value === true)
+            }
+            aria-label="Select row"
+          />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+      },
+      {
+        accessorKey: "title",
+        header: "Title",
+        cell: ({ row }) => (
+          <span className="block truncate font-medium">
+            {row.original.title}
+          </span>
+        ),
+      },
+      {
+        accessorKey: "body",
+        header: "Preview",
+        cell: ({ row }) =>
+          row.original.body ? (
+            <span className="line-clamp-2 whitespace-normal text-muted-foreground">
+              {row.original.body}
+            </span>
+          ) : (
+            <span className="text-muted-foreground">—</span>
+          ),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated",
+        cell: ({ row }) => (
+          <span className="text-muted-foreground tabular-nums">
+            {dates.relativeTime(row.original.updatedAt)}
+          </span>
+        ),
+      },
+      {
+        id: "actions",
+        cell: ({ row }) => (
+          <div className="flex justify-end">
+            <NoteActions
+              disabled={disabled}
+              note={row.original}
+              onDelete={onDelete}
+              onEdit={onEdit}
+            />
+          </div>
+        ),
+      },
+    ],
+    [notes, selectedIds, disabled, onSelect, onSelectAll, onEdit, onDelete]
   )
+
+  return <DataTable columns={columns} data={notes} />
 }

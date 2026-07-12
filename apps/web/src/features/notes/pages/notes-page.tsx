@@ -4,23 +4,25 @@ import {
   Alert,
   AlertDescription,
   AlertTitle,
-} from "@workspace/ui/components/alert"
-import { Button } from "@workspace/ui/components/button"
-import { ConfirmDialog } from "@workspace/ui/components/confirm-dialog"
+} from "@workspace/ui-shadcn/components/alert"
+import { Button } from "@workspace/ui-shadcn/components/button"
+import { ConfirmDialog } from "@workspace/ui-shadcn/components/confirm-dialog"
 import {
   Empty,
   EmptyContent,
   EmptyDescription,
   EmptyMedia,
   EmptyTitle,
-} from "@workspace/ui/components/empty"
-import { Filter } from "@workspace/ui/components/filter"
+} from "@workspace/ui-shadcn/components/empty"
+import { Input } from "@workspace/ui-shadcn/components/input"
 import {
-  ShellMain,
-  shellPageStackClassName,
-} from "@workspace/ui/components/shell"
-import { Skeleton } from "@workspace/ui/components/skeleton"
-import { useDebouncedValue } from "@workspace/ui/hooks/use-debounced-value"
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@workspace/ui-shadcn/components/select"
+import { Skeleton } from "@workspace/ui-shadcn/components/skeleton"
 import {
   CircleAlertIcon,
   FileTextIcon,
@@ -75,7 +77,6 @@ export function NotesPage() {
   const bulkDeleteNotes = useBulkDeleteNotesMutation()
 
   const [search, setSearch] = useState("")
-  const debouncedSearch = useDebouncedValue(search)
   const [sort, setSort] = useState<SortOption>("newest")
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
@@ -90,7 +91,7 @@ export function NotesPage() {
 
   const filteredNotes = useMemo(() => {
     const items = data?.items ?? []
-    const query = debouncedSearch.trim().toLowerCase()
+    const query = search.trim().toLowerCase()
     const filtered = query
       ? items.filter(
           (note) =>
@@ -99,7 +100,7 @@ export function NotesPage() {
         )
       : items
     return sortNotes(filtered, sort)
-  }, [data?.items, debouncedSearch, sort])
+  }, [data?.items, search, sort])
 
   const isMutating = deleteNote.isPending || bulkDeleteNotes.isPending
 
@@ -157,153 +158,168 @@ export function NotesPage() {
       return `This permanently deletes ${deleteTarget.count} selected notes. This action cannot be undone.`
     }
     if (deleteTarget?.type === "single") {
-      return `“${deleteTarget.title}” will be permanently deleted. This action cannot be undone.`
+      return `"${deleteTarget.title}" will be permanently deleted. This action cannot be undone.`
     }
     return ""
   })()
 
   return (
     <>
-      <ShellMain
-        header={{
-          heading: "Notes",
-          subtitle:
-            "Create, search, edit, and manage notes synced with the NestJS API.",
-          cta: (
-            <Button onClick={openCreateSheet}>
-              <PlusIcon className="size-4" />
-              New note
-            </Button>
-          ),
-        }}
-      >
-        <div className={shellPageStackClassName}>
-          <Filter>
-            <Filter.Search
+      <div className="space-y-6">
+        {/* Page header */}
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="space-y-1">
+            <h2 className="text-2xl font-bold tracking-tight">Notes</h2>
+            <p className="text-muted-foreground">
+              Create and manage your notes.
+            </p>
+          </div>
+          <Button onClick={openCreateSheet}>
+            <PlusIcon className="size-4" />
+            New note
+          </Button>
+        </div>
+
+        {/* Filters */}
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="relative flex-1">
+            <SearchIcon className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
               aria-label="Search notes"
-              onValueChange={setSearch}
+              className="pl-9"
+              onChange={(e) => setSearch(e.target.value)}
               placeholder="Search notes…"
               value={search}
             />
-            <Filter.Select
-              aria-label="Sort notes"
-              onValueChange={setSort}
-              options={sortOptions}
-              value={sort}
-            />
-          </Filter>
-
-          {selectedIds.size > 0 ? (
-            <div className="flex flex-wrap items-center gap-3 rounded-lg border bg-muted/40 px-4 py-3">
-              <p className="text-sm font-medium">{selectedIds.size} selected</p>
-              <Button
-                disabled={isMutating}
-                onClick={() =>
-                  setDeleteTarget({ type: "bulk", count: selectedIds.size })
-                }
-                size="sm"
-                variant="destructive"
-              >
-                <Trash2Icon className="size-4" />
-                Delete selected
-              </Button>
-              <Button
-                disabled={isMutating}
-                onClick={() => setSelectedIds(new Set())}
-                size="sm"
-                variant="ghost"
-              >
-                Clear selection
-              </Button>
-            </div>
-          ) : null}
-
-          {isLoading ? (
-            <div className="overflow-hidden rounded-lg border">
-              {Array.from({ length: 3 }).map((_, index) => (
-                <div
-                  className="flex items-center gap-3 border-b px-4 py-4 last:border-b-0"
-                  key={index}
-                >
-                  <Skeleton className="size-4 rounded-sm" />
-                  <div className="flex-1 space-y-2">
-                    <Skeleton className="h-4 w-48" />
-                    <Skeleton className="h-3 w-full max-w-md" />
-                    <Skeleton className="h-3 w-24" />
-                  </div>
-                </div>
+          </div>
+          <Select onValueChange={(v) => setSort(v as SortOption)} value={sort}>
+            <SelectTrigger aria-label="Sort notes" className="w-40">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {sortOptions.map((o) => (
+                <SelectItem key={o.value} value={o.value}>
+                  {o.label}
+                </SelectItem>
               ))}
-            </div>
-          ) : null}
-
-          {isError ? (
-            <Alert variant="error">
-              <CircleAlertIcon />
-              <AlertTitle>Could not load notes</AlertTitle>
-              <AlertDescription>
-                {error instanceof Error
-                  ? error.message
-                  : "Something went wrong."}
-              </AlertDescription>
-            </Alert>
-          ) : null}
-
-          {showEmptyInitial ? (
-            <Empty className="rounded-lg border border-dashed">
-              <EmptyContent>
-                <EmptyMedia variant="icon">
-                  <FileTextIcon />
-                </EmptyMedia>
-                <EmptyTitle>No notes yet</EmptyTitle>
-                <EmptyDescription>
-                  Create your first note or seed sample data with{" "}
-                  <code className="rounded bg-muted px-1 py-0.5 text-xs">
-                    pnpm --filter api seed
-                  </code>
-                  .
-                </EmptyDescription>
-                <Button onClick={openCreateSheet}>
-                  <PlusIcon className="size-4" />
-                  Create note
-                </Button>
-              </EmptyContent>
-            </Empty>
-          ) : null}
-
-          {showEmptySearch ? (
-            <Empty className="rounded-lg border border-dashed">
-              <EmptyContent>
-                <EmptyMedia variant="icon">
-                  <SearchIcon />
-                </EmptyMedia>
-                <EmptyTitle>No matching notes</EmptyTitle>
-                <EmptyDescription>
-                  Nothing matches &ldquo;{debouncedSearch.trim()}&rdquo;. Try a
-                  different search term.
-                </EmptyDescription>
-              </EmptyContent>
-            </Empty>
-          ) : null}
-
-          {!isLoading && !isError && filteredNotes.length > 0 ? (
-            <NotesTable
-              disabled={isMutating}
-              notes={filteredNotes}
-              onDelete={(note) =>
-                setDeleteTarget({
-                  type: "single",
-                  id: note.id,
-                  title: note.title,
-                })
-              }
-              onEdit={openEditSheet}
-              onSelect={toggleSelection}
-              onSelectAll={toggleSelectAll}
-              selectedIds={selectedIds}
-            />
-          ) : null}
+            </SelectContent>
+          </Select>
         </div>
-      </ShellMain>
+
+        {/* Bulk selection toolbar */}
+        {selectedIds.size > 0 ? (
+          <div className="flex flex-wrap items-center gap-3 rounded-lg border bg-muted/40 px-4 py-3">
+            <p className="text-sm font-medium">{selectedIds.size} selected</p>
+            <Button
+              disabled={isMutating}
+              onClick={() =>
+                setDeleteTarget({ type: "bulk", count: selectedIds.size })
+              }
+              size="sm"
+              variant="destructive"
+            >
+              <Trash2Icon className="size-4" />
+              Delete selected
+            </Button>
+            <Button
+              disabled={isMutating}
+              onClick={() => setSelectedIds(new Set())}
+              size="sm"
+              variant="ghost"
+            >
+              Clear selection
+            </Button>
+          </div>
+        ) : null}
+
+        {/* Loading skeleton */}
+        {isLoading ? (
+          <div className="overflow-hidden rounded-lg border">
+            {Array.from({ length: 3 }).map((_, index) => (
+              <div
+                className="flex items-center gap-3 border-b px-4 py-4 last:border-b-0"
+                key={index}
+              >
+                <Skeleton className="size-4 rounded-sm" />
+                <div className="flex-1 space-y-2">
+                  <Skeleton className="h-4 w-48" />
+                  <Skeleton className="h-3 w-full max-w-md" />
+                  <Skeleton className="h-3 w-24" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : null}
+
+        {/* Error */}
+        {isError ? (
+          <Alert variant="destructive">
+            <CircleAlertIcon />
+            <AlertTitle>Could not load notes</AlertTitle>
+            <AlertDescription>
+              {error instanceof Error ? error.message : "Something went wrong."}
+            </AlertDescription>
+          </Alert>
+        ) : null}
+
+        {/* Empty — no notes at all */}
+        {showEmptyInitial ? (
+          <Empty className="rounded-lg border border-dashed">
+            <EmptyContent>
+              <EmptyMedia variant="icon">
+                <FileTextIcon />
+              </EmptyMedia>
+              <EmptyTitle>No notes yet</EmptyTitle>
+              <EmptyDescription>
+                Create your first note or seed sample data with{" "}
+                <code className="rounded bg-muted px-1 py-0.5 text-xs">
+                  pnpm --filter api seed
+                </code>
+                .
+              </EmptyDescription>
+              <Button onClick={openCreateSheet}>
+                <PlusIcon className="size-4" />
+                Create note
+              </Button>
+            </EmptyContent>
+          </Empty>
+        ) : null}
+
+        {/* Empty — no search results */}
+        {showEmptySearch ? (
+          <Empty className="rounded-lg border border-dashed">
+            <EmptyContent>
+              <EmptyMedia variant="icon">
+                <SearchIcon />
+              </EmptyMedia>
+              <EmptyTitle>No matching notes</EmptyTitle>
+              <EmptyDescription>
+                Nothing matches &ldquo;{search.trim()}&rdquo;. Try a different
+                search term.
+              </EmptyDescription>
+            </EmptyContent>
+          </Empty>
+        ) : null}
+
+        {/* Notes table */}
+        {!isLoading && !isError && filteredNotes.length > 0 ? (
+          <NotesTable
+            disabled={isMutating}
+            notes={filteredNotes}
+            onDelete={(note) =>
+              setDeleteTarget({
+                type: "single",
+                id: note.id,
+                title: note.title,
+              })
+            }
+            onEdit={openEditSheet}
+            onSelect={toggleSelection}
+            onSelectAll={toggleSelectAll}
+            selectedIds={selectedIds}
+          />
+        ) : null}
+      </div>
 
       <NoteFormSheet
         note={editingNote}

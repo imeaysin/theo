@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react"
 import { Link, useSearchParams } from "react-router-dom"
-import { AuthPageBody, AuthPageHeader } from "@workspace/ui/auth"
-import { Button } from "@workspace/ui/components/button"
-import { PageLoading } from "@workspace/ui/components/page-loading"
-import { toastManager } from "@workspace/ui/components/toast"
+import { AuthPageBody, AuthPageHeader } from "@workspace/ui-shadcn/auth"
+import { Button } from "@workspace/ui-shadcn/components/button"
+import { PageLoading } from "@workspace/ui-shadcn/components/page-loading"
+import { toastManager } from "@workspace/ui-shadcn/components/toast"
 import { useAcceptInvitation, useAuthSession } from "@workspace/auth/react"
 import { defaultAuthenticatedRoute, routes } from "@/config/routes"
 import { withAuthRedirectQuery } from "@/routing/safe-redirect"
@@ -49,13 +49,8 @@ export function AcceptInvitationPage() {
           description="This invitation link is missing an id. Open the link from your email again."
           title="Invalid invitation link"
         />
-        <Button
-          className="w-full"
-          render={<Link to={routes.signIn} />}
-          size="lg"
-          type="button"
-        >
-          Go to sign in
+        <Button asChild className="w-full" size="lg" type="button">
+          <Link to={routes.signIn}>Go to sign in</Link>
         </Button>
       </AuthPageBody>
     )
@@ -89,20 +84,15 @@ export function AcceptInvitationPage() {
           description="Sign in with the email address that received this invitation."
           title="Sign in to accept"
         />
-        <Button
-          className="w-full"
-          render={
-            <Link
-              to={withAuthRedirectQuery(routes.signIn, {
-                redirect: returnPath,
-                fallback: defaultAuthenticatedRoute,
-              })}
-            />
-          }
-          size="lg"
-          type="button"
-        >
-          Sign in
+        <Button asChild className="w-full" size="lg" type="button">
+          <Link
+            to={withAuthRedirectQuery(routes.signIn, {
+              redirect: returnPath,
+              fallback: defaultAuthenticatedRoute,
+            })}
+          >
+            Sign in
+          </Link>
         </Button>
       </AuthPageBody>
     )
@@ -120,13 +110,10 @@ export function AcceptInvitationPage() {
           accepted ? "Welcome to the workspace" : "Invitation not accepted"
         }
       />
-      <Button
-        className="w-full"
-        render={<Link to={routes.organizationPeople} />}
-        size="lg"
-        type="button"
-      >
-        {accepted ? "Open workspace" : "View workspace"}
+      <Button asChild className="w-full" size="lg" type="button">
+        <Link to={routes.organizationPeople}>
+          {accepted ? "Open workspace" : "View workspace"}
+        </Link>
       </Button>
     </AuthPageBody>
   )

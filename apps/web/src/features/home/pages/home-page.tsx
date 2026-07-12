@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { Button } from "@workspace/ui/components/button"
+import { Button } from "@workspace/ui-shadcn/components/button"
 import { routes } from "@/config/routes"
 import { site } from "@/config/site"
 
@@ -11,8 +11,8 @@ export function HomePage() {
         Shared UI, auth, and routing for the web application.
       </p>
       <div className="flex gap-3">
-        <Button render={<Link to={routes.signIn} />} variant="outline">
-          Sign in
+        <Button asChild variant="outline">
+          <Link to={routes.signIn}>Sign in</Link>
         </Button>
       </div>
     </main>

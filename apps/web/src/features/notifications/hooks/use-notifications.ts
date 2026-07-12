@@ -6,7 +6,7 @@ import {
   type NotificationResponse,
   type UnreadCountResponse,
 } from "@workspace/contracts"
-import { toastManager } from "@workspace/ui/components/toast"
+import { toastManager } from "@workspace/ui-shadcn/components/toast"
 import { apiRoutes } from "@/config/api-routes"
 import { apiFetch } from "@/lib/api"
 

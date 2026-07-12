@@ -2,20 +2,16 @@ import {
   Alert,
   AlertDescription,
   AlertTitle,
-} from "@workspace/ui/components/alert"
-import { Button } from "@workspace/ui/components/button"
+} from "@workspace/ui-shadcn/components/alert"
+import { Button } from "@workspace/ui-shadcn/components/button"
 import {
   Empty,
   EmptyContent,
   EmptyDescription,
   EmptyMedia,
   EmptyTitle,
-} from "@workspace/ui/components/empty"
-import {
-  ShellMain,
-  shellPageStackClassName,
-} from "@workspace/ui/components/shell"
-import { Skeleton } from "@workspace/ui/components/skeleton"
+} from "@workspace/ui-shadcn/components/empty"
+import { Skeleton } from "@workspace/ui-shadcn/components/skeleton"
 import { BellIcon, CheckCheckIcon, CircleAlertIcon } from "lucide-react"
 import { NotificationList } from "@/features/notifications/components/notification-list"
 import {
@@ -37,27 +33,31 @@ export function NotificationsPage() {
     markRead.isPending || markAllRead.isPending || deleteNotification.isPending
 
   return (
-    <ShellMain
-      header={{
-        heading: "Notifications",
-        subtitle:
-          totalUnread > 0
-            ? `You have ${totalUnread} unread notification${totalUnread === 1 ? "" : "s"}.`
-            : "You're all caught up.",
-        cta:
-          totalUnread > 0 ? (
-            <Button
-              disabled={isMutating}
-              onClick={() => markAllRead.mutate()}
-              variant="outline"
-            >
-              <CheckCheckIcon className="size-4" />
-              Mark all as read
-            </Button>
-          ) : undefined,
-      }}
-    >
-      <div className={shellPageStackClassName}>
+    <div className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="space-y-1">
+          <h2 className="text-2xl font-bold tracking-tight">Notifications</h2>
+          {totalUnread > 0 ? (
+            <p className="text-muted-foreground">
+              {totalUnread} unread notification{totalUnread !== 1 ? "s" : ""}
+            </p>
+          ) : (
+            <p className="text-muted-foreground">You&apos;re all caught up.</p>
+          )}
+        </div>
+        {totalUnread > 0 ? (
+          <Button
+            disabled={isMutating}
+            onClick={() => markAllRead.mutate()}
+            variant="outline"
+          >
+            <CheckCheckIcon className="size-4" />
+            Mark all as read
+          </Button>
+        ) : null}
+      </div>
+
+      <div className="space-y-4">
         {isLoading ? (
           <div className="overflow-hidden rounded-lg border">
             {Array.from({ length: 4 }).map((_, index) => (
@@ -77,7 +77,7 @@ export function NotificationsPage() {
         ) : null}
 
         {isError ? (
-          <Alert variant="error">
+          <Alert variant="destructive">
             <CircleAlertIcon />
             <AlertTitle>Could not load notifications</AlertTitle>
             <AlertDescription>
@@ -109,6 +109,6 @@ export function NotificationsPage() {
           />
         ) : null}
       </div>
-    </ShellMain>
+    </div>
   )
 }

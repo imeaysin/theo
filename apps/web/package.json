@@ -13,16 +13,16 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@ai-sdk/react": "catalog:",
     "@fontsource-variable/geist-mono": "catalog:",
     "@fontsource/cal-sans": "catalog:",
     "@hookform/resolvers": "^5.4.0",
     "@tanstack/react-query": "^5.101.1",
+    "@tanstack/react-table": "^8.21.3",
     "@workspace/auth": "workspace:*",
     "@workspace/config": "workspace:*",
     "@workspace/contracts": "workspace:*",
     "@workspace/dates": "workspace:*",
-    "@ai-sdk/react": "catalog:",
-    "@workspace/ui": "workspace:*",
     "@workspace/ui-shadcn": "workspace:*",
     "lucide-react": "catalog:",
     "react": "catalog:",
