@@ -8,7 +8,7 @@ const loggerEnvSchema = z.object({
   LOG_PRETTY: z.enum(["true", "false"]).optional(),
   CI: z.string().optional(),
   JEST_WORKER_ID: z.string().optional(),
-  NODE_ENV: z.string().optional(),
+  NODE_ENV: z.enum(["development", "production", "test"]).default("production"),
 })
 
 const env = loggerEnvSchema.parse({
@@ -16,10 +16,9 @@ const env = loggerEnvSchema.parse({
   LOG_PRETTY: process.env.LOG_PRETTY?.trim(),
   CI: process.env.CI?.trim(),
   JEST_WORKER_ID: process.env.JEST_WORKER_ID?.trim(),
-  NODE_ENV: process.env.NODE_ENV?.trim(),
+  NODE_ENV: process.env.NODE_ENV?.trim() || undefined,
 })
 
-/** Nest internals that spam the console on every boot — kept at debug. */
 const NEST_VERBOSE_CONTEXTS = new Set([
   "InstanceLoader",
   "RoutesResolver",
@@ -43,7 +42,6 @@ function createRootLogger(): Logger {
   const level = resolveLogLevel()
 
   if (isPrettyEnabled()) {
-    // https://getpino.io/#/docs/pretty — transport loads pino-pretty in a worker thread (development only)
     return pino({
       level,
       transport: {
@@ -61,7 +59,6 @@ function createRootLogger(): Logger {
 
   const options: LoggerOptions = {
     level,
-    // ISO timestamps; structured JSON for production / log aggregators
     timestamp: pino.stdTimeFunctions.isoTime,
   }
 
@@ -70,7 +67,6 @@ function createRootLogger(): Logger {
 
 const root = createRootLogger()
 
-/** Named child logger for a module or context. */
 export function createLogger(name: string): Logger {
   return root.child({ name })
 }
