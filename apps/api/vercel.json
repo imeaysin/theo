@@ -12,5 +12,13 @@
       "dest": "dist/main.js",
       "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
     }
-  ]
+  ],
+  "env": {
+    "NODE_OPTIONS": "--experimental-require-module"
+  },
+  "build": {
+    "env": {
+      "NODE_OPTIONS": "--experimental-require-module"
+    }
+  }
 }
