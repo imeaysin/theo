@@ -1,10 +1,4 @@
-import * as tsConfigPaths from "tsconfig-paths"
-tsConfigPaths.register({
-  baseUrl: __dirname,
-  paths: {
-    "@/*": ["./*"],
-  },
-})
+import "module-alias/register"
 
 import { NestFactory } from "@nestjs/core"
 import { env } from "@workspace/config"

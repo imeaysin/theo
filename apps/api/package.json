@@ -47,12 +47,12 @@
     "compression": "^1.8.1",
     "express": "^5.2.1",
     "helmet": "^8.2.0",
+    "module-alias": "^2.3.4",
     "mongodb": "^7.2.0",
     "nestjs-zod": "^5.4.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "socket.io": "^4.8.3",
-    "tsconfig-paths": "^4.2.0",
     "zod": "catalog:"
   },
   "devDependencies": {
@@ -62,6 +62,7 @@
     "@types/compression": "^1.8.1",
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
+    "@types/module-alias": "^2.0.4",
     "@types/node": "catalog:",
     "@types/supertest": "^7.0.0",
     "@workspace/eslint-config": "workspace:*",
@@ -77,5 +78,8 @@
     "tsc-alias": "^1.9.0",
     "typescript": "catalog:",
     "webpack-node-externals": "^3.0.0"
+  },
+  "_moduleAliases": {
+    "@": "src"
   }
 }
