@@ -1,5 +1,3 @@
-import "module-alias/register"
-
 import { NestFactory } from "@nestjs/core"
 import { env } from "@workspace/config"
 import { createLogger } from "@workspace/logger"

@@ -6,7 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "nest build && tsc-alias",
+    "build": "nest build",
+    "vercel-build": "nest build",
     "dev": "nest start --watch",
     "start": "nest start",
     "start:debug": "nest start --debug --watch",
@@ -47,7 +48,6 @@
     "compression": "^1.8.1",
     "express": "^5.2.1",
     "helmet": "^8.2.0",
-    "module-alias": "^2.3.4",
     "mongodb": "^7.2.0",
     "nestjs-zod": "^5.4.0",
     "reflect-metadata": "^0.2.2",
@@ -62,7 +62,6 @@
     "@types/compression": "^1.8.1",
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
-    "@types/module-alias": "^2.0.4",
     "@types/node": "catalog:",
     "@types/supertest": "^7.0.0",
     "@workspace/eslint-config": "workspace:*",
@@ -75,11 +74,7 @@
     "ts-jest": "^29.2.5",
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
-    "tsc-alias": "^1.9.0",
     "typescript": "catalog:",
     "webpack-node-externals": "^3.0.0"
-  },
-  "_moduleAliases": {
-    "@": "src"
   }
 }
