@@ -418,7 +418,7 @@ export function StartPage() {
 
           {/* Video section */}
           <div
-            className="3xl:mb-20 mt-8 mb-8 overflow-visible md:mt-12 lg:mt-0 lg:mb-4 lg:w-full"
+            className="3xl:mb-20 mx-auto mt-8 mb-8 w-full max-w-[1400px] overflow-visible md:mt-12 lg:mt-0 lg:mb-4"
             ref={videoContainerRef}
           >
             <div className="relative overflow-hidden">
