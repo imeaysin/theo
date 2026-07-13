@@ -2,17 +2,5 @@
   "version": 2,
   "env": {
     "NODE_OPTIONS": "--experimental-require-module"
-  },
-  "builds": [
-    {
-      "src": "dist/main.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/dist/main.js"
-    }
-  ]
+  }
 }
