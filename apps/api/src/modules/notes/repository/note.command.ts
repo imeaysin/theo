@@ -77,6 +77,14 @@ export class NoteCommandRepository extends BaseMongoRepository {
     return result.deletedCount > 0
   }
 
+  async deleteManyByUserId(userId: string): Promise<number> {
+    const result = await this.db.collection<NoteEntity>(COLLECTION).deleteMany({
+      userId,
+    })
+
+    return result.deletedCount
+  }
+
   async deleteMany(scope: BulkNoteMutationScope): Promise<number> {
     const objectIds = scope.ids
       .filter((id) => ObjectId.isValid(id))

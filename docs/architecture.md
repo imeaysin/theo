@@ -31,6 +31,7 @@
 - `@workspace/ui` — components, auth UI, app shell
 
 **API pattern:** controller → Service Orchestrator (Pragmatic Light-CQRS) → Command / Query Repository → Domain Exceptions.
+**Events pattern:** Publishers emit explicitly-typed Event Classes (e.g., `UserDeletedEvent`) via `@nestjs/event-emitter`. Subscribers (Listeners) intercept globally tracked enums (`AppEvents`) to ensure cross-module decoupling without direct file imports.
 
 **Tests:** API uses Jest (`test/unit/`, `test/e2e/`). Web and packages use Vitest (`test/`).
 

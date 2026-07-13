@@ -40,12 +40,12 @@ Export from `packages/contracts/src/index.ts`.
 
 ```
 apps/api/src/modules/notes/
-  commands/     create-note, delete-note
-  queries/      list-notes
-  notes.dto.ts       createZodDto wrappers from @workspace/contracts
-  entities/     domain types
-  repositories/ MongoDB access
+  domain/         Pure Business Layer (calculations, models, exceptions)
+  repository/     Data Infrastructure (Light-CQRS: notes.command.ts, notes.query.ts)
+  dto/            Ingress Contracts (createZodDto wrappers)
+  listeners/      Event Bus Subscribers (e.g., user-deleted.listener.ts)
   notes.controller.ts
+  notes.service.ts  (Orchestrator)
   notes.module.ts
 ```
 

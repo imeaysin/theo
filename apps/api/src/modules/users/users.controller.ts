@@ -8,16 +8,16 @@ import {
 import type { JwtClaims } from "@workspace/auth/types"
 import { CurrentUser } from "@/common/decorators"
 import { ApiAuthErrorResponses } from "@/common/decorators/api-error-responses.decorator"
-import { MeApiResponseDto } from "./me.dto"
-import { MeService } from "./me.service"
+import { MeApiResponseDto } from "./dto"
+import { UsersService } from "./users.service"
 
-@ApiTags("account")
+@ApiTags("users")
 @ApiAuthErrorResponses()
-@Controller({ path: "me", version: "1" })
-export class MeController {
-  constructor(private readonly meService: MeService) {}
+@Controller({ path: "users", version: "1" })
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
 
-  @Get()
+  @Get("me")
   @ApiBearerAuth("bearer")
   @ApiOperation({
     summary: "Current user",
@@ -25,6 +25,6 @@ export class MeController {
   })
   @ApiOkResponse({ type: MeApiResponseDto })
   async getMe(@CurrentUser() user: JwtClaims) {
-    return this.meService.getCurrentUser(user)
+    return this.usersService.getCurrentUserContext(user)
   }
 }

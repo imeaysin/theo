@@ -4,6 +4,7 @@ import { NotesService } from "./notes.service"
 import { NotesCronProducer } from "./notes-cron.producer"
 import { NotesQueueConsumer } from "./notes-queue.consumer"
 import { NoteQueryRepository, NoteCommandRepository } from "./repository"
+import { UserDeletedListener } from "./listeners"
 
 @Module({
   controllers: [NotesController],
@@ -13,6 +14,7 @@ import { NoteQueryRepository, NoteCommandRepository } from "./repository"
     NotesService,
     NotesCronProducer,
     NotesQueueConsumer,
+    UserDeletedListener,
   ],
 })
 export class NotesModule {}

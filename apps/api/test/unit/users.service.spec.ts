@@ -1,6 +1,6 @@
 import { findOrganizationMemberRole } from "@workspace/auth/nestjs"
 import type { JwtClaims } from "@workspace/auth/types"
-import { MeService } from "@/modules/me/me.service"
+import { UsersService } from "@/modules/users/users.service"
 
 jest.mock("@workspace/auth/nestjs", () => ({
   findOrganizationMemberRole: jest.fn(),
@@ -8,8 +8,8 @@ jest.mock("@workspace/auth/nestjs", () => ({
 
 const findOrganizationMemberRoleMock = jest.mocked(findOrganizationMemberRole)
 
-describe("MeService", () => {
-  const service = new MeService()
+describe("UsersService", () => {
+  const service = new UsersService()
 
   const claims = {
     id: "user-1",
@@ -28,7 +28,7 @@ describe("MeService", () => {
   it("returns JWT claims with organization role resolved from the database", async () => {
     findOrganizationMemberRoleMock.mockResolvedValue("admin")
 
-    await expect(service.getCurrentUser(claims)).resolves.toEqual({
+    await expect(service.getCurrentUserContext(claims)).resolves.toEqual({
       id: "user-1",
       email: "user@example.com",
       role: "user",
@@ -45,7 +45,7 @@ describe("MeService", () => {
 
   it("omits organization role lookup when no active workspace is set", async () => {
     await expect(
-      service.getCurrentUser({ ...claims, activeOrganizationId: null })
+      service.getCurrentUserContext({ ...claims, activeOrganizationId: null })
     ).resolves.toEqual({
       id: "user-1",
       email: "user@example.com",

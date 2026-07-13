@@ -20,6 +20,7 @@ import { ensureSessionActiveOrganization } from "./default-organization"
 
 export type CreateAuthOptions = {
   secondaryStorage?: Parameters<typeof betterAuth>[0]["secondaryStorage"]
+  onUserDeleted?: (userId: string) => Promise<void> | void
 }
 
 const emailProvider = createEmailProvider(getEmailProviderConfig())
@@ -76,7 +77,7 @@ function socialProviders() {
 }
 
 export function createAuth(options: CreateAuthOptions = {}) {
-  const { secondaryStorage } = options
+  const { secondaryStorage, onUserDeleted } = options
 
   const auth = betterAuth({
     appName: env.APP_NAME,
@@ -116,6 +117,15 @@ export function createAuth(options: CreateAuthOptions = {}) {
         create: {
           before: async (session, context) =>
             ensureSessionActiveOrganization(context, session),
+        },
+      },
+      user: {
+        delete: {
+          after: async (user) => {
+            if (onUserDeleted) {
+              await onUserDeleted(user.id)
+            }
+          },
         },
       },
     },

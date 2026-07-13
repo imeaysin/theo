@@ -44,8 +44,9 @@ Set `SKIP_ENV_VALIDATION=true` when env is incomplete locally.
 
 ### API (`apps/api`)
 
-- **Pattern:** controller → `CommandBus` / `QueryBus` → handler → repository (or storage repository).
-- **Reference module:** `src/modules/notes/` (commands, queries, dto, entities, repositories).
+- **Pattern:** controller → Service Orchestrator (Pragmatic Light-CQRS) → Command / Query Repository.
+- **Events:** Decoupled architecture using strictly-typed Event Classes (e.g., `UserDeletedEvent`) and `@nestjs/event-emitter`.
+- **Reference module:** `src/modules/notes/` (domain, dto, repository, listeners, service, controller).
 - **Validation & OpenAPI:** Zod schemas in `@workspace/contracts` (with `.meta()` / `.describe()`). API uses `nestjs-zod` (`createZodDto`, global `ZodValidationPipe`, `cleanupOpenApiDoc` for `/docs`). Request bodies use `.strict()` (reject unknown keys).
 - **Responses:** success envelope `{ success, statusCode, message, data, timestamp }` via `TransformResponseInterceptor`; errors `{ success, statusCode, code, message, errors, path, timestamp }` via `AllExceptionsFilter`. Document success with `apiSuccessResponse()` in contracts; use `@ApiAuthErrorResponses()` / `@ApiPublicErrorResponses()` on controllers.
 - **Domain errors:** `apiNotFound(..., DomainErrorCode.NOTE_NOT_FOUND)` — codes live in `@workspace/contracts` (`HttpErrorCode`, `DomainErrorCode`).

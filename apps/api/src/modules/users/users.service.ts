@@ -4,8 +4,8 @@ import type { JwtClaims } from "@workspace/auth/types"
 import { MeResponseSchema, type MeResponse } from "@workspace/contracts"
 
 @Injectable()
-export class MeService {
-  async getCurrentUser(claims: JwtClaims): Promise<MeResponse> {
+export class UsersService {
+  async getCurrentUserContext(claims: JwtClaims): Promise<MeResponse> {
     const organizationRole = claims.activeOrganizationId
       ? await findOrganizationMemberRole(claims.activeOrganizationId, claims.id)
       : null
