@@ -26,9 +26,7 @@ import {
 } from "@workspace/ui-shadcn/components/dialog"
 import { OrganizationRolePermissions } from "./organization-role-permissions"
 
-/**
- * @description Schema & types
- */
+const EMPTY_PERMISSIONS: OrganizationPermissionMap = {}
 
 const createOrganizationRoleSchema = z.object({
   role: z
@@ -36,8 +34,8 @@ const createOrganizationRoleSchema = z.object({
     .min(1, "Role name is required.")
     .max(50, "Role name must be 50 characters or fewer.")
     .regex(
-      /^[a-z0-9-]+$/,
-      "Role name may only contain lowercase letters, numbers, and hyphens."
+      /^[a-zA-Z0-9-]+$/,
+      "Role name may only contain letters, numbers, and hyphens."
     ),
   permission: z.custom<OrganizationPermissionMap>(
     (val) => typeof val === "object" && val !== null,
@@ -50,10 +48,6 @@ type CreateOrganizationRoleValues = {
   permission: OrganizationPermissionMap
 }
 
-/**
- * @description Public types
- */
-
 export type CreateOrganizationRoleDialogProps = {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -61,14 +55,10 @@ export type CreateOrganizationRoleDialogProps = {
   onSubmit: (values: CreateOrganizationRoleValues) => Promise<void> | void
 }
 
-/**
- * @description CreateOrganizationRoleDialog
- */
-
 export function CreateOrganizationRoleDialog({
   open,
   onOpenChange,
-  defaultPermissions = {} as OrganizationPermissionMap,
+  defaultPermissions = EMPTY_PERMISSIONS,
   onSubmit,
 }: CreateOrganizationRoleDialogProps) {
   const form = useForm<CreateOrganizationRoleValues>({
@@ -90,8 +80,8 @@ export function CreateOrganizationRoleDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent>
-        <DialogHeader className="border-b px-6 pb-4">
+      <DialogContent className="sm:max-w-lg">
+        <DialogHeader>
           <DialogTitle>Create role</DialogTitle>
           <DialogDescription>
             Add a custom role with create, read, update, and delete access.
@@ -99,12 +89,8 @@ export function CreateOrganizationRoleDialog({
         </DialogHeader>
 
         <Form {...form}>
-          <form
-            className="flex min-h-0 flex-1 flex-col"
-            noValidate
-            onSubmit={form.handleSubmit(handleSubmit)}
-          >
-            <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-6">
+          <form noValidate onSubmit={form.handleSubmit(handleSubmit)}>
+            <div className="flex flex-col gap-4 py-4">
               <FormField
                 control={form.control}
                 name="role"
@@ -142,7 +128,7 @@ export function CreateOrganizationRoleDialog({
               />
             </div>
 
-            <DialogFooter className="border-t px-6 py-4">
+            <DialogFooter>
               <DialogClose asChild>
                 <Button disabled={isSubmitting} type="button" variant="outline">
                   Cancel
