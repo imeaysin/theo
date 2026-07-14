@@ -55,8 +55,8 @@ export function DeleteOrganizationDialog({
 
   return (
     <AlertDialog onOpenChange={onOpenChange} open={open}>
-      <AlertDialogContent>
-        <form className="contents" onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
+        <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete workspace</AlertDialogTitle>
             <AlertDialogDescription>
@@ -81,8 +81,8 @@ export function DeleteOrganizationDialog({
               Delete workspace
             </Button>
           </AlertDialogFooter>
-        </form>
-      </AlertDialogContent>
+        </AlertDialogContent>
+      </form>
     </AlertDialog>
   )
 }

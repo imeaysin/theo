@@ -80,16 +80,16 @@ export function CreateOrganizationRoleDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-lg">
-        <DialogHeader>
-          <DialogTitle>Create role</DialogTitle>
-          <DialogDescription>
-            Add a custom role with create, read, update, and delete access.
-          </DialogDescription>
-        </DialogHeader>
+      <Form {...form}>
+        <form noValidate onSubmit={form.handleSubmit(handleSubmit)}>
+          <DialogContent className="sm:max-w-lg">
+            <DialogHeader>
+              <DialogTitle>Create role</DialogTitle>
+              <DialogDescription>
+                Add a custom role with create, read, update, and delete access.
+              </DialogDescription>
+            </DialogHeader>
 
-        <Form {...form}>
-          <form noValidate onSubmit={form.handleSubmit(handleSubmit)}>
             <div className="flex flex-col gap-4 py-4">
               <FormField
                 control={form.control}
@@ -139,9 +139,9 @@ export function CreateOrganizationRoleDialog({
                 Create role
               </Button>
             </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
+          </DialogContent>
+        </form>
+      </Form>
     </Dialog>
   )
 }

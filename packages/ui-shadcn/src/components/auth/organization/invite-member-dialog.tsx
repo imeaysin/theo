@@ -36,10 +36,7 @@ import {
  */
 
 const inviteMemberSchema = z.object({
-  email: z
-    .string()
-    .min(1, "Email is required.")
-    .email("Please enter a valid email address."),
+  email: z.string().email("Please enter a valid email address."),
   role: z.string().min(1, "Please select a role."),
 })
 
@@ -76,50 +73,47 @@ export function InviteMemberDialog({
   const isSubmitting = form.formState.isSubmitting
 
   const roleItems = roles.map((roleName) => ({
-    value: roleName,
     label: formatRoleLabel(roleName),
+    value: roleName,
   }))
 
   function handleOpenChange(nextOpen: boolean) {
-    if (!nextOpen) form.reset({ email: "", role: roles[0] ?? "" })
+    if (!nextOpen) form.reset()
     onOpenChange(nextOpen)
   }
 
   async function handleSubmit(values: InviteMemberValues) {
     await onSubmit(values)
-    form.reset({ email: "", role: roles[0] ?? "" })
+    form.reset()
   }
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent>
-        <DialogHeader className="border-b px-6 pb-4">
-          <DialogTitle>Invite member</DialogTitle>
-          <DialogDescription>
-            Send an invitation to join this workspace.
-          </DialogDescription>
-        </DialogHeader>
+      <Form {...form}>
+        <form noValidate onSubmit={form.handleSubmit(handleSubmit)}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Invite team member</DialogTitle>
+              <DialogDescription>
+                Invite a new member to join your workspace.
+              </DialogDescription>
+            </DialogHeader>
 
-        <Form {...form}>
-          <form
-            className="flex min-h-0 flex-1 flex-col"
-            noValidate
-            onSubmit={form.handleSubmit(handleSubmit)}
-          >
-            <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-6">
+            <div className="flex flex-col gap-4 py-4">
               <FormField
                 control={form.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>Email address</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
                         autoFocus
                         disabled={isSubmitting}
-                        placeholder="name@example.com"
+                        placeholder="jane@example.com"
                         type="email"
+                        autoComplete="off"
                       />
                     </FormControl>
                     <FormMessage />
@@ -131,10 +125,10 @@ export function InviteMemberDialog({
                 control={form.control}
                 name="role"
                 render={({ field }) => (
-                  <FormItem className="w-full">
+                  <FormItem>
                     <FormLabel>Role</FormLabel>
                     <Select
-                      disabled={isSubmitting || roleItems.length === 0}
+                      disabled={isSubmitting}
                       onValueChange={field.onChange}
                       value={field.value}
                     >
@@ -157,7 +151,7 @@ export function InviteMemberDialog({
               />
             </div>
 
-            <DialogFooter className="border-t px-6 py-4">
+            <DialogFooter>
               <DialogClose asChild>
                 <Button disabled={isSubmitting} type="button" variant="outline">
                   Cancel
@@ -168,9 +162,9 @@ export function InviteMemberDialog({
                 Invite member
               </Button>
             </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
+          </DialogContent>
+        </form>
+      </Form>
     </Dialog>
   )
 }

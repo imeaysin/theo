@@ -100,19 +100,15 @@ export function CreateOrganizationDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent showCloseButton={!required}>
-        <DialogHeader className="border-b px-6 pb-4">
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
-        </DialogHeader>
+      <Form {...form}>
+        <form noValidate onSubmit={form.handleSubmit(handleSubmit)}>
+          <DialogContent showCloseButton={!required}>
+            <DialogHeader>
+              <DialogTitle>{title}</DialogTitle>
+              <DialogDescription>{description}</DialogDescription>
+            </DialogHeader>
 
-        <Form {...form}>
-          <form
-            className="flex min-h-0 flex-1 flex-col"
-            noValidate
-            onSubmit={form.handleSubmit(handleSubmit)}
-          >
-            <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-6">
+            <div className="flex flex-col gap-4 py-4">
               <FormField
                 control={form.control}
                 name="name"
@@ -149,13 +145,14 @@ export function CreateOrganizationDialog({
                         onChange={field.onChange}
                         value={field.value}
                       />
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
               ) : null}
             </div>
 
-            <DialogFooter className="border-t px-6 py-4">
+            <DialogFooter>
               {required ? null : (
                 <DialogClose asChild>
                   <Button
@@ -172,9 +169,9 @@ export function CreateOrganizationDialog({
                 {submitLabel}
               </Button>
             </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
+          </DialogContent>
+        </form>
+      </Form>
     </Dialog>
   )
 }

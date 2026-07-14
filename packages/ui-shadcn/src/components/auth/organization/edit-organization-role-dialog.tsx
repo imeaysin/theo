@@ -96,17 +96,17 @@ export function EditOrganizationRoleDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-lg">
-        <DialogHeader>
-          <DialogTitle>Edit role</DialogTitle>
-          <DialogDescription>
-            Update permissions for {formatOrganizationRoleLabel(role.role)}.
-          </DialogDescription>
-        </DialogHeader>
+      <Form {...form}>
+        <form noValidate onSubmit={form.handleSubmit(handleSubmit)}>
+          <DialogContent className="sm:max-w-lg">
+            <DialogHeader>
+              <DialogTitle>Edit role</DialogTitle>
+              <DialogDescription>
+                Update permissions for {formatOrganizationRoleLabel(role.role)}.
+              </DialogDescription>
+            </DialogHeader>
 
-        <Form {...form}>
-          <form noValidate onSubmit={form.handleSubmit(handleSubmit)}>
-            <div className="flex flex-col gap-4 pb-6">
+            <div className="flex flex-col gap-4 py-4">
               <FormField
                 control={form.control}
                 name="permission"
@@ -136,9 +136,9 @@ export function EditOrganizationRoleDialog({
                 Save changes
               </Button>
             </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
+          </DialogContent>
+        </form>
+      </Form>
     </Dialog>
   )
 }

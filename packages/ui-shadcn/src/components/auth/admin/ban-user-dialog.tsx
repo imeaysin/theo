@@ -62,22 +62,18 @@ export function BanUserDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent>
-        <DialogHeader className="border-b px-6 pb-4">
-          <DialogTitle>Ban user</DialogTitle>
-          <DialogDescription>
-            {userLabel} will be signed out and unable to sign in again until
-            unbanned.
-          </DialogDescription>
-        </DialogHeader>
+      <Form {...form}>
+        <form noValidate onSubmit={form.handleSubmit(handleSubmit)}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Ban user</DialogTitle>
+              <DialogDescription>
+                {userLabel} will be signed out and unable to sign in again until
+                unbanned.
+              </DialogDescription>
+            </DialogHeader>
 
-        <Form {...form}>
-          <form
-            className="flex min-h-0 flex-1 flex-col"
-            noValidate
-            onSubmit={form.handleSubmit(handleSubmit)}
-          >
-            <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-6">
+            <div className="flex flex-col gap-4 py-4">
               <FormField
                 control={form.control}
                 name="banReason"
@@ -97,7 +93,7 @@ export function BanUserDialog({
               />
             </div>
 
-            <DialogFooter className="border-t px-6 py-4">
+            <DialogFooter>
               <DialogClose asChild>
                 <Button disabled={isSubmitting} type="button" variant="outline">
                   Cancel
@@ -112,9 +108,9 @@ export function BanUserDialog({
                 Ban user
               </Button>
             </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
+          </DialogContent>
+        </form>
+      </Form>
     </Dialog>
   )
 }

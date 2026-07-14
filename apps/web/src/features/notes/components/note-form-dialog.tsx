@@ -83,22 +83,19 @@ export function NoteFormDialog({
 
   return (
     <Dialog onOpenChange={handleOpenChange} open={open}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>{isEditing ? "Edit note" : "New note"}</DialogTitle>
-          <DialogDescription>
-            {isEditing
-              ? "Update the title or body of your note."
-              : "Add a title and optional details."}
-          </DialogDescription>
-        </DialogHeader>
+      <Form {...form}>
+        <form noValidate onSubmit={form.handleSubmit(handleSubmit)}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>{isEditing ? "Edit note" : "New note"}</DialogTitle>
+              <DialogDescription>
+                {isEditing
+                  ? "Update the title or body of your note."
+                  : "Add a title and optional details."}
+              </DialogDescription>
+            </DialogHeader>
 
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="flex flex-col gap-6"
-          >
-            <div className="space-y-4">
+            <div className="flex flex-col gap-4 py-4">
               <FormField
                 control={form.control}
                 name="title"
@@ -136,7 +133,8 @@ export function NoteFormDialog({
                 )}
               />
             </div>
-            <DialogFooter className="gap-2 sm:gap-0">
+
+            <DialogFooter>
               <DialogClose asChild>
                 <Button type="button" variant="outline" disabled={isPending}>
                   Cancel
@@ -146,9 +144,9 @@ export function NoteFormDialog({
                 {isEditing ? "Save changes" : "Create note"}
               </Button>
             </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
+          </DialogContent>
+        </form>
+      </Form>
     </Dialog>
   )
 }
