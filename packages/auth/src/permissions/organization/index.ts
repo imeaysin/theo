@@ -98,7 +98,7 @@ export function checkOrganizationPermission<
   return false
 }
 
-function isOrganizationResource(
+export function isOrganizationResource(
   resource: string
 ): resource is OrganizationResource {
   return resource in statement

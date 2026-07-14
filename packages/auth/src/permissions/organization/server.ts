@@ -5,6 +5,7 @@ import { authCollections } from "../collections"
 import {
   ac,
   authorizeStaticOrganizationRole,
+  isOrganizationResource,
   type OrganizationAction,
   type OrganizationRequiredPermission,
   type OrganizationResource,
@@ -38,9 +39,14 @@ async function authorizeDynamicRole<R extends OrganizationResource>(params: {
   const parsed = permissionRecordSchema.safeParse(JSON.parse(record.permission))
   if (!parsed.success) return false
 
-  const dynamicRole = ac.newRole(
-    parsed.data as PermissionMapFor<OrganizationStatement>
-  )
+  const dynamicPermissions = Object.entries(parsed.data).reduce<
+    PermissionMapFor<OrganizationStatement>
+  >((acc, [resource, actions]) => {
+    if (!isOrganizationResource(resource)) return acc
+    return { ...acc, [resource]: actions }
+  }, {})
+
+  const dynamicRole = ac.newRole(dynamicPermissions)
   return dynamicRole.authorize({ [params.resource]: [params.action] }).success
 }
 

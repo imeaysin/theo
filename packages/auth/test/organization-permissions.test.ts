@@ -67,7 +67,6 @@ describe("checkOrganizationPermission", () => {
 
   it("ignores invalid or unknown static roles in a comma-separated list", () => {
     // superhacker doesn't exist, but admin does
-    // @ts-expect-error
     expect(
       checkOrganizationPermission({
         role: "superhacker",
@@ -75,7 +74,6 @@ describe("checkOrganizationPermission", () => {
         action: "read",
       })
     ).toBe(false)
-    // @ts-expect-error
     expect(
       checkOrganizationPermission({
         role: "admin,superhacker",

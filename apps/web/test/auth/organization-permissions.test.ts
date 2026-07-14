@@ -1,9 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { checkOrganizationPermission } from "@workspace/auth/permissions/organization"
-import { organizationUiPermissions } from "../../../../packages/ui/src/auth/organization/ui-permissions"
-
-type UiPermissionResource =
-  keyof (typeof organizationUiPermissions)["inviteMember"]["permissions"]
+import { organizationUiPermissions } from "../../../../packages/coss-ui/src/auth/organization/ui-permissions"
+import { checkOrganizationPermissionMap } from "@workspace/auth/permissions/organization"
 
 describe("organizationUiPermissions", () => {
   it("grants billing role access to billing but not members", () => {
@@ -62,7 +60,7 @@ describe("organizationUiPermissions", () => {
   })
 
   it("ignores invalid or unknown static roles in a comma-separated list", () => {
-    // @ts-expect-error
+    // superhacker doesn't exist, but admin does
     expect(
       checkOrganizationPermission({
         role: "superhacker",
@@ -70,7 +68,6 @@ describe("organizationUiPermissions", () => {
         action: "read",
       })
     ).toBe(false)
-    // @ts-expect-error
     expect(
       checkOrganizationPermission({
         role: "admin,superhacker",
@@ -81,25 +78,11 @@ describe("organizationUiPermissions", () => {
   })
 
   it("maps UI actions to permissions owners are granted", () => {
-    for (const [action, check] of Object.entries(organizationUiPermissions)) {
-      const [resource, actions] = Object.entries(check.permissions)[0] ?? []
-      const permissionAction = actions?.[0]
-
-      expect(resource, `${action} should declare a resource`).toBeTruthy()
+    const checks = Object.values(organizationUiPermissions)
+    for (const check of checks) {
       expect(
-        permissionAction,
-        `${action} should declare an action`
-      ).toBeTruthy()
-
-      if (!resource || !permissionAction) continue
-
-      expect(
-        checkOrganizationPermission({
-          role: "owner",
-          resource: resource as UiPermissionResource,
-          action: permissionAction as never,
-        }),
-        `${action} should be allowed for owners`
+        checkOrganizationPermissionMap("owner", check.permissions),
+        "owner should be granted all UI permissions"
       ).toBe(true)
     }
   })
