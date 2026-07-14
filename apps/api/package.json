@@ -46,7 +46,6 @@
     "bullmq": "catalog:",
     "compression": "^1.8.1",
     "helmet": "^8.2.0",
-    "mongodb": "^7.2.0",
     "nestjs-zod": "^5.4.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",

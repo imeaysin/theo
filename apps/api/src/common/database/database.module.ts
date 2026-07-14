@@ -1,11 +1,9 @@
 import { Global, Module } from "@nestjs/common"
-import { connectDb, getDb } from "@workspace/db"
+import { connectDb } from "@workspace/db"
 import { env } from "@workspace/config"
-import type { Db } from "mongodb"
 import { DatabaseLifecycle } from "@/common/database/database.lifecycle"
 
 export const DATABASE_READY = Symbol("DATABASE_READY")
-export const MONGO_DB = Symbol("MONGO_DB")
 
 @Global()
 @Module({
@@ -18,12 +16,7 @@ export const MONGO_DB = Symbol("MONGO_DB")
         return true
       },
     },
-    {
-      provide: MONGO_DB,
-      inject: [DATABASE_READY],
-      useFactory: (): Db => getDb(),
-    },
   ],
-  exports: [DATABASE_READY, MONGO_DB],
+  exports: [DATABASE_READY],
 })
 export class DatabaseModule {}

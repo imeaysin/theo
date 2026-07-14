@@ -2,7 +2,7 @@
  * Promotes a user to platform admin by email.
  * Usage: SKIP_ENV_VALIDATION=true pnpm --filter api exec ts-node --transpile-only scripts/promote-admin.ts user@example.com
  */
-import { MongoClient } from "mongodb"
+import mongoose from "mongoose"
 import { env } from "@workspace/config"
 
 async function main() {
@@ -12,22 +12,20 @@ async function main() {
     process.exit(1)
   }
 
-  const client = new MongoClient(env.MONGODB_URI)
-  await client.connect()
-  const db = client.db()
+  await mongoose.connect(env.MONGODB_URI)
 
-  const result = await db
+  const result = await mongoose.connection
     .collection("user")
     .updateOne({ email }, { $set: { role: "admin" } })
 
   if (result.matchedCount === 0) {
     console.error(`No user found with email ${email}`)
-    await client.close()
+    await mongoose.disconnect()
     process.exit(1)
   }
 
   console.log(`Promoted ${email} to platform admin`)
-  await client.close()
+  await mongoose.disconnect()
 }
 
 main().catch((error: unknown) => {

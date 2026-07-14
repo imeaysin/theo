@@ -12,21 +12,6 @@ function isConnectionReady() {
   return mongoose.connection.readyState === 1
 }
 
-export function getMongoClient() {
-  if (!isConnectionReady()) {
-    throw new Error("MongoDB not connected. Call connectDb() first.")
-  }
-  return mongoose.connection.getClient()
-}
-
-export function getDb() {
-  const db = mongoose.connection.db
-  if (!db) {
-    throw new Error("MongoDB not connected. Call connectDb() first.")
-  }
-  return db
-}
-
 export async function connectDb(uri: string = databaseEnv.MONGODB_URI) {
   if (isConnectionReady()) return mongoose
 

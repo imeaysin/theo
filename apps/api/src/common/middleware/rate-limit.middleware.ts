@@ -1,48 +1,29 @@
 import { HttpStatus } from "@nestjs/common"
 import type { INestApplication } from "@nestjs/common"
-import { isDbConnected } from "@workspace/db"
+import { isDbConnected, RateLimitModel } from "@workspace/db"
 import { createLogger } from "@workspace/logger"
-import type { Db } from "mongodb"
 import type { NextFunction, Request, Response } from "express"
 import { HttpErrorCode } from "@workspace/contracts"
 import { createErrorEnvelope } from "../filters/error-envelope.util"
 
-const COLLECTION = "api_rate_limits"
 const logger = createLogger("RateLimit")
 
 export type RateLimitOptions = {
   enabled: boolean
   windowMs: number
   max: number
-  getDb: () => Db
-}
-
-let indexEnsured = false
-
-async function ensureIndex(db: Db) {
-  if (indexEnsured) return
-  await db
-    .collection(COLLECTION)
-    .createIndex({ resetAt: 1 }, { expireAfterSeconds: 0 })
-  indexEnsured = true
 }
 
 async function isAllowed(
-  db: Db,
   key: string,
   windowMs: number,
   max: number
 ): Promise<boolean> {
-  await ensureIndex(db)
-
   const now = new Date()
-  const col = db.collection<{ _id: string; count: number; resetAt: Date }>(
-    COLLECTION
-  )
-  const existing = await col.findOne({ _id: key })
+  const existing = await RateLimitModel.findById(key).lean()
 
   if (!existing || existing.resetAt <= now) {
-    await col.updateOne(
+    await RateLimitModel.updateOne(
       { _id: key },
       { $set: { count: 1, resetAt: new Date(now.getTime() + windowMs) } },
       { upsert: true }
@@ -52,7 +33,7 @@ async function isAllowed(
 
   if (existing.count >= max) return false
 
-  await col.updateOne({ _id: key }, { $inc: { count: 1 } })
+  await RateLimitModel.updateOne({ _id: key }, { $inc: { count: 1 } })
   return true
 }
 
@@ -88,7 +69,6 @@ export function applyRateLimit(
 
     try {
       const allowed = await isAllowed(
-        options.getDb(),
         clientKey(req),
         options.windowMs,
         options.max

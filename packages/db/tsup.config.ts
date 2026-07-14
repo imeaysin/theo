@@ -9,5 +9,4 @@ export default defineConfig((options): Options => ({
   sourcemap: true,
   minify: false,
   treeshake: true,
-  external: ["mongodb"],
 }))

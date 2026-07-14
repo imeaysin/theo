@@ -30,15 +30,11 @@
     "@workspace/logger": "workspace:*",
     "mongoose": "^9.6.2"
   },
-  "peerDependencies": {
-    "mongodb": "~7.2"
-  },
   "devDependencies": {
     "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
     "@types/node": "catalog:",
     "eslint": "catalog:",
-    "mongodb": "~7.2",
     "tsup": "catalog:",
     "typescript": "catalog:"
   }

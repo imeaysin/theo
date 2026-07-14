@@ -1,14 +1,22 @@
 import { ObjectId } from "mongodb"
-import { connectDb, getDb, getMongoClient, isDbConnected } from "@workspace/db"
+import { connectDb, isDbConnected, mongooseInstance } from "@workspace/db"
 import { env } from "@workspace/config"
 
 /** Shared MongoDB handle — same pool as business API (`@workspace/db`). */
 export function getAuthDb() {
-  return getDb()
+  const db = mongooseInstance.connection.db
+  if (!db) {
+    throw new Error("MongoDB connection not established")
+  }
+  return db
 }
 
 export function getAuthMongoClient() {
-  return getMongoClient()
+  const client = mongooseInstance.connection.getClient()
+  if (!client) {
+    throw new Error("MongoDB client not available")
+  }
+  return client
 }
 
 export async function ensureAuthMongoConnected() {
