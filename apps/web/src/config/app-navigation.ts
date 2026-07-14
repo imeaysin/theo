@@ -7,6 +7,16 @@ import {
   SquareTerminal,
 } from "lucide-react"
 import { routes } from "@/config/routes"
+import type { LucideIcon } from "lucide-react"
+
+export type NavItem = {
+  title: string
+  url: string
+  icon?: LucideIcon
+  isActive?: boolean
+  requiredPermission?: string
+  items?: NavItem[]
+}
 
 export const appNavigation = {
   navMain: [
@@ -64,7 +74,7 @@ export const appNavigation = {
         },
       ],
     },
-  ],
+  ] satisfies NavItem[],
   projects: [
     {
       name: "Design Engineering",

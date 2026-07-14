@@ -51,11 +51,14 @@ export const adminRole = ac.newRole({
   team: ["invite", "remove", "update-role"],
 })
 
+export const supportRole = ac.newRole(platformGrants.support)
+
 export const platformRoles = {
   guest: guestRole,
   user: userRole,
   manager: managerRole,
   admin: adminRole,
+  support: supportRole,
 } as const
 
 export const platformRoleNames = [
@@ -63,6 +66,7 @@ export const platformRoleNames = [
   "user",
   "manager",
   "admin",
+  "support",
 ] as const satisfies readonly PlatformRoleName[]
 
 function isPlatformRoleName(role: string): role is PlatformRoleName {
@@ -90,7 +94,13 @@ export function checkPlatformPermissionMap(
     if (!actions) continue
 
     for (const action of actions) {
-      if (!checkPlatformPermission(platformRole, resource, action)) {
+      if (
+        !checkPlatformPermission({
+          role: platformRole,
+          resource: resource,
+          action: action,
+        })
+      ) {
         return false
       }
     }
@@ -103,12 +113,15 @@ export function createPlatformPermissionResult(success: boolean) {
   return { error: null, success }
 }
 
-export function checkPlatformPermission<R extends PlatformResource>(
-  platformRole: string,
-  resource: R,
+export function checkPlatformPermission<R extends PlatformResource>(params: {
+  role: string | null | undefined
+  resource: R
   action: PlatformAction<R>
-): boolean {
-  if (!isPlatformRoleName(platformRole)) return false
+}): boolean {
+  if (!params.role) return false
+  if (!isPlatformRoleName(params.role)) return false
 
-  return platformRoles[platformRole].authorize({ [resource]: [action] }).success
+  return platformRoles[params.role].authorize({
+    [params.resource]: [params.action],
+  }).success
 }

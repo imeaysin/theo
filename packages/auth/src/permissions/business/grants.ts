@@ -21,6 +21,12 @@ export const platformGrants = {
     analytics: ["read", "export"],
     settings: ["read", "update"],
   },
+  support: {
+    project: ["read"],
+    content: ["read"],
+    billing: ["read"],
+    analytics: ["read"],
+  },
 } as const
 
 export const organizationGrants = {
@@ -43,5 +49,9 @@ export const organizationGrants = {
     content: ["create", "read", "update"],
     analytics: ["read"],
     settings: ["read"],
+  },
+  billing: {
+    billing: ["read", "manage"],
+    project: ["read"],
   },
 } as const

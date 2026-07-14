@@ -58,8 +58,16 @@ function isSuccessEnvelope<T>(value: unknown): value is ApiSuccessResponse<T> {
 
 async function executeFetch<T>(
   path: string,
+  init?: InternalFetchInit
+): Promise<T>
+async function executeFetch(
+  path: string,
+  init?: InternalFetchInit
+): Promise<void>
+async function executeFetch<T = void>(
+  path: string,
   init: InternalFetchInit = {}
-): Promise<T> {
+): Promise<T | undefined> {
   const { __retried, ...requestInit } = init
   const token = await getBearerToken(authClient, DEFAULT_JWT_STORAGE_KEY)
   const headers = new Headers(requestInit.headers)
@@ -81,7 +89,7 @@ async function executeFetch<T>(
   })
 
   if (!response.ok) {
-    const body = (await response.json().catch(() => null)) as unknown
+    const body: unknown = await response.json().catch(() => null)
 
     if (isApiErrorBody(body)) {
       const apiError = new ApiError({
@@ -102,6 +110,10 @@ async function executeFetch<T>(
         if (refreshed && refreshed !== token) {
           return executeFetch<T>(path, { ...requestInit, __retried: true })
         }
+
+        // If refresh failed or returned the same token, sign out and redirect to clear state
+        await authClient.signOut()
+        window.location.href = "/sign-in"
       }
 
       throw apiError
@@ -115,10 +127,10 @@ async function executeFetch<T>(
   }
 
   if (response.status === 204) {
-    return undefined as T
+    return undefined
   }
 
-  const json = (await response.json()) as unknown
+  const json = await response.json()
 
   if (!isSuccessEnvelope<T>(json)) {
     throw new ApiError({
@@ -131,6 +143,11 @@ async function executeFetch<T>(
   return json.data
 }
 
-export function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
+export function apiFetch<T>(path: string, init?: RequestInit): Promise<T>
+export function apiFetch(path: string, init?: RequestInit): Promise<void>
+export function apiFetch<T = void>(
+  path: string,
+  init?: RequestInit
+): Promise<T | undefined> {
   return executeFetch<T>(path, init)
 }

@@ -17,7 +17,6 @@ import {
     BetterAuthModule.forRootAsync({
       imports: [DatabaseModule, CacheModule],
       inject: [DATABASE_READY, CACHE_PROVIDER, EventEmitter2],
-      disableGlobalAuthGuard: true,
       useFactory: (
         _dbReady: unknown,
         cache: CacheProvider,

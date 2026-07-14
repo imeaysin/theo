@@ -27,7 +27,11 @@ export class RbacGuard implements CanActivate {
     const user = ctx.switchToHttp().getRequest<{ user: JwtClaims }>().user
 
     if (
-      !checkPlatformPermission(user.role, required.resource, required.action)
+      !checkPlatformPermission({
+        role: user.role,
+        resource: required.resource,
+        action: required.action,
+      })
     ) {
       throw new ForbiddenException("Insufficient permissions")
     }

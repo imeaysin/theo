@@ -1,6 +1,5 @@
 import { DynamicModule, Module } from "@nestjs/common"
 import { APP_GUARD, Reflector } from "@nestjs/core"
-import { JwksGuard } from "./jwks.guard"
 import { OrgRbacGuard } from "./org-rbac.guard"
 import { RbacGuard } from "./rbac.guard"
 
@@ -14,11 +13,6 @@ export class AuthGuardsModule {
     return {
       module: AuthGuardsModule,
       providers: [
-        {
-          provide: APP_GUARD,
-          useFactory: (reflector: Reflector) => new JwksGuard(reflector),
-          inject: [Reflector],
-        },
         {
           provide: APP_GUARD,
           useFactory: (reflector: Reflector) => new RbacGuard(reflector),

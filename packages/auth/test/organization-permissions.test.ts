@@ -10,43 +10,154 @@ import {
 } from "../src/permissions/organization"
 
 describe("checkOrganizationPermission", () => {
-  it("grants owners full organization management", () => {
-    expect(checkOrganizationPermission("owner", "organization", "delete")).toBe(
-      true
-    )
-    expect(checkOrganizationPermission("owner", "member", "update")).toBe(true)
-    expect(checkOrganizationPermission("owner", "invitation", "create")).toBe(
-      true
-    )
-  })
-
-  it("limits members to read-oriented actions", () => {
-    expect(checkOrganizationPermission("member", "member", "update")).toBe(
-      false
-    )
-    expect(checkOrganizationPermission("member", "invitation", "create")).toBe(
-      false
-    )
-    expect(checkOrganizationPermission("member", "project", "read")).toBe(true)
-  })
-
-  it("allows admins to invite but not delete the workspace", () => {
-    expect(checkOrganizationPermission("admin", "invitation", "create")).toBe(
-      true
-    )
-    expect(checkOrganizationPermission("admin", "organization", "delete")).toBe(
-      false
-    )
-  })
-
-  it("supports comma-separated role strings", () => {
+  it("grants billing role access to billing but not members", () => {
     expect(
-      checkOrganizationPermission("member,admin", "invitation", "create")
+      checkOrganizationPermission({
+        role: "billing",
+        resource: "billing",
+        action: "read",
+      })
+    ).toBe(true)
+    expect(
+      checkOrganizationPermission({
+        role: "billing",
+        resource: "billing",
+        action: "manage",
+      })
+    ).toBe(true)
+    expect(
+      checkOrganizationPermission({
+        role: "billing",
+        resource: "member",
+        action: "update",
+      })
+    ).toBe(false)
+  })
+
+  it("handles messy role strings with spaces and empty segments", () => {
+    expect(
+      checkOrganizationPermission({
+        role: "member,admin",
+        resource: "invitation",
+        action: "create",
+      })
+    ).toBe(true)
+    expect(
+      checkOrganizationPermission({
+        role: "billing,member",
+        resource: "project",
+        action: "update",
+      })
+    ).toBe(true)
+    expect(
+      checkOrganizationPermission({
+        role: " ,, owner, ",
+        resource: "organization",
+        action: "delete",
+      })
+    ).toBe(true)
+    expect(
+      checkOrganizationPermission({
+        role: " admin , billing ",
+        resource: "billing",
+        action: "manage",
+      })
     ).toBe(true)
   })
 
+  it("ignores invalid or unknown static roles in a comma-separated list", () => {
+    // superhacker doesn't exist, but admin does
+    // @ts-expect-error
+    expect(
+      checkOrganizationPermission({
+        role: "superhacker",
+        resource: "project",
+        action: "read",
+      })
+    ).toBe(false)
+    // @ts-expect-error
+    expect(
+      checkOrganizationPermission({
+        role: "admin,superhacker",
+        resource: "project",
+        action: "read",
+      })
+    ).toBe(true)
+  })
+
+  it("grants owners full organization management", () => {
+    expect(
+      checkOrganizationPermission({
+        role: "owner",
+        resource: "organization",
+        action: "delete",
+      })
+    ).toBe(true)
+    expect(
+      checkOrganizationPermission({
+        role: "owner",
+        resource: "member",
+        action: "update",
+      })
+    ).toBe(true)
+    expect(
+      checkOrganizationPermission({
+        role: "owner",
+        resource: "invitation",
+        action: "create",
+      })
+    ).toBe(true)
+  })
+
+  it("limits members to read-oriented actions", () => {
+    expect(
+      checkOrganizationPermission({
+        role: "member",
+        resource: "member",
+        action: "update",
+      })
+    ).toBe(false)
+    expect(
+      checkOrganizationPermission({
+        role: "member",
+        resource: "invitation",
+        action: "create",
+      })
+    ).toBe(false)
+    expect(
+      checkOrganizationPermission({
+        role: "member",
+        resource: "project",
+        action: "read",
+      })
+    ).toBe(true)
+  })
+
+  it("allows admins to invite but not delete the workspace", () => {
+    expect(
+      checkOrganizationPermission({
+        role: "admin",
+        resource: "invitation",
+        action: "create",
+      })
+    ).toBe(true)
+    expect(
+      checkOrganizationPermission({
+        role: "admin",
+        resource: "organization",
+        action: "delete",
+      })
+    ).toBe(false)
+  })
+
   it("denies access when no organization role is present", () => {
-    expect(checkOrganizationPermission(null, "project", "read")).toBe(false)
+    expect(
+      checkOrganizationPermission({
+        role: null,
+        resource: "project",
+        action: "read",
+      })
+    ).toBe(false)
   })
 })
 
@@ -65,12 +176,23 @@ describe("canAssignOrganizationRole", () => {
 
 describe("getOrganizationRoleNames", () => {
   it("always includes built-in roles and merges dynamic roles", () => {
-    expect(getOrganizationRoleNames()).toEqual(["owner", "admin", "member"])
-    expect(getOrganizationRoleNames([])).toEqual(["owner", "admin", "member"])
+    expect(getOrganizationRoleNames()).toEqual([
+      "owner",
+      "admin",
+      "member",
+      "billing",
+    ])
+    expect(getOrganizationRoleNames([])).toEqual([
+      "owner",
+      "admin",
+      "member",
+      "billing",
+    ])
     expect(getOrganizationRoleNames([{ role: "moderator" }])).toEqual([
       "owner",
       "admin",
       "member",
+      "billing",
       "moderator",
     ])
   })
@@ -100,7 +222,7 @@ describe("resolveAssignableOrganizationRoles", () => {
         activeMemberRole: "owner",
         dynamicRoles: [],
       })
-    ).toEqual(["owner", "admin", "member"])
+    ).toEqual(["owner", "admin", "member", "billing"])
   })
 
   it("does not require dynamic roles from list-roles", () => {
@@ -110,7 +232,7 @@ describe("resolveAssignableOrganizationRoles", () => {
         activeMemberRole: "owner",
         dynamicRoles: undefined,
       })
-    ).toEqual(["owner", "admin", "member"])
+    ).toEqual(["owner", "admin", "member", "billing"])
   })
 
   it("returns no roles when the user cannot assign", () => {
@@ -128,7 +250,7 @@ describe("resolveAssignableOrganizationRoles", () => {
         canAssignRoles: true,
         activeMemberRole: "admin",
       })
-    ).toEqual(["admin", "member"])
+    ).toEqual(["admin", "member", "billing"])
   })
 
   it("merges custom dynamic roles", () => {
@@ -138,7 +260,7 @@ describe("resolveAssignableOrganizationRoles", () => {
         activeMemberRole: "owner",
         dynamicRoles: [{ role: "moderator" }],
       })
-    ).toEqual(["owner", "admin", "member", "moderator"])
+    ).toEqual(["owner", "admin", "member", "billing", "moderator"])
   })
 })
 

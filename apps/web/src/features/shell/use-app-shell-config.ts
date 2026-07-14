@@ -33,18 +33,25 @@ export function useAppShellConfig() {
   const { data: organizations } = useListOrganizations()
 
   const navMain = useMemo(() => {
-    let items = appNavigation.navMain
+    const baseItems = appNavigation.navMain.map((item) => ({
+      ...item,
+      items: item.items?.filter((sub) => {
+        if (sub.title === "Workspace" && !activeOrganization) return false
+        return true
+      }),
+    }))
 
-    if (adminPermission?.success) {
-      items = [...items, adminNavigationItem]
-    }
+    const allItems = adminPermission?.success
+      ? [...baseItems, adminNavigationItem]
+      : baseItems
 
-    return items.map((item) => {
+    return allItems.map((item) => {
       const isUrlActive =
         pathname === item.url ||
         (item.items &&
           item.items.length === 0 &&
           pathname.startsWith(`${item.url}/`))
+
       const hasActiveSubItem = item.items?.some(
         (sub) => pathname === sub.url || pathname.startsWith(`${sub.url}/`)
       )
@@ -58,7 +65,7 @@ export function useAppShellConfig() {
         })),
       }
     })
-  }, [adminPermission?.success, pathname])
+  }, [adminPermission?.success, pathname, activeOrganization])
 
   const projects = useMemo(() => {
     return appNavigation.projects.map((proj) => ({
@@ -78,7 +85,7 @@ export function useAppShellConfig() {
       return [
         {
           name: activeOrganization?.name ?? "Personal Workspace",
-          logo: GalleryVerticalEnd as React.ElementType,
+          logo: GalleryVerticalEnd,
           plan: "Free",
         },
       ]
@@ -86,26 +93,29 @@ export function useAppShellConfig() {
     const logos = [GalleryVerticalEnd, AudioWaveform, Command]
     return organizations.map((org, index) => ({
       name: org.name,
-      logo: logos[index % logos.length] as React.ElementType,
+      logo: logos[index % logos.length] ?? GalleryVerticalEnd,
       plan: org.slug ?? "Pro",
     }))
   }, [organizations, activeOrganization])
 
-  const userMenuItems = useMemo<AuthUserButtonMenuItem[]>(
-    () => [
+  const userMenuItems = useMemo<AuthUserButtonMenuItem[]>(() => {
+    return [
       {
         label: "Account settings",
         href: routes.settingsAccount,
         icon: SettingsIcon,
       },
-      {
-        label: "Workspace settings",
-        href: routes.organizationSettings,
-        icon: SettingsIcon,
-      },
-    ],
-    []
-  )
+      ...(activeOrganization
+        ? [
+            {
+              label: "Workspace settings",
+              href: routes.organizationSettings,
+              icon: SettingsIcon,
+            },
+          ]
+        : []),
+    ]
+  }, [activeOrganization])
 
   return {
     brandLabel: site.name,

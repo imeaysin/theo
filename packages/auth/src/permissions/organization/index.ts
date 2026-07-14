@@ -45,10 +45,13 @@ export const memberRole = ac.newRole({
   ...organizationGrants.member,
 })
 
+export const billingRole = ac.newRole(organizationGrants.billing)
+
 export const organizationRoles = {
   owner: ownerRole,
   admin: adminRole,
   member: memberRole,
+  billing: billingRole,
 } as const
 
 const ownerRoleName = "owner" satisfies keyof typeof organizationRoles
@@ -71,18 +74,28 @@ export function authorizeStaticOrganizationRole<R extends OrganizationResource>(
   return role.authorize({ [resource]: [action] }).success
 }
 
-export function checkOrganizationPermission<R extends OrganizationResource>(
-  organizationRole: string | null | undefined,
-  resource: R,
+export function checkOrganizationPermission<
+  R extends OrganizationResource,
+>(params: {
+  role: string | null | undefined
+  resource: R
   action: OrganizationAction<R>
-): boolean {
-  if (!organizationRole) return false
+}): boolean {
+  if (!params.role) return false
 
-  return organizationRole
-    .split(",")
-    .some((roleName) =>
-      authorizeStaticOrganizationRole(roleName, resource, action)
-    )
+  const roles = params.role.split(",").map((r) => r.trim())
+  for (const role of roles) {
+    if (!isStaticOrganizationRoleName(role)) continue
+
+    if (
+      organizationRoles[role].authorize({ [params.resource]: [params.action] })
+        .success
+    ) {
+      return true
+    }
+  }
+
+  return false
 }
 
 function isOrganizationResource(
@@ -102,7 +115,13 @@ export function checkOrganizationPermissionMap(
     if (!actions) continue
 
     for (const action of actions) {
-      if (!checkOrganizationPermission(organizationRole, resource, action)) {
+      if (
+        !checkOrganizationPermission({
+          role: organizationRole,
+          resource: resource,
+          action: action,
+        })
+      ) {
         return false
       }
     }
@@ -129,7 +148,7 @@ export function formatOrganizationRoleLabel(role: string) {
 }
 
 export function getStaticOrganizationRoleNames(): (keyof typeof organizationRoles)[] {
-  return ["owner", "admin", "member"]
+  return ["owner", "admin", "member", "billing"]
 }
 
 /** Static built-in roles plus any dynamic roles from list-roles. */

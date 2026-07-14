@@ -10,7 +10,7 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
-    bodyParser: false,
+    rawBody: true,
   })
 
   app.useLogger(new NestLoggerService())

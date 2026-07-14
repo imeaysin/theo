@@ -19,19 +19,19 @@ export type OrganizationMemberScope = {
 
 const permissionRecordSchema = z.record(z.string(), z.array(z.string()))
 
-async function authorizeDynamicRole<R extends OrganizationResource>(
-  organizationId: string,
-  roleName: string,
-  resource: R,
+async function authorizeDynamicRole<R extends OrganizationResource>(params: {
+  organizationId: string
+  roleName: string
+  resource: R
   action: OrganizationAction<R>
-): Promise<boolean> {
+}): Promise<boolean> {
   await ensureAuthMongoConnected()
 
   const record = await getAuthDb()
     .collection(authCollections.organizationRole)
     .findOne({
-      organizationId: toMongoId(organizationId),
-      role: roleName.trim(),
+      organizationId: toMongoId(params.organizationId),
+      role: params.roleName.trim(),
     })
   if (!record || typeof record.permission !== "string") return false
 
@@ -41,23 +41,31 @@ async function authorizeDynamicRole<R extends OrganizationResource>(
   const dynamicRole = ac.newRole(
     parsed.data as PermissionMapFor<OrganizationStatement>
   )
-  return dynamicRole.authorize({ [resource]: [action] }).success
+  return dynamicRole.authorize({ [params.resource]: [params.action] }).success
 }
 
 export async function checkOrganizationPermissionAsync<
   R extends OrganizationResource,
->(
-  organizationId: string,
-  organizationRole: string | null | undefined,
-  resource: R,
+>(params: {
+  organizationId: string
+  role: string | null | undefined
+  resource: R
   action: OrganizationAction<R>
-): Promise<boolean> {
-  if (!organizationRole) return false
+}): Promise<boolean> {
+  if (!params.role) return false
 
-  for (const roleName of organizationRole.split(",")) {
-    if (authorizeStaticOrganizationRole(roleName, resource, action)) return true
+  for (const roleName of params.role.split(",")) {
     if (
-      await authorizeDynamicRole(organizationId, roleName, resource, action)
+      authorizeStaticOrganizationRole(roleName, params.resource, params.action)
+    )
+      return true
+    if (
+      await authorizeDynamicRole({
+        organizationId: params.organizationId,
+        roleName,
+        resource: params.resource,
+        action: params.action,
+      })
     ) {
       return true
     }
@@ -78,10 +86,10 @@ export async function checkMemberOrganizationPermission<
     member.userId
   )
 
-  return checkOrganizationPermissionAsync(
-    member.organizationId,
-    organizationRole,
-    permission.resource,
-    permission.action
-  )
+  return checkOrganizationPermissionAsync({
+    organizationId: member.organizationId,
+    role: organizationRole,
+    resource: permission.resource,
+    action: permission.action,
+  })
 }
