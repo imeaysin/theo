@@ -102,7 +102,7 @@ export function CreateOrganizationRoleDialog({
                         {...field}
                         autoFocus
                         disabled={isSubmitting}
-                        placeholder="moderator"
+                        placeholder="Support"
                       />
                     </FormControl>
                     <FormMessage />

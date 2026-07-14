@@ -27,6 +27,8 @@ import {
 } from "@workspace/ui-shadcn/components/dialog"
 import { OrganizationRolePermissions } from "./organization-role-permissions"
 
+const EMPTY_PERMISSIONS: OrganizationPermissionMap = {}
+
 /**
  * @description Schema & types
  */
@@ -66,7 +68,7 @@ export function EditOrganizationRoleDialog({
   const form = useForm<EditOrganizationRoleValues>({
     resolver: zodResolver(editOrganizationRoleSchema),
     defaultValues: {
-      permission: role?.permissions ?? ({} as OrganizationPermissionMap),
+      permission: role?.permission ?? EMPTY_PERMISSIONS,
     },
   })
 
@@ -76,7 +78,7 @@ export function EditOrganizationRoleDialog({
   useEffect(() => {
     if (role) {
       form.reset({
-        permission: role.permissions ?? ({} as OrganizationPermissionMap),
+        permission: role.permission ?? EMPTY_PERMISSIONS,
       })
     }
   }, [role, form])
@@ -94,8 +96,8 @@ export function EditOrganizationRoleDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent>
-        <DialogHeader className="border-b px-6 pb-4">
+      <DialogContent className="sm:max-w-lg">
+        <DialogHeader>
           <DialogTitle>Edit role</DialogTitle>
           <DialogDescription>
             Update permissions for {formatOrganizationRoleLabel(role.role)}.
@@ -103,12 +105,8 @@ export function EditOrganizationRoleDialog({
         </DialogHeader>
 
         <Form {...form}>
-          <form
-            className="flex min-h-0 flex-1 flex-col"
-            noValidate
-            onSubmit={form.handleSubmit(handleSubmit)}
-          >
-            <div className="flex flex-1 overflow-y-auto p-6">
+          <form noValidate onSubmit={form.handleSubmit(handleSubmit)}>
+            <div className="flex flex-col gap-4 pb-6">
               <FormField
                 control={form.control}
                 name="permission"
@@ -127,7 +125,7 @@ export function EditOrganizationRoleDialog({
               />
             </div>
 
-            <DialogFooter className="border-t px-6 py-4">
+            <DialogFooter>
               <DialogClose asChild>
                 <Button disabled={isSubmitting} type="button" variant="outline">
                   Cancel
