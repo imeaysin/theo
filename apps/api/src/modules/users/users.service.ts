@@ -6,7 +6,7 @@ import { MeResponseSchema, type MeResponse } from "@workspace/contracts"
 @Injectable()
 export class UsersService {
   async getCurrentUserContext(claims: JwtClaims): Promise<MeResponse> {
-    const organizationRole = claims.activeOrganizationId
+    const orgRole = claims.activeOrganizationId
       ? await findOrganizationMemberRole(claims.activeOrganizationId, claims.id)
       : null
 
@@ -15,8 +15,8 @@ export class UsersService {
       email: claims.email,
       role: claims.role,
       name: claims.name,
-      activeOrganizationId: claims.activeOrganizationId,
-      organizationRole,
+      activeOrganizationId: claims.activeOrganizationId ?? null,
+      organizationRole: orgRole,
     })
   }
 }

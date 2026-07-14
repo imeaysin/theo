@@ -23,6 +23,19 @@ export type CreateAuthOptions = {
   onUserDeleted?: (userId: string) => Promise<void> | void
 }
 
+export const authUserOptions = {
+  deleteUser: {
+    enabled: true,
+  },
+  additionalFields: {
+    bio: {
+      type: "string",
+      required: false,
+      defaultValue: null,
+    },
+  },
+} as const
+
 const emailProvider = createEmailProvider(getEmailProviderConfig())
 
 function parseAdminUserIds(raw: string): string[] {
@@ -87,11 +100,7 @@ export function createAuth(options: CreateAuthOptions = {}) {
       origin.trim()
     ),
 
-    user: {
-      deleteUser: {
-        enabled: true,
-      },
-    },
+    user: authUserOptions,
 
     database: mongodbAdapter(getAuthDb(), { client: getAuthMongoClient() }),
 

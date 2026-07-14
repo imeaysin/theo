@@ -101,7 +101,7 @@ See [`apps/api/README.md`](./apps/api/README.md). Add modules under `src/modules
 
 ## Project structure
 
-```
+```tree
 apps/
   api/          NestJS business API + Better Auth at /api/auth
   web/          Main product SPA (auth, dashboard shell)

@@ -16,7 +16,9 @@ type AuthClientOptions =
     ? Options
     : never
 
-export type AuthUser = InferUserFromClient<AuthClientOptions>
+export type AuthUser = InferUserFromClient<AuthClientOptions> & {
+  bio?: string | null
+}
 export type AuthSession = InferSessionFromClient<AuthClientOptions>
 
 export type JwtClaims = JwtPayload & {

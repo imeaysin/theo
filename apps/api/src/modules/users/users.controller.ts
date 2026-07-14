@@ -8,20 +8,21 @@ import {
 import type { JwtClaims } from "@workspace/auth/types"
 import { CurrentUser } from "@/common/decorators"
 import { ApiAuthErrorResponses } from "@/common/decorators/api-error-responses.decorator"
-import { MeApiResponseDto } from "./dto"
 import { UsersService } from "./users.service"
+import { MeApiResponseDto } from "./dto"
 
 @ApiTags("users")
 @ApiAuthErrorResponses()
+@ApiBearerAuth("bearer")
 @Controller({ path: "users", version: "1" })
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get("me")
-  @ApiBearerAuth("bearer")
   @ApiOperation({
-    summary: "Current user",
-    description: "Returns JWT claims for the bearer token.",
+    summary: "Current user context",
+    description:
+      "Returns fast JWT claims for the bearer token without querying the database.",
   })
   @ApiOkResponse({ type: MeApiResponseDto })
   async getMe(@CurrentUser() user: JwtClaims) {

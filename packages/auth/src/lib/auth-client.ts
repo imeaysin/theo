@@ -37,6 +37,15 @@ export const authClient = createAuthClient({
       }
     },
   },
+  user: {
+    additionalFields: {
+      bio: {
+        type: "string",
+        required: false,
+        defaultValue: null,
+      },
+    } as const,
+  },
 })
 
 export type AuthClient = typeof authClient

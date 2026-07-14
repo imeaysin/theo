@@ -2,12 +2,10 @@ import { HttpErrorCode } from "./http.errors"
 import { NoteErrorCode } from "./note.errors"
 import { FileErrorCode } from "./file.errors"
 import { NotificationErrorCode } from "./notification.errors"
-
 export * from "./http.errors"
 export * from "./note.errors"
 export * from "./file.errors"
 export * from "./notification.errors"
-
 export type DomainErrorCode =
   NoteErrorCode | FileErrorCode | NotificationErrorCode
 
