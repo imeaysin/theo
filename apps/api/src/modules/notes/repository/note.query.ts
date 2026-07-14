@@ -1,33 +1,43 @@
-import { Inject, Injectable } from "@nestjs/common"
-import { ObjectId, type Db } from "mongodb"
-import { MONGO_DB } from "@/common/database/database.module"
-import { BaseMongoRepository } from "@/common/database/repositories"
+import { Injectable } from "@nestjs/common"
+import { isValidObjectId } from "mongoose"
+import { NoteModel } from "@workspace/db"
 import type { NoteEntity, NoteActorScope } from "../domain/note.model"
 
-const COLLECTION = "notes"
-
 @Injectable()
-export class NoteQueryRepository extends BaseMongoRepository {
-  constructor(@Inject(MONGO_DB) private readonly db: Db) {
-    super()
-  }
-
+export class NoteQueryRepository {
   async findMany(scope: NoteActorScope): Promise<NoteEntity[]> {
-    return this.db
-      .collection<NoteEntity>(COLLECTION)
-      .find({
-        organizationId: scope.organizationId,
-        userId: scope.userId,
-      })
+    const docs = await NoteModel.find({
+      organizationId: scope.organizationId,
+      userId: scope.userId,
+    })
       .sort({ createdAt: -1 })
-      .toArray()
+      .lean()
+
+    return docs.map((doc) => ({
+      id: doc._id.toString(),
+      organizationId: doc.organizationId,
+      userId: doc.userId,
+      title: doc.title,
+      body: doc.body,
+      createdAt: doc.createdAt,
+      updatedAt: doc.updatedAt,
+    }))
   }
 
   async findById(id: string): Promise<NoteEntity | null> {
-    if (!ObjectId.isValid(id)) return null
+    if (!isValidObjectId(id)) return null
 
-    return this.db.collection<NoteEntity>(COLLECTION).findOne({
-      _id: new ObjectId(id),
-    })
+    const doc = await NoteModel.findById(id).lean()
+    if (!doc) return null
+
+    return {
+      id: doc._id.toString(),
+      organizationId: doc.organizationId,
+      userId: doc.userId,
+      title: doc.title,
+      body: doc.body,
+      createdAt: doc.createdAt,
+      updatedAt: doc.updatedAt,
+    }
   }
 }

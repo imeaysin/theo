@@ -3,7 +3,7 @@ import type { NoteEntity } from "../domain/note.model"
 
 export function toNoteResponse(record: NoteEntity): NoteResponse {
   return NoteResponseSchema.parse({
-    id: record._id.toString(),
+    id: record.id,
     organizationId: record.organizationId,
     userId: record.userId,
     title: record.title,

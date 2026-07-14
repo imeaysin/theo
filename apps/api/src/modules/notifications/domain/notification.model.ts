@@ -1,7 +1,5 @@
-import type { ObjectId } from "mongodb"
-
 export type NotificationEntity = {
-  _id: ObjectId
+  id: string
   userId: string
   title: string
   body: string
@@ -17,7 +15,7 @@ export type NewNotificationEntity = Pick<
 >
 
 export type DeviceTokenEntity = {
-  _id: ObjectId
+  id: string
   userId: string
   token: string
   platform: "ios" | "android" | "web"

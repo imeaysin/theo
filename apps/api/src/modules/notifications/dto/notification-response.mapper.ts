@@ -8,7 +8,7 @@ export function toNotificationResponse(
   record: NotificationEntity
 ): NotificationResponse {
   return NotificationResponseSchema.parse({
-    id: record._id.toString(),
+    id: record.id,
     userId: record.userId,
     title: record.title,
     body: record.body,

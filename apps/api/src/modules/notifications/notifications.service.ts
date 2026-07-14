@@ -43,7 +43,7 @@ export class NotificationsService {
     return {
       totalUnread,
       items: notifications.map((n) => ({
-        id: n._id.toString(),
+        id: n.id,
         userId: n.userId,
         title: n.title,
         body: n.body,
@@ -78,7 +78,7 @@ export class NotificationsService {
   async registerDeviceToken(data: NewDeviceTokenEntity) {
     const token = await this.commandRepo.upsertToken(data)
     return {
-      id: token._id.toString(),
+      id: token.id,
       token: token.token,
       platform: token.platform,
       createdAt: token.createdAt.toISOString(),

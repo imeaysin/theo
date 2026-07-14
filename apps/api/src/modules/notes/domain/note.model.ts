@@ -1,7 +1,5 @@
-import type { ObjectId } from "mongodb"
-
 export type NoteEntity = {
-  _id: ObjectId
+  id: string
   organizationId: string
   userId: string
   title: string

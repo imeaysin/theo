@@ -45,7 +45,7 @@ export class NotesService {
       "note.created",
       {
         type: "note.created",
-        noteId: note._id.toString(),
+        noteId: note.id,
         authorId: scope.userId,
       },
       {
@@ -55,7 +55,7 @@ export class NotesService {
     )
 
     this.eventEmitter.emit("note.created", {
-      noteId: note._id.toString(),
+      noteId: note.id,
       authorId: scope.userId,
     })
 
