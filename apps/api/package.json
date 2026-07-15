@@ -7,6 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
+    "vercel-build": "nest build",
     "dev": "nest start --watch",
     "start": "nest start",
     "start:debug": "nest start --debug --watch",
@@ -22,6 +23,7 @@
     "promote-admin": "SKIP_ENV_VALIDATION=true ts-node --transpile-only scripts/promote-admin.ts"
   },
   "dependencies": {
+    "@ai-sdk/openai": "catalog:",
     "@nestjs/bullmq": "^11.0.4",
     "@nestjs/common": "catalog:",
     "@nestjs/core": "catalog:",
@@ -41,10 +43,10 @@
     "@workspace/notifications": "workspace:*",
     "@workspace/payment": "workspace:*",
     "@workspace/storage": "workspace:*",
-    "@ai-sdk/openai": "catalog:",
     "ai": "catalog:",
     "bullmq": "catalog:",
     "compression": "^1.8.1",
+    "express": "^5.2.1",
     "helmet": "^8.2.0",
     "nestjs-zod": "^5.4.0",
     "reflect-metadata": "^0.2.2",
@@ -71,7 +73,7 @@
     "ts-jest": "^29.2.5",
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
-    "tsconfig-paths": "^4.2.0",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "webpack-node-externals": "^3.0.0"
   }
 }
