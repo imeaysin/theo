@@ -5,24 +5,40 @@ import {
   AlertDescription,
   AlertTitle,
 } from "@workspace/ui-shadcn/components/alert"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@workspace/ui-shadcn/components/alert-dialog"
 import { Button } from "@workspace/ui-shadcn/components/button"
-import { ConfirmDialog } from "@workspace/ui-shadcn/components/confirm-dialog"
 import {
   Empty,
   EmptyContent,
   EmptyDescription,
+  EmptyHeader,
   EmptyMedia,
   EmptyTitle,
 } from "@workspace/ui-shadcn/components/empty"
-import { Input } from "@workspace/ui-shadcn/components/input"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@workspace/ui-shadcn/components/input-group"
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@workspace/ui-shadcn/components/select"
 import { Skeleton } from "@workspace/ui-shadcn/components/skeleton"
+import { Spinner } from "@workspace/ui-shadcn/components/spinner"
 import {
   CircleAlertIcon,
   FileTextIcon,
@@ -41,12 +57,12 @@ import {
 
 type SortOption = "newest" | "oldest" | "title-asc" | "title-desc"
 
-const sortOptions: { value: SortOption; label: string }[] = [
-  { value: "newest", label: "Newest first" },
-  { value: "oldest", label: "Oldest first" },
-  { value: "title-asc", label: "Title A–Z" },
-  { value: "title-desc", label: "Title Z–A" },
-]
+const sortItems = [
+  { label: "Newest first", value: "newest" },
+  { label: "Oldest first", value: "oldest" },
+  { label: "Title A–Z", value: "title-asc" },
+  { label: "Title Z–A", value: "title-desc" },
+] as const satisfies readonly { label: string; value: SortOption }[]
 
 function sortNotes(items: NoteResponse[], sort: SortOption) {
   const sorted = [...items]
@@ -165,48 +181,54 @@ export function NotesPage() {
 
   return (
     <>
-      <div className="space-y-6">
-        {/* Page header */}
+      <div className="flex flex-col gap-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="space-y-1">
+          <div className="flex flex-col gap-1">
             <h2 className="text-2xl font-bold tracking-tight">Notes</h2>
             <p className="text-muted-foreground">
               Create and manage your notes.
             </p>
           </div>
           <Button onClick={openCreateDialog}>
-            <PlusIcon className="size-4" />
+            <PlusIcon data-icon="inline-start" />
             New note
           </Button>
         </div>
 
-        {/* Filters */}
         <div className="flex flex-wrap items-center gap-3">
-          <div className="relative flex-1">
-            <SearchIcon className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
+          <InputGroup className="flex-1">
+            <InputGroupAddon>
+              <SearchIcon />
+            </InputGroupAddon>
+            <InputGroupInput
               aria-label="Search notes"
-              className="pl-9"
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search notes…"
               value={search}
             />
-          </div>
-          <Select onValueChange={(v) => setSort(v as SortOption)} value={sort}>
+          </InputGroup>
+          <Select
+            items={[...sortItems]}
+            onValueChange={(value) => {
+              if (value) setSort(value as SortOption)
+            }}
+            value={sort}
+          >
             <SelectTrigger aria-label="Sort notes" className="w-40">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {sortOptions.map((o) => (
-                <SelectItem key={o.value} value={o.value}>
-                  {o.label}
-                </SelectItem>
-              ))}
+              <SelectGroup>
+                {sortItems.map((item) => (
+                  <SelectItem key={item.value} value={item.value}>
+                    {item.label}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
             </SelectContent>
           </Select>
         </div>
 
-        {/* Bulk selection toolbar */}
         {selectedIds.size > 0 ? (
           <div className="flex flex-wrap items-center gap-3 rounded-lg border bg-muted/40 px-4 py-3">
             <p className="text-sm font-medium">{selectedIds.size} selected</p>
@@ -218,7 +240,7 @@ export function NotesPage() {
               size="sm"
               variant="destructive"
             >
-              <Trash2Icon className="size-4" />
+              <Trash2Icon data-icon="inline-start" />
               Delete selected
             </Button>
             <Button
@@ -232,7 +254,6 @@ export function NotesPage() {
           </div>
         ) : null}
 
-        {/* Loading skeleton */}
         {isLoading ? (
           <div className="overflow-hidden rounded-lg border">
             {Array.from({ length: 3 }).map((_, index) => (
@@ -241,7 +262,7 @@ export function NotesPage() {
                 key={index}
               >
                 <Skeleton className="size-4 rounded-sm" />
-                <div className="flex-1 space-y-2">
+                <div className="flex flex-1 flex-col gap-2">
                   <Skeleton className="h-4 w-48" />
                   <Skeleton className="h-3 w-full max-w-md" />
                   <Skeleton className="h-3 w-24" />
@@ -251,7 +272,6 @@ export function NotesPage() {
           </div>
         ) : null}
 
-        {/* Error */}
         {isError ? (
           <Alert variant="destructive">
             <CircleAlertIcon />
@@ -262,10 +282,9 @@ export function NotesPage() {
           </Alert>
         ) : null}
 
-        {/* Empty — no notes at all */}
         {showEmptyInitial ? (
-          <Empty className="rounded-lg border border-dashed">
-            <EmptyContent>
+          <Empty className="border border-dashed">
+            <EmptyHeader>
               <EmptyMedia variant="icon">
                 <FileTextIcon />
               </EmptyMedia>
@@ -277,18 +296,19 @@ export function NotesPage() {
                 </code>
                 .
               </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
               <Button onClick={openCreateDialog}>
-                <PlusIcon className="size-4" />
+                <PlusIcon data-icon="inline-start" />
                 Create note
               </Button>
             </EmptyContent>
           </Empty>
         ) : null}
 
-        {/* Empty — no search results */}
         {showEmptySearch ? (
-          <Empty className="rounded-lg border border-dashed">
-            <EmptyContent>
+          <Empty className="border border-dashed">
+            <EmptyHeader>
               <EmptyMedia variant="icon">
                 <SearchIcon />
               </EmptyMedia>
@@ -297,11 +317,10 @@ export function NotesPage() {
                 Nothing matches &ldquo;{search.trim()}&rdquo;. Try a different
                 search term.
               </EmptyDescription>
-            </EmptyContent>
+            </EmptyHeader>
           </Empty>
         ) : null}
 
-        {/* Notes table */}
         {!isLoading && !isError && filteredNotes.length > 0 ? (
           <NotesTable
             disabled={isMutating}
@@ -327,26 +346,38 @@ export function NotesPage() {
         open={dialogOpen}
       />
 
-      <ConfirmDialog
-        confirmLabel={
-          deleteTarget?.type === "bulk"
-            ? `Delete ${deleteTarget.count} notes`
-            : "Delete note"
-        }
-        description={deleteDialogDescription}
-        onConfirm={confirmDelete}
+      <AlertDialog
         onOpenChange={(open) => {
           if (!open) setDeleteTarget(null)
         }}
         open={deleteTarget !== null}
-        pending={isMutating}
-        title={
-          deleteTarget?.type === "bulk"
-            ? "Delete selected notes?"
-            : "Delete note?"
-        }
-        variant="destructive"
-      />
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {deleteTarget?.type === "bulk"
+                ? "Delete selected notes?"
+                : "Delete note?"}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {deleteDialogDescription}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isMutating}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={isMutating}
+              onClick={() => void confirmDelete()}
+              variant="destructive"
+            >
+              {isMutating ? <Spinner data-icon="inline-start" /> : null}
+              {deleteTarget?.type === "bulk"
+                ? `Delete ${deleteTarget.count} notes`
+                : "Delete note"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   )
 }

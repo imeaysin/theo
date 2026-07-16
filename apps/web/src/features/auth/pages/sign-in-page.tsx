@@ -13,8 +13,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@workspace/ui-shadcn/components/card"
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@workspace/ui-shadcn/components/field"
 import { Input } from "@workspace/ui-shadcn/components/input"
-import { Label } from "@workspace/ui-shadcn/components/label"
+import { Spinner } from "@workspace/ui-shadcn/components/spinner"
 import { routes, defaultAuthenticatedRoute } from "@/config/routes"
 import { getSafeRedirectPath } from "@/routing/safe-redirect"
 import { AuthDivider } from "@/features/auth/components/auth-divider"
@@ -62,6 +68,10 @@ export function SignInPage() {
     navigate(redirectPath, { replace: true })
   }
 
+  const emailError = form.formState.errors.email
+  const passwordError = form.formState.errors.password
+  const isSubmitting = form.formState.isSubmitting
+
   return (
     <Card>
       <CardHeader>
@@ -71,38 +81,38 @@ export function SignInPage() {
           before the first sign-in.
         </CardDescription>
       </CardHeader>
-      <CardContent className="grid gap-4">
+      <CardContent className="flex flex-col gap-4">
         <GoogleSignInButton callbackPath={redirectPath} />
         <AuthDivider />
-        <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              autoComplete="email"
-              {...form.register("email")}
-            />
-            {form.formState.errors.email ? (
-              <p className="text-sm text-destructive">
-                {form.formState.errors.email.message}
-              </p>
-            ) : null}
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              autoComplete="current-password"
-              {...form.register("password")}
-            />
-            {form.formState.errors.password ? (
-              <p className="text-sm text-destructive">
-                {form.formState.errors.password.message}
-              </p>
-            ) : null}
-          </div>
+        <form
+          className="flex flex-col gap-4"
+          noValidate
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
+          <FieldGroup>
+            <Field data-invalid={emailError ? true : undefined}>
+              <FieldLabel htmlFor="email">Email</FieldLabel>
+              <Input
+                aria-invalid={Boolean(emailError)}
+                autoComplete="email"
+                id="email"
+                type="email"
+                {...form.register("email")}
+              />
+              <FieldError errors={[emailError]} />
+            </Field>
+            <Field data-invalid={passwordError ? true : undefined}>
+              <FieldLabel htmlFor="password">Password</FieldLabel>
+              <Input
+                aria-invalid={Boolean(passwordError)}
+                autoComplete="current-password"
+                id="password"
+                type="password"
+                {...form.register("password")}
+              />
+              <FieldError errors={[passwordError]} />
+            </Field>
+          </FieldGroup>
           {formError ? (
             <p className="text-sm text-destructive">{formError}</p>
           ) : null}
@@ -111,8 +121,9 @@ export function SignInPage() {
               Resend or open verification instructions
             </Link>
           ) : null}
-          <Button disabled={form.formState.isSubmitting} type="submit">
-            {form.formState.isSubmitting ? "Signing in…" : "Sign in"}
+          <Button disabled={isSubmitting} type="submit">
+            {isSubmitting ? <Spinner data-icon="inline-start" /> : null}
+            {isSubmitting ? "Signing in…" : "Sign in"}
           </Button>
         </form>
       </CardContent>

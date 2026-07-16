@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@workspace/ui-shadcn/components/card"
+import { Spinner } from "@workspace/ui-shadcn/components/spinner"
 import { routes } from "@/config/routes"
 import { resendVerificationEmail } from "@/features/auth/lib/resend-verification-email"
 
@@ -41,7 +42,7 @@ export function VerifyEmailPage() {
             : "Check your inbox for a verification link."}
         </CardDescription>
       </CardHeader>
-      <CardContent className="grid gap-3 text-sm text-muted-foreground">
+      <CardContent className="flex flex-col gap-3 text-sm text-muted-foreground">
         <p>
           Email/password sign-in stays blocked until verification completes.
           Google sign-in does not require this step.
@@ -49,6 +50,7 @@ export function VerifyEmailPage() {
         {statusMessage ? <p>{statusMessage}</p> : null}
         {email ? (
           <Button disabled={isSending} onClick={() => void handleResend()}>
+            {isSending ? <Spinner data-icon="inline-start" /> : null}
             {isSending ? "Sending…" : "Resend verification email"}
           </Button>
         ) : null}

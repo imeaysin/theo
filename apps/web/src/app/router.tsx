@@ -1,6 +1,6 @@
 import { createBrowserRouter, Link, Navigate } from "react-router-dom"
 import { Button } from "@workspace/ui-shadcn/components/button"
-import { PageNotFound } from "@workspace/ui-shadcn/components/page-not-found"
+import { PageNotFound } from "@/components/page-not-found"
 import { AppLayout } from "@/components/layouts/app-layout"
 import { AuthLayout } from "@/components/layouts/auth-layout"
 import { RootLayout } from "@/components/layouts/root-layout"
@@ -57,8 +57,8 @@ export const router = createBrowserRouter([
     element: (
       <PageNotFound
         action={
-          <Button asChild>
-            <Link to={routes.home}>Go home</Link>
+          <Button nativeButton={false} render={<Link to={routes.home} />}>
+            Go home
           </Button>
         }
       />

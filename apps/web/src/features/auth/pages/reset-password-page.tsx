@@ -16,8 +16,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@workspace/ui-shadcn/components/card"
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@workspace/ui-shadcn/components/field"
 import { Input } from "@workspace/ui-shadcn/components/input"
-import { Label } from "@workspace/ui-shadcn/components/label"
+import { Spinner } from "@workspace/ui-shadcn/components/spinner"
 import { routes } from "@/config/routes"
 
 export function ResetPasswordPage() {
@@ -65,6 +71,9 @@ export function ResetPasswordPage() {
     navigate(routes.signIn, { replace: true })
   }
 
+  const errors = form.formState.errors
+  const isSubmitting = form.formState.isSubmitting
+
   return (
     <Card>
       <CardHeader>
@@ -74,29 +83,42 @@ export function ResetPasswordPage() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="grid gap-2">
-            <Label htmlFor="password">New password</Label>
-            <Input
-              id="password"
-              type="password"
-              autoComplete="new-password"
-              {...form.register("password")}
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="confirmPassword">Confirm password</Label>
-            <Input
-              id="confirmPassword"
-              type="password"
-              autoComplete="new-password"
-              {...form.register("confirmPassword")}
-            />
-          </div>
+        <form
+          className="flex flex-col gap-4"
+          noValidate
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
+          <FieldGroup>
+            <Field data-invalid={errors.password ? true : undefined}>
+              <FieldLabel htmlFor="password">New password</FieldLabel>
+              <Input
+                aria-invalid={Boolean(errors.password)}
+                autoComplete="new-password"
+                id="password"
+                type="password"
+                {...form.register("password")}
+              />
+              <FieldError errors={[errors.password]} />
+            </Field>
+            <Field data-invalid={errors.confirmPassword ? true : undefined}>
+              <FieldLabel htmlFor="confirmPassword">
+                Confirm password
+              </FieldLabel>
+              <Input
+                aria-invalid={Boolean(errors.confirmPassword)}
+                autoComplete="new-password"
+                id="confirmPassword"
+                type="password"
+                {...form.register("confirmPassword")}
+              />
+              <FieldError errors={[errors.confirmPassword]} />
+            </Field>
+          </FieldGroup>
           {formError ? (
             <p className="text-sm text-destructive">{formError}</p>
           ) : null}
-          <Button disabled={form.formState.isSubmitting} type="submit">
+          <Button disabled={isSubmitting} type="submit">
+            {isSubmitting ? <Spinner data-icon="inline-start" /> : null}
             Update password
           </Button>
         </form>

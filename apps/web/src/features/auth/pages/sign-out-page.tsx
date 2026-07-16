@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@workspace/ui-shadcn/components/card"
+import { Spinner } from "@workspace/ui-shadcn/components/spinner"
 import { routes } from "@/config/routes"
 
 export function SignOutPage() {
@@ -39,14 +40,17 @@ export function SignOutPage() {
       </CardHeader>
       <CardContent className="text-sm text-muted-foreground">
         {error ? (
-          <>
+          <div className="flex flex-col gap-2">
             <p className="text-destructive">{error}</p>
             <Link className="underline" to={routes.signIn}>
               Continue to sign in
             </Link>
-          </>
+          </div>
         ) : (
-          <p>Clearing your session…</p>
+          <div className="flex items-center gap-2">
+            <Spinner />
+            <p>Clearing your session…</p>
+          </div>
         )}
       </CardContent>
     </Card>

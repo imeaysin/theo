@@ -12,8 +12,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@workspace/ui-shadcn/components/card"
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@workspace/ui-shadcn/components/field"
 import { Input } from "@workspace/ui-shadcn/components/input"
-import { Label } from "@workspace/ui-shadcn/components/label"
+import { Spinner } from "@workspace/ui-shadcn/components/spinner"
 import { defaultAuthenticatedRoute } from "@/config/routes"
 
 export function TwoFactorPage() {
@@ -38,6 +44,9 @@ export function TwoFactorPage() {
     navigate(defaultAuthenticatedRoute, { replace: true })
   }
 
+  const codeError = form.formState.errors.code
+  const isSubmitting = form.formState.isSubmitting
+
   return (
     <Card>
       <CardHeader>
@@ -47,20 +56,29 @@ export function TwoFactorPage() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="grid gap-2">
-            <Label htmlFor="code">Authentication code</Label>
-            <Input
-              id="code"
-              inputMode="numeric"
-              autoComplete="one-time-code"
-              {...form.register("code")}
-            />
-          </div>
+        <form
+          className="flex flex-col gap-4"
+          noValidate
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
+          <FieldGroup>
+            <Field data-invalid={codeError ? true : undefined}>
+              <FieldLabel htmlFor="code">Authentication code</FieldLabel>
+              <Input
+                aria-invalid={Boolean(codeError)}
+                autoComplete="one-time-code"
+                id="code"
+                inputMode="numeric"
+                {...form.register("code")}
+              />
+              <FieldError errors={[codeError]} />
+            </Field>
+          </FieldGroup>
           {formError ? (
             <p className="text-sm text-destructive">{formError}</p>
           ) : null}
-          <Button disabled={form.formState.isSubmitting} type="submit">
+          <Button disabled={isSubmitting} type="submit">
+            {isSubmitting ? <Spinner data-icon="inline-start" /> : null}
             Verify
           </Button>
         </form>

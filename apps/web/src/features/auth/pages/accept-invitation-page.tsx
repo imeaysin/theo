@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@workspace/ui-shadcn/components/card"
+import { Spinner } from "@workspace/ui-shadcn/components/spinner"
 import {
   acceptInvitationPath,
   defaultAuthenticatedRoute,
@@ -67,11 +68,12 @@ function AcceptInvitationActions({
           Join the organization using the invitation sent to your email.
         </CardDescription>
       </CardHeader>
-      <CardContent className="grid gap-3">
+      <CardContent className="flex flex-col gap-3">
         {statusMessage ? (
           <p className="text-sm text-destructive">{statusMessage}</p>
         ) : null}
         <Button disabled={isAccepting} onClick={() => void acceptInvitation()}>
+          {isAccepting ? <Spinner data-icon="inline-start" /> : null}
           {isAccepting ? "Accepting…" : "Accept invitation"}
         </Button>
       </CardContent>
@@ -92,25 +94,32 @@ function SignInRequiredCard({
         <CardDescription>Sign in to join this organization.</CardDescription>
       </CardHeader>
       <CardFooter className="flex flex-col items-stretch gap-2">
-        <Button asChild>
-          <Link
-            to={withAuthRedirectQuery(routes.signIn, {
-              redirect: redirectTarget,
-              fallback: defaultAuthenticatedRoute,
-            })}
-          >
-            Sign in
-          </Link>
+        <Button
+          nativeButton={false}
+          render={
+            <Link
+              to={withAuthRedirectQuery(routes.signIn, {
+                redirect: redirectTarget,
+                fallback: defaultAuthenticatedRoute,
+              })}
+            />
+          }
+        >
+          Sign in
         </Button>
-        <Button asChild variant="outline">
-          <Link
-            to={withAuthRedirectQuery(routes.signUp, {
-              redirect: redirectTarget,
-              fallback: defaultAuthenticatedRoute,
-            })}
-          >
-            Create account
-          </Link>
+        <Button
+          nativeButton={false}
+          render={
+            <Link
+              to={withAuthRedirectQuery(routes.signUp, {
+                redirect: redirectTarget,
+                fallback: defaultAuthenticatedRoute,
+              })}
+            />
+          }
+          variant="outline"
+        >
+          Create account
         </Button>
       </CardFooter>
     </Card>

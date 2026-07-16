@@ -13,8 +13,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@workspace/ui-shadcn/components/card"
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@workspace/ui-shadcn/components/field"
 import { Input } from "@workspace/ui-shadcn/components/input"
-import { Label } from "@workspace/ui-shadcn/components/label"
+import { Spinner } from "@workspace/ui-shadcn/components/spinner"
 import { routes, defaultAuthenticatedRoute } from "@/config/routes"
 import { AuthDivider } from "@/features/auth/components/auth-divider"
 import { GoogleSignInButton } from "@/features/auth/components/google-sign-in-button"
@@ -53,6 +59,9 @@ export function SignUpPage() {
     )
   }
 
+  const errors = form.formState.errors
+  const isSubmitting = form.formState.isSubmitting
+
   return (
     <Card>
       <CardHeader>
@@ -62,49 +71,70 @@ export function SignUpPage() {
           before you can sign in.
         </CardDescription>
       </CardHeader>
-      <CardContent className="grid gap-4">
+      <CardContent className="flex flex-col gap-4">
         <GoogleSignInButton
           callbackPath={defaultAuthenticatedRoute}
           label="Continue with Google"
         />
         <AuthDivider />
-        <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="grid gap-2">
-            <Label htmlFor="name">Name</Label>
-            <Input id="name" autoComplete="name" {...form.register("name")} />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              autoComplete="email"
-              {...form.register("email")}
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              autoComplete="new-password"
-              {...form.register("password")}
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="confirmPassword">Confirm password</Label>
-            <Input
-              id="confirmPassword"
-              type="password"
-              autoComplete="new-password"
-              {...form.register("confirmPassword")}
-            />
-          </div>
+        <form
+          className="flex flex-col gap-4"
+          noValidate
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
+          <FieldGroup>
+            <Field data-invalid={errors.name ? true : undefined}>
+              <FieldLabel htmlFor="name">Name</FieldLabel>
+              <Input
+                aria-invalid={Boolean(errors.name)}
+                autoComplete="name"
+                id="name"
+                {...form.register("name")}
+              />
+              <FieldError errors={[errors.name]} />
+            </Field>
+            <Field data-invalid={errors.email ? true : undefined}>
+              <FieldLabel htmlFor="email">Email</FieldLabel>
+              <Input
+                aria-invalid={Boolean(errors.email)}
+                autoComplete="email"
+                id="email"
+                type="email"
+                {...form.register("email")}
+              />
+              <FieldError errors={[errors.email]} />
+            </Field>
+            <Field data-invalid={errors.password ? true : undefined}>
+              <FieldLabel htmlFor="password">Password</FieldLabel>
+              <Input
+                aria-invalid={Boolean(errors.password)}
+                autoComplete="new-password"
+                id="password"
+                type="password"
+                {...form.register("password")}
+              />
+              <FieldError errors={[errors.password]} />
+            </Field>
+            <Field data-invalid={errors.confirmPassword ? true : undefined}>
+              <FieldLabel htmlFor="confirmPassword">
+                Confirm password
+              </FieldLabel>
+              <Input
+                aria-invalid={Boolean(errors.confirmPassword)}
+                autoComplete="new-password"
+                id="confirmPassword"
+                type="password"
+                {...form.register("confirmPassword")}
+              />
+              <FieldError errors={[errors.confirmPassword]} />
+            </Field>
+          </FieldGroup>
           {formError ? (
             <p className="text-sm text-destructive">{formError}</p>
           ) : null}
-          <Button disabled={form.formState.isSubmitting} type="submit">
-            {form.formState.isSubmitting ? "Creating…" : "Sign up"}
+          <Button disabled={isSubmitting} type="submit">
+            {isSubmitting ? <Spinner data-icon="inline-start" /> : null}
+            {isSubmitting ? "Creating…" : "Sign up"}
           </Button>
         </form>
       </CardContent>

@@ -7,8 +7,53 @@ import { site } from "@/config/site"
 export function Navbar() {
   const { data: session, isPending } = useSession()
 
+  let authActions = null
+  if (!isPending && session) {
+    authActions = (
+      <>
+        <Button
+          nativeButton={false}
+          render={<Link to={routes.dashboard} />}
+          size="sm"
+          variant="ghost"
+        >
+          App
+        </Button>
+        <Button
+          onClick={() => {
+            void signOut()
+          }}
+          size="sm"
+          variant="outline"
+        >
+          Sign out
+        </Button>
+      </>
+    )
+  } else if (!isPending) {
+    authActions = (
+      <>
+        <Button
+          nativeButton={false}
+          render={<Link to={routes.signIn} />}
+          size="sm"
+          variant="ghost"
+        >
+          Sign in
+        </Button>
+        <Button
+          nativeButton={false}
+          render={<Link to={routes.signUp} />}
+          size="sm"
+        >
+          Sign up
+        </Button>
+      </>
+    )
+  }
+
   return (
-    <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur-sm">
+    <header className="sticky top-0 border-b bg-background/80 backdrop-blur-sm">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
         <Link
           className="font-heading text-sm font-semibold tracking-tight"
@@ -16,33 +61,7 @@ export function Navbar() {
         >
           {site.name}
         </Link>
-        <div className="flex items-center gap-2">
-          {isPending ? null : session ? (
-            <>
-              <Button asChild size="sm" variant="ghost">
-                <Link to={routes.dashboard}>App</Link>
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => {
-                  void signOut()
-                }}
-              >
-                Sign out
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button asChild size="sm" variant="ghost">
-                <Link to={routes.signIn}>Sign in</Link>
-              </Button>
-              <Button asChild size="sm">
-                <Link to={routes.signUp}>Sign up</Link>
-              </Button>
-            </>
-          )}
-        </div>
+        <div className="flex items-center gap-2">{authActions}</div>
       </div>
     </header>
   )

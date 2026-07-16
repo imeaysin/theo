@@ -1,7 +1,7 @@
 import { Suspense } from "react"
 import { Outlet } from "react-router-dom"
 import { Navbar } from "@/components/navbar"
-import { PageLoading } from "@workspace/ui-shadcn/components/page-loading"
+import { PageLoading } from "@/components/page-loading"
 
 export function RootLayout() {
   return (

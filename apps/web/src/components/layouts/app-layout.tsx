@@ -1,6 +1,7 @@
 import { AppSidebar } from "@/components/app-sidebar"
 import { useEventStream } from "@/features/notifications/hooks/use-event-stream"
 import { useAppShellConfig } from "@/features/shell/use-app-shell-config"
+import { useEnsureActiveOrganization } from "@/features/shell/use-ensure-active-organization"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -15,11 +16,12 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@workspace/ui-shadcn/components/sidebar"
-import { Outlet, useLocation } from "react-router-dom"
+import { Link, Outlet, useLocation } from "react-router-dom"
 
-export const AppLayout = () => {
+export function AppLayout() {
   const { navMain, brandLabel } = useAppShellConfig()
   const { pathname } = useLocation()
+  useEnsureActiveOrganization()
   useEventStream()
 
   const currentNav = navMain.find(
@@ -32,32 +34,37 @@ export const AppLayout = () => {
   const currentSubNav = currentNav?.items?.find(
     (n) => pathname === n.url || pathname.startsWith(`${n.url}/`)
   )
+
   return (
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 bg-background transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-          <div className="flex items-center gap-2 px-6">
+        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+          <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator
+              className="mr-2 data-vertical:h-4 data-vertical:self-auto"
               orientation="vertical"
-              className="mr-2 data-[orientation=vertical]:h-4"
             />
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    {currentNav?.title ?? brandLabel}
-                  </BreadcrumbLink>
+                  {currentNav?.url ? (
+                    <BreadcrumbLink render={<Link to={currentNav.url} />}>
+                      {currentNav.title}
+                    </BreadcrumbLink>
+                  ) : (
+                    <BreadcrumbPage>{brandLabel}</BreadcrumbPage>
+                  )}
                 </BreadcrumbItem>
-                {currentSubNav && (
+                {currentSubNav ? (
                   <>
                     <BreadcrumbSeparator className="hidden md:block" />
                     <BreadcrumbItem>
                       <BreadcrumbPage>{currentSubNav.title}</BreadcrumbPage>
                     </BreadcrumbItem>
                   </>
-                )}
+                ) : null}
               </BreadcrumbList>
             </Breadcrumb>
           </div>

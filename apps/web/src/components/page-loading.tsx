@@ -24,7 +24,7 @@ export function PageLoading({
       role="status"
       {...props}
     >
-      <EmptyMedia className="mb-0">
+      <EmptyMedia>
         <Spinner className="size-8 text-primary" />
       </EmptyMedia>
       {message ? (

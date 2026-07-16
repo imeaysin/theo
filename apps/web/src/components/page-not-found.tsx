@@ -2,13 +2,13 @@ import { FileQuestionIcon } from "lucide-react"
 import type * as React from "react"
 import { Button } from "@workspace/ui-shadcn/components/button"
 import {
-  PageState,
-  PageStateActions,
-  PageStateDescription,
-  PageStateHeader,
-  PageStateIcon,
-  PageStateTitle,
-} from "@workspace/ui-shadcn/components/page-state"
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@workspace/ui-shadcn/components/empty"
 import { cn } from "@workspace/ui-shadcn/lib/utils"
 
 export type PageNotFoundProps = {
@@ -17,7 +17,7 @@ export type PageNotFoundProps = {
   homeHref?: string
   homeLabel?: string
   action?: React.ReactNode
-} & React.ComponentProps<typeof PageState>
+} & React.ComponentProps<typeof Empty>
 
 export function PageNotFound({
   title = "Page not found",
@@ -29,21 +29,24 @@ export function PageNotFound({
   ...props
 }: PageNotFoundProps) {
   return (
-    <PageState className={cn(className)} {...props}>
-      <PageStateHeader>
-        <PageStateIcon>
+    <Empty
+      className={cn("min-h-[50vh] flex-1 py-16 sm:py-24", className)}
+      {...props}
+    >
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
           <FileQuestionIcon />
-        </PageStateIcon>
-        <PageStateTitle>{title}</PageStateTitle>
-        <PageStateDescription>{description}</PageStateDescription>
-      </PageStateHeader>
-      <PageStateActions>
+        </EmptyMedia>
+        <EmptyTitle>{title}</EmptyTitle>
+        <EmptyDescription>{description}</EmptyDescription>
+      </EmptyHeader>
+      <EmptyContent>
         {action ?? (
-          <Button asChild size="lg">
-            <a href={homeHref}>{homeLabel}</a>
+          <Button nativeButton={false} render={<a href={homeHref} />} size="lg">
+            {homeLabel}
           </Button>
         )}
-      </PageStateActions>
-    </PageState>
+      </EmptyContent>
+    </Empty>
   )
 }

@@ -16,8 +16,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@workspace/ui-shadcn/components/card"
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@workspace/ui-shadcn/components/field"
 import { Input } from "@workspace/ui-shadcn/components/input"
-import { Label } from "@workspace/ui-shadcn/components/label"
+import { Spinner } from "@workspace/ui-shadcn/components/spinner"
 import { routes } from "@/config/routes"
 
 export function ForgotPasswordPage() {
@@ -43,6 +49,9 @@ export function ForgotPasswordPage() {
     setSent(true)
   }
 
+  const emailError = form.formState.errors.email
+  const isSubmitting = form.formState.isSubmitting
+
   return (
     <Card>
       <CardHeader>
@@ -57,20 +66,29 @@ export function ForgotPasswordPage() {
             Check your inbox for a password reset link.
           </p>
         ) : (
-          <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                autoComplete="email"
-                {...form.register("email")}
-              />
-            </div>
+          <form
+            className="flex flex-col gap-4"
+            noValidate
+            onSubmit={form.handleSubmit(onSubmit)}
+          >
+            <FieldGroup>
+              <Field data-invalid={emailError ? true : undefined}>
+                <FieldLabel htmlFor="email">Email</FieldLabel>
+                <Input
+                  aria-invalid={Boolean(emailError)}
+                  autoComplete="email"
+                  id="email"
+                  type="email"
+                  {...form.register("email")}
+                />
+                <FieldError errors={[emailError]} />
+              </Field>
+            </FieldGroup>
             {formError ? (
               <p className="text-sm text-destructive">{formError}</p>
             ) : null}
-            <Button disabled={form.formState.isSubmitting} type="submit">
+            <Button disabled={isSubmitting} type="submit">
+              {isSubmitting ? <Spinner data-icon="inline-start" /> : null}
               Send reset link
             </Button>
           </form>

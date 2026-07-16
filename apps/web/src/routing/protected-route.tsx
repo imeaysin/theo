@@ -1,5 +1,5 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom"
-import { PageLoading } from "@workspace/ui-shadcn/components/page-loading"
+import { PageLoading } from "@/components/page-loading"
 import { useSession } from "@workspace/auth/client"
 import { routes } from "@/config/routes"
 

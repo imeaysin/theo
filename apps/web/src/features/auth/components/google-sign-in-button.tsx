@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { signIn } from "@workspace/auth/client"
 import { Button } from "@workspace/ui-shadcn/components/button"
+import { Spinner } from "@workspace/ui-shadcn/components/spinner"
 import { buildAuthCallback } from "@/features/auth/lib/auth-callback"
 
 type GoogleSignInButtonProps = {
@@ -33,13 +34,14 @@ export function GoogleSignInButton({
   }
 
   return (
-    <div className="grid gap-2">
+    <div className="flex flex-col gap-2">
       <Button
         disabled={isLoading}
+        onClick={() => void continueWithGoogle()}
         type="button"
         variant="outline"
-        onClick={() => void continueWithGoogle()}
       >
+        {isLoading ? <Spinner data-icon="inline-start" /> : null}
         {isLoading ? "Redirecting…" : label}
       </Button>
       {errorMessage ? (

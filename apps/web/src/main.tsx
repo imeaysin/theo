@@ -7,10 +7,8 @@ import "@/index.css"
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <div className="relative isolate min-h-svh">
-      <Providers>
-        <RouterProvider router={router} />
-      </Providers>
-    </div>
+    <Providers>
+      <RouterProvider router={router} />
+    </Providers>
   </StrictMode>
 )

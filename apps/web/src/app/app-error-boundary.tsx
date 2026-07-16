@@ -1,5 +1,5 @@
 import * as React from "react"
-import { PageError } from "@workspace/ui-shadcn/components/page-error"
+import { PageError } from "@/components/page-error"
 
 type State = { error: Error | null }
 

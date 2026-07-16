@@ -10,7 +10,7 @@ vi.mock("@workspace/auth/client", () => ({
   useSession: () => useSession(),
 }))
 
-vi.mock("@workspace/ui-shadcn/components/page-loading", () => ({
+vi.mock("@/components/page-loading", () => ({
   PageLoading: () => <div>Loading session</div>,
 }))
 
