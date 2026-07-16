@@ -3,7 +3,7 @@
 import * as React from "react"
 import { AppSidebar as UiAppSidebar } from "@workspace/ui-shadcn/components/app-sidebar"
 import type { ComponentProps } from "react"
-import { CreateWorkspaceDialog } from "@/features/shell/components/create-workspace-dialog"
+import { CreateOrganizationDialog } from "@/features/shell/components/create-organization-dialog"
 import { useAppShellConfig } from "@/features/shell/use-app-shell-config"
 import { Link } from "react-router-dom"
 
@@ -41,8 +41,8 @@ export function AppSidebar(props: AppSidebarProps) {
     onTeamChange,
     onAddTeam,
     userMenuItems,
-    createWorkspaceOpen,
-    setCreateWorkspaceOpen,
+    createOrganizationOpen,
+    setCreateOrganizationOpen,
   } = useAppShellConfig()
 
   return (
@@ -60,9 +60,9 @@ export function AppSidebar(props: AppSidebarProps) {
         userMenuItems={userMenuItems}
         {...props}
       />
-      <CreateWorkspaceDialog
-        onOpenChange={setCreateWorkspaceOpen}
-        open={createWorkspaceOpen}
+      <CreateOrganizationDialog
+        onOpenChange={setCreateOrganizationOpen}
+        open={createOrganizationOpen}
       />
     </>
   )

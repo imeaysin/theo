@@ -32,7 +32,7 @@ function useIsClient() {
 
 /**
  * Compact theme selector with SVG preview cards (coss particle style),
- * wired to Theo's theme plugin / next-themes.
+ * wired to the theme plugin / next-themes.
  */
 export function Appearance({ className }: AppearanceProps) {
   const { useTheme, localization } = useAuthPlugin(themePlugin)

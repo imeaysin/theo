@@ -1,6 +1,6 @@
 # Web (`apps/web`)
 
-Vite + React client for the Theo template.
+Vite + React client.
 
 ## Development
 

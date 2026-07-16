@@ -23,12 +23,12 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
-import type { OrgRole } from "@/features/organization/hooks/use-org-roles"
+import type { OrganizationRole } from "@/features/organization/hooks/use-organization-roles"
 import {
   ROLE_PERMISSION_CATALOG,
   isPermissionResource,
   type PermissionResource,
-} from "@/features/organization/lib/org-roles"
+} from "@/features/organization/lib/organization-roles"
 
 const RoleNameSchema = z.object({
   role: z
@@ -48,7 +48,7 @@ type RoleNameValues = z.infer<typeof RoleNameSchema>
 type RoleFormDialogProps = {
   readonly open: boolean
   readonly onOpenChange: (open: boolean) => void
-  readonly editingRole: OrgRole | null
+  readonly editingRole: OrganizationRole | null
   readonly onSaved: () => void
 }
 
@@ -58,7 +58,9 @@ function emptyPermissionState(): PermissionState {
   return {}
 }
 
-function permissionStateFromRole(role: OrgRole | null): PermissionState {
+function permissionStateFromRole(
+  role: OrganizationRole | null
+): PermissionState {
   const next = emptyPermissionState()
   if (!role) return next
   for (const [resource, actions] of Object.entries(role.permission)) {
@@ -102,7 +104,7 @@ export function RoleFormDialog({
 }
 
 type RoleFormBodyProps = {
-  readonly editingRole: OrgRole | null
+  readonly editingRole: OrganizationRole | null
   readonly onOpenChange: (open: boolean) => void
   readonly onSaved: () => void
 }

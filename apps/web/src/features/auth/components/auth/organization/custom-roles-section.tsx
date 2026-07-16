@@ -10,16 +10,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import type { OrgRole } from "@/features/organization/hooks/use-org-roles"
-import { formatRoleLabel } from "@/features/organization/lib/org-roles"
+import type { OrganizationRole } from "@/features/organization/hooks/use-organization-roles"
+import { formatRoleLabel } from "@/features/organization/lib/organization-roles"
 
 type CustomRolesSectionProps = {
   readonly canDeleteRoles: boolean
   readonly canUpdateRoles: boolean
-  readonly customRoles: readonly OrgRole[]
+  readonly customRoles: readonly OrganizationRole[]
   readonly isPending: boolean
-  readonly onDelete: (role: OrgRole) => void
-  readonly onEdit: (role: OrgRole) => void
+  readonly onDelete: (role: OrganizationRole) => void
+  readonly onEdit: (role: OrganizationRole) => void
 }
 
 function permissionSummary(permission: Record<string, string[]>) {

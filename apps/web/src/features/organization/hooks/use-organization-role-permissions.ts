@@ -7,7 +7,7 @@ const ROLE_PERMISSION_CHECKS = [
   { key: "acRead", permissions: { ac: ["read"] } },
 ] as const
 
-export function useOrgRolePermissions(
+export function useOrganizationRolePermissions(
   organizationId: string | null | undefined
 ) {
   const { flags, isPending } = useOrgPermissionFlags(

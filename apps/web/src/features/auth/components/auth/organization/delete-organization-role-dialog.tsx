@@ -9,22 +9,22 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { Spinner } from "@/components/ui/spinner"
-import type { OrgRole } from "@/features/organization/hooks/use-org-roles"
-import { formatRoleLabel } from "@/features/organization/lib/org-roles"
+import type { OrganizationRole } from "@/features/organization/hooks/use-organization-roles"
+import { formatRoleLabel } from "@/features/organization/lib/organization-roles"
 
-type DeleteOrgRoleDialogProps = {
+type DeleteOrganizationRoleDialogProps = {
   readonly isDeleting: boolean
-  readonly role: OrgRole | null
+  readonly role: OrganizationRole | null
   readonly onConfirm: () => void
   readonly onOpenChange: (open: boolean) => void
 }
 
-export function DeleteOrgRoleDialog({
+export function DeleteOrganizationRoleDialog({
   isDeleting,
   role,
   onConfirm,
   onOpenChange,
-}: DeleteOrgRoleDialogProps) {
+}: DeleteOrganizationRoleDialogProps) {
   return (
     <AlertDialog open={role != null} onOpenChange={onOpenChange}>
       <AlertDialogContent>

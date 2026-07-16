@@ -8,7 +8,7 @@ import {
   User2 as UserIcon,
 } from "lucide-react"
 import { useEffect, useMemo } from "react"
-import { authClient as theoAuthClient } from "@workspace/auth/client"
+import { authClient } from "@workspace/auth/client"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { organizationPlugin } from "@/lib/auth/organization-plugin"
@@ -69,8 +69,13 @@ export function Organization({
     throw new Error("[Better Auth UI] Either `view` or `path` must be provided")
   }
 
-  const { authClient, basePaths, localization, navigate } = useAuth()
-  useAuthenticate(authClient)
+  const {
+    authClient: sessionClient,
+    basePaths,
+    localization,
+    navigate,
+  } = useAuth()
+  useAuthenticate(sessionClient)
 
   const {
     localization: organizationLocalization,
@@ -80,7 +85,7 @@ export function Organization({
   } = useAuthPlugin(organizationPlugin)
 
   const { data: activeOrganization, isPending } =
-    theoAuthClient.useActiveOrganization()
+    authClient.useActiveOrganization()
 
   useEffect(() => {
     if (!isPending && !activeOrganization) {

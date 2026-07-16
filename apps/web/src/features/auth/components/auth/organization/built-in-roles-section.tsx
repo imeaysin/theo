@@ -3,7 +3,7 @@ import {
   ASSIGNABLE_ORG_ROLES,
   STATIC_ORG_ROLES,
   formatRoleLabel,
-} from "@/features/organization/lib/org-roles"
+} from "@/features/organization/lib/organization-roles"
 
 export function BuiltInRolesSection() {
   return (

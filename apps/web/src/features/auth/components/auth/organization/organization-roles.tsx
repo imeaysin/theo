@@ -1,6 +1,6 @@
 "use client"
 
-import { authClient as theoAuthClient } from "@workspace/auth/client"
+import { authClient } from "@workspace/auth/client"
 import { useQueryClient } from "@tanstack/react-query"
 import { Plus } from "lucide-react"
 import { useState, type ComponentProps } from "react"
@@ -9,16 +9,16 @@ import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { RoleFormDialog } from "@/features/organization/components/role-form-dialog"
-import { useOrgRolePermissions } from "@/features/organization/hooks/use-org-role-permissions"
+import { useOrganizationRolePermissions } from "@/features/organization/hooks/use-organization-role-permissions"
 import {
-  orgRolesKey,
-  useOrgRoles,
-  type OrgRole,
-} from "@/features/organization/hooks/use-org-roles"
+  organizationRolesKey,
+  useOrganizationRoles,
+  type OrganizationRole,
+} from "@/features/organization/hooks/use-organization-roles"
 import { cn } from "@/lib/utils"
-import { BuiltInRolesSection } from "./organization-roles-built-in"
-import { CustomRolesSection } from "./organization-roles-custom"
-import { DeleteOrgRoleDialog } from "./organization-roles-delete-dialog"
+import { BuiltInRolesSection } from "./built-in-roles-section"
+import { CustomRolesSection } from "./custom-roles-section"
+import { DeleteOrganizationRoleDialog } from "./delete-organization-role-dialog"
 
 export type OrganizationRolesProps = {
   className?: string
@@ -34,15 +34,17 @@ export function OrganizationRoles({
 }: OrganizationRolesProps & ComponentProps<"div">) {
   const queryClient = useQueryClient()
   const { data: organization, isPending: orgPending } =
-    theoAuthClient.useActiveOrganization()
-  const permissions = useOrgRolePermissions(organization?.id)
-  const rolesQuery = useOrgRoles(
+    authClient.useActiveOrganization()
+  const permissions = useOrganizationRolePermissions(organization?.id)
+  const rolesQuery = useOrganizationRoles(
     permissions.canListRoles ? organization?.id : null
   )
 
   const [roleFormOpen, setRoleFormOpen] = useState(false)
-  const [editingRole, setEditingRole] = useState<OrgRole | null>(null)
-  const [roleToDelete, setRoleToDelete] = useState<OrgRole | null>(null)
+  const [editingRole, setEditingRole] = useState<OrganizationRole | null>(null)
+  const [roleToDelete, setRoleToDelete] = useState<OrganizationRole | null>(
+    null
+  )
   const [isDeleting, setIsDeleting] = useState(false)
 
   const customRoles = rolesQuery.data ?? []
@@ -51,14 +53,14 @@ export function OrganizationRoles({
   async function refreshRoles() {
     if (!organization?.id) return
     await queryClient.invalidateQueries({
-      queryKey: orgRolesKey(organization.id),
+      queryKey: organizationRolesKey(organization.id),
     })
   }
 
   async function handleDelete() {
     if (!roleToDelete) return
     setIsDeleting(true)
-    const result = await theoAuthClient.organization.deleteRole({
+    const result = await authClient.organization.deleteRole({
       roleId: roleToDelete.id,
     })
     setIsDeleting(false)
@@ -120,7 +122,7 @@ export function OrganizationRoles({
         }}
       />
 
-      <DeleteOrgRoleDialog
+      <DeleteOrganizationRoleDialog
         isDeleting={isDeleting}
         role={roleToDelete}
         onConfirm={() => {

@@ -57,7 +57,7 @@ export function useAppShellConfig() {
   const { data: session } = useSession()
   const { data: activeOrganization } = authClient.useActiveOrganization()
   const { data: organizations } = authClient.useListOrganizations()
-  const [createWorkspaceOpen, setCreateWorkspaceOpen] = useState(false)
+  const [createOrganizationOpen, setCreateOrganizationOpen] = useState(false)
 
   const navMain = useMemo<AppSidebarNavItem[]>(() => {
     return appNavigation.navMain.map((item) => {
@@ -112,12 +112,12 @@ export function useAppShellConfig() {
       organizationId: team.id,
     })
     if (result.error) {
-      toast.error(result.error.message ?? "Could not switch workspace")
+      toast.error(result.error.message ?? "Could not switch organization")
     }
   }, [])
 
   const onAddTeam = useCallback(() => {
-    setCreateWorkspaceOpen(true)
+    setCreateOrganizationOpen(true)
   }, [])
 
   return {
@@ -135,8 +135,8 @@ export function useAppShellConfig() {
     userMenuItems,
     onTeamChange,
     onAddTeam,
-    createWorkspaceOpen,
-    setCreateWorkspaceOpen,
+    createOrganizationOpen,
+    setCreateOrganizationOpen,
     onSignOut: () => {
       void signOut()
     },

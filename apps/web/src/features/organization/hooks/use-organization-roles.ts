@@ -9,7 +9,7 @@ const RoleRowSchema = z.object({
   permission: z.unknown(),
 })
 
-export type OrgRole = {
+export type OrganizationRole = {
   readonly id: string
   readonly role: string
   readonly permission: Record<string, string[]>
@@ -37,15 +37,17 @@ function toPermissionMap(value: unknown): Record<string, string[]> {
   return isPermissionMap(value) ? value : {}
 }
 
-export function orgRolesKey(organizationId: string) {
+export function organizationRolesKey(organizationId: string) {
   return ["organization", "roles", organizationId] as const
 }
 
-export function useOrgRoles(organizationId: string | null | undefined) {
+export function useOrganizationRoles(
+  organizationId: string | null | undefined
+) {
   return useQuery({
-    queryKey: orgRolesKey(organizationId ?? ""),
+    queryKey: organizationRolesKey(organizationId ?? ""),
     enabled: Boolean(organizationId),
-    queryFn: async (): Promise<OrgRole[]> => {
+    queryFn: async (): Promise<OrganizationRole[]> => {
       const result = await authClient.organization.listRoles({
         query: { organizationId: organizationId ?? undefined },
       })

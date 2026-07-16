@@ -22,30 +22,30 @@ import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
-import { toOrgSlug } from "@/features/shell/organization-slug"
+import { toOrganizationSlug } from "@/features/shell/organization-slug"
 
-const CreateWorkspaceSchema = z.object({
+const CreateOrganizationSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters").max(80),
 })
 
-type CreateWorkspaceValues = z.infer<typeof CreateWorkspaceSchema>
+type CreateOrganizationValues = z.infer<typeof CreateOrganizationSchema>
 
-type CreateWorkspaceDialogProps = {
+type CreateOrganizationDialogProps = {
   readonly open: boolean
   readonly onOpenChange: (open: boolean) => void
 }
 
-function createUniqueOrgSlug(name: string) {
-  return `${toOrgSlug(name)}-${Date.now().toString(36)}`
+function createUniqueOrganizationSlug(name: string) {
+  return `${toOrganizationSlug(name)}-${Date.now().toString(36)}`
 }
 
-export function CreateWorkspaceDialog({
+export function CreateOrganizationDialog({
   open,
   onOpenChange,
-}: CreateWorkspaceDialogProps) {
+}: CreateOrganizationDialogProps) {
   const [isPending, setIsPending] = useState(false)
-  const form = useForm<CreateWorkspaceValues>({
-    resolver: zodResolver(CreateWorkspaceSchema),
+  const form = useForm<CreateOrganizationValues>({
+    resolver: zodResolver(CreateOrganizationSchema),
     defaultValues: { name: "" },
   })
 
@@ -54,9 +54,9 @@ export function CreateWorkspaceDialog({
     form.reset({ name: "" })
   }, [open, form])
 
-  async function handleSubmit(values: CreateWorkspaceValues) {
+  async function handleSubmit(values: CreateOrganizationValues) {
     setIsPending(true)
-    const slug = createUniqueOrgSlug(values.name)
+    const slug = createUniqueOrganizationSlug(values.name)
     const created = await authClient.organization.create({
       name: values.name,
       slug,
@@ -64,14 +64,14 @@ export function CreateWorkspaceDialog({
 
     if (created.error) {
       setIsPending(false)
-      toast.error(created.error.message ?? "Could not create workspace")
+      toast.error(created.error.message ?? "Could not create organization")
       return
     }
 
     const organizationId = created.data?.id
     if (!organizationId) {
       setIsPending(false)
-      toast.error("Workspace created but id was missing")
+      toast.error("Organization created but id was missing")
       return
     }
 
@@ -81,11 +81,11 @@ export function CreateWorkspaceDialog({
     setIsPending(false)
 
     if (activated.error) {
-      toast.error(activated.error.message ?? "Could not activate workspace")
+      toast.error(activated.error.message ?? "Could not activate organization")
       return
     }
 
-    toast.success("Workspace created")
+    toast.success("Organization created")
     onOpenChange(false)
     form.reset({ name: "" })
   }
@@ -103,20 +103,21 @@ export function CreateWorkspaceDialog({
       <DialogContent className="sm:max-w-md" showCloseButton={!isPending}>
         <form noValidate onSubmit={form.handleSubmit(handleSubmit)}>
           <DialogHeader>
-            <DialogTitle>Create workspace</DialogTitle>
+            <DialogTitle>Create organization</DialogTitle>
             <DialogDescription>
-              Name your workspace. You can invite members after it is created.
+              Name your organization. You can invite members after it is
+              created.
             </DialogDescription>
           </DialogHeader>
 
           <FieldGroup className="py-4">
             <Field data-invalid={nameError ? true : undefined}>
-              <FieldLabel htmlFor="workspace-name">Name</FieldLabel>
+              <FieldLabel htmlFor="organization-name">Name</FieldLabel>
               <Input
                 aria-invalid={Boolean(nameError)}
                 autoFocus
                 disabled={isPending}
-                id="workspace-name"
+                id="organization-name"
                 placeholder="Acme Inc"
                 {...form.register("name")}
               />
@@ -133,7 +134,7 @@ export function CreateWorkspaceDialog({
             </DialogClose>
             <Button disabled={isPending} type="submit">
               {isPending ? <Spinner data-icon="inline-start" /> : null}
-              Create workspace
+              Create organization
             </Button>
           </DialogFooter>
         </form>

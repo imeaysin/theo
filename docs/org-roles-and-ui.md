@@ -1,6 +1,6 @@
 # Organization roles, custom roles & module UI
 
-How Theo maps Better Auth org RBAC to API guards and web UI — including **static** built-in roles and **dynamic** custom roles.
+How Better Auth org RBAC maps to API guards and web UI — including **static** built-in roles and **dynamic** custom roles.
 
 Related: [authN-authZ.md](./authN-authZ.md) (full stack), [adding-a-feature.md](./adding-a-feature.md), Organization UI at `/organization/*`.
 
@@ -52,7 +52,7 @@ Custom roles may **only** use actions that exist in `organizationStatement`, and
 | `rolePermissionCatalog`                  | same                                       | Resources shown in custom-role UI (omits `organization` + `ac`) |
 | `useHasOrgPermission`                    | `apps/web/src/hooks/use-org-permission.ts` | Module UI gating (static **and** custom)                        |
 
-Do **not** duplicate permission lists in feature folders. Web helpers re-export from auth in `apps/web/src/features/organization/lib/org-roles.ts`.
+Do **not** duplicate permission lists in feature folders. Web helpers re-export from auth in `apps/web/src/features/organization/lib/organization-roles.ts`.
 
 ---
 
@@ -212,7 +212,7 @@ Example: billing module needs `billing: ["read", "pay"]`.
 | -------- | ---------------------------------------------- |
 | Settings | Profile, logo, danger zone (`settings:update`) |
 | People   | Members + invitations (Better Auth UI)         |
-| Roles    | Built-in badges + custom CRUD (Theo)           |
+| Roles    | Built-in badges + custom CRUD                  |
 
 Routes: `/organization/settings|people|roles`.
 Custom roles: `apps/web/src/features/organization/` + BA UI shell under `features/auth/components/auth/organization/`.
