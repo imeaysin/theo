@@ -1,4 +1,4 @@
-import { SquareTerminal } from "lucide-react"
+import { Building2, SquareTerminal } from "lucide-react"
 import { routes } from "@/config/routes"
 import type { LucideIcon } from "lucide-react"
 
@@ -31,6 +31,12 @@ export const appNavigation = {
         { title: "Uploads", url: routes.uploads },
         { title: "Notifications", url: routes.notifications },
       ],
+    },
+    {
+      title: "Workspace",
+      url: routes.workspace,
+      icon: Building2,
+      items: [{ title: "Members & roles", url: routes.workspace }],
     },
   ] satisfies readonly NavItem[],
   projects: emptyProjects,

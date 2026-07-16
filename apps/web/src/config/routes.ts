@@ -20,6 +20,7 @@ export const routeSegments = {
     notes: "notes",
     uploads: "uploads",
     notifications: "notifications",
+    workspace: "workspace",
   },
 } as const
 
@@ -51,6 +52,7 @@ export const routes = {
     routeSegments.app.root,
     routeSegments.app.notifications
   ),
+  workspace: toPath(routeSegments.app.root, routeSegments.app.workspace),
 } as const
 
 export const defaultAuthenticatedRoute = routes.dashboard

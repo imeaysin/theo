@@ -10,6 +10,7 @@ import { dashboardRoutes } from "@/features/dashboard/routes"
 import { notesRoutes } from "@/features/notes/routes"
 import { notificationRoutes } from "@/features/notifications/routes"
 import { uploadsRoutes } from "@/features/uploads/routes"
+import { workspaceRoutes } from "@/features/workspace/routes"
 import { homeRoutes } from "@/features/home/routes"
 import { ProtectedRoute } from "@/routing/protected-route"
 import { routeSegments, routes } from "@/config/routes"
@@ -48,6 +49,7 @@ export const router = createBrowserRouter([
           ...notesRoutes,
           ...notificationRoutes,
           ...uploadsRoutes,
+          ...workspaceRoutes,
         ],
       },
     ],
