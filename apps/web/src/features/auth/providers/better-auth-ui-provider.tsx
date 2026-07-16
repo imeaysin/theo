@@ -2,9 +2,11 @@ import "@/lib/auth/auth-plugin"
 import { authClient } from "@workspace/auth/client"
 import { useTheme } from "@workspace/ui-shadcn/components/theme-provider"
 import { useQueryClient } from "@tanstack/react-query"
-import type { ReactNode } from "react"
+import { useMemo, type ReactNode } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { AuthProvider } from "@/features/auth/components/auth/auth-provider"
+import { useWorkspaceRoles } from "@/features/workspace/hooks/use-workspace"
+import { formatRoleLabel } from "@/features/workspace/lib/org-roles"
 import { apiKeyPlugin } from "@/lib/auth/api-key-plugin"
 import { deleteUserPlugin } from "@/lib/auth/delete-user-plugin"
 import { organizationPlugin } from "@/lib/auth/organization-plugin"
@@ -15,6 +17,18 @@ import { defaultAuthenticatedRoute, routes } from "@/config/routes"
 export function BetterAuthUiProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
+  const { data: activeOrganization } = authClient.useActiveOrganization()
+  const { data: customRoles } = useWorkspaceRoles(activeOrganization?.id)
+
+  const additionalRoles = useMemo(() => {
+    const labels: Record<string, string> = {
+      viewer: "Viewer",
+    }
+    for (const role of customRoles ?? []) {
+      labels[role.role] = formatRoleLabel(role.role)
+    }
+    return labels
+  }, [customRoles])
 
   return (
     <AuthProvider
@@ -38,7 +52,7 @@ export function BetterAuthUiProvider({ children }: { children: ReactNode }) {
         <Link to={href ?? to ?? "/"} {...props} />
       )}
       plugins={[
-        organizationPlugin(),
+        organizationPlugin({ additionalRoles }),
         apiKeyPlugin({ organization: true }),
         themePlugin({ useTheme }),
         deleteUserPlugin(),

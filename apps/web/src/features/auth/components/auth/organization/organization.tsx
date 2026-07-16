@@ -8,13 +8,18 @@ import {
   useAuthenticate,
   useAuthPlugin,
 } from "@better-auth-ui/react"
-import { Settings as SettingsIcon, User2 as UserIcon } from "lucide-react"
+import {
+  Settings as SettingsIcon,
+  Shield as ShieldIcon,
+  User2 as UserIcon,
+} from "lucide-react"
 import { useEffect, useMemo } from "react"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { organizationPlugin } from "@/lib/auth/organization-plugin"
 import { cn } from "@/lib/utils"
 import { OrganizationPeople } from "./organization-people"
+import { OrganizationRoles } from "./organization-roles"
 import { OrganizationSettings } from "./organization-settings"
 
 export type OrganizationProps = {
@@ -25,10 +30,20 @@ export type OrganizationProps = {
   view?: OrganizationView
 }
 
+function organizationHref(
+  basePath: string,
+  slug: string | null | undefined,
+  slugPrefix: string,
+  segment: string
+) {
+  if (slug) {
+    return `${basePath}/${slugPrefix}${slug}/${segment}`
+  }
+  return `${basePath}/${segment}`
+}
+
 /**
- * Organization management shell: tabs for profile / danger zone and for
- * people (members / invitations). Path segments come from
- * `useAuthPlugin(organizationPlugin).viewPaths.organization`.
+ * Organization management shell: settings, people, and custom roles tabs.
  */
 export function Organization({
   className,
@@ -92,6 +107,8 @@ export function Organization({
     return null
   }
 
+  const rolesPath = organizationViewPaths.organization.roles ?? "roles"
+
   return (
     <Tabs
       value={currentView}
@@ -104,9 +121,12 @@ export function Organization({
             className="gap-1"
             onClick={() =>
               navigate({
-                to: slug
-                  ? `${basePaths.organization}/${slugPrefix}${slug}/${organizationViewPaths.organization.settings}`
-                  : `${basePaths.organization}/${organizationViewPaths.organization.settings}`,
+                to: organizationHref(
+                  basePaths.organization,
+                  slug,
+                  slugPrefix,
+                  organizationViewPaths.organization.settings
+                ),
               })
             }
           >
@@ -120,15 +140,36 @@ export function Organization({
             className="gap-1"
             onClick={() =>
               navigate({
-                to: slug
-                  ? `${basePaths.organization}/${slugPrefix}${slug}/${organizationViewPaths.organization.people}`
-                  : `${basePaths.organization}/${organizationViewPaths.organization.people}`,
+                to: organizationHref(
+                  basePaths.organization,
+                  slug,
+                  slugPrefix,
+                  organizationViewPaths.organization.people
+                ),
               })
             }
           >
             <UserIcon className="text-muted-foreground" />
 
             {organizationLocalization.people}
+          </TabsTrigger>
+
+          <TabsTrigger
+            value="roles"
+            className="gap-1"
+            onClick={() =>
+              navigate({
+                to: organizationHref(
+                  basePaths.organization,
+                  slug,
+                  slugPrefix,
+                  rolesPath
+                ),
+              })
+            }
+          >
+            <ShieldIcon className="text-muted-foreground" />
+            Roles
           </TabsTrigger>
         </TabsList>
       </div>
@@ -139,6 +180,10 @@ export function Organization({
 
       <TabsContent value="people" tabIndex={-1}>
         <OrganizationPeople />
+      </TabsContent>
+
+      <TabsContent value="roles" tabIndex={-1}>
+        <OrganizationRoles />
       </TabsContent>
     </Tabs>
   )

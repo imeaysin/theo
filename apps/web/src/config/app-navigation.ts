@@ -39,6 +39,7 @@ export const appNavigation = {
       items: [
         { title: "Settings", url: routes.organizationSettings },
         { title: "People", url: routes.organizationPeople },
+        { title: "Roles", url: routes.organizationRoles },
       ],
     },
   ] satisfies readonly NavItem[],

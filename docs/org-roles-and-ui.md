@@ -74,7 +74,7 @@ Exact actions: read `packages/auth/src/access/roles.ts`.
 
 ## Custom roles — full lifecycle
 
-UI: **Workspace → Members & roles** (`/app/workspace`).
+UI: **Organization → Roles** (`/organization/roles`) — custom role CRUD. Members & invites stay on **People**.
 
 ### 1. Create
 

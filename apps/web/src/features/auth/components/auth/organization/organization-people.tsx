@@ -12,8 +12,7 @@ export type OrganizationPeopleProps = {
 }
 
 /**
- * Organization people UI: members table (see `OrganizationMembers`), then org
- * invitations.
+ * Organization people UI: members table, then org invitations.
  */
 export function OrganizationPeople({
   className,

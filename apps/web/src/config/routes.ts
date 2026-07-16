@@ -56,6 +56,7 @@ export const routes = {
   workspace: toPath(routeSegments.app.root, routeSegments.app.workspace),
   organizationSettings: "/organization/settings",
   organizationPeople: "/organization/people",
+  organizationRoles: "/organization/roles",
   settings: toPath(routeSegments.app.root, routeSegments.app.settings),
   settingsAccount: toPath(
     routeSegments.app.root,
