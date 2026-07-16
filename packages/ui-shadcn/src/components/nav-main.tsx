@@ -1,6 +1,6 @@
 "use client"
 
-import type * as React from "react"
+import * as React from "react"
 import {
   Collapsible,
   CollapsibleContent,
@@ -30,6 +30,60 @@ export type NavMainItem = {
   }[]
 }
 
+function NavMainCollapsibleItem({
+  item,
+  linkComponent: LinkComponent,
+}: {
+  item: NavMainItem
+  linkComponent: React.ElementType
+}) {
+  const isItemActive = Boolean(
+    item.isActive || item.items?.some((sub) => sub.isActive)
+  )
+  const [open, setOpen] = React.useState(isItemActive)
+  const [wasActive, setWasActive] = React.useState(isItemActive)
+
+  if (isItemActive !== wasActive) {
+    setWasActive(isItemActive)
+    if (isItemActive) {
+      setOpen(true)
+    }
+  }
+
+  return (
+    <Collapsible
+      className="group/collapsible"
+      open={open}
+      onOpenChange={setOpen}
+      render={<SidebarMenuItem />}
+    >
+      <CollapsibleTrigger
+        render={
+          <SidebarMenuButton isActive={item.isActive} tooltip={item.title} />
+        }
+      >
+        {item.icon}
+        <span>{item.title}</span>
+        <ChevronRightIcon className="ml-auto transition-transform duration-200 group-data-open/collapsible:rotate-90" />
+      </CollapsibleTrigger>
+      <CollapsibleContent>
+        <SidebarMenuSub>
+          {item.items?.map((subItem) => (
+            <SidebarMenuSubItem key={subItem.title}>
+              <SidebarMenuSubButton
+                isActive={subItem.isActive}
+                render={<LinkComponent href={subItem.url} />}
+              >
+                <span>{subItem.title}</span>
+              </SidebarMenuSubButton>
+            </SidebarMenuSubItem>
+          ))}
+        </SidebarMenuSub>
+      </CollapsibleContent>
+    </Collapsible>
+  )
+}
+
 export function NavMain({
   items,
   label = "Platform",
@@ -45,8 +99,6 @@ export function NavMain({
       <SidebarMenu>
         {items.map((item) => {
           const hasChildren = Boolean(item.items && item.items.length > 0)
-          const isItemActive =
-            item.isActive || item.items?.some((sub) => sub.isActive)
 
           if (!hasChildren) {
             return (
@@ -64,39 +116,11 @@ export function NavMain({
           }
 
           return (
-            <Collapsible
-              className="group/collapsible"
-              defaultOpen={isItemActive}
+            <NavMainCollapsibleItem
               key={item.title}
-              render={<SidebarMenuItem />}
-            >
-              <CollapsibleTrigger
-                render={
-                  <SidebarMenuButton
-                    isActive={item.isActive}
-                    tooltip={item.title}
-                  />
-                }
-              >
-                {item.icon}
-                <span>{item.title}</span>
-                <ChevronRightIcon className="ml-auto transition-transform duration-200 group-data-open/collapsible:rotate-90" />
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <SidebarMenuSub>
-                  {item.items?.map((subItem) => (
-                    <SidebarMenuSubItem key={subItem.title}>
-                      <SidebarMenuSubButton
-                        isActive={subItem.isActive}
-                        render={<LinkComponent href={subItem.url} />}
-                      >
-                        <span>{subItem.title}</span>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  ))}
-                </SidebarMenuSub>
-              </CollapsibleContent>
-            </Collapsible>
+              item={item}
+              linkComponent={LinkComponent}
+            />
           )
         })}
       </SidebarMenu>
