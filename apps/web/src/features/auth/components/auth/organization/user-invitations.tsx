@@ -31,6 +31,30 @@ export function UserInvitations({ className }: UserInvitationsProps) {
     authClient as OrganizationAuthClient
   )
 
+  function renderCardContent() {
+    if (isPending) {
+      return (
+        <div className="p-4">
+          <UserInvitationRowSkeleton />
+        </div>
+      )
+    }
+
+    if (!invitations?.length) {
+      return <UserInvitationsEmpty />
+    }
+
+    return invitations.map((invitation, index) => (
+      <div key={invitation.id}>
+        {index > 0 && <Separator />}
+
+        <div className="p-4">
+          <UserInvitationRow invitation={invitation} />
+        </div>
+      </div>
+    ))
+  }
+
   return (
     <div className={className}>
       <div className="flex flex-col gap-3">
@@ -39,25 +63,7 @@ export function UserInvitations({ className }: UserInvitationsProps) {
         </h2>
 
         <Card className="p-0">
-          <CardContent className="p-0">
-            {isPending ? (
-              <div className="p-4">
-                <UserInvitationRowSkeleton />
-              </div>
-            ) : !invitations?.length ? (
-              <UserInvitationsEmpty />
-            ) : (
-              invitations.map((invitation, index) => (
-                <div key={invitation.id}>
-                  {index > 0 && <Separator />}
-
-                  <div className="p-4">
-                    <UserInvitationRow invitation={invitation} />
-                  </div>
-                </div>
-              ))
-            )}
-          </CardContent>
+          <CardContent className="p-0">{renderCardContent()}</CardContent>
         </Card>
       </div>
     </div>

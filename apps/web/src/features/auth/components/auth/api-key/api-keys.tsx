@@ -54,6 +54,31 @@ export function ApiKeys({
 
   const [createOpen, setCreateOpen] = useState(false)
 
+  function renderListContent() {
+    if (isPending) return <ApiKeySkeleton />
+
+    if (!listData?.apiKeys.length) {
+      return (
+        <ApiKeysEmpty
+          onCreatePress={() => setCreateOpen(true)}
+          hideCreate={hideCreate}
+        />
+      )
+    }
+
+    return listData.apiKeys.map((key, index) => (
+      <div key={key.id}>
+        {index > 0 && <Separator />}
+
+        <ApiKey
+          apiKey={key}
+          hideDelete={hideDelete}
+          organizationId={organizationId}
+        />
+      </div>
+    ))
+  }
+
   return (
     <div className={cn("flex flex-col gap-3", className)}>
       <div className="flex items-end justify-between gap-3">
@@ -74,28 +99,7 @@ export function ApiKeys({
       </div>
 
       <Card className="p-0">
-        <CardContent className="p-0">
-          {isPending ? (
-            <ApiKeySkeleton />
-          ) : !listData?.apiKeys.length ? (
-            <ApiKeysEmpty
-              onCreatePress={() => setCreateOpen(true)}
-              hideCreate={hideCreate}
-            />
-          ) : (
-            listData.apiKeys.map((key, index) => (
-              <div key={key.id}>
-                {index > 0 && <Separator />}
-
-                <ApiKey
-                  apiKey={key}
-                  hideDelete={hideDelete}
-                  organizationId={organizationId}
-                />
-              </div>
-            ))
-          )}
-        </CardContent>
+        <CardContent className="p-0">{renderListContent()}</CardContent>
       </Card>
 
       {!hideCreate && (

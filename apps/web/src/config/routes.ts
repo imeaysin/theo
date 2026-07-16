@@ -20,7 +20,6 @@ export const routeSegments = {
     notes: "notes",
     uploads: "uploads",
     notifications: "notifications",
-    workspace: "workspace",
     settings: "settings",
   },
 } as const
@@ -53,7 +52,6 @@ export const routes = {
     routeSegments.app.root,
     routeSegments.app.notifications
   ),
-  workspace: toPath(routeSegments.app.root, routeSegments.app.workspace),
   organizationSettings: "/organization/settings",
   organizationPeople: "/organization/people",
   organizationRoles: "/organization/roles",

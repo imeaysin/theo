@@ -7,7 +7,7 @@ import {
   useInviteMember,
 } from "@better-auth-ui/react"
 import { UserPlus } from "lucide-react"
-import { type SyntheticEvent, useEffect, useState } from "react"
+import { type SyntheticEvent, useState } from "react"
 import { toast } from "sonner"
 
 import {
@@ -57,16 +57,15 @@ export function InviteMemberDialog({
   const [role, setRole] = useState(() => pickDefaultRole(Object.keys(roles)))
   const [emailError, setEmailError] = useState<string>()
 
-  useEffect(() => {
-    setRole((current) => {
-      const keys = Object.keys(roles)
-      return keys.includes(current) ? current : pickDefaultRole(keys)
-    })
-  }, [roles])
+  const roleKeys = Object.keys(roles)
+  const effectiveRole = roleKeys.includes(role)
+    ? role
+    : pickDefaultRole(roleKeys)
 
-  useEffect(() => {
-    if (!open) setEmailError(undefined)
-  }, [open])
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen) setEmailError(undefined)
+    onOpenChange(nextOpen)
+  }
 
   const { mutate: inviteMember, isPending: isInviting } = useInviteMember(
     authClient as OrganizationAuthClient,
@@ -78,7 +77,7 @@ export function InviteMemberDialog({
     }
   )
 
-  const isRoleValid = Object.keys(roles).includes(role)
+  const isRoleValid = roleKeys.includes(effectiveRole)
 
   const handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -90,12 +89,12 @@ export function InviteMemberDialog({
 
     inviteMember({
       email: email.trim(),
-      role: role as Parameters<typeof inviteMember>[0]["role"],
+      role: effectiveRole as Parameters<typeof inviteMember>[0]["role"],
     })
   }
 
   return (
-    <AlertDialog open={open} onOpenChange={onOpenChange}>
+    <AlertDialog open={open} onOpenChange={handleOpenChange}>
       <AlertDialogContent>
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           <AlertDialogHeader>
@@ -147,7 +146,7 @@ export function InviteMemberDialog({
               </Label>
 
               <Select
-                value={role}
+                value={effectiveRole}
                 onValueChange={(value) => setRole(value ?? "")}
                 disabled={isInviting}
               >

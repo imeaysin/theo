@@ -26,7 +26,9 @@ const RESEND_COOLDOWN_SECONDS = 60
  * @returns Whether the component has hydrated on the client.
  */
 function useIsHydrated() {
-  const subscribe = () => () => {}
+  const subscribe = (_onStoreChange: () => void) => {
+    return () => undefined
+  }
   return useSyncExternalStore(
     subscribe,
     () => true,
@@ -58,14 +60,10 @@ export function VerifyEmail({ className }: VerifyEmailProps) {
   } = useAuth()
 
   const isHydrated = useIsHydrated()
-  const [email, setEmail] = useState(
-    (isHydrated && sessionStorage.getItem("better-auth-ui.verify-email")) || ""
-  )
+  const email = isHydrated
+    ? (sessionStorage.getItem("better-auth-ui.verify-email") ?? "")
+    : ""
   const [cooldown, setCooldown] = useState(RESEND_COOLDOWN_SECONDS)
-
-  useEffect(() => {
-    setEmail(sessionStorage.getItem("better-auth-ui.verify-email") ?? "")
-  }, [])
 
   useEffect(() => {
     if (cooldown <= 0 || !email) return

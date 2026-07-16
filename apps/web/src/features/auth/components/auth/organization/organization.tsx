@@ -1,19 +1,14 @@
 "use client"
 
 import type { OrganizationView } from "@better-auth-ui/core/plugins"
-import {
-  type OrganizationAuthClient,
-  useActiveOrganization,
-  useAuth,
-  useAuthenticate,
-  useAuthPlugin,
-} from "@better-auth-ui/react"
+import { useAuth, useAuthenticate, useAuthPlugin } from "@better-auth-ui/react"
 import {
   Settings as SettingsIcon,
   Shield as ShieldIcon,
   User2 as UserIcon,
 } from "lucide-react"
 import { useEffect, useMemo } from "react"
+import { authClient as theoAuthClient } from "@workspace/auth/client"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { organizationPlugin } from "@/lib/auth/organization-plugin"
@@ -30,16 +25,35 @@ export type OrganizationProps = {
   view?: OrganizationView
 }
 
-function organizationHref(
-  basePath: string,
-  slug: string | null | undefined,
-  slugPrefix: string,
-  segment: string
-) {
+type OrganizationHrefOptions = {
+  readonly basePath: string
+  readonly slug: string | null | undefined
+  readonly slugPrefix: string
+  readonly segment: string
+}
+
+function organizationHref(options: OrganizationHrefOptions) {
+  const { basePath, slug, slugPrefix, segment } = options
   if (slug) {
     return `${basePath}/${slugPrefix}${slug}/${segment}`
   }
   return `${basePath}/${segment}`
+}
+
+function resolveOrganizationView(options: {
+  readonly view: OrganizationView | undefined
+  readonly path: string | undefined
+  readonly viewPaths: Record<string, string>
+}): OrganizationView | undefined {
+  if (options.view) return options.view
+
+  for (const [key, segment] of Object.entries(options.viewPaths)) {
+    if (segment !== options.path) continue
+    if (key === "settings" || key === "people" || key === "roles") {
+      return key
+    }
+  }
+  return undefined
 }
 
 /**
@@ -65,9 +79,8 @@ export function Organization({
     slugPrefix,
   } = useAuthPlugin(organizationPlugin)
 
-  const { data: activeOrganization, isPending } = useActiveOrganization(
-    authClient as OrganizationAuthClient
-  )
+  const { data: activeOrganization, isPending } =
+    theoAuthClient.useActiveOrganization()
 
   useEffect(() => {
     if (!isPending && !activeOrganization) {
@@ -84,15 +97,15 @@ export function Organization({
     activeOrganization,
   ])
 
-  const currentView = useMemo(() => {
-    if (view) return view
-
-    const match = Object.entries(organizationViewPaths.organization).find(
-      ([, segment]) => segment === path
-    )
-
-    return match?.[0] as OrganizationView | undefined
-  }, [view, path, organizationViewPaths.organization])
+  const currentView = useMemo(
+    () =>
+      resolveOrganizationView({
+        view,
+        path,
+        viewPaths: organizationViewPaths.organization,
+      }),
+    [view, path, organizationViewPaths.organization]
+  )
 
   if (!currentView) {
     const validPaths = Object.values(organizationViewPaths.organization).join(
@@ -121,12 +134,12 @@ export function Organization({
             className="gap-1"
             onClick={() =>
               navigate({
-                to: organizationHref(
-                  basePaths.organization,
+                to: organizationHref({
+                  basePath: basePaths.organization,
                   slug,
                   slugPrefix,
-                  organizationViewPaths.organization.settings
-                ),
+                  segment: organizationViewPaths.organization.settings,
+                }),
               })
             }
           >
@@ -140,12 +153,12 @@ export function Organization({
             className="gap-1"
             onClick={() =>
               navigate({
-                to: organizationHref(
-                  basePaths.organization,
+                to: organizationHref({
+                  basePath: basePaths.organization,
                   slug,
                   slugPrefix,
-                  organizationViewPaths.organization.people
-                ),
+                  segment: organizationViewPaths.organization.people,
+                }),
               })
             }
           >
@@ -159,12 +172,12 @@ export function Organization({
             className="gap-1"
             onClick={() =>
               navigate({
-                to: organizationHref(
-                  basePaths.organization,
+                to: organizationHref({
+                  basePath: basePaths.organization,
                   slug,
                   slugPrefix,
-                  rolesPath
-                ),
+                  segment: rolesPath,
+                }),
               })
             }
           >

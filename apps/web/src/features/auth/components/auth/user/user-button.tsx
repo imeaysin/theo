@@ -63,11 +63,15 @@ export type UserButtonProps = {
   hideSettings?: boolean
 }
 
-function renderUserLink(
-  link: UserButtonLink | ReactElement,
-  navigate: (options: { to: string; replace?: boolean }) => void,
+function renderUserLink({
+  link,
+  navigate,
+  fallbackKey,
+}: {
+  link: UserButtonLink | ReactElement
+  navigate: (options: { to: string; replace?: boolean }) => void
   fallbackKey: string
-): ReactNode {
+}): ReactNode {
   if (isValidElement(link)) return link
 
   const { label, href, icon, variant } = link
@@ -122,7 +126,11 @@ export function UserButton({
       if (visibility === "unauthenticated" && session) return []
     }
     return [
-      renderUserLink(link, navigate, `user-button-link-${index.toString()}`),
+      renderUserLink({
+        link,
+        navigate,
+        fallbackKey: `user-button-link-${index.toString()}`,
+      }),
     ]
   })
 

@@ -33,6 +33,22 @@ export function Passkeys({ className }: PasskeysProps) {
 
   const [addOpen, setAddOpen] = useState(false)
 
+  function renderCardContent() {
+    if (isPending) return <PasskeySkeleton />
+
+    if (!passkeys?.length) {
+      return <PasskeysEmpty onAddPress={() => setAddOpen(true)} />
+    }
+
+    return passkeys.map((passkey, index) => (
+      <div key={passkey.id}>
+        {index > 0 && <Separator />}
+
+        <Passkey passkey={passkey} />
+      </div>
+    ))
+  }
+
   return (
     <div className={cn("flex flex-col gap-3", className)}>
       <div className="flex items-end justify-between gap-3">
@@ -51,21 +67,7 @@ export function Passkeys({ className }: PasskeysProps) {
       </div>
 
       <Card className="p-0">
-        <CardContent className="p-0">
-          {isPending ? (
-            <PasskeySkeleton />
-          ) : !passkeys?.length ? (
-            <PasskeysEmpty onAddPress={() => setAddOpen(true)} />
-          ) : (
-            passkeys.map((passkey, index) => (
-              <div key={passkey.id}>
-                {index > 0 && <Separator />}
-
-                <Passkey passkey={passkey} />
-              </div>
-            ))
-          )}
-        </CardContent>
+        <CardContent className="p-0">{renderCardContent()}</CardContent>
       </Card>
 
       <AddPasskeyDialog open={addOpen} onOpenChange={setAddOpen} />

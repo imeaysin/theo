@@ -36,7 +36,10 @@ export type ThemePluginOptions = CommonThemeOptions &
 export const themePlugin = createAuthPlugin(
   coreThemePlugin.id,
   ({ useTheme, ...rest }: ThemePluginOptions) => {
-    const base = coreThemePlugin({ setTheme: () => {}, ...rest })
+    function unusedSetTheme(_theme: string) {
+      return
+    }
+    const base = coreThemePlugin({ setTheme: unusedSetTheme, ...rest })
     return {
       ...base,
       useTheme:

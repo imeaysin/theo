@@ -35,6 +35,10 @@ type CreateWorkspaceDialogProps = {
   readonly onOpenChange: (open: boolean) => void
 }
 
+function createUniqueOrgSlug(name: string) {
+  return `${toOrgSlug(name)}-${Date.now().toString(36)}`
+}
+
 export function CreateWorkspaceDialog({
   open,
   onOpenChange,
@@ -52,7 +56,7 @@ export function CreateWorkspaceDialog({
 
   async function handleSubmit(values: CreateWorkspaceValues) {
     setIsPending(true)
-    const slug = `${toOrgSlug(values.name)}-${Date.now().toString(36)}`
+    const slug = createUniqueOrgSlug(values.name)
     const created = await authClient.organization.create({
       name: values.name,
       slug,

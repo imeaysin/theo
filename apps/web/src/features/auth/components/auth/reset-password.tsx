@@ -23,6 +23,26 @@ import { Label } from "@/components/ui/label"
 import { Spinner } from "@/components/ui/spinner"
 import { cn } from "@/lib/utils"
 
+type PasswordValidationMessages = {
+  fieldRequired: string
+  tooShort: string
+  tooLong: string
+}
+
+function passwordValidationMessage(options: {
+  el: HTMLInputElement
+  messages: PasswordValidationMessages
+  min?: number
+  max?: number
+}) {
+  const { el, messages, min, max } = options
+  if (el.validity.valueMissing) return messages.fieldRequired
+  if (el.validity.tooShort) {
+    return messages.tooShort.replace("{{min}}", String(min))
+  }
+  return messages.tooLong.replace("{{max}}", String(max))
+}
+
 export type ResetPasswordProps = {
   className?: string
 }
@@ -136,17 +156,12 @@ export function ResetPassword({ className }: ResetPasswordProps) {
                     const el = e.target as HTMLInputElement
                     const min = emailAndPassword?.minPasswordLength
                     const max = emailAndPassword?.maxPasswordLength
-                    const msg = el.validity.valueMissing
-                      ? localization.auth.fieldRequired
-                      : el.validity.tooShort
-                        ? localization.auth.tooShort.replace(
-                            "{{min}}",
-                            String(min)
-                          )
-                        : localization.auth.tooLong.replace(
-                            "{{max}}",
-                            String(max)
-                          )
+                    const msg = passwordValidationMessage({
+                      el,
+                      messages: localization.auth,
+                      min,
+                      max,
+                    })
 
                     setFieldErrors((prev) => ({
                       ...prev,
@@ -208,17 +223,12 @@ export function ResetPassword({ className }: ResetPasswordProps) {
                       const el = e.target as HTMLInputElement
                       const min = emailAndPassword?.minPasswordLength
                       const max = emailAndPassword?.maxPasswordLength
-                      const msg = el.validity.valueMissing
-                        ? localization.auth.fieldRequired
-                        : el.validity.tooShort
-                          ? localization.auth.tooShort.replace(
-                              "{{min}}",
-                              String(min)
-                            )
-                          : localization.auth.tooLong.replace(
-                              "{{max}}",
-                              String(max)
-                            )
+                      const msg = passwordValidationMessage({
+                        el,
+                        messages: localization.auth,
+                        min,
+                        max,
+                      })
 
                       setFieldErrors((prev) => ({
                         ...prev,

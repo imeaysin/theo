@@ -7,7 +7,7 @@ import {
   useCreateOrganization,
 } from "@better-auth-ui/react"
 import { Briefcase } from "lucide-react"
-import { type SyntheticEvent, useEffect, useState } from "react"
+import { type SyntheticEvent, useState } from "react"
 
 import {
   AlertDialog,
@@ -51,27 +51,25 @@ export function CreateOrganizationDialog({
       onSuccess: () => onOpenChange(false),
     })
 
-  const handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    createOrganization({ name, slug })
-  }
+  const effectiveSlug = slugEdited ? slug : sanitizeSlug(name)
 
-  useEffect(() => {
-    if (!open) {
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen) {
       setSlug("")
       setName("")
       setSlugEdited(false)
       setNameError(undefined)
     }
-  }, [open])
+    onOpenChange(nextOpen)
+  }
 
-  useEffect(() => {
-    if (slugEdited) return
-    setSlug(sanitizeSlug(name))
-  }, [name, slugEdited])
+  const handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    createOrganization({ name, slug: effectiveSlug })
+  }
 
   return (
-    <AlertDialog open={open} onOpenChange={onOpenChange}>
+    <AlertDialog open={open} onOpenChange={handleOpenChange}>
       <AlertDialogContent>
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           <AlertDialogHeader>
@@ -118,7 +116,7 @@ export function CreateOrganizationDialog({
 
             <SlugField
               id="create-organization-slug"
-              value={slug}
+              value={effectiveSlug}
               onChange={(value) => {
                 setSlug(value)
                 setSlugEdited(true)

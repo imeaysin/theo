@@ -9,30 +9,7 @@ const RoleRowSchema = z.object({
   permission: z.unknown(),
 })
 
-export type WorkspaceMember = {
-  readonly id: string
-  readonly role: string
-  readonly userId: string
-  readonly organizationId: string
-  readonly createdAt: Date | string
-  readonly user: {
-    readonly id: string
-    readonly name: string
-    readonly email: string
-    readonly image?: string | null
-  }
-}
-
-export type WorkspaceInvitation = {
-  readonly id: string
-  readonly email: string
-  readonly role: string
-  readonly status: string
-  readonly organizationId: string
-  readonly expiresAt: Date | string
-}
-
-export type WorkspaceRole = {
+export type OrgRole = {
   readonly id: string
   readonly role: string
   readonly permission: Record<string, string[]>
@@ -60,15 +37,15 @@ function toPermissionMap(value: unknown): Record<string, string[]> {
   return isPermissionMap(value) ? value : {}
 }
 
-export function useWorkspaceOrganization() {
-  return authClient.useActiveOrganization()
+export function orgRolesKey(organizationId: string) {
+  return ["organization", "roles", organizationId] as const
 }
 
-export function useWorkspaceRoles(organizationId: string | null | undefined) {
+export function useOrgRoles(organizationId: string | null | undefined) {
   return useQuery({
-    queryKey: ["workspace", "roles", organizationId],
+    queryKey: orgRolesKey(organizationId ?? ""),
     enabled: Boolean(organizationId),
-    queryFn: async (): Promise<WorkspaceRole[]> => {
+    queryFn: async (): Promise<OrgRole[]> => {
       const result = await authClient.organization.listRoles({
         query: { organizationId: organizationId ?? undefined },
       })
@@ -90,8 +67,4 @@ export function useWorkspaceRoles(organizationId: string | null | undefined) {
       })
     },
   })
-}
-
-export function workspaceRolesKey(organizationId: string) {
-  return ["workspace", "roles", organizationId] as const
 }

@@ -1,7 +1,7 @@
 "use client"
 
 import { useAuthPlugin } from "@better-auth-ui/react"
-import { useEffect, useState, type ReactNode } from "react"
+import { useSyncExternalStore, type ReactNode } from "react"
 
 import { Card, CardContent } from "@/components/ui/card"
 import { FieldLegend, FieldSet } from "@/components/ui/field"
@@ -18,6 +18,18 @@ type ThemeValue = "system" | "light" | "dark"
 
 const THEME_OPTIONS: readonly ThemeValue[] = ["system", "light", "dark"]
 
+function subscribeNoop() {
+  return () => undefined
+}
+
+function useIsClient() {
+  return useSyncExternalStore(
+    subscribeNoop,
+    () => true,
+    () => false
+  )
+}
+
 /**
  * Compact theme selector with SVG preview cards (coss particle style),
  * wired to Theo's theme plugin / next-themes.
@@ -25,9 +37,7 @@ const THEME_OPTIONS: readonly ThemeValue[] = ["system", "light", "dark"]
 export function Appearance({ className }: AppearanceProps) {
   const { useTheme, localization } = useAuthPlugin(themePlugin)
   const { theme, setTheme, themes = [] } = useTheme()
-
-  const [isMounted, setIsMounted] = useState(false)
-  useEffect(() => setIsMounted(true), [])
+  const isClient = useIsClient()
 
   const themeLabels: Record<ThemeValue, string> = {
     system: localization.system,
@@ -43,8 +53,8 @@ export function Appearance({ className }: AppearanceProps) {
     })
   )
 
-  const selectedTheme = isMounted ? (theme ?? "") : ""
-  const isDisabled = !isMounted || !theme
+  const selectedTheme = isClient ? (theme ?? "") : ""
+  const isDisabled = !isClient || !theme
 
   return (
     <div>

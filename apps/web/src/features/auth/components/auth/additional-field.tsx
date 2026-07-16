@@ -74,6 +74,33 @@ function formatTime(date: Date) {
   return `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
 }
 
+function hiddenFieldValue(defaultValue: unknown): string {
+  if (defaultValue == null) return ""
+  if (defaultValue instanceof Date) return defaultValue.toISOString()
+  return String(defaultValue)
+}
+
+function numberFieldDefaultValue(
+  defaultValue: unknown
+): number | string | undefined {
+  if (defaultValue == null) return undefined
+  if (typeof defaultValue === "number") return defaultValue
+  return String(defaultValue)
+}
+
+function numericInputMode(maxFractionDigits: number | undefined) {
+  if (!maxFractionDigits) return "numeric"
+  return "decimal"
+}
+
+function sliderInitialValue(defaultValue: unknown, min: number): number {
+  if (typeof defaultValue === "number") return defaultValue
+  if (defaultValue != null && !Number.isNaN(Number(defaultValue))) {
+    return Number(defaultValue)
+  }
+  return min
+}
+
 /**
  * Icon-only copy button used as an `InputGroupAddon`. `getValue` is invoked
  * lazily on click so the button copies the input's *live* value rather than a
@@ -132,13 +159,7 @@ export function AdditionalField({
       <input
         type="hidden"
         name={name}
-        value={
-          field.defaultValue == null
-            ? ""
-            : field.defaultValue instanceof Date
-              ? field.defaultValue.toISOString()
-              : String(field.defaultValue)
-        }
+        value={hiddenFieldValue(field.defaultValue)}
       />
     )
   }
@@ -183,13 +204,7 @@ export function AdditionalField({
             field.step ??
             (maxFractionDigits ? 1 / 10 ** maxFractionDigits : undefined)
           }
-          defaultValue={
-            field.defaultValue == null
-              ? undefined
-              : typeof field.defaultValue === "number"
-                ? field.defaultValue
-                : String(field.defaultValue)
-          }
+          defaultValue={numberFieldDefaultValue(field.defaultValue)}
           placeholder={field.placeholder}
           required={field.required}
           readOnly={field.readOnly}
@@ -326,9 +341,7 @@ function InputField({ name, field, isPending }: AdditionalFieldProps) {
   const maxFractionDigits = field.formatOptions?.maximumFractionDigits
   const nativeInputType = isNumeric ? "number" : undefined
   const nativeInputMode = isNumeric
-    ? maxFractionDigits
-      ? "decimal"
-      : "numeric"
+    ? numericInputMode(maxFractionDigits)
     : undefined
   const nativeStep = maxFractionDigits ? 1 / 10 ** maxFractionDigits : undefined
 
@@ -418,12 +431,7 @@ function SliderField({ name, field, isPending }: AdditionalFieldProps) {
   const max = field.max ?? 100
   const step =
     field.step ?? (maxFractionDigits ? 1 / 10 ** maxFractionDigits : 1)
-  const initial =
-    typeof field.defaultValue === "number"
-      ? field.defaultValue
-      : field.defaultValue != null && !Number.isNaN(Number(field.defaultValue))
-        ? Number(field.defaultValue)
-        : min
+  const initial = sliderInitialValue(field.defaultValue, min)
 
   const [value, setValue] = useState<number>(initial)
 
@@ -505,7 +513,7 @@ function DateInput({ name, field, isPending }: AdditionalFieldProps) {
           type="text"
           name={name}
           value={formValue}
-          onChange={() => {}}
+          readOnly
           required={field.required}
           tabIndex={-1}
           aria-hidden="true"

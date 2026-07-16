@@ -2,7 +2,7 @@
 
 How Theo maps Better Auth org RBAC to API guards and web UI — including **static** built-in roles and **dynamic** custom roles.
 
-Related: [authN-authZ.md](./authN-authZ.md) (full stack), [adding-a-feature.md](./adding-a-feature.md), Workspace UI at `/app/workspace`.
+Related: [authN-authZ.md](./authN-authZ.md) (full stack), [adding-a-feature.md](./adding-a-feature.md), Organization UI at `/organization/*`.
 
 ---
 
@@ -52,7 +52,7 @@ Custom roles may **only** use actions that exist in `organizationStatement`, and
 | `rolePermissionCatalog`                  | same                                       | Resources shown in custom-role UI (omits `organization` + `ac`) |
 | `useHasOrgPermission`                    | `apps/web/src/hooks/use-org-permission.ts` | Module UI gating (static **and** custom)                        |
 
-Do **not** duplicate permission lists in feature folders. Web helpers re-export from auth in `apps/web/src/features/workspace/lib/org-roles.ts`.
+Do **not** duplicate permission lists in feature folders. Web helpers re-export from auth in `apps/web/src/features/organization/lib/org-roles.ts`.
 
 ---
 
@@ -172,7 +172,7 @@ const canCreate = useHasOrgPermission(
 ) : null}
 ```
 
-Batch checks: `useOrgPermissionFlags` (used by the workspace page).
+Batch checks: `useOrgPermissionFlags` (used by organization role / permission UI).
 
 **Rules**
 
@@ -206,16 +206,16 @@ Example: billing module needs `billing: ["read", "pay"]`.
 
 ---
 
-## Workspace management (reference UI)
+## Organization management (reference UI)
 
-| Tab         | Behavior                             |
-| ----------- | ------------------------------------ |
-| Overview    | Rename workspace (`settings:update`) |
-| Members     | List, assign role, remove            |
-| Invitations | Pending invites, cancel              |
-| Roles       | Built-in badges + custom CRUD        |
+| Tab      | Behavior                                       |
+| -------- | ---------------------------------------------- |
+| Settings | Profile, logo, danger zone (`settings:update`) |
+| People   | Members + invitations (Better Auth UI)         |
+| Roles    | Built-in badges + custom CRUD (Theo)           |
 
-Implementation: `apps/web/src/features/workspace/`.
+Routes: `/organization/settings|people|roles`.
+Custom roles: `apps/web/src/features/organization/` + BA UI shell under `features/auth/components/auth/organization/`.
 
 E2E scripts (API up + Mongo/Redis):
 

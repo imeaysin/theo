@@ -126,6 +126,26 @@ export function OrganizationInvitations({
     })
   }
 
+  function renderTableBody() {
+    if (isPending) return <OrganizationInvitationRowSkeleton />
+
+    if (!sortedInvitations?.length) {
+      return (
+        <TableRow>
+          <TableCell colSpan={5}>
+            <OrganizationInvitationsEmpty
+              onInvitePress={() => setInviteOpen(true)}
+            />
+          </TableCell>
+        </TableRow>
+      )
+    }
+
+    return sortedInvitations.map((invitation) => (
+      <OrganizationInvitationRow key={invitation.id} invitation={invitation} />
+    ))
+  }
+
   return (
     <div className={cn("flex flex-col gap-3", className)} {...props}>
       <h3 className="truncate text-sm font-semibold">
@@ -302,26 +322,7 @@ export function OrganizationInvitations({
               </TableRow>
             </TableHeader>
 
-            <TableBody>
-              {isPending ? (
-                <OrganizationInvitationRowSkeleton />
-              ) : !sortedInvitations?.length ? (
-                <TableRow>
-                  <TableCell colSpan={5}>
-                    <OrganizationInvitationsEmpty
-                      onInvitePress={() => setInviteOpen(true)}
-                    />
-                  </TableCell>
-                </TableRow>
-              ) : (
-                sortedInvitations.map((invitation) => (
-                  <OrganizationInvitationRow
-                    key={invitation.id}
-                    invitation={invitation}
-                  />
-                ))
-              )}
-            </TableBody>
+            <TableBody>{renderTableBody()}</TableBody>
           </Table>
         </Card>
       </div>

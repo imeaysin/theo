@@ -23,12 +23,12 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
+import type { OrgRole } from "@/features/organization/hooks/use-org-roles"
 import {
   ROLE_PERMISSION_CATALOG,
   isPermissionResource,
   type PermissionResource,
-} from "@/features/workspace/lib/org-roles"
-import type { WorkspaceRole } from "@/features/workspace/hooks/use-workspace"
+} from "@/features/organization/lib/org-roles"
 
 const RoleNameSchema = z.object({
   role: z
@@ -48,7 +48,7 @@ type RoleNameValues = z.infer<typeof RoleNameSchema>
 type RoleFormDialogProps = {
   readonly open: boolean
   readonly onOpenChange: (open: boolean) => void
-  readonly editingRole: WorkspaceRole | null
+  readonly editingRole: OrgRole | null
   readonly onSaved: () => void
 }
 
@@ -58,7 +58,7 @@ function emptyPermissionState(): PermissionState {
   return {}
 }
 
-function permissionStateFromRole(role: WorkspaceRole | null): PermissionState {
+function permissionStateFromRole(role: OrgRole | null): PermissionState {
   const next = emptyPermissionState()
   if (!role) return next
   for (const [resource, actions] of Object.entries(role.permission)) {
@@ -102,7 +102,7 @@ export function RoleFormDialog({
 }
 
 type RoleFormBodyProps = {
-  readonly editingRole: WorkspaceRole | null
+  readonly editingRole: OrgRole | null
   readonly onOpenChange: (open: boolean) => void
   readonly onSaved: () => void
 }
@@ -180,7 +180,7 @@ function RoleFormBody({
         </DialogTitle>
         <DialogDescription>
           Permissions must be a subset of what you already have in this
-          workspace.
+          organization.
         </DialogDescription>
       </DialogHeader>
 

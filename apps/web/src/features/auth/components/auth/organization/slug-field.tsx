@@ -38,6 +38,24 @@ export function sanitizeSlug(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, "-")
 }
 
+function SlugCheckIndicator({
+  checkSlugData,
+  checkSlugError,
+}: {
+  checkSlugData: { status?: boolean } | undefined
+  checkSlugError: unknown
+}) {
+  if (checkSlugData?.status) {
+    return <Check className="size-4 text-foreground" />
+  }
+
+  if (checkSlugError) {
+    return <X className="size-4 text-destructive" />
+  }
+
+  return <Spinner />
+}
+
 /**
  * Organization slug field with debounced availability checking.
  */
@@ -55,7 +73,12 @@ export function SlugField({
     slugPrefix,
   } = useAuthPlugin(organizationPlugin)
 
-  const [slugError, setSlugError] = useState<string>()
+  const [fieldValidation, setFieldValidation] = useState<{
+    atValue: string
+    message: string
+  }>()
+  const slugError =
+    fieldValidation?.atValue === value ? fieldValidation.message : undefined
 
   const {
     mutate: checkSlug,
@@ -75,16 +98,11 @@ export function SlugField({
   )
 
   useEffect(() => {
-    // Clear stale validation errors when the controlled value changes
-    // externally (e.g. the parent resets the form), not just via this
-    // input's onChange.
-    setSlugError(undefined)
-
     if (!checkSlugEnabled) return
 
     resetCheckSlug()
     debouncer.maybeExecute(value)
-  }, [checkSlugEnabled, value, debouncer.maybeExecute, resetCheckSlug])
+  }, [checkSlugEnabled, value, debouncer, resetCheckSlug])
 
   return (
     <Field data-invalid={!!slugError}>
@@ -101,11 +119,14 @@ export function SlugField({
           value={value}
           onChange={(e) => {
             onChange(sanitizeSlug(e.target.value))
-            setSlugError(undefined)
+            setFieldValidation(undefined)
           }}
           onInvalid={(e) => {
             e.preventDefault()
-            setSlugError(authLocalization.auth.fieldRequired)
+            setFieldValidation({
+              atValue: value,
+              message: authLocalization.auth.fieldRequired,
+            })
           }}
           aria-invalid={!!slugError}
           placeholder={localization.slugPlaceholder}
@@ -115,13 +136,10 @@ export function SlugField({
 
         {checkSlugEnabled && !!value.trim() && value.trim() !== currentSlug && (
           <InputGroupAddon align="inline-end">
-            {checkSlugData?.status ? (
-              <Check className="size-4 text-foreground" />
-            ) : checkSlugError ? (
-              <X className="size-4 text-destructive" />
-            ) : (
-              <Spinner />
-            )}
+            <SlugCheckIndicator
+              checkSlugData={checkSlugData}
+              checkSlugError={checkSlugError}
+            />
           </InputGroupAddon>
         )}
       </InputGroup>

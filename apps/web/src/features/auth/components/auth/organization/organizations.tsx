@@ -36,6 +36,30 @@ export function Organizations({ className }: OrganizationsProps) {
   const { data: organizations, isPending: organizationsPending } =
     useListOrganizations(authClient as OrganizationAuthClient)
 
+  function renderCardContent() {
+    if (organizationsPending) {
+      return (
+        <div className="p-4">
+          <OrganizationViewSkeleton />
+        </div>
+      )
+    }
+
+    if (!organizations?.length) {
+      return <OrganizationsEmpty onCreatePress={() => setCreateOpen(true)} />
+    }
+
+    return organizations.map((organization, index) => (
+      <div key={organization.id}>
+        {index > 0 && <Separator />}
+
+        <div className="p-4">
+          <OrganizationRow organization={organization} />
+        </div>
+      </div>
+    ))
+  }
+
   return (
     <>
       <div className={className}>
@@ -56,25 +80,7 @@ export function Organizations({ className }: OrganizationsProps) {
           </div>
 
           <Card className="p-0">
-            <CardContent className="p-0">
-              {organizationsPending ? (
-                <div className="p-4">
-                  <OrganizationViewSkeleton />
-                </div>
-              ) : !organizations?.length ? (
-                <OrganizationsEmpty onCreatePress={() => setCreateOpen(true)} />
-              ) : (
-                organizations.map((organization, index) => (
-                  <div key={organization.id}>
-                    {index > 0 && <Separator />}
-
-                    <div className="p-4">
-                      <OrganizationRow organization={organization} />
-                    </div>
-                  </div>
-                ))
-              )}
-            </CardContent>
+            <CardContent className="p-0">{renderCardContent()}</CardContent>
           </Card>
         </div>
       </div>

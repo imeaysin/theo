@@ -9,6 +9,28 @@ import type { ComponentProps } from "react"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
 
+function renderProviderButtonIcon(
+  isSignInPending: boolean,
+  ProviderIcon: (typeof providerIcons)[keyof typeof providerIcons] | undefined
+) {
+  if (isSignInPending) return <Spinner />
+  if (ProviderIcon) return <ProviderIcon />
+  return null
+}
+
+function providerButtonLabel(options: {
+  display: "full" | "name" | "icon"
+  provider: SocialProvider
+  continueWith: string
+}) {
+  const { display, provider, continueWith } = options
+  if (display === "full") {
+    return continueWith.replace("{{provider}}", getProviderName(provider))
+  }
+  if (display === "name") return getProviderName(provider)
+  return null
+}
+
 export type ProviderButtonProps = {
   provider: SocialProvider
   display?: "full" | "name" | "icon"
@@ -52,20 +74,13 @@ export function ProviderButton({
       {...props}
       aria-label={getProviderName(provider)}
     >
-      {signInSocialPending ? (
-        <Spinner />
-      ) : ProviderIcon ? (
-        <ProviderIcon />
-      ) : null}
+      {renderProviderButtonIcon(signInSocialPending, ProviderIcon)}
 
-      {display === "full"
-        ? localization.auth.continueWith.replace(
-            "{{provider}}",
-            getProviderName(provider)
-          )
-        : display === "name"
-          ? getProviderName(provider)
-          : null}
+      {providerButtonLabel({
+        display,
+        provider,
+        continueWith: localization.auth.continueWith,
+      })}
     </Button>
   )
 }

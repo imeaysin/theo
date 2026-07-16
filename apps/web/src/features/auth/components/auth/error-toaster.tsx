@@ -8,6 +8,12 @@ import type { BetterFetchError } from "better-auth/react"
 import { useEffect } from "react"
 import { toast } from "sonner"
 
+function handleAuthMutationError(error: unknown) {
+  const err = error as BetterFetchError
+  if (err.error?.code === "EMAIL_NOT_VERIFIED") return
+  toast.error(err.error?.message || err.message)
+}
+
 export function ErrorToaster() {
   const queryClient = useQueryClient()
 
@@ -28,28 +34,15 @@ export function ErrorToaster() {
     const mutationCache = queryClient.getMutationCache()
     const previousMutationOnError = mutationCache.config.onError
 
-    mutationCache.config.onError = (
-      error,
-      variables,
-      onMutateResult,
-      mutation,
-      context
-    ) => {
-      previousMutationOnError?.(
-        error,
-        variables,
-        onMutateResult,
-        mutation,
-        context
-      )
+    mutationCache.config.onError = (...args) => {
+      previousMutationOnError?.(...args)
 
+      const [, , , mutation] = args
       if (!matchMutation({ mutationKey: authMutationKeys.all }, mutation)) {
         return
       }
 
-      const err = error as BetterFetchError
-      if (err.error?.code === "EMAIL_NOT_VERIFIED") return
-      toast.error(err.error?.message || err.message)
+      handleAuthMutationError(args[0])
     }
 
     return () => {

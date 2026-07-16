@@ -12,6 +12,14 @@ export type ProviderButtonsProps = {
 
 export type SocialLayout = "auto" | "horizontal" | "vertical" | "grid"
 
+function providerDisplayForLayout(
+  layout: SocialLayout
+): "full" | "name" | "icon" {
+  if (layout === "vertical") return "full"
+  if (layout === "grid") return "name"
+  return "icon"
+}
+
 /**
  * Render sign-in buttons for configured social providers. Each button owns its own sign-in mutation
  * and reads the shared sign-in pending state from React Query.
@@ -48,13 +56,7 @@ export function ProviderButtons({
         <ProviderButton
           key={provider}
           provider={provider}
-          display={
-            resolvedSocialLayout === "vertical"
-              ? "full"
-              : resolvedSocialLayout === "grid"
-                ? "name"
-                : "icon"
-          }
+          display={providerDisplayForLayout(resolvedSocialLayout)}
           className={cn(resolvedSocialLayout === "horizontal" && "flex-1")}
         />
       ))}

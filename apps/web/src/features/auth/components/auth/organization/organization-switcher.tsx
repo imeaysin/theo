@@ -112,6 +112,78 @@ export function OrganizationSwitcher({
     }
   }
 
+  function renderTriggerContent() {
+    if (isPending) {
+      return <OrganizationView isPending hideRole hideSlug={hideSlug} />
+    }
+
+    if (activeOrganization) {
+      return <OrganizationView hideRole hideSlug={hideSlug} />
+    }
+
+    if (session && !hidePersonal) {
+      return <UserView hideSubtitle={hideSlug} />
+    }
+
+    return (
+      <OrganizationView
+        hideRole
+        hideSlug={hideSlug}
+        organization={{ name: organizationLocalization.organization }}
+      />
+    )
+  }
+
+  function renderDropdownHeader() {
+    if (activeOrganization) {
+      return (
+        <div className="flex items-center justify-between gap-4 px-2 py-2">
+          <OrganizationView
+            hideRole
+            hideSlug={hideSlug}
+            organization={activeOrganization}
+          />
+
+          {!hideSettings && (
+            <Link
+              href={
+                slug
+                  ? `${basePaths.organization}/${slugPrefix}${slug}/${organizationViewPaths.organization.settings}`
+                  : `${basePaths.organization}/${organizationViewPaths.organization.settings}`
+              }
+              className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
+            >
+              <SettingsIcon className="text-muted-foreground" />
+
+              {organizationLocalization.manage}
+            </Link>
+          )}
+        </div>
+      )
+    }
+
+    if (!isPending && session?.user && !hidePersonal) {
+      return (
+        <div className="flex items-center justify-between gap-4 px-2 py-2">
+          <UserView hideSubtitle={hideSlug} />
+
+          {!hideSettings && (
+            <Link
+              href={`${basePaths.settings}/${viewPaths.settings.account}`}
+              className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
+            >
+              <SettingsIcon className="text-muted-foreground" />
+
+              {localization.settings.settings}
+            </Link>
+          )}
+        </div>
+      )
+    }
+
+    return null
+  }
+
   return (
     <>
       <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
@@ -124,19 +196,7 @@ export function OrganizationSwitcher({
             )}
             disabled={!session || isPending}
           >
-            {isPending ? (
-              <OrganizationView isPending hideRole hideSlug={hideSlug} />
-            ) : activeOrganization ? (
-              <OrganizationView hideRole hideSlug={hideSlug} />
-            ) : session && !hidePersonal ? (
-              <UserView hideSubtitle={hideSlug} />
-            ) : (
-              <OrganizationView
-                hideRole
-                hideSlug={hideSlug}
-                organization={{ name: organizationLocalization.organization }}
-              />
-            )}
+            {renderTriggerContent()}
 
             <ChevronsUpDown className="size-4 shrink-0 text-muted-foreground" />
           </DropdownMenuTrigger>
@@ -148,49 +208,7 @@ export function OrganizationSwitcher({
           sideOffset={sideOffset}
           className="max-w-svw min-w-64"
         >
-          {activeOrganization ? (
-            <div className="flex items-center justify-between gap-4 px-2 py-2">
-              <OrganizationView
-                hideRole
-                hideSlug={hideSlug}
-                organization={activeOrganization}
-              />
-
-              {!hideSettings && (
-                <Link
-                  href={
-                    slug
-                      ? `${basePaths.organization}/${slugPrefix}${slug}/${organizationViewPaths.organization.settings}`
-                      : `${basePaths.organization}/${organizationViewPaths.organization.settings}`
-                  }
-                  className={cn(
-                    buttonVariants({ variant: "outline", size: "sm" })
-                  )}
-                >
-                  <SettingsIcon className="text-muted-foreground" />
-
-                  {organizationLocalization.manage}
-                </Link>
-              )}
-            </div>
-          ) : !isPending && session?.user && !hidePersonal ? (
-            <div className="flex items-center justify-between gap-4 px-2 py-2">
-              <UserView hideSubtitle={hideSlug} />
-
-              {!hideSettings && (
-                <Link
-                  href={`${basePaths.settings}/${viewPaths.settings.account}`}
-                  className={cn(
-                    buttonVariants({ variant: "outline", size: "sm" })
-                  )}
-                >
-                  <SettingsIcon className="text-muted-foreground" />
-
-                  {localization.settings.settings}
-                </Link>
-              )}
-            </div>
-          ) : null}
+          {renderDropdownHeader()}
 
           <DropdownMenuSeparator />
 

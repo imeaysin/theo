@@ -5,8 +5,8 @@ import { useQueryClient } from "@tanstack/react-query"
 import { useMemo, type ReactNode } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { AuthProvider } from "@/features/auth/components/auth/auth-provider"
-import { useWorkspaceRoles } from "@/features/workspace/hooks/use-workspace"
-import { formatRoleLabel } from "@/features/workspace/lib/org-roles"
+import { useOrgRoles } from "@/features/organization/hooks/use-org-roles"
+import { formatRoleLabel } from "@/features/organization/lib/org-roles"
 import { apiKeyPlugin } from "@/lib/auth/api-key-plugin"
 import { deleteUserPlugin } from "@/lib/auth/delete-user-plugin"
 import { organizationPlugin } from "@/lib/auth/organization-plugin"
@@ -18,7 +18,7 @@ export function BetterAuthUiProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const { data: activeOrganization } = authClient.useActiveOrganization()
-  const { data: customRoles } = useWorkspaceRoles(activeOrganization?.id)
+  const { data: customRoles } = useOrgRoles(activeOrganization?.id)
 
   const additionalRoles = useMemo(() => {
     const labels: Record<string, string> = {

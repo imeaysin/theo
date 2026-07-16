@@ -7,7 +7,8 @@ import {
   useAuthPlugin,
   useUpdateOrganization,
 } from "@better-auth-ui/react"
-import { type SyntheticEvent, useEffect, useState } from "react"
+import type { Organization } from "better-auth/client"
+import { type SyntheticEvent, useState } from "react"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
@@ -26,6 +27,77 @@ export type OrganizationProfileProps = {
   className?: string
 }
 
+type OrganizationProfileFormProps = {
+  activeOrganization: Organization
+  isPending: boolean
+  onSubmit: (data: { name: string; slug: string }) => void
+  saveLabel: string
+}
+
+function OrganizationProfileForm({
+  activeOrganization,
+  isPending,
+  onSubmit,
+  saveLabel,
+}: OrganizationProfileFormProps) {
+  const { localization: organizationLocalization } =
+    useAuthPlugin(organizationPlugin)
+
+  const [slug, setSlug] = useState(activeOrganization.slug)
+
+  const nameInputId = `${activeOrganization.id}-name`
+  const slugInputId = `${activeOrganization.id}-slug`
+
+  function handleSubmit(e: SyntheticEvent<HTMLFormElement>) {
+    e.preventDefault()
+
+    const formData = new FormData(e.currentTarget)
+    const name = formData.get("name") as string
+
+    onSubmit({ name, slug })
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <ChangeOrganizationLogo />
+
+      <Field>
+        <Label htmlFor={nameInputId}>{organizationLocalization.name}</Label>
+
+        <Input
+          id={nameInputId}
+          name="name"
+          defaultValue={activeOrganization.name}
+          autoComplete="organization"
+          placeholder={organizationLocalization.namePlaceholder}
+          disabled={isPending}
+        />
+
+        <FieldError />
+      </Field>
+
+      <SlugField
+        id={slugInputId}
+        value={slug}
+        onChange={setSlug}
+        currentSlug={activeOrganization.slug}
+        disabled={isPending}
+      />
+
+      <Button
+        type="submit"
+        disabled={isPending}
+        size="sm"
+        className="mt-1 w-fit"
+      >
+        {isPending && <Spinner />}
+
+        {saveLabel}
+      </Button>
+    </form>
+  )
+}
+
 /**
  * Profile card for the active organization: logo (when enabled), display name, and slug.
  */
@@ -38,12 +110,6 @@ export function OrganizationProfile({ className }: OrganizationProfileProps) {
     authClient as OrganizationAuthClient
   )
 
-  const [slug, setSlug] = useState(activeOrganization?.slug ?? "")
-
-  useEffect(() => {
-    setSlug(activeOrganization?.slug ?? "")
-  }, [activeOrganization?.slug])
-
   const { mutate: commitOrganizationUpdate, isPending } = useUpdateOrganization(
     authClient as OrganizationAuthClient,
     {
@@ -52,20 +118,9 @@ export function OrganizationProfile({ className }: OrganizationProfileProps) {
     }
   )
 
-  function handleSubmit(e: SyntheticEvent<HTMLFormElement>) {
-    e.preventDefault()
-    if (!activeOrganization) return
-
-    const formData = new FormData(e.currentTarget)
-    const name = formData.get("name") as string
-
-    commitOrganizationUpdate({
-      data: { name, slug },
-    })
+  function handleSubmit(data: { name: string; slug: string }) {
+    commitOrganizationUpdate({ data })
   }
-
-  const nameInputId = `${activeOrganization?.id ?? "org"}-name`
-  const slugInputId = `${activeOrganization?.id ?? "org"}-slug`
 
   return (
     <div>
@@ -75,57 +130,27 @@ export function OrganizationProfile({ className }: OrganizationProfileProps) {
 
       <Card className={className}>
         <CardContent>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <ChangeOrganizationLogo />
-
-            <Field>
-              <Label htmlFor={nameInputId}>
-                {organizationLocalization.name}
-              </Label>
-
-              {activeOrganization ? (
-                <Input
-                  key={activeOrganization.id}
-                  id={nameInputId}
-                  name="name"
-                  defaultValue={activeOrganization.name}
-                  autoComplete="organization"
-                  placeholder={organizationLocalization.namePlaceholder}
-                  disabled={isPending}
-                />
-              ) : (
+          {activeOrganization ? (
+            <OrganizationProfileForm
+              key={activeOrganization.id}
+              activeOrganization={activeOrganization}
+              isPending={isPending}
+              onSubmit={handleSubmit}
+              saveLabel={localization.settings.saveChanges}
+            />
+          ) : (
+            <div className="flex flex-col gap-4">
+              <Field>
+                <Label>{organizationLocalization.name}</Label>
                 <Skeleton className="h-8 w-full rounded-md" />
-              )}
+              </Field>
 
-              <FieldError />
-            </Field>
-
-            {activeOrganization ? (
-              <SlugField
-                id={slugInputId}
-                value={slug}
-                onChange={setSlug}
-                currentSlug={activeOrganization.slug}
-                disabled={isPending}
-              />
-            ) : (
               <Field>
                 <Label>{organizationLocalization.slug}</Label>
                 <Skeleton className="h-8 w-full rounded-md" />
               </Field>
-            )}
-
-            <Button
-              type="submit"
-              disabled={isPending || !activeOrganization}
-              size="sm"
-              className="mt-1 w-fit"
-            >
-              {isPending && <Spinner />}
-
-              {localization.settings.saveChanges}
-            </Button>
-          </form>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
