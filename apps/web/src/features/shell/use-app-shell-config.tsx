@@ -22,7 +22,6 @@ import type {
 type OrganizationSummary = {
   readonly id: string
   readonly name: string
-  readonly slug?: string | null
 }
 
 const TEAM_LOGOS = [GalleryVerticalEnd, AudioWaveform, Command] as const
@@ -40,7 +39,7 @@ function toShellTeams(
       id: org.id,
       name: org.name,
       logo: <Logo />,
-      plan: org.slug ?? "Pro",
+      plan: "Organization",
     }
   })
 }
