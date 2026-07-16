@@ -23,40 +23,40 @@ import {
   EmailStyles,
 } from "./email-styles"
 
-const resetPasswordEmailLocalization = {
-  RESET_YOUR_PASSWORD: "Reset your password",
+const emailVerificationEmailLocalization = {
+  VERIFY_YOUR_EMAIL_ADDRESS: "Verify your email address",
   LOGO: "Logo",
-  WE_RECEIVED_REQUEST_TO_RESET_PASSWORD:
-    "We received a request to reset the password for your {appName} account {email}.",
-  RESET_PASSWORD: "Reset password",
+  CLICK_BUTTON_TO_VERIFY_EMAIL:
+    "Click the button below to verify your email address {emailAddress} for your {appName} account.",
+  VERIFY_EMAIL_ADDRESS: "Verify email address",
   OR_COPY_AND_PASTE_URL: "Or copy and paste this URL into your browser:",
   THIS_LINK_EXPIRES_IN_MINUTES:
     "This link expires in {expirationMinutes} minutes.",
   EMAIL_SENT_BY: "Email sent by {appName}.",
-  IF_YOU_DIDNT_REQUEST_PASSWORD_RESET:
-    "If you didn't request a password reset, you can safely ignore this email. Your password will remain unchanged.",
+  IF_YOU_DIDNT_REQUEST_THIS_EMAIL:
+    "If you didn't request this email, you can safely ignore it. Someone else might have typed your email address by mistake.",
   POWERED_BY_BETTER_AUTH: "Powered by {betterAuth}",
 }
 
 /**
- * Localization strings for the ResetPasswordEmail component.
+ * Localization strings for the EmailVerificationEmail component.
  *
- * Contains all text content used in the password reset email template.
+ * Contains all text content used in the email verification email template.
  */
-export type ResetPasswordEmailLocalization =
-  typeof resetPasswordEmailLocalization
+export type EmailVerificationEmailLocalization =
+  typeof emailVerificationEmailLocalization
 
 /**
- * Props for the ResetPasswordEmail component.
+ * Props for the EmailVerificationEmail component.
  */
-export interface ResetPasswordEmailProps {
-  /** Password reset URL that users must click to reset their password */
+export interface EmailVerificationEmailProps {
+  /** Verification URL that users must click to verify their email */
   url: string
-  /** Email address of the user requesting password reset */
+  /** Email address being verified */
   email?: string
   /** Name of the application sending the email */
   appName?: string
-  /** Number of minutes until the reset link expires */
+  /** Number of minutes until the verification link expires */
   expirationMinutes?: number
   /** Logo URL(s) - a single string or light/dark variants. If omitted, no logo is shown. */
   logoURL?: string | { light: string; dark: string }
@@ -72,16 +72,16 @@ export interface ResetPasswordEmailProps {
   head?: ReactNode
   /**
    * Localization overrides for customizing email text
-   * @remarks `ResetPasswordEmailLocalization`
+   * @remarks `EmailVerificationEmailLocalization`
    */
-  localization?: Partial<ResetPasswordEmailLocalization>
+  localization?: Partial<EmailVerificationEmailLocalization>
 }
 
 /**
- * Email template component that sends password reset links to users.
+ * Email template component that sends email verification links to users.
  *
  * This email includes:
- * - Password reset button and fallback URL
+ * - Verification button and fallback URL
  * - Expiration time information
  * - Security notice for unauthorized requests
  * - Customizable branding and styling
@@ -89,8 +89,8 @@ export interface ResetPasswordEmailProps {
  *
  * @example
  * ```tsx
- * <ResetPasswordEmail
- *   url="https://example.com/auth/reset-password?token=abc123"
+ * <EmailVerificationEmail
+ *   url="https://example.com/verify?token=abc123"
  *   email="user@example.com"
  *   appName="My App"
  *   expirationMinutes={60}
@@ -99,7 +99,7 @@ export interface ResetPasswordEmailProps {
  * />
  * ```
  */
-export const ResetPasswordEmail = ({
+export const EmailVerificationEmail = ({
   url,
   email,
   appName,
@@ -111,13 +111,13 @@ export const ResetPasswordEmail = ({
   poweredBy,
   head,
   ...props
-}: ResetPasswordEmailProps) => {
+}: EmailVerificationEmailProps) => {
   const localization = {
-    ...ResetPasswordEmail.localization,
+    ...EmailVerificationEmail.localization,
     ...props.localization,
   }
 
-  const previewText = localization.RESET_YOUR_PASSWORD
+  const previewText = localization.VERIFY_YOUR_EMAIL_ADDRESS
 
   return (
     <Html>
@@ -186,25 +186,25 @@ export const ResetPasswordEmail = ({
                   classNames?.title
                 )}
               >
-                {localization.RESET_YOUR_PASSWORD}
+                {localization.VERIFY_EMAIL_ADDRESS}
               </Heading>
 
-              <Text className={cn("text-sm", classNames?.content)}>
+              <Text className={cn("text-sm font-normal", classNames?.content)}>
                 {(() => {
                   const textWithAppName =
-                    localization.WE_RECEIVED_REQUEST_TO_RESET_PASSWORD.replace(
+                    localization.CLICK_BUTTON_TO_VERIFY_EMAIL.replace(
                       "{appName}",
                       appName || ""
                     )
                       .replace(/\s{2,}/g, " ")
                       .replace(" .", ".")
 
-                  const [beforeEmail, afterEmail] =
-                    textWithAppName.split("{email}")
+                  const [beforeEmailAddress, afterEmailAddress] =
+                    textWithAppName.split("{emailAddress}")
 
                   return email ? (
                     <>
-                      {beforeEmail}
+                      {beforeEmailAddress}
 
                       <Link
                         href={`mailto:${email}`}
@@ -213,11 +213,11 @@ export const ResetPasswordEmail = ({
                         {email}
                       </Link>
 
-                      {afterEmail}
+                      {afterEmailAddress}
                     </>
                   ) : (
                     textWithAppName
-                      .replace("{email}", "")
+                      .replace("{emailAddress}", "")
                       .replace(/\s{2,}/g, " ")
                       .replace(" .", ".")
                   )
@@ -232,13 +232,13 @@ export const ResetPasswordEmail = ({
                     classNames?.button
                   )}
                 >
-                  {localization.RESET_PASSWORD}
+                  {localization.VERIFY_EMAIL_ADDRESS}
                 </Button>
               </Section>
 
               <Text
                 className={cn(
-                  "m-0 mb-3 text-xs text-muted-foreground",
+                  "mb-3 text-xs text-muted-foreground",
                   classNames?.description
                 )}
               >
@@ -265,7 +265,7 @@ export const ResetPasswordEmail = ({
               {expirationMinutes || appName ? (
                 <Text
                   className={cn(
-                    "m-0 mb-3 text-xs text-muted-foreground",
+                    "mb-3 text-xs text-muted-foreground",
                     classNames?.description
                   )}
                 >
@@ -287,17 +287,17 @@ export const ResetPasswordEmail = ({
 
               <Text
                 className={cn(
-                  "m-0 text-xs text-muted-foreground",
+                  "mt-3 text-xs text-muted-foreground",
                   classNames?.description
                 )}
               >
-                {localization.IF_YOU_DIDNT_REQUEST_PASSWORD_RESET}
+                {localization.IF_YOU_DIDNT_REQUEST_THIS_EMAIL}
               </Text>
 
               {poweredBy && (
                 <Text
                   className={cn(
-                    "m-0 mt-4 text-center text-[11px] text-muted-foreground",
+                    "mt-4 mb-0 text-center text-[11px] text-muted-foreground",
                     classNames?.poweredBy
                   )}
                 >
@@ -331,13 +331,20 @@ export const ResetPasswordEmail = ({
   )
 }
 
-ResetPasswordEmail.localization = resetPasswordEmailLocalization
+/**
+ * Default localization strings for the email verification template.
+ * Can be overridden via the `localization` prop.
+ */
+EmailVerificationEmail.localization = emailVerificationEmailLocalization
 
-ResetPasswordEmail.PreviewProps = {
-  url: "https://better-auth-ui.com/auth/reset-password?token=example-token",
-  email: "m@example.com",
+/**
+ * Example props for previewing the email template in development.
+ */
+EmailVerificationEmail.PreviewProps = {
+  url: "https://better-auth-ui.com/auth/verify-email?token=example-token",
   appName: "Better Auth",
+  email: "m@example.com",
   darkMode: true,
-} as ResetPasswordEmailProps
+} as EmailVerificationEmailProps
 
-export default ResetPasswordEmail
+export default EmailVerificationEmail

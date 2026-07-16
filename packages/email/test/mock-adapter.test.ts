@@ -6,10 +6,10 @@ describe("MockEmailAdapter", () => {
     const info = vi.spyOn(console, "info").mockImplementation(() => undefined)
 
     const adapter = new MockEmailAdapter()
-    await adapter.sendVerificationEmail(
-      "user@example.com",
-      "http://localhost/verify"
-    )
+    await adapter.sendVerificationEmail({
+      to: "user@example.com",
+      url: "http://localhost/verify",
+    })
 
     expect(info).toHaveBeenCalledWith(
       expect.stringContaining("user@example.com")

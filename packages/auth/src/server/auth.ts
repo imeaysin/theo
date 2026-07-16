@@ -89,6 +89,10 @@ export function createAuth() {
             to: data.email,
             organizationName: data.organization.name,
             inviterName: data.inviter.user.name,
+            inviterEmail: data.inviter.user.email,
+            role: Array.isArray(data.role)
+              ? data.role.join(", ")
+              : String(data.role ?? "member"),
             invitationId: data.invitation.id,
           })
         },

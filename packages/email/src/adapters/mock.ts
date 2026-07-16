@@ -1,4 +1,9 @@
-import type { EmailProvider } from "../types"
+import type {
+  EmailProvider,
+  OrganizationInvitationEmailInput,
+  SendLinkEmailInput,
+  SendOtpEmailInput,
+} from "../types"
 
 type DevEmailPayload = {
   to: string
@@ -14,46 +19,51 @@ export class MockEmailAdapter implements EmailProvider {
     )
   }
 
-  async sendWelcomeEmail(to: string, name: string): Promise<void> {
-    this.log({ to, subject: "Welcome!", lines: [`Welcome, ${name}!`] })
-  }
-
-  async sendVerificationEmail(to: string, url: string): Promise<void> {
+  async sendVerificationEmail(input: SendLinkEmailInput): Promise<void> {
     this.log({
-      to,
+      to: input.to,
       subject: "Verify your email",
-      lines: [`Verification link: ${url}`],
+      lines: [`Verification link: ${input.url}`],
     })
   }
 
-  async sendResetPasswordEmail(to: string, url: string): Promise<void> {
+  async sendResetPasswordEmail(input: SendLinkEmailInput): Promise<void> {
     this.log({
-      to,
+      to: input.to,
       subject: "Reset your password",
-      lines: [`Reset link: ${url}`],
+      lines: [`Reset link: ${input.url}`],
     })
   }
 
-  async sendMagicLinkEmail(to: string, url: string): Promise<void> {
+  async sendMagicLinkEmail(input: SendLinkEmailInput): Promise<void> {
     this.log({
-      to,
+      to: input.to,
       subject: "Your sign-in link",
-      lines: [`Magic link: ${url}`],
+      lines: [`Magic link: ${input.url}`],
     })
   }
 
-  async sendOtpEmail(to: string, otp: string, type: string): Promise<void> {
+  async sendOtpEmail(input: SendOtpEmailInput): Promise<void> {
     const subject =
-      type === "sign-in" ? "Your sign-in code" : "Verify your email"
-    this.log({ to, subject, lines: [`OTP (${type}): ${otp}`] })
+      input.type === "sign-in" ? "Your sign-in code" : "Verify your email"
+    this.log({
+      to: input.to,
+      subject,
+      lines: [`OTP (${input.type}): ${input.otp}`],
+    })
   }
 
   async sendOrganizationInvitationEmail(
-    to: string,
-    org: string,
-    inviter: string,
-    url: string
+    input: OrganizationInvitationEmailInput
   ): Promise<void> {
-    this.log({ to, subject: `Join ${org}`, lines: [`Accept: ${url}`] })
+    this.log({
+      to: input.to,
+      subject: `Join ${input.organizationName}`,
+      lines: [
+        `Inviter: ${input.inviterName}`,
+        `Accept: ${input.url}`,
+        input.role ? `Role: ${input.role}` : "",
+      ].filter(Boolean),
+    })
   }
 }
