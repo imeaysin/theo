@@ -5,8 +5,8 @@ import {
   apiKeyPlugin as coreApiKeyPlugin,
 } from "@better-auth-ui/core/plugins"
 
-import { ApiKeys } from "@/features/auth/components/auth/api-key/api-keys"
-import { OrganizationApiKeys } from "@/features/auth/components/auth/api-key/organization-api-keys"
+import { ApiKeys } from "@/features/auth/components/api-key/api-keys"
+import { OrganizationApiKeys } from "@/features/auth/components/api-key/organization-api-keys"
 
 export const apiKeyPlugin = createAuthPlugin(
   coreApiKeyPlugin.id,

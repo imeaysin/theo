@@ -1,4 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useState } from "react"
+import { useForm, useWatch } from "react-hook-form"
+import { toast } from "sonner"
+import { z } from "zod"
+
+import { Badge } from "@workspace/ui-shadcn/components/badge"
 import { Button } from "@workspace/ui-shadcn/components/button"
 import {
   DialogClose,
@@ -13,24 +19,22 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
+  FieldLegend,
+  FieldSet,
 } from "@workspace/ui-shadcn/components/field"
 import { Input } from "@workspace/ui-shadcn/components/input"
 import { Spinner } from "@workspace/ui-shadcn/components/spinner"
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { toast } from "sonner"
-import { z } from "zod"
-import {
-  RolePermissionPicker,
-  countSelectedPermissions,
-  permissionStateFromRole,
-  toPermissionPayload,
-} from "@/features/organization/components/role-permission-picker"
+import { RolePermissionPicker } from "@/features/organization/components/role-permission-picker"
 import type { OrganizationRole } from "@/features/organization/hooks/use-organization-roles"
 import {
   ROLE_PERMISSION_CATALOG,
   type PermissionResource,
 } from "@/features/organization/lib/organization-roles"
+import {
+  countSelectedPermissions,
+  permissionStateFromRole,
+  toPermissionPayload,
+} from "@/features/organization/lib/permission-state"
 import { saveOrganizationRole } from "@/features/organization/lib/save-organization-role"
 
 const RoleNameSchema = z.object({
@@ -68,8 +72,11 @@ export function RoleFormBody({
     resolver: zodResolver(RoleNameSchema),
     defaultValues: { role: editingRole?.role ?? "" },
   })
+  const roleDraft = useWatch({ control: form.control, name: "role" }) ?? ""
+  const normalizedDraft = roleDraft.trim().toLowerCase()
   const selectedCount = countSelectedPermissions(permissionState)
   const nameError = form.formState.errors.role
+  const permissionsInvalid = selectedCount === 0
 
   function toggleAction(resource: PermissionResource, action: string) {
     setPermissionState((current) => {
@@ -115,40 +122,55 @@ export function RoleFormBody({
           {isEditing ? "Edit custom role" : "Create custom role"}
         </DialogTitle>
         <DialogDescription>
-          Choose a name and the permissions this role should grant. You can only
-          include permissions you already have.
+          Name the role and choose what members with it can do. You can only
+          grant permissions you already have.
         </DialogDescription>
       </DialogHeader>
 
-      <FieldGroup className="max-h-[60vh] gap-5 overflow-y-auto py-4">
-        <Field data-invalid={nameError ? true : undefined}>
+      <FieldGroup className="max-h-[60vh] overflow-y-auto py-4">
+        <Field
+          data-invalid={nameError ? true : undefined}
+          data-disabled={isPending ? true : undefined}
+        >
           <FieldLabel htmlFor="role-name">Role name</FieldLabel>
           <Input
+            autoFocus
+            autoComplete="off"
             disabled={isPending}
             id="role-name"
             placeholder="support"
+            aria-invalid={Boolean(nameError)}
             {...form.register("role")}
           />
           <FieldDescription>
-            Letters, numbers, hyphens, and underscores. Saved in lowercase.
+            {normalizedDraft.length >= 2 && !nameError
+              ? `Saved as ${normalizedDraft}`
+              : "Letters, numbers, hyphens, and underscores. Saved in lowercase."}
           </FieldDescription>
           <FieldError errors={[nameError]} />
         </Field>
 
-        <div className="flex flex-col gap-2">
+        <FieldSet data-invalid={permissionsInvalid ? true : undefined}>
           <div className="flex items-center justify-between gap-3">
-            <FieldLabel>Permissions</FieldLabel>
-            <span className="text-xs text-muted-foreground">
+            <FieldLegend variant="label">Permissions</FieldLegend>
+            <Badge variant={permissionsInvalid ? "outline" : "secondary"}>
               {selectedCount} selected
-            </span>
+            </Badge>
           </div>
+          <FieldDescription>
+            Pick at least one action. Members with this role receive only these
+            permissions.
+          </FieldDescription>
           <RolePermissionPicker
             disabled={isPending}
             permissionState={permissionState}
             onToggleAction={toggleAction}
             onToggleResource={toggleResource}
           />
-        </div>
+          {permissionsInvalid ? (
+            <FieldError>Select at least one permission to continue.</FieldError>
+          ) : null}
+        </FieldSet>
       </FieldGroup>
 
       <DialogFooter>
@@ -158,7 +180,7 @@ export function RoleFormBody({
         >
           Cancel
         </DialogClose>
-        <Button disabled={isPending || selectedCount === 0} type="submit">
+        <Button disabled={isPending || permissionsInvalid} type="submit">
           {isPending ? <Spinner data-icon="inline-start" /> : null}
           {isEditing ? "Save changes" : "Create role"}
         </Button>

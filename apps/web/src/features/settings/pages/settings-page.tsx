@@ -1,6 +1,6 @@
 import { viewPaths } from "@better-auth-ui/core"
 import { Navigate, useParams } from "react-router-dom"
-import { Settings } from "@/features/auth/components/auth/settings/settings"
+import { Settings } from "@/features/auth/components/settings/settings"
 import { organizationPlugin } from "@/lib/auth/organization-plugin"
 
 const validSettingsPaths = new Set([

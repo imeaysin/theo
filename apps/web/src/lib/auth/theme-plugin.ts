@@ -5,8 +5,8 @@ import {
   type ThemeLocalization,
 } from "@better-auth-ui/core/plugins"
 
-import { Appearance } from "@/features/auth/components/auth/theme/appearance"
-import { ThemeToggleItem } from "@/features/auth/components/auth/theme/theme-toggle-item"
+import { Appearance } from "@/features/auth/components/theme/appearance"
+import { ThemeToggleItem } from "@/features/auth/components/theme/theme-toggle-item"
 
 export type UseThemeHook = () => {
   theme?: string

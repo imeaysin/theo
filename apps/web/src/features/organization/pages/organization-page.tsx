@@ -1,5 +1,5 @@
 import { organizationPlugin } from "@/lib/auth/organization-plugin"
-import { Organization } from "@/features/auth/components/auth/organization/organization"
+import { Organization } from "@/features/auth/components/organization/organization"
 import { Navigate, useParams } from "react-router-dom"
 
 const validOrganizationPaths = new Set(

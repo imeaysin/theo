@@ -7,7 +7,7 @@ import {
 } from "@better-auth-ui/core/plugins"
 import { Briefcase } from "lucide-react"
 
-import { OrganizationsSettings } from "@/features/auth/components/auth/organization/organizations-settings"
+import { OrganizationsSettings } from "@/features/auth/components/organization/organizations-settings"
 
 declare module "@better-auth-ui/core/plugins" {
   interface OrganizationViewPaths {
