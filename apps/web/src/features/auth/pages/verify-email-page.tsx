@@ -1,127 +1,65 @@
-import { useEffect, useState } from "react"
-import { Link, Navigate, useSearchParams } from "react-router-dom"
-import { AuthPageBody, AuthPageHeader } from "@workspace/ui-shadcn/auth"
+import { useState } from "react"
+import { Link, useSearchParams } from "react-router-dom"
 import { Button } from "@workspace/ui-shadcn/components/button"
-import { PageLoading } from "@workspace/ui-shadcn/components/page-loading"
-import { toast } from "@workspace/ui-shadcn/components/sonner"
 import {
-  useSendVerificationEmail,
-  useVerifyEmail,
-  useAuthSession,
-} from "@workspace/auth/react"
-import { OpenEmailButton } from "@workspace/ui-shadcn/auth"
-import {
-  absoluteAppUrl,
-  routes,
-  defaultAuthenticatedRoute,
-} from "@/config/routes"
-
-function getVerifyEmailCopy(verified: boolean) {
-  if (verified) {
-    return {
-      description: "Your email address has been verified.",
-      title: "You're all set",
-      buttonLabel: "Continue to sign in",
-    }
-  }
-
-  return {
-    description:
-      "We sent a verification link to your email. Open it to activate your account.",
-    title: "Verify your email",
-    buttonLabel: "Back to sign in",
-  }
-}
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@workspace/ui-shadcn/components/card"
+import { Spinner } from "@workspace/ui-shadcn/components/spinner"
+import { routes } from "@/config/routes"
+import { resendVerificationEmail } from "@/features/auth/lib/resend-verification-email"
 
 export function VerifyEmailPage() {
   const [searchParams] = useSearchParams()
-  const email = searchParams.get("email") ?? ""
-  const token = searchParams.get("token")
-  const { data: session } = useAuthSession()
-  const [verified, setVerified] = useState(false)
-  const sendVerification = useSendVerificationEmail()
-  const { mutate: verifyEmail, isPending: isVerifying } = useVerifyEmail()
-  const copy = getVerifyEmailCopy(verified)
+  const email = searchParams.get("email")
+  const [statusMessage, setStatusMessage] = useState<string | null>(null)
+  const [isSending, setIsSending] = useState(false)
 
-  useEffect(() => {
-    if (!token) return
-
-    verifyEmail(token, {
-      onSuccess: () => {
-        setVerified(true)
-        toast.success("Email verified", {
-          description: "Your account is ready. You can sign in now.",
-        })
-      },
-      onError: () => {
-        toast.error("Verification failed", {
-          description: "This link is invalid or has expired.",
-        })
-      },
-    })
-  }, [token, verifyEmail])
-
-  async function resendEmail() {
+  async function handleResend() {
     if (!email) {
-      toast.error("Email required", {
-        description: "Sign up again or contact support to resend verification.",
-      })
+      setStatusMessage("Enter your email on the sign-up form to resend.")
       return
     }
 
-    try {
-      await sendVerification.mutateAsync({
-        email,
-        callbackURL: absoluteAppUrl(routes.verifyEmail),
-      })
-      toast.success("Email sent", {
-        description: "Check your inbox for a new verification link.",
-      })
-    } catch {
-      toast.error("Could not resend", {
-        description: "Please try again in a moment.",
-      })
-    }
-  }
-
-  if (session && (verified || !token)) {
-    return <Navigate replace to={defaultAuthenticatedRoute} />
-  }
-
-  if (token && isVerifying) {
-    return <PageLoading message="Verifying your email…" />
+    setIsSending(true)
+    setStatusMessage(null)
+    const result = await resendVerificationEmail(email)
+    setIsSending(false)
+    setStatusMessage(result.message)
   }
 
   return (
-    <AuthPageBody>
-      <AuthPageHeader description={copy.description} title={copy.title} />
-
-      <div className="flex flex-col gap-3">
-        {!verified && email ? (
-          <>
-            <OpenEmailButton email={email} />
-            <Button
-              className="w-full"
-              disabled={sendVerification.isPending}
-              onClick={() => void resendEmail()}
-              size="lg"
-              type="button"
-              variant="outline"
-            >
-              Resend verification email
-            </Button>
-          </>
+    <Card>
+      <CardHeader>
+        <CardTitle>Verify your email</CardTitle>
+        <CardDescription>
+          {email
+            ? `We sent a verification link to ${email}.`
+            : "Check your inbox for a verification link."}
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-3 text-sm text-muted-foreground">
+        <p>
+          Email/password sign-in stays blocked until verification completes.
+          Google sign-in does not require this step.
+        </p>
+        {statusMessage ? <p>{statusMessage}</p> : null}
+        {email ? (
+          <Button disabled={isSending} onClick={() => void handleResend()}>
+            {isSending ? <Spinner data-icon="inline-start" /> : null}
+            {isSending ? "Sending…" : "Resend verification email"}
+          </Button>
         ) : null}
-        <Button
-          asChild
-          className="w-full"
-          size="lg"
-          type="button"
-          variant="default"
-        >
-          <Link to={routes.signIn}>{copy.buttonLabel}</Link>
-        </Button>
-      </div>
-    </AuthPageBody>
+      </CardContent>
+      <CardFooter>
+        <Link className="text-sm underline" to={routes.signIn}>
+          Back to sign in
+        </Link>
+      </CardFooter>
+    </Card>
   )
 }

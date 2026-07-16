@@ -1,3 +1,4 @@
+import "./observability/instrument"
 import { NestFactory } from "@nestjs/core"
 import { env } from "@workspace/config"
 import { createLogger } from "@workspace/logger"
@@ -10,7 +11,7 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
-    rawBody: true,
+    bodyParser: false,
   })
 
   app.useLogger(new NestLoggerService())

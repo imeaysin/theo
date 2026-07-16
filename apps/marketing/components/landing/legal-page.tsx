@@ -58,7 +58,6 @@ function LegalBlockView({ block }: { block: LegalBlock }) {
       return (
         <p className="leading-relaxed text-foreground">
           <Button
-            asChild
             className="inline h-auto p-0 text-foreground"
 
             variant="link"

@@ -2,9 +2,11 @@ import { Module } from "@nestjs/common"
 import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from "@nestjs/core"
 import { ZodValidationPipe } from "nestjs-zod"
 import { EventEmitterModule } from "@nestjs/event-emitter"
-import { AuthGuardsModule } from "@workspace/auth/nestjs"
+import { SentryModule } from "@sentry/nestjs/setup"
+import { WorkspaceAuthModule } from "@workspace/auth/nestjs"
 import { AppController } from "./app.controller"
 import { AppService } from "./app.service"
+import { isSentryEnabled } from "./observability/enabled"
 import { CacheModule } from "./common/cache/cache.module"
 import { DatabaseModule } from "./common/database/database.module"
 import { JobsModule } from "./common/jobs/jobs.module"
@@ -19,7 +21,6 @@ import { StorageExceptionFilter } from "./common/filters/storage-exception.filte
 import { ZodValidationExceptionFilter } from "./common/filters/zod-validation-exception.filter"
 import { LoggingInterceptor } from "./common/interceptors/logging.interceptor"
 import { TransformResponseInterceptor } from "./common/interceptors/transform-response.interceptor"
-import { AuthModule } from "./modules/auth/auth.module"
 import { HealthModule } from "./modules/health/health.module"
 import { UsersModule } from "./modules/users/users.module"
 import { NotesModule } from "./modules/notes/notes.module"
@@ -28,10 +29,11 @@ import { UploadsModule } from "./modules/uploads/uploads.module"
 
 @Module({
   imports: [
+    ...(isSentryEnabled() ? [SentryModule.forRoot()] : []),
     EventEmitterModule.forRoot(),
-    AuthGuardsModule.register(),
-    CacheModule,
     DatabaseModule,
+    WorkspaceAuthModule,
+    CacheModule,
     JobsModule,
     PushModule,
     RealtimeModule,
@@ -42,7 +44,6 @@ import { UploadsModule } from "./modules/uploads/uploads.module"
     NotesModule,
     NotificationsModule,
     UploadsModule,
-    AuthModule,
   ],
   controllers: [AppController],
   providers: [

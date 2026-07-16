@@ -1,12 +1,19 @@
 import * as React from "react"
 import { Resend } from "resend"
-import type { EmailProvider, ResendEmailConfig } from "../types"
-import { WelcomeEmail } from "../templates/welcome"
-import { VerificationEmail } from "../templates/verification-email"
-import { ResetPasswordEmail } from "../templates/reset-password"
-import { MagicLinkEmail } from "../templates/magic-link"
-import { OtpEmail } from "../templates/otp"
-import { OrganizationInvitationEmail } from "../templates/organization-invitation"
+import {
+  EmailVerificationEmail,
+  MagicLinkEmail,
+  OrganizationInvitationEmail,
+  OtpEmail,
+  ResetPasswordEmail,
+} from "../templates"
+import type {
+  EmailProvider,
+  OrganizationInvitationEmailInput,
+  ResendEmailConfig,
+  SendLinkEmailInput,
+  SendOtpEmailInput,
+} from "../types"
 
 export class ResendEmailAdapter implements EmailProvider {
   private readonly client: Resend
@@ -15,6 +22,10 @@ export class ResendEmailAdapter implements EmailProvider {
   constructor(config: ResendEmailConfig) {
     this.client = new Resend(config.apiKey)
     this.config = config
+  }
+
+  private get appName() {
+    return this.config.appName
   }
 
   private async send(to: string, subject: string, react: React.ReactElement) {
@@ -26,49 +37,75 @@ export class ResendEmailAdapter implements EmailProvider {
     })
   }
 
-  async sendWelcomeEmail(to: string, name: string): Promise<void> {
+  async sendVerificationEmail(input: SendLinkEmailInput): Promise<void> {
     await this.send(
-      to,
-      `Welcome to ${this.config.appName}!`,
-      <WelcomeEmail name={name} />
+      input.to,
+      "Verify your email",
+      <EmailVerificationEmail
+        url={input.url}
+        email={input.to}
+        appName={this.appName}
+        expirationMinutes={input.expirationMinutes}
+      />
     )
   }
 
-  async sendVerificationEmail(to: string, url: string): Promise<void> {
-    await this.send(to, "Verify your email", <VerificationEmail url={url} />)
+  async sendResetPasswordEmail(input: SendLinkEmailInput): Promise<void> {
+    await this.send(
+      input.to,
+      "Reset your password",
+      <ResetPasswordEmail
+        url={input.url}
+        email={input.to}
+        appName={this.appName}
+        expirationMinutes={input.expirationMinutes}
+      />
+    )
   }
 
-  async sendResetPasswordEmail(to: string, url: string): Promise<void> {
-    await this.send(to, "Reset your password", <ResetPasswordEmail url={url} />)
+  async sendMagicLinkEmail(input: SendLinkEmailInput): Promise<void> {
+    await this.send(
+      input.to,
+      `Sign in to ${this.appName}`,
+      <MagicLinkEmail
+        url={input.url}
+        email={input.to}
+        appName={this.appName}
+        expirationMinutes={input.expirationMinutes}
+      />
+    )
   }
 
-  async sendMagicLinkEmail(to: string, url: string): Promise<void> {
-    await this.send(to, "Your sign-in link", <MagicLinkEmail url={url} />)
-  }
-
-  async sendOtpEmail(
-    to: string,
-    otp: string,
-    type: "sign-in" | "email-verification" | "forget-password" | "change-email"
-  ): Promise<void> {
+  async sendOtpEmail(input: SendOtpEmailInput): Promise<void> {
     const subject =
-      type === "sign-in" ? "Your sign-in code" : "Verify your email"
-    await this.send(to, subject, <OtpEmail otp={otp} />)
+      input.type === "sign-in" ? "Your sign-in code" : "Verify your email"
+    await this.send(
+      input.to,
+      subject,
+      <OtpEmail
+        verificationCode={input.otp}
+        email={input.to}
+        appName={this.appName}
+        expirationMinutes={input.expirationMinutes}
+      />
+    )
   }
 
   async sendOrganizationInvitationEmail(
-    to: string,
-    org: string,
-    inviter: string,
-    url: string
+    input: OrganizationInvitationEmailInput
   ): Promise<void> {
     await this.send(
-      to,
-      `Join ${org}`,
+      input.to,
+      `Join ${input.organizationName}`,
       <OrganizationInvitationEmail
-        organizationName={org}
-        inviterName={inviter}
-        url={url}
+        url={input.url}
+        email={input.to}
+        appName={this.appName}
+        organizationName={input.organizationName}
+        inviterName={input.inviterName}
+        inviterEmail={input.inviterEmail}
+        role={input.role}
+        expirationHours={input.expirationHours}
       />
     )
   }

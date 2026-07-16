@@ -56,15 +56,6 @@ export async function signInEmail(
   )
 }
 
-export async function issueJwt(agent: Agent): Promise<string> {
-  const res = await withAuthOrigin(agent.get("/api/auth/token"))
-  const token = res.body?.token
-  if (typeof token !== "string" || !token) {
-    throw new Error("Failed to mint JWT from /api/auth/token")
-  }
-  return token
-}
-
 export async function createOrganization(
   agent: Agent,
   input: { name: string; slug: string }
@@ -100,8 +91,7 @@ export async function registerVerifiedUser(
     email: input.email,
     password: input.password,
   })
-  const jwt = await issueJwt(agent)
-  return { agent, jwt }
+  return { agent }
 }
 
 export async function onboardOrganization(
@@ -115,6 +105,5 @@ export async function onboardOrganization(
   }
 
   await setActiveOrganization(agent, organizationId)
-  const jwt = await issueJwt(agent)
-  return { organizationId, jwt }
+  return { organizationId }
 }

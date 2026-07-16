@@ -1,6 +1,6 @@
 # API app — agent guide
 
-NestJS 11 REST API with Better Auth, MongoDB, and CQRS feature modules.
+NestJS 11 REST API with Better Auth sessions, MongoDB, and CQRS feature modules.
 
 ## Module structure (copy from `notes`)
 
@@ -21,21 +21,46 @@ modules/<feature>/
 
 ## Cross-cutting (`src/common/`)
 
-| Path                          | Role                                                                       |
-| ----------------------------- | -------------------------------------------------------------------------- |
-| `configure-app.ts`            | CORS, helmet, versioning, swagger (`cleanupOpenApiDoc`), static uploads    |
-| `interceptors/`               | HTTP logging (with `requestId`), success envelope transform                |
-| `middleware/`                 | Request ID propagation, MongoDB-backed `/v1/*` rate limiting               |
-| `jobs/`                       | Job queue provider (`@workspace/jobs`) — `inline` or `redis` (BullMQ)      |
-| `filters/`                    | Global exception handler (machine-readable `code`)                         |
-| `decorators/`                 | Auth re-exports, `@ApiAuthErrorResponses()` / `@ApiPublicErrorResponses()` |
-| `exceptions/`                 | Base `DomainException` for throwing pure domain errors                     |
-| `storage/storage.module.ts`   | `STORAGE` provider from `@workspace/storage`                               |
-| `database/database.module.ts` | Global `DATABASE_READY` + injectable `MONGO_DB` (native driver `Db`)       |
+| Path                          | Role                                                                    |
+| ----------------------------- | ----------------------------------------------------------------------- |
+| `configure-app.ts`            | CORS, helmet, versioning, swagger (`cleanupOpenApiDoc`), static uploads |
+| `interceptors/`               | HTTP logging (with `requestId`), success envelope transform             |
+| `middleware/`                 | Request ID propagation, MongoDB-backed `/v1/*` rate limiting            |
+| `jobs/`                       | Job queue provider (`@workspace/jobs`) — `inline` or `redis` (BullMQ)   |
+| `filters/`                    | Global exception handler (machine-readable `code`)                      |
+| `decorators/`                 | Re-exports from `@workspace/auth/nestjs` + OpenAPI error helpers        |
+| `exceptions/`                 | Base `DomainException` for throwing pure domain errors                  |
+| `storage/storage.module.ts`   | `STORAGE` provider from `@workspace/storage`                            |
+| `database/database.module.ts` | Global `DATABASE_READY` + injectable Mongo connection                   |
+
+## Auth
+
+`WorkspaceAuthModule` from `@workspace/auth/nestjs` registers Better Auth
+(`@thallesp/nestjs-better-auth`) with cookie sessions and org RBAC.
+
+| Decorator / guard           | Purpose                                 |
+| --------------------------- | --------------------------------------- |
+| Global `AuthGuard`          | Session required by default             |
+| `@AllowAnonymous()`         | Public route                            |
+| `@Session()`                | Inject Better Auth session              |
+| `@MemberHasPermission(...)` | Org RBAC via Better Auth access control |
+
+Org-scoped routes must use `session.session.activeOrganizationId` (via
+`requireActiveOrganizationId`) — never accept `organizationId` from query/body.
+
+Notes are **per-member within an organization** (scoped by `organizationId` +
+`userId`). `@MemberHasPermission` gates which roles can call the endpoint;
+the repository still only returns/mutates that member’s notes.
+
+For static vs **custom** org roles and how the web app should mirror these
+guards, see [docs/org-roles-and-ui.md](../../docs/org-roles-and-ui.md).
+
+CASL (`AccessGuard`, `@UseAbility`) is available from `@workspace/auth/nestjs`
+for attribute-based checks when needed — not used on controllers yet.
+
+`NestFactory.create(AppModule, { bodyParser: false })` is required for Better Auth.
 
 ## Testing
-
-Follow the [NestJS testing guide](https://docs.nestjs.com/fundamentals/testing): `Test.createTestingModule()`, `createNestApplication()`, and Supertest.
 
 | Layer                      | Location                                    | Command                                     |
 | -------------------------- | ------------------------------------------- | ------------------------------------------- |
@@ -43,62 +68,12 @@ Follow the [NestJS testing guide](https://docs.nestjs.com/fundamentals/testing):
 | **E2E**                    | `test/e2e/**/*.e2e-spec.ts`                 | `pnpm test:e2e` (MongoDB required)          |
 | **Integration (live API)** | `test/integration/**/*.integration-spec.ts` | `pnpm test:integration` with `pnpm dev:api` |
 
-**E2E helpers**
-
-- `test/e2e/support/create-e2e-app.ts` — `Test.createTestingModule({ imports: [AppModule] })`, `createNestApplication()`, `configureApp()` (see [Nest testing](https://docs.nestjs.com/fundamentals/testing))
-- `test/e2e/jest-e2e.setup.ts` — stubs Better Auth ESM deps (`jose`, `better-auth` plugins) so real guards load in Jest
-
-Global guards use `APP_GUARD` + `useFactory` in `@workspace/auth/nestjs` (Reflector is wired explicitly because the nestjs bundle is built with tsup/esbuild, which does not emit DI metadata). E2E runs the real guard chain; authenticated flows are covered by **integration** tests.
+Authenticated flows use Better Auth session cookies (supertest agent), not JWTs.
 
 ## Adding an endpoint
 
 1. Add Zod schema (+ `.meta()` / `.describe()` for Swagger) to `packages/contracts`.
-2. Add `createZodDto` wrappers in the module inside the `dto/` directory (e.g. `dto/create-note.dto.ts`).
-3. Create repository methods (`*.command.ts` or `*.query.ts`) and orchestrate them in `*.service.ts`.
+2. Add `createZodDto` wrappers in the module `dto/` directory.
+3. Create repository methods and orchestrate them in `*.service.ts`.
 4. Wire service and repositories in module `providers`.
 5. Expose via controller — `@Body() MyDto` validates automatically; add `@ApiAuthErrorResponses()` or `@ApiPublicErrorResponses()`.
-
-**Domain errors:** add codes to `DomainErrorCode` in `packages/contracts/src/api/errors.ts`, then create and throw custom exceptions that inherit from `DomainException` inside your business layer.
-
-Do not call repositories or storage directly from controllers. Instead, dispatch logic through the orchestrating Service.
-
-## Serverless architecture
-
-The API is designed for **stateless, serverless execution** (e.g. Vercel, AWS Lambda, Cloud Run). Every request must stand alone.
-
-### Request context (never from client body)
-
-| Context                | Source                                                           |
-| ---------------------- | ---------------------------------------------------------------- |
-| User id, platform role | Verified JWT (`@CurrentUser()`)                                  |
-| Active workspace       | JWT `activeOrganizationId` (`@CurrentOrganization()`)            |
-| Org permissions        | Member role from DB (`@RequireOrgPermission` via `OrgRbacGuard`) |
-
-Org-scoped routes (notes, uploads) must use `@CurrentOrganization()` — never accept `organizationId` from query/body.
-
-### What must not exist
-
-- **In-memory rate limiting** — removed `@nestjs/throttler` (counters are per-instance). `/v1/*` uses MongoDB-backed limits in `middleware/rate-limit.middleware.ts`; `/api/auth/*` uses Better Auth `rateLimit.storage: "database"`. Prefer edge/gateway limits in high-traffic production.
-- **Separate MongoDB pools** — auth and business API share `@workspace/db` (`connectDb` once per instance).
-- **Session state on business routes** — `/v1/*` uses Bearer JWT only; Better Auth cookies are for `/api/auth/*`.
-
-### Acceptable per-instance state
-
-- Mongoose connection reuse (`readyState === 1` guard in `connectDb`)
-- Lazy `getAuth()` singleton (immutable config, not user data)
-- JWKS public-key cache in `jose` (`cooldownDuration` in `verifyAccessToken`)
-- `STORAGE` provider factory (env-bound, stateless)
-
-### Deployment
-
-- **MongoDB:** use a serverless-friendly URI (e.g. Atlas) with connection pooling; `DatabaseModule` connects on boot via `DATABASE_READY`.
-- **File uploads:** set `STORAGE_PROVIDER=s3` in production — `local` + `express.static` is dev-only (ephemeral disk, not multi-instance safe).
-- **Graceful shutdown:** `DatabaseLifecycle` disconnects on `onModuleDestroy` (long-running dev; optional in pure serverless).
-
-### Guard chain
-
-```
-JwksGuard → RbacGuard → OrgRbacGuard
-```
-
-`@Public()` skips JWT. `@RequirePermission` = platform role from JWT. `@RequireOrgPermission` = active org from JWT + member role resolved from DB.

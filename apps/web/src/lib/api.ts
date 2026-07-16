@@ -1,5 +1,3 @@
-import { authClient } from "@workspace/auth/client"
-import { DEFAULT_JWT_STORAGE_KEY, getBearerToken } from "@workspace/auth/react"
 import { env } from "@/config/env"
 import {
   HttpErrorCode,
@@ -9,8 +7,6 @@ import {
   type ApiFieldError,
   type ApiSuccessResponse,
 } from "@workspace/contracts"
-
-const RETRYABLE_AUTH_STATUSES = new Set([401, 403])
 
 type InternalFetchInit = RequestInit & { __retried?: boolean }
 
@@ -52,7 +48,6 @@ function isApiErrorBody(value: unknown): value is ApiErrorResponse {
 
 function isSuccessEnvelope<T>(value: unknown): value is ApiSuccessResponse<T> {
   if (typeof value !== "object" || value === null) return false
-
   return "success" in value && value.success === true && "data" in value
 }
 
@@ -68,8 +63,7 @@ async function executeFetch<T = void>(
   path: string,
   init: InternalFetchInit = {}
 ): Promise<T | undefined> {
-  const { __retried, ...requestInit } = init
-  const token = await getBearerToken(authClient, DEFAULT_JWT_STORAGE_KEY)
+  const { __retried: _retried, ...requestInit } = init
   const headers = new Headers(requestInit.headers)
 
   if (
@@ -79,44 +73,23 @@ async function executeFetch<T = void>(
   ) {
     headers.set("Content-Type", "application/json")
   }
-  if (token) {
-    headers.set("Authorization", `Bearer ${token}`)
-  }
 
   const response = await fetch(`${env.apiUrl}${path}`, {
     ...requestInit,
     headers,
+    credentials: "include",
   })
 
   if (!response.ok) {
     const body: unknown = await response.json().catch(() => null)
 
     if (isApiErrorBody(body)) {
-      const apiError = new ApiError({
+      throw new ApiError({
         message: body.message,
         status: body.statusCode,
         code: isApiErrorCode(body.code) ? body.code : HttpErrorCode.HTTP_ERROR,
         errors: body.errors ?? null,
       })
-
-      if (!__retried && RETRYABLE_AUTH_STATUSES.has(apiError.status) && token) {
-        const refreshed = await getBearerToken(
-          authClient,
-          DEFAULT_JWT_STORAGE_KEY,
-          {
-            forceRefresh: true,
-          }
-        )
-        if (refreshed && refreshed !== token) {
-          return executeFetch<T>(path, { ...requestInit, __retried: true })
-        }
-
-        // If refresh failed or returned the same token, sign out and redirect to clear state
-        await authClient.signOut()
-        window.location.href = "/sign-in"
-      }
-
-      throw apiError
     }
 
     throw new ApiError({

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import * as Device from "expo-device"
 import { Platform, StyleSheet } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
-import { mobileAuthClient } from "@workspace/auth/mobile"
+import { mobileAuthClient } from "@/lib/auth-client"
 import { parseMobileEnv } from "@workspace/config/client"
 
 import { AnimatedIcon } from "@/components/animated-icon"

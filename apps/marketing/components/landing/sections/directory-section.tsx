@@ -40,7 +40,6 @@ export function DirectorySection({
             <div className="flex items-center gap-2.5">
               {items.map((item) => (
                 <Button
-                  asChild
                   key={item.href}
                   className={
                     item.iconClassName ??

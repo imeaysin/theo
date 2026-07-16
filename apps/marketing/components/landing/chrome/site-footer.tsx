@@ -31,7 +31,6 @@ interface SiteFooterProps {
 function FooterLinkItem({ link }: { link: FooterLink }) {
   return (
     <Button
-      asChild
       className="h-auto justify-start p-0 text-sm text-muted-foreground hover:text-foreground"
       variant="ghost"
     >
@@ -53,7 +52,6 @@ function StatusIndicator({
 }) {
   return (
     <Button
-      asChild
       className="inline-flex h-auto items-center gap-2 p-0 no-underline hover:no-underline hover:opacity-80"
       variant="ghost"
     >
@@ -61,8 +59,8 @@ function StatusIndicator({
         <span className="text-sm text-muted-foreground">{status.label}</span>
         <span className="text-sm text-foreground">{status.value}</span>
         <span className="relative flex size-2 shrink-0 items-center justify-center">
-          <span className="relative z-10 block size-2 rounded-full bg-success" />
-          <span className="animate-pulse-glow absolute inset-0 rounded-full bg-success" />
+          <span className="bg-success relative z-10 block size-2 rounded-full" />
+          <span className="animate-pulse-glow bg-success absolute inset-0 rounded-full" />
         </span>
       </a>
     </Button>

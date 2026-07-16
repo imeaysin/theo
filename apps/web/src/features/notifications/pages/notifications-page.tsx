@@ -6,8 +6,8 @@ import {
 import { Button } from "@workspace/ui-shadcn/components/button"
 import {
   Empty,
-  EmptyContent,
   EmptyDescription,
+  EmptyHeader,
   EmptyMedia,
   EmptyTitle,
 } from "@workspace/ui-shadcn/components/empty"
@@ -33,9 +33,9 @@ export function NotificationsPage() {
     markRead.isPending || markAllRead.isPending || deleteNotification.isPending
 
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="space-y-1">
+        <div className="flex flex-col gap-1">
           <h2 className="text-2xl font-bold tracking-tight">Notifications</h2>
           {totalUnread > 0 ? (
             <p className="text-muted-foreground">
@@ -51,13 +51,13 @@ export function NotificationsPage() {
             onClick={() => markAllRead.mutate()}
             variant="outline"
           >
-            <CheckCheckIcon className="size-4" />
+            <CheckCheckIcon data-icon="inline-start" />
             Mark all as read
           </Button>
         ) : null}
       </div>
 
-      <div className="space-y-4">
+      <div className="flex flex-col gap-4">
         {isLoading ? (
           <div className="overflow-hidden rounded-lg border">
             {Array.from({ length: 4 }).map((_, index) => (
@@ -66,7 +66,7 @@ export function NotificationsPage() {
                 key={index}
               >
                 <Skeleton className="mt-1.5 size-2 rounded-full" />
-                <div className="flex-1 space-y-2">
+                <div className="flex flex-1 flex-col gap-2">
                   <Skeleton className="h-4 w-48" />
                   <Skeleton className="h-3 w-full max-w-sm" />
                   <Skeleton className="h-3 w-20" />
@@ -87,8 +87,8 @@ export function NotificationsPage() {
         ) : null}
 
         {!isLoading && !isError && notifications.length === 0 ? (
-          <Empty className="rounded-lg border border-dashed">
-            <EmptyContent>
+          <Empty className="border border-dashed">
+            <EmptyHeader>
               <EmptyMedia variant="icon">
                 <BellIcon />
               </EmptyMedia>
@@ -96,7 +96,7 @@ export function NotificationsPage() {
               <EmptyDescription>
                 When something important happens, you&apos;ll see it here.
               </EmptyDescription>
-            </EmptyContent>
+            </EmptyHeader>
           </Empty>
         ) : null}
 

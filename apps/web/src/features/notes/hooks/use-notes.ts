@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { useActiveOrganizationId } from "@workspace/auth/react"
+import { useActiveOrganizationId } from "@/lib/session"
 import {
   BulkDeleteNotesSchema,
   CreateNoteSchema,
@@ -12,7 +12,7 @@ import {
   type NotesListResponse,
   type UpdateNoteInput,
 } from "@workspace/contracts"
-import { toast } from "@workspace/ui-shadcn/components/sonner"
+import { toast } from "sonner"
 import { apiRoutes } from "@/config/api-routes"
 import { apiFetch } from "@/lib/api"
 
@@ -58,6 +58,11 @@ export function useCreateNoteMutation() {
 
   return useMutation({
     mutationFn: async (input: CreateNoteInput) => {
+      if (!organizationId) {
+        throw new Error(
+          "No active workspace. Wait a moment for your workspace to activate, then try again."
+        )
+      }
       const promise = (async () => {
         const body = CreateNoteSchema.parse(input)
         const data = await apiFetch<unknown>(apiRoutes.notes, {

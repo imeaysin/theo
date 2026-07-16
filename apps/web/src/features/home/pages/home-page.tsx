@@ -11,8 +11,12 @@ export function HomePage() {
         Shared UI, auth, and routing for the web application.
       </p>
       <div className="flex gap-3">
-        <Button asChild variant="outline">
-          <Link to={routes.signIn}>Sign in</Link>
+        <Button
+          nativeButton={false}
+          render={<Link to={routes.signIn} />}
+          variant="outline"
+        >
+          Sign in
         </Button>
       </div>
     </main>

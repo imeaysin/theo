@@ -3,7 +3,10 @@ import {
   getSafeRedirectPath,
   withAuthRedirectQuery,
 } from "@/routing/safe-redirect"
-import { defaultAuthenticatedRoute } from "@/config/routes"
+import {
+  acceptInvitationPath,
+  defaultAuthenticatedRoute,
+} from "@/config/routes"
 
 describe("getSafeRedirectPath", () => {
   it("returns the fallback when redirect is missing", () => {
@@ -15,10 +18,10 @@ describe("getSafeRedirectPath", () => {
   it("allows same-app relative paths", () => {
     expect(
       getSafeRedirectPath(
-        "/accept-invitation?id=abc",
+        acceptInvitationPath("abc"),
         defaultAuthenticatedRoute
       )
-    ).toBe("/accept-invitation?id=abc")
+    ).toBe(acceptInvitationPath("abc"))
     expect(getSafeRedirectPath("/app/notes", defaultAuthenticatedRoute)).toBe(
       "/app/notes"
     )
@@ -36,9 +39,9 @@ describe("getSafeRedirectPath", () => {
   it("adds redirect query for auth cross-links", () => {
     expect(
       withAuthRedirectQuery("/auth/sign-in", {
-        redirect: "/accept-invitation?id=abc",
+        redirect: acceptInvitationPath("abc"),
         fallback: defaultAuthenticatedRoute,
       })
-    ).toBe("/auth/sign-in?redirect=%2Faccept-invitation%3Fid%3Dabc")
+    ).toBe("/auth/sign-in?redirect=%2Faccept-invitation%2Fabc")
   })
 })

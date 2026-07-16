@@ -1,2 +1,3 @@
-import "./jose"
+/// <reference types="jest" />
+
 import "./better-auth"

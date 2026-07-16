@@ -1,7 +1,6 @@
 "use client"
 import { DialogDescription } from "@workspace/ui-shadcn/components/dialog"
-import { Icons } from "@workspace/ui-shadcn/components/icons"
-import { Star, StarHalf, Play } from "lucide-react"
+import { Star, StarHalf, Play, DoorClosed } from "lucide-react"
 import type Hls from "hls.js"
 import Image from "next/image"
 import Link from "next/link"
@@ -202,7 +201,7 @@ function VideoTestimonialCard({
               className="absolute top-6 right-6"
               aria-label="Close dialog"
             >
-              <Icons.Close className="h-6 w-6 text-primary" />
+              <DoorClosed className="h-6 w-6 text-primary" />
             </button>
             <div className="flex flex-col gap-6">
               <div className="flex flex-col gap-3">
@@ -282,7 +281,7 @@ function VideoTestimonialCardMobile({
           className="absolute top-6 right-6"
           aria-label="Close dialog"
         >
-          <Icons.Close className="h-6 w-6 text-primary" />
+          <DoorClosed className="h-6 w-6 text-primary" />
         </button>
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-3">

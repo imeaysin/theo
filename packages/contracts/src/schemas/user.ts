@@ -1,9 +1,7 @@
 import { z } from "zod"
 import { apiSuccessResponse } from "../api/envelopes"
 
-const roleNameSchema = z
-  .enum(["guest", "user", "manager", "admin"])
-  .describe("Application role")
+const roleNameSchema = z.string().min(1).describe("Application role")
 
 export const MeResponseSchema = z
   .object({
@@ -25,7 +23,7 @@ export const MeResponseSchema = z
   .meta({
     id: "MeResponseDto",
     title: "Current user",
-    description: "JWT claims for the authenticated user.",
+    description: "Authenticated user session context.",
   })
 
 export const MeApiResponseSchema = apiSuccessResponse(MeResponseSchema, {

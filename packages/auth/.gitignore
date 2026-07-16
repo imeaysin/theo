@@ -1,6 +1,0 @@
-# Build output must only go to dist/ (tsup). Ignore accidental tsc emits in src/.
-src/**/*.js
-src/**/*.js.map
-src/**/*.d.ts.map
-src/**/*.d.ts
-!src/lib/auth.d.ts

@@ -65,11 +65,17 @@ apps/web/src/features/notes/
 
 ## 4. Authorization
 
-Use decorators from `@workspace/auth/nestjs` — see [packages/auth/README.md](../packages/auth/README.md).
+Use exports from `@workspace/auth/nestjs` — see [packages/auth/README.md](../packages/auth/README.md),
+[docs/org-roles-and-ui.md](./org-roles-and-ui.md) (static + custom roles + module UI),
+and [docs/authN-authZ.md](./authN-authZ.md).
 
-User-owned resources: JWT + ownership check in the handler (notes pattern).
+- Session: `@Session()` / global AuthGuard; `@AllowAnonymous()` for public routes
+- Org RBAC: `@MemberHasPermission({ permissions: { project: ["read"] } })`
+- Web UI: `useHasOrgPermission({ project: ["create"] }, orgId)` from `apps/web/src/hooks/use-org-permission.ts`
+- ABAC (ownership): CASL `AccessGuard` + `@UseAbility` — not a substitute for org RBAC with custom roles
+- Always take `activeOrganizationId` from the session — never from the client body
 
-Org-scoped resources: `@RequireOrgPermission(...)`.
+Permission vocabulary and built-in roles live in `packages/auth/src/access/roles.ts`. Custom roles are created in **Workspace → Members & roles** and are checked via `hasPermission` (not `checkRolePermission`).
 
 ## 5. Verify
 

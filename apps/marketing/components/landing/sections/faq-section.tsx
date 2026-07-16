@@ -36,7 +36,6 @@ export function FaqSection({
         <Accordion
           className={cn("w-full space-y-4", className)}
           defaultValue={defaultValue}
-          type="multiple"
         >
           {items.map((item) => (
             <AccordionItem key={item.question} value={item.question}>

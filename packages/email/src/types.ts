@@ -1,18 +1,34 @@
+export type SendLinkEmailInput = {
+  readonly to: string
+  readonly url: string
+  readonly expirationMinutes?: number
+}
+
+export type SendOtpEmailInput = {
+  readonly to: string
+  readonly otp: string
+  readonly type:
+    "sign-in" | "email-verification" | "forget-password" | "change-email"
+  readonly expirationMinutes?: number
+}
+
+export type OrganizationInvitationEmailInput = {
+  readonly to: string
+  readonly url: string
+  readonly organizationName: string
+  readonly inviterName: string
+  readonly inviterEmail?: string
+  readonly role?: string
+  readonly expirationHours?: number
+}
+
 export type EmailProvider = {
-  sendWelcomeEmail(to: string, name: string): Promise<void>
-  sendVerificationEmail(to: string, url: string): Promise<void>
-  sendResetPasswordEmail(to: string, url: string): Promise<void>
-  sendMagicLinkEmail(to: string, url: string): Promise<void>
-  sendOtpEmail(
-    to: string,
-    otp: string,
-    type: "sign-in" | "email-verification" | "forget-password" | "change-email"
-  ): Promise<void>
+  sendVerificationEmail(input: SendLinkEmailInput): Promise<void>
+  sendResetPasswordEmail(input: SendLinkEmailInput): Promise<void>
+  sendMagicLinkEmail(input: SendLinkEmailInput): Promise<void>
+  sendOtpEmail(input: SendOtpEmailInput): Promise<void>
   sendOrganizationInvitationEmail(
-    to: string,
-    organizationName: string,
-    inviterName: string,
-    url: string
+    input: OrganizationInvitationEmailInput
   ): Promise<void>
 }
 

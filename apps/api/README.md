@@ -17,13 +17,13 @@ pnpm --filter api seed   # after first sign-up
 | ---------------------------- | ------------ | --------------------------- |
 | `GET /`                      | Public       | API metadata                |
 | `GET /v1/health`             | Public       | Liveness + MongoDB          |
-| `GET /v1/me`                 | Bearer JWT   | Current user                |
-| `GET /v1/notes`              | Bearer JWT   | List notes                  |
-| `POST /v1/notes`             | Bearer JWT   | Create note                 |
-| `PATCH /v1/notes/:id`        | Bearer JWT   | Update note                 |
-| `DELETE /v1/notes/:id`       | Bearer JWT   | Delete note                 |
-| `POST /v1/notes/bulk-delete` | Bearer JWT   | Bulk delete notes (max 100) |
-| `POST /v1/uploads`           | Bearer JWT   | Upload file (max 5 MB)      |
+| `GET /v1/users/me`           | Session      | Current user                |
+| `GET /v1/notes`              | Session      | List notes                  |
+| `POST /v1/notes`             | Session      | Create note                 |
+| `PATCH /v1/notes/:id`        | Session      | Update note                 |
+| `DELETE /v1/notes/:id`       | Session      | Delete note                 |
+| `POST /v1/notes/bulk-delete` | Session      | Bulk delete notes (max 100) |
+| `POST /v1/uploads`           | Session      | Upload file (max 5 MB)      |
 | `GET /uploads/*`             | Public       | Local storage files (dev)   |
 | `/api/auth/*`                | Better Auth  | Session, OAuth, roles       |
 | `GET /docs`                  | Public (dev) | Swagger                     |

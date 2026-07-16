@@ -142,7 +142,6 @@ interface NavbarBrandProps {
 export function NavbarBrand({ href, logo, label, onClick }: NavbarBrandProps) {
   return (
     <Button
-      asChild
       className="touch-manipulation gap-2 px-0 hover:opacity-80 active:opacity-80"
       onClick={onClick}
 

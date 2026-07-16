@@ -1,116 +1,148 @@
-import { useEffect, useState } from "react"
-import { Link, useSearchParams } from "react-router-dom"
-import { AuthPageBody, AuthPageHeader } from "@workspace/ui-shadcn/auth"
+import { Link, useNavigate, useParams } from "react-router-dom"
+import { useState } from "react"
+import { authClient, useSession } from "@workspace/auth/client"
 import { Button } from "@workspace/ui-shadcn/components/button"
-import { PageLoading } from "@workspace/ui-shadcn/components/page-loading"
-import { toast } from "@workspace/ui-shadcn/components/sonner"
-import { useAcceptInvitation, useAuthSession } from "@workspace/auth/react"
-import { defaultAuthenticatedRoute, routes } from "@/config/routes"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@workspace/ui-shadcn/components/card"
+import { Spinner } from "@workspace/ui-shadcn/components/spinner"
+import {
+  acceptInvitationPath,
+  defaultAuthenticatedRoute,
+  routes,
+} from "@/config/routes"
 import { withAuthRedirectQuery } from "@/routing/safe-redirect"
 
+const INVITATION_ERROR = "Unable to accept invitation"
+
 export function AcceptInvitationPage() {
-  const [searchParams] = useSearchParams()
-  const invitationId = searchParams.get("id")
-  const { data: session, isPending: sessionPending } = useAuthSession()
-  const { mutate: acceptInvitation, isPending: isAccepting } =
-    useAcceptInvitation()
-  const [accepted, setAccepted] = useState(false)
+  const { invitationId } = useParams()
+  if (!invitationId) return <InvalidInvitationCard />
+  return <AcceptInvitationBody invitationId={invitationId} />
+}
 
-  useEffect(() => {
-    if (!invitationId || sessionPending || !session || accepted) return
+function AcceptInvitationBody({
+  invitationId,
+}: {
+  readonly invitationId: string
+}) {
+  const { data: session, isPending } = useSession()
+  if (isPending) return <PendingSessionCard />
+  if (!session) return <SignInRequiredCard invitationId={invitationId} />
+  return <AcceptInvitationActions invitationId={invitationId} />
+}
 
-    acceptInvitation(
-      { invitationId },
-      {
-        onSuccess: () => {
-          setAccepted(true)
-          toast.success("Invitation accepted", {
-            description: "You have joined the workspace.",
-          })
-        },
-        onError: () => {
-          toast.error("Could not accept invitation", {
-            description:
-              "This invitation is invalid, expired, or already used.",
-          })
-        },
-      }
-    )
-  }, [acceptInvitation, accepted, invitationId, session, sessionPending])
+function AcceptInvitationActions({
+  invitationId,
+}: {
+  readonly invitationId: string
+}) {
+  const navigate = useNavigate()
+  const [statusMessage, setStatusMessage] = useState<string | null>(null)
+  const [isAccepting, setIsAccepting] = useState(false)
 
-  if (!invitationId) {
-    return (
-      <AuthPageBody>
-        <AuthPageHeader
-          description="This invitation link is missing an id. Open the link from your email again."
-          title="Invalid invitation link"
-        />
-        <Button asChild className="w-full" size="lg" type="button">
-          <Link to={routes.signIn}>Go to sign in</Link>
-        </Button>
-      </AuthPageBody>
-    )
-  }
-
-  if (sessionPending || (session && isAccepting)) {
-    return <PageLoading message="Accepting your invitation…" />
-  }
-
-  if (!session) {
-    const returnPath = `${routes.acceptInvitation}?id=${invitationId}`
-
-    return (
-      <AuthPageBody
-        footer={
-          <p className="font-sans text-sm text-muted-foreground">
-            New here?{" "}
-            <Link
-              className="text-foreground underline underline-offset-2 transition-colors hover:text-foreground/80"
-              to={withAuthRedirectQuery(routes.signUp, {
-                redirect: returnPath,
-                fallback: defaultAuthenticatedRoute,
-              })}
-            >
-              Create an account
-            </Link>
-          </p>
-        }
-      >
-        <AuthPageHeader
-          description="Sign in with the email address that received this invitation."
-          title="Sign in to accept"
-        />
-        <Button asChild className="w-full" size="lg" type="button">
-          <Link
-            to={withAuthRedirectQuery(routes.signIn, {
-              redirect: returnPath,
-              fallback: defaultAuthenticatedRoute,
-            })}
-          >
-            Sign in
-          </Link>
-        </Button>
-      </AuthPageBody>
-    )
+  async function acceptInvitation() {
+    setIsAccepting(true)
+    setStatusMessage(null)
+    const result = await authClient.organization.acceptInvitation({
+      invitationId,
+    })
+    setIsAccepting(false)
+    if (result.error) {
+      setStatusMessage(result.error.message ?? INVITATION_ERROR)
+      return
+    }
+    navigate(defaultAuthenticatedRoute, { replace: true })
   }
 
   return (
-    <AuthPageBody>
-      <AuthPageHeader
-        description={
-          accepted
-            ? "You can open your workspace settings to get started."
-            : "We could not accept this invitation automatically. Try again or contact your workspace admin."
-        }
-        title={
-          accepted ? "Welcome to the workspace" : "Invitation not accepted"
-        }
-      />
-      <Button asChild className="w-full" size="lg" type="button">
-        <Link to={routes.organizationPeople}>
-          {accepted ? "Open workspace" : "View workspace"}
-        </Link>
-      </Button>
-    </AuthPageBody>
+    <Card>
+      <CardHeader>
+        <CardTitle>Accept invitation</CardTitle>
+        <CardDescription>
+          Join the organization using the invitation sent to your email.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-3">
+        {statusMessage ? (
+          <p className="text-sm text-destructive">{statusMessage}</p>
+        ) : null}
+        <Button disabled={isAccepting} onClick={() => void acceptInvitation()}>
+          {isAccepting ? <Spinner data-icon="inline-start" /> : null}
+          {isAccepting ? "Accepting…" : "Accept invitation"}
+        </Button>
+      </CardContent>
+    </Card>
+  )
+}
+
+function SignInRequiredCard({
+  invitationId,
+}: {
+  readonly invitationId: string
+}) {
+  const redirectTarget = acceptInvitationPath(invitationId)
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Accept invitation</CardTitle>
+        <CardDescription>Sign in to join this organization.</CardDescription>
+      </CardHeader>
+      <CardFooter className="flex flex-col items-stretch gap-2">
+        <Button
+          nativeButton={false}
+          render={
+            <Link
+              to={withAuthRedirectQuery(routes.signIn, {
+                redirect: redirectTarget,
+                fallback: defaultAuthenticatedRoute,
+              })}
+            />
+          }
+        >
+          Sign in
+        </Button>
+        <Button
+          nativeButton={false}
+          render={
+            <Link
+              to={withAuthRedirectQuery(routes.signUp, {
+                redirect: redirectTarget,
+                fallback: defaultAuthenticatedRoute,
+              })}
+            />
+          }
+          variant="outline"
+        >
+          Create account
+        </Button>
+      </CardFooter>
+    </Card>
+  )
+}
+
+function PendingSessionCard() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Checking session…</CardTitle>
+      </CardHeader>
+    </Card>
+  )
+}
+
+function InvalidInvitationCard() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Invalid invitation</CardTitle>
+        <CardDescription>This invitation link is incomplete.</CardDescription>
+      </CardHeader>
+    </Card>
   )
 }

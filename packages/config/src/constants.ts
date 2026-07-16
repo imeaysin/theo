@@ -11,7 +11,7 @@ export const DEV_URLS = {
 } as const
 
 export const DEV_ALLOWED_ORIGINS =
-  `${DEV_URLS.MARKETING},${DEV_URLS.WEB},${DEV_URLS.MOBILE}` as const
+  `${DEV_URLS.MARKETING},${DEV_URLS.WEB},${DEV_URLS.MOBILE},http://127.0.0.1:3000,http://127.0.0.1:5173,http://127.0.0.1:8081` as const
 
 export const clientDefaults = {
   apiUrl: DEV_URLS.API,

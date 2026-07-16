@@ -24,7 +24,7 @@ packages/
   realtime/       Event bus (memory / Redis pub/sub)
   redis/          ioredis client factory
   storage/        File upload providers (local / S3)
-  coss-ui/             Shared React components + auth UI + app shell
+  ui-shadcn/      Shared React UI (shadcn + app shell)
 tooling/        eslint-config, typescript-config, vitest-config
 docs/           Human docs (architecture, features, deployment)
 ```
@@ -50,14 +50,15 @@ Set `SKIP_ENV_VALIDATION=true` when env is incomplete locally.
 - **Validation & OpenAPI:** Zod schemas in `@workspace/contracts` (with `.meta()` / `.describe()`). API uses `nestjs-zod` (`createZodDto`, global `ZodValidationPipe`, `cleanupOpenApiDoc` for `/docs`). Request bodies use `.strict()` (reject unknown keys).
 - **Responses:** success envelope `{ success, statusCode, message, data, timestamp }` via `TransformResponseInterceptor`; errors `{ success, statusCode, code, message, errors, path, timestamp }` via `AllExceptionsFilter`. Document success with `apiSuccessResponse()` in contracts; use `@ApiAuthErrorResponses()` / `@ApiPublicErrorResponses()` on controllers.
 - **Domain errors:** `apiNotFound(..., DomainErrorCode.NOTE_NOT_FOUND)` — codes live in `@workspace/contracts` (`HttpErrorCode`, `DomainErrorCode`).
-- **Auth:** JWT from Better Auth; guards in `app.module.ts`; decorators in `common/decorators`.
+- **Auth:** Better Auth sessions via `@workspace/auth/nestjs`; `@Session()` / `@MemberHasPermission` / CASL. See [docs/authN-authZ.md](./docs/authN-authZ.md).
 - **Tests:** `test/unit/*.spec.ts` (Jest), `test/e2e/*.e2e-spec.ts` (`pnpm test:e2e` in api).
 - **Logging:** `@workspace/logger` (pino v10). Dev: `pino-pretty` via transport (`LOG_PRETTY=true|false`). Production: JSON + ISO timestamps. Nest route noise at `debug` — set `LOG_LEVEL=debug` to show.
 
 ### Web (`apps/web`)
 
 - **Pattern:** route → page → TanStack Query hooks → `lib/api.ts`.
-- **`apiFetch`** unwraps the success envelope (`data`) and attaches bearer token; throws `ApiError` with `code` on failures.
+- **`apiFetch`** unwraps the success envelope (`data`) and sends cookies (`credentials: "include"`); throws `ApiError` with `code` on failures.
+- **Auth client:** `@workspace/auth/client` (`useSession`, `signIn`, `signOut`).
 - **Tests:** `test/**/*.test.ts` with `@/` alias (see `vitest.config.ts`).
 
 ### Shared packages
@@ -76,5 +77,7 @@ Set `SKIP_ENV_VALIDATION=true` when env is incomplete locally.
 
 - [docs/architecture.md](./docs/architecture.md)
 - [docs/adding-a-feature.md](./docs/adding-a-feature.md)
+- [docs/org-roles-and-ui.md](./docs/org-roles-and-ui.md) — static vs custom roles, module API/UI gating
+- [docs/authN-authZ.md](./docs/authN-authZ.md)
 - [packages/auth/README.md](./packages/auth/README.md)
 - Per-app: `apps/api/AGENTS.md`, `apps/web/AGENTS.md`

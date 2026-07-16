@@ -43,7 +43,7 @@ See [docs/adding-a-feature.md](./docs/adding-a-feature.md) for the full-stack pa
 ## Code style
 
 - Prettier + ESLint — run `pnpm format` (repo root) and `pnpm lint`.
-- Shared UI goes in `packages/coss-ui`, not duplicated per app.
+- Shared UI goes in `packages/ui-shadcn`, not duplicated per app.
 - API request/response shapes go in `packages/contracts`.
 - Shared dependency versions live in `pnpm-workspace.yaml` under `catalog:` — use `"package": "catalog:"` in `package.json`, not hardcoded versions.
 - Dev URL defaults (ports, app name) live in `packages/config/src/constants.ts`.

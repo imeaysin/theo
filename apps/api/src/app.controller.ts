@@ -1,6 +1,6 @@
 import { Controller, Get, VERSION_NEUTRAL } from "@nestjs/common"
 import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger"
-import { Public } from "./common/decorators"
+import { AllowAnonymous } from "./common/decorators"
 import { ApiPublicErrorResponses } from "./common/decorators/api-error-responses.decorator"
 import { AppService } from "./app.service"
 import { ApiRootApiResponseDto } from "./app.dto"
@@ -12,7 +12,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  @Public()
+  @AllowAnonymous()
   @ApiOperation({
     summary: "API metadata",
     description: "Entry point with links to auth, health, and Swagger docs.",

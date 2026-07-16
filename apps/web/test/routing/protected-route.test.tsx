@@ -4,13 +4,13 @@ import { describe, expect, it, vi } from "vitest"
 import { ProtectedRoute } from "@/routing/protected-route"
 import { routes } from "@/config/routes"
 
-const useAuthSession = vi.fn()
+const useSession = vi.fn()
 
-vi.mock("@workspace/auth/react", () => ({
-  useAuthSession: () => useAuthSession(),
+vi.mock("@workspace/auth/client", () => ({
+  useSession: () => useSession(),
 }))
 
-vi.mock("@workspace/ui-shadcn/components/page-loading", () => ({
+vi.mock("@/components/page-loading", () => ({
   PageLoading: () => <div>Loading session</div>,
 }))
 
@@ -52,7 +52,7 @@ function renderProtectedRoute(initialPath = "/app/dashboard") {
 
 describe("ProtectedRoute", () => {
   it("shows a loading state while the session is pending", () => {
-    useAuthSession.mockReturnValue({ data: undefined, isPending: true })
+    useSession.mockReturnValue({ data: undefined, isPending: true })
 
     renderProtectedRoute()
 
@@ -60,7 +60,7 @@ describe("ProtectedRoute", () => {
   })
 
   it("redirects unauthenticated users to sign in with return path", () => {
-    useAuthSession.mockReturnValue({ data: null, isPending: false })
+    useSession.mockReturnValue({ data: null, isPending: false })
 
     renderProtectedRoute("/app/dashboard")
 
@@ -72,7 +72,7 @@ describe("ProtectedRoute", () => {
   })
 
   it("redirects banned users to sign out", () => {
-    useAuthSession.mockReturnValue({
+    useSession.mockReturnValue({
       data: {
         user: { id: "u1", banned: true, emailVerified: true },
         session: { id: "s1" },
@@ -86,7 +86,7 @@ describe("ProtectedRoute", () => {
   })
 
   it("redirects unverified users to verify email", () => {
-    useAuthSession.mockReturnValue({
+    useSession.mockReturnValue({
       data: {
         user: {
           id: "u1",
@@ -108,7 +108,7 @@ describe("ProtectedRoute", () => {
   })
 
   it("renders protected content for authenticated users", () => {
-    useAuthSession.mockReturnValue({
+    useSession.mockReturnValue({
       data: {
         user: { id: "u1", emailVerified: true },
         session: { id: "s1" },

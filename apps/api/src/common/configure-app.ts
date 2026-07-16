@@ -49,10 +49,7 @@ function applySwagger(app: INestApplication) {
       "Business REST API. Auth routes are served at /api/auth. Successful JSON responses use the `{ success, statusCode, message, data, timestamp }` envelope; failures return `{ success, statusCode, code, message, errors, path, timestamp }`."
     )
     .setVersion("1.0")
-    .addBearerAuth(
-      { type: "http", scheme: "bearer", bearerFormat: "JWT" },
-      "bearer"
-    )
+    .addCookieAuth("better-auth.session_token")
     .build()
 
   const document = SwaggerModule.createDocument(app, swaggerConfig)

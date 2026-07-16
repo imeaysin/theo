@@ -1,7 +1,11 @@
 import type { NotificationResponse } from "@workspace/contracts"
 import { dates } from "@/lib/dates"
 import { Button } from "@workspace/ui-shadcn/components/button"
-import { TooltipHint } from "@workspace/ui-shadcn/components/tooltip-hint"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@workspace/ui-shadcn/components/tooltip"
 import { cn } from "@workspace/ui-shadcn/lib/utils"
 import { CheckIcon, ExternalLinkIcon, Trash2Icon } from "lucide-react"
 import { Link } from "react-router-dom"
@@ -27,11 +31,11 @@ function NotificationItem({
       )}
     >
       <div
+        aria-hidden
         className={cn(
           "mt-1.5 size-2 shrink-0 rounded-full",
           notification.read ? "bg-transparent" : "bg-primary"
         )}
-        aria-hidden
       />
 
       <div className="min-w-0 flex-1">
@@ -49,7 +53,7 @@ function NotificationItem({
               to={notification.actionUrl}
             >
               View
-              <ExternalLinkIcon className="size-3" />
+              <ExternalLinkIcon />
             </Link>
           ) : null}
         </div>
@@ -57,29 +61,39 @@ function NotificationItem({
 
       <div className="flex shrink-0 items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
         {!notification.read ? (
-          <TooltipHint content="Mark as read">
-            <Button
-              aria-label="Mark as read"
-              disabled={disabled}
-              onClick={() => onMarkRead(notification.id)}
-              size="icon-sm"
-              variant="ghost"
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  aria-label="Mark as read"
+                  disabled={disabled}
+                  onClick={() => onMarkRead(notification.id)}
+                  size="icon-sm"
+                  variant="ghost"
+                />
+              }
             >
-              <CheckIcon className="size-3.5" />
-            </Button>
-          </TooltipHint>
+              <CheckIcon />
+            </TooltipTrigger>
+            <TooltipContent>Mark as read</TooltipContent>
+          </Tooltip>
         ) : null}
-        <TooltipHint content="Delete notification">
-          <Button
-            aria-label="Delete notification"
-            disabled={disabled}
-            onClick={() => onDelete(notification.id)}
-            size="icon-sm"
-            variant="ghost"
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button
+                aria-label="Delete notification"
+                disabled={disabled}
+                onClick={() => onDelete(notification.id)}
+                size="icon-sm"
+                variant="ghost"
+              />
+            }
           >
-            <Trash2Icon className="size-3.5" />
-          </Button>
-        </TooltipHint>
+            <Trash2Icon />
+          </TooltipTrigger>
+          <TooltipContent>Delete notification</TooltipContent>
+        </Tooltip>
       </div>
     </div>
   )

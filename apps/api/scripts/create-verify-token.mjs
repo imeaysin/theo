@@ -8,16 +8,14 @@
 import { createRequire } from "node:module"
 import { fileURLToPath } from "node:url"
 import path from "node:path"
+import { SignJWT } from "jose"
 
 const require = createRequire(import.meta.url)
-const scriptDir = path.dirname(fileURLToPath(import.meta.url))
-const apiRoot = path.resolve(scriptDir, "..")
-const authPkg = path.resolve(apiRoot, "../../packages/auth")
+const apiRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 
 const { env } = await import(
   require.resolve("@workspace/config", { paths: [apiRoot] })
 )
-const { SignJWT } = await import(require.resolve("jose", { paths: [authPkg] }))
 
 const email = process.argv[2]
 if (!email) {

@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import type { ReactNode } from "react"
 import { notFound } from "next/navigation"
 import { GuideSection } from "@/components/landing"
-import { Icons } from "@workspace/ui-shadcn/components/icons"
 import { siteConfig } from "@/config/site"
 import {
   chatPlatformSlugs,
@@ -11,16 +10,17 @@ import {
 } from "@/data/chat-platforms"
 import { toGuidePage } from "@/lib/chat-guide"
 import { createMarketingMetadata } from "@/lib/metadata"
+import { GamepadDirectional } from "lucide-react"
 
 interface PageProps {
   params: Promise<{ platform: string }>
 }
 
 const platformIcons: Record<ChatPlatformSlug, ReactNode> = {
-  imessage: <Icons.IMessage className="size-10" />,
-  slack: <Icons.Slack className="size-10" />,
-  whatsapp: <Icons.WhatsApp className="size-10 text-[#25D366]" />,
-  telegram: <Icons.Telegram className="size-10" />,
+  imessage: <GamepadDirectional className="size-10" />,
+  slack: <GamepadDirectional className="size-10" />,
+  whatsapp: <GamepadDirectional className="size-10 text-[#25D366]" />,
+  telegram: <GamepadDirectional className="size-10" />,
 }
 
 export function generateStaticParams() {

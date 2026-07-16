@@ -1,22 +1,22 @@
-import {
-  BookOpen,
-  Frame,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react"
+import { Building2, SquareTerminal } from "lucide-react"
 import { routes } from "@/config/routes"
 import type { LucideIcon } from "lucide-react"
 
 export type NavItem = {
-  title: string
-  url: string
-  icon?: LucideIcon
-  isActive?: boolean
-  requiredPermission?: string
-  items?: NavItem[]
+  readonly title: string
+  readonly url: string
+  readonly icon?: LucideIcon
+  readonly isActive?: boolean
+  readonly items?: readonly NavItem[]
 }
+
+export type NavProject = {
+  readonly name: string
+  readonly url: string
+  readonly icon: LucideIcon
+}
+
+const emptyProjects: readonly NavProject[] = []
 
 export const appNavigation = {
   navMain: [
@@ -26,86 +26,22 @@ export const appNavigation = {
       icon: SquareTerminal,
       isActive: true,
       items: [
-        {
-          title: "Dashboard",
-          url: routes.dashboard,
-        },
-        {
-          title: "Notes",
-          url: routes.notes,
-        },
+        { title: "Dashboard", url: routes.dashboard },
+        { title: "Notes", url: routes.notes },
+        { title: "Uploads", url: routes.uploads },
+        { title: "Notifications", url: routes.notifications },
       ],
     },
     {
-      title: "Settings",
-      url: routes.settingsAccount,
-      icon: Settings2,
+      title: "Organization",
+      url: routes.organizationSettings,
+      icon: Building2,
       items: [
-        {
-          title: "Account",
-          url: routes.settingsAccount,
-        },
-        {
-          title: "Workspace",
-          url: routes.organizationSettings,
-        },
+        { title: "Settings", url: routes.organizationSettings },
+        { title: "People", url: routes.organizationPeople },
+        { title: "Roles", url: routes.organizationRoles },
       ],
     },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-  ] satisfies NavItem[],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
-}
-
-export const adminNavigationItem = {
-  title: "Admin",
-  url: routes.adminUsers,
-  icon: Settings2,
-  items: [
-    {
-      title: "Users",
-      url: routes.adminUsers,
-    },
-    {
-      title: "Roles",
-      url: routes.adminUsers,
-    },
-  ],
+  ] satisfies readonly NavItem[],
+  projects: emptyProjects,
 }

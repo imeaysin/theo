@@ -2,24 +2,23 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { CreateNoteSchema, type NoteResponse } from "@workspace/contracts"
 import { Button } from "@workspace/ui-shadcn/components/button"
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@workspace/ui-shadcn/components/form"
-import { Input } from "@workspace/ui-shadcn/components/input"
-import { Textarea } from "@workspace/ui-shadcn/components/textarea"
-import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogClose,
 } from "@workspace/ui-shadcn/components/dialog"
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@workspace/ui-shadcn/components/field"
+import { Input } from "@workspace/ui-shadcn/components/input"
+import { Spinner } from "@workspace/ui-shadcn/components/spinner"
+import { Textarea } from "@workspace/ui-shadcn/components/textarea"
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import type { z } from "zod"
@@ -81,72 +80,62 @@ export function NoteFormDialog({
     onOpenChange(nextOpen)
   }
 
+  const titleError = form.formState.errors.title
+  const bodyError = form.formState.errors.body
+
   return (
     <Dialog onOpenChange={handleOpenChange} open={open}>
-      <Form {...form}>
+      <DialogContent className="sm:max-w-md" showCloseButton={!isPending}>
         <form noValidate onSubmit={form.handleSubmit(handleSubmit)}>
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle>{isEditing ? "Edit note" : "New note"}</DialogTitle>
-              <DialogDescription>
-                {isEditing
-                  ? "Update the title or body of your note."
-                  : "Add a title and optional details."}
-              </DialogDescription>
-            </DialogHeader>
+          <DialogHeader>
+            <DialogTitle>{isEditing ? "Edit note" : "New note"}</DialogTitle>
+            <DialogDescription>
+              {isEditing
+                ? "Update the title or body of your note."
+                : "Add a title and optional details."}
+            </DialogDescription>
+          </DialogHeader>
 
-            <div className="flex flex-col gap-4 py-4">
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Title</FormLabel>
-                    <FormControl>
-                      <Input
-                        disabled={isPending}
-                        placeholder="What is this note about?"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+          <FieldGroup className="py-4">
+            <Field data-invalid={titleError ? true : undefined}>
+              <FieldLabel htmlFor="note-title">Title</FieldLabel>
+              <Input
+                aria-invalid={Boolean(titleError)}
+                disabled={isPending}
+                id="note-title"
+                placeholder="What is this note about?"
+                {...form.register("title")}
               />
-              <FormField
-                control={form.control}
-                name="body"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Details (optional)</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        className="min-h-[120px]"
-                        disabled={isPending}
-                        placeholder="Add some details..."
-                        {...field}
-                        value={field.value ?? ""}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+              <FieldError errors={[titleError]} />
+            </Field>
+            <Field data-invalid={bodyError ? true : undefined}>
+              <FieldLabel htmlFor="note-body">Details (optional)</FieldLabel>
+              <Textarea
+                aria-invalid={Boolean(bodyError)}
+                className="min-h-30"
+                disabled={isPending}
+                id="note-body"
+                placeholder="Add some details..."
+                {...form.register("body")}
               />
-            </div>
+              <FieldError errors={[bodyError]} />
+            </Field>
+          </FieldGroup>
 
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button type="button" variant="outline" disabled={isPending}>
-                  Cancel
-                </Button>
-              </DialogClose>
-              <Button disabled={isPending} type="submit">
-                {isEditing ? "Save changes" : "Create note"}
-              </Button>
-            </DialogFooter>
-          </DialogContent>
+          <DialogFooter>
+            <DialogClose
+              disabled={isPending}
+              render={<Button type="button" variant="outline" />}
+            >
+              Cancel
+            </DialogClose>
+            <Button disabled={isPending} type="submit">
+              {isPending ? <Spinner data-icon="inline-start" /> : null}
+              {isEditing ? "Save changes" : "Create note"}
+            </Button>
+          </DialogFooter>
         </form>
-      </Form>
+      </DialogContent>
     </Dialog>
   )
 }

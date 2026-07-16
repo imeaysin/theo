@@ -23,7 +23,7 @@ export function FeatureHero({
 }: FeatureHeroProps) {
   const cta = ctaHref ? (
     <div className="pt-2">
-      <Button asChild size="lg" variant="default">
+      <Button size="lg" variant="default">
         <a href={ctaHref}>{ctaLabel}</a>
       </Button>
     </div>

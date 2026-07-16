@@ -1,6 +1,6 @@
 # Web (`apps/web`)
 
-Vite + React client for the Theo template.
+Vite + React client.
 
 ## Development
 
@@ -10,13 +10,13 @@ pnpm --filter web dev
 
 ## Example features
 
-| Route            | Purpose                                                      |
-| ---------------- | ------------------------------------------------------------ |
-| `/`              | Public home                                                  |
-| `/auth/*`        | Better Auth UI (sign-in, sign-up, password reset, 2FA, etc.) |
-| `/app/dashboard` | Protected shell overview                                     |
-| `/app/notes`     | **Reference CRUD** — TanStack Query + `lib/api.ts` + JWT     |
-| `/app/uploads`   | **Reference upload** — multipart FormData + `lib/api.ts`     |
-| `/app/settings`  | Signed-in profile                                            |
+| Route                              | Purpose                                                      |
+| ---------------------------------- | ------------------------------------------------------------ |
+| `/`                                | Public home                                                  |
+| `/auth/*`                          | Better Auth UI (sign-in, sign-up, password reset, 2FA, etc.) |
+| `/app/dashboard`                   | Protected shell overview                                     |
+| `/app/notes`                       | **Reference CRUD** — TanStack Query + cookie `apiFetch`      |
+| `/app/uploads`                     | **Reference upload** — multipart FormData + `lib/api.ts`     |
+| `/accept-invitation/:invitationId` | Org invite accept (Better Auth)                              |
 
 See [docs/adding-a-feature.md](../../docs/adding-a-feature.md) and [AGENTS.md](./AGENTS.md).

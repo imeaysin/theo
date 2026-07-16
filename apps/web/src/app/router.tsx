@@ -1,27 +1,33 @@
-import { createBrowserRouter, Link, Navigate } from "react-router-dom"
+import { createBrowserRouter, Link, Navigate, Outlet } from "react-router-dom"
 import { Button } from "@workspace/ui-shadcn/components/button"
-import { PageNotFound } from "@workspace/ui-shadcn/components/page-not-found"
-import { AuthLayout } from "@/components/layouts/auth-layout"
+import { PageNotFound } from "@/components/page-not-found"
 import { AppLayout } from "@/components/layouts/app-layout"
+import { AuthLayout } from "@/components/layouts/auth-layout"
 import { RootLayout } from "@/components/layouts/root-layout"
-import { RouterLayout } from "@/components/layouts/router-layout"
-import { accountRoutes } from "@/features/account/routes"
 import { AcceptInvitationPage } from "@/features/auth/pages/accept-invitation-page"
+import { BetterAuthUiProvider } from "@/features/auth/providers/better-auth-ui-provider"
 import { authRoutes } from "@/features/auth/routes"
 import { dashboardRoutes } from "@/features/dashboard/routes"
 import { notesRoutes } from "@/features/notes/routes"
 import { notificationRoutes } from "@/features/notifications/routes"
-import { uploadsRoutes } from "@/features/uploads/routes"
 import { organizationRoutes } from "@/features/organization/routes"
-import { adminRoutes } from "@/features/admin/routes"
+import { uploadsRoutes } from "@/features/uploads/routes"
+import { settingsRoutes } from "@/features/settings/routes"
 import { homeRoutes } from "@/features/home/routes"
 import { ProtectedRoute } from "@/routing/protected-route"
-import { AdminRoute } from "@/routing/admin-route"
 import { routeSegments, routes } from "@/config/routes"
+
+function AuthUiLayout() {
+  return (
+    <BetterAuthUiProvider>
+      <Outlet />
+    </BetterAuthUiProvider>
+  )
+}
 
 export const router = createBrowserRouter([
   {
-    element: <RouterLayout />,
+    element: <AuthUiLayout />,
     children: [
       {
         element: <RootLayout />,
@@ -33,30 +39,36 @@ export const router = createBrowserRouter([
         children: authRoutes,
       },
       {
-        path: routes.acceptInvitation,
         element: <AuthLayout />,
-        children: [{ index: true, element: <AcceptInvitationPage /> }],
+        children: [
+          {
+            path: `${routeSegments.acceptInvitation.root}/${routeSegments.acceptInvitation.invitationId}`,
+            element: <AcceptInvitationPage />,
+          },
+        ],
       },
       {
         element: <ProtectedRoute />,
         children: [
           {
-            path: routeSegments.app.root,
             element: <AppLayout />,
             children: [
-              {
-                index: true,
-                element: <Navigate replace to={routeSegments.app.dashboard} />,
-              },
-              ...dashboardRoutes,
-              ...notesRoutes,
-              ...notificationRoutes,
-              ...uploadsRoutes,
-              ...accountRoutes,
               ...organizationRoutes,
               {
-                element: <AdminRoute />,
-                children: adminRoutes,
+                path: routeSegments.app.root,
+                children: [
+                  {
+                    index: true,
+                    element: (
+                      <Navigate replace to={routeSegments.app.dashboard} />
+                    ),
+                  },
+                  ...dashboardRoutes,
+                  ...notesRoutes,
+                  ...notificationRoutes,
+                  ...uploadsRoutes,
+                  ...settingsRoutes,
+                ],
               },
             ],
           },
@@ -67,8 +79,8 @@ export const router = createBrowserRouter([
         element: (
           <PageNotFound
             action={
-              <Button asChild>
-                <Link to={routes.home}>Go home</Link>
+              <Button nativeButton={false} render={<Link to={routes.home} />}>
+                Go home
               </Button>
             }
           />

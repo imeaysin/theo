@@ -12,6 +12,7 @@ export class HealthService {
       status: dbUp ? "ok" : "degraded",
       app: env.APP_NAME,
       db: dbUp ? "up" : "down",
+      timestamp: new Date().toISOString(),
     })
   }
 }

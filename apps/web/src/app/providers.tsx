@@ -10,10 +10,12 @@ export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(createQueryClient)
 
   return (
-    <ThemeProvider defaultTheme="system">
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
-          <AppErrorBoundary>{children}</AppErrorBoundary>
+          <AppErrorBoundary>
+            <div className="relative min-h-svh">{children}</div>
+          </AppErrorBoundary>
           <Toaster />
         </TooltipProvider>
       </QueryClientProvider>

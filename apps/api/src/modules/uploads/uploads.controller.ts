@@ -8,22 +8,22 @@ import {
 } from "@nestjs/common"
 import { FileInterceptor } from "@nestjs/platform-express"
 import {
-  ApiBearerAuth,
   ApiBody,
   ApiConsumes,
   ApiCreatedResponse,
   ApiOperation,
   ApiTags,
 } from "@nestjs/swagger"
-import type { JwtClaims } from "@workspace/auth/types"
 import { UPLOAD_MAX_BYTES } from "@workspace/contracts"
 import {
-  CurrentOrganization,
-  CurrentUser,
-  RequireOrgPermission,
+  MemberHasPermission,
+  Session,
+  type UserSession,
 } from "@/common/decorators"
 import { ApiAuthErrorResponses } from "@/common/decorators/api-error-responses.decorator"
+import { requireActiveOrganizationId } from "@/common/session-context"
 import { UploadsService } from "./uploads.service"
+import { UploadBadRequestException } from "./domain/exceptions"
 import { UploadApiResponseDto, type FileMetadata } from "./dto"
 
 @ApiTags("uploads")
@@ -33,14 +33,9 @@ export class UploadsController {
   constructor(private readonly uploadsService: UploadsService) {}
 
   @Post()
-  @RequireOrgPermission("content", "create")
+  @MemberHasPermission({ permissions: { project: ["create"] } })
   @HttpCode(HttpStatus.CREATED)
-  @ApiBearerAuth("bearer")
-  @ApiOperation({
-    summary: "Upload a file",
-    description:
-      "Uploads a single file (max 5 MB) for the authenticated user in the active workspace.",
-  })
+  @ApiOperation({ summary: "Upload a file" })
   @ApiConsumes("multipart/form-data")
   @ApiBody({
     description: "Multipart upload with a single `file` field.",
@@ -62,18 +57,13 @@ export class UploadsController {
       limits: { fileSize: UPLOAD_MAX_BYTES, files: 1 },
     })
   )
-  upload(
-    @CurrentOrganization() organizationId: string,
-    @CurrentUser() user: JwtClaims,
-    @UploadedFile()
-    file?: FileMetadata
-  ) {
+  upload(@Session() session: UserSession, @UploadedFile() file?: FileMetadata) {
     if (!file) {
-      throw new Error("File is required")
+      throw new UploadBadRequestException("File is required")
     }
     return this.uploadsService.uploadFile({
-      organizationId,
-      userId: user.id,
+      organizationId: requireActiveOrganizationId(session),
+      userId: session.user.id,
       file,
     })
   }

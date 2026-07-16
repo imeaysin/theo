@@ -41,4 +41,15 @@ All apps read the **root** `.env` via `@workspace/config`. Copy from [`.env.exam
 
 Set `RESEND_API_KEY` in production for real email delivery.
 
+## Observability (optional)
+
+Disabled by default. Active only when the variable is set **and** `NODE_ENV=production`.
+
+| Variable                      | App | Description                                    |
+| ----------------------------- | --- | ---------------------------------------------- |
+| `SENTRY_DSN`                  | API | Sentry error + performance monitoring          |
+| `OTEL_EXPORTER_OTLP_ENDPOINT` | API | OpenTelemetry trace export URL (OTLP/HTTP)     |
+| `OTEL_SERVICE_NAME`           | API | Service name in traces (default: `api`)        |
+| `VITE_SENTRY_DSN`             | Web | Sentry DSN for client-side errors (build-time) |
+
 See `.env.example` for the full list.

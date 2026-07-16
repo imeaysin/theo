@@ -1,208 +1,34 @@
-# Auth & authorization (`@workspace/auth`)
+# @workspace/auth
 
-Better Auth config, permissions, and framework adapters.
+Shared authentication and authorization for Theo.
 
-## Roles
+- **Better Auth** (`1.6.23`) — sessions, email/password, OAuth, 2FA, organizations, admin, API keys
+- **CASL** v7 — isomorphic ABAC
+- **Sessions** — Redis secondary storage (`@better-auth/redis-storage`) + Mongo copy (`storeSessionInDatabase`)
 
-### Platform (app-wide)
+No custom JWT bearer layer. Org/admin plugins require Mongo; Redis holds hot session data for multi-instance hosts.
 
-Defined in [`src/permissions/platform/index.ts`](./src/permissions/platform/index.ts). Stored on `user.role`. Embedded in JWT as `role`.
+## Access control (org roles)
 
-| Role      | Typical use                                                    |
-| --------- | -------------------------------------------------------------- |
-| `guest`   | Read-only access                                               |
-| `user`    | Default on sign-up (`defaultRole: "user"`)                     |
-| `manager` | Team lead — publish projects, invite/remove team, billing read |
-| `admin`   | Full platform access + Better Auth admin API                   |
+Source of truth: `src/access/roles.ts` (exported as `@workspace/auth/access`).
 
-**Assign platform role** (admin only):
+| Export                  | Role                                                |
+| ----------------------- | --------------------------------------------------- |
+| `organizationStatement` | Permission vocabulary for Better Auth `ac`          |
+| `organizationRoles`     | Built-in `owner` / `admin` / `member` / `viewer`    |
+| `rolePermissionCatalog` | Checkbox resources for the custom-role UI           |
+| `ASSIGNABLE_ORG_ROLES`  | Roles that can be invited/assigned (excludes owner) |
 
-```ts
-import { authClient } from "@workspace/auth/client"
+Custom roles are **not** defined here — they live in Mongo (`organizationRole`) via `dynamicAccessControl` and the Workspace UI.
 
-await authClient.admin.setRole({ userId: "…", role: "manager" })
-```
-
-User must refresh JWT after role change: `await authClient.token()`.
-
-**Protect API route:**
+How modules should gate API + UI (including custom roles): **[docs/org-roles-and-ui.md](../../docs/org-roles-and-ui.md)**.
 
 ```ts
-@RequirePermission("team", "invite")  // manager + admin have this
+// API
+@MemberHasPermission({ permissions: { project: ["read"] } })
+
+// Web (includes dynamic roles)
+const canCreate = useHasOrgPermission({ project: ["create"] }, orgId)
 ```
 
-### Organization (per org)
-
-Defined in [`src/permissions/organization/index.ts`](./src/permissions/organization/index.ts). Stored on `member.role`. Embedded in JWT as `organizationRole` (minted at `/api/auth/token`).
-
-| Role     | Typical use                           |
-| -------- | ------------------------------------- |
-| `owner`  | Full org control                      |
-| `admin`  | Manage members, invitations, settings |
-| `member` | Create/update own work                |
-
-**Assign org role:**
-
-```ts
-await authClient.organization.inviteMember({ email, role: "admin" })
-await authClient.organization.updateMemberRole({ memberId, role: "admin" })
-```
-
-**Protect org-scoped API route:**
-
-```ts
-@RequireOrgPermission("project", "create")
-```
-
-Requires active organization (`organization.setActive`) and a fresh JWT.
-
-## Custom roles
-
-### Platform — code change
-
-1. Add role in `src/permissions/platform/index.ts`:
-
-```ts
-export const supportRole = ac.newRole({
-  content: ["read"],
-  settings: ["read"],
-})
-export const roles = {
-  guestRole,
-  userRole,
-  managerRole,
-  adminRole,
-  supportRole,
-}
-export type RoleName = "guest" | "user" | "manager" | "admin" | "support"
-```
-
-2. Register in [`src/lib/auth.ts`](./src/lib/auth.ts) `admin({ roles: { …, support: supportRole } })`.
-3. Register in [`src/lib/auth-client.ts`](./src/lib/auth-client.ts) `adminClient({ ac, roles })`.
-4. Assign with `authClient.admin.setRole({ userId, role: "support" })`.
-
-### Organization — no deploy (dynamic)
-
-`dynamicAccessControl` is enabled. Org admins create roles at runtime:
-
-```ts
-await authClient.organization.createRole({
-  role: "moderator",
-  permission: {
-    project: ["read", "update"],
-    content: ["read"],
-  },
-})
-
-await authClient.organization.updateMemberRole({ memberId, role: "moderator" })
-```
-
-`OrgRbacGuard` resolves dynamic roles from the `organizationRole` collection automatically.
-
-## NestJS guards
-
-Registered globally via `AuthGuardsModule` (`APP_GUARD` + `useExisting` — see [Nest testing: overriding globally registered enhancers](https://docs.nestjs.com/fundamentals/testing#overriding-globally-registered-enhancers)):
-
-```
-JwksGuard → RbacGuard → OrgRbacGuard
-```
-
-| Decorator                                 | Scope                                          |
-| ----------------------------------------- | ---------------------------------------------- |
-| `@Public()`                               | Skip JWT                                       |
-| `@CurrentUser()`                          | JWT claims                                     |
-| `@CurrentOrganization()`                  | JWT `activeOrganizationId` (throws if missing) |
-| `@RequirePermission(resource, action)`    | Platform                                       |
-| `@RequireOrgPermission(resource, action)` | Active org                                     |
-
-Permission statements (resources + actions) live in the `statement` export in each permissions file. Use those keys in decorators.
-
-## JWT claims
-
-| Claim                  | Source                       |
-| ---------------------- | ---------------------------- |
-| `role`                 | `user.role` (platform)       |
-| `activeOrganizationId` | session                      |
-| `organizationRole`     | `member.role` for active org |
-
-Mint: `GET /api/auth/token` (session required). Business API verifies JWT via JWKS — no DB on the hot path; org dynamic roles are loaded only when `@RequireOrgPermission` is used.
-
-## Permission architecture
-
-Three layers — each has a single job:
-
-| Layer           | Location                                                                        | Responsibility                                                                 |
-| --------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| **Definitions** | `packages/auth/src/permissions/`                                                | Access-control statements, static roles, permission keys, sync check helpers   |
-| **Enforcement** | `packages/auth/src/adapters/nestjs/` + `apps/api` handlers                      | JWT guards, `@RequirePermission` / `@RequireOrgPermission`, resource ownership |
-| **UI gating**   | `packages/ui/src/auth/organization/ui-permissions.ts` + `@workspace/auth/react` | Hide/disable controls via `hasPermission`; never the source of truth           |
-
-### `permissions/` layout
-
-```text
-permissions/
-  types.ts                 # PermissionMapFor, ResourceName, ActionName
-  collections.ts           # Better Auth Mongo collection names
-  business/
-    statement.ts           # App feature resources (project, content, …)
-    grants.ts              # Role grants for platform + organization
-  platform/
-    index.ts               # Platform AC, roles, checkPlatformPermission
-  organization/
-    statement.ts           # Org AC statement (org plugin + business)
-    index.ts               # Org AC, roles, helpers
-    server.ts              # Dynamic role checks (server only)
-```
-
-### Adding a new capability
-
-1. Extend `business/statement.ts` and `business/grants.ts`.
-2. Protect API: `@RequireOrgPermission("project", "publish")`.
-3. Gate shared auth UI with `useOrganizationPermission({ permissions: { project: ["publish"] } })` — same shape as Better Auth `hasPermission`. Optional DRY constants in `packages/ui/src/auth/organization/ui-permissions.ts`.
-4. App-specific pages inline permission maps or define their own `ui-permissions` — do not add UI aliases to `@workspace/auth`.
-
-### Better Auth recommended checks
-
-| Check                 | When                                 | API                                                                                                                   |
-| --------------------- | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
-| `checkRolePermission` | Static roles only, sync UI preview   | `authClient.organization.checkRolePermission` / `authClient.admin.checkRolePermission`                                |
-| `hasPermission`       | Current user, includes dynamic roles | `authClient.organization.hasPermission({ permissions: { … } })` → `useOrganizationPermission({ permissions: { … } })` |
-| JWT + guards          | Business API hot path                | `@RequirePermission`, `@RequireOrgPermission`                                                                         |
-
-With `dynamicAccessControl` enabled, **always use `hasPermission` hooks for UI** that gates user actions. `checkRolePermission` is for static role metadata (e.g. role labels), not authoritative access.
-
-### What belongs where
-
-**`@workspace/auth`** — roles, statements, guards, JWT claims, `useOrganizationPermission` (wraps `hasPermission` with Better Auth input shape).
-
-**`apps/api`** — decorate controllers with `@RequirePermission` / `@RequireOrgPermission`; ownership checks in handlers (e.g. note belongs to `user.id`).
-
-**`apps/web`** — routing, page layout, wiring `AuthUiConfigProvider`. No permission logic unless app-specific (not org/auth UI).
-
-**`packages/ui`** — shared auth/org components; `organization/ui-permissions.ts` for typed `hasPermission` inputs + `useOrganizationPermission`. Reusable across web and marketing.
-
-## Exports
-
-| Import                                     | Use                                             |
-| ------------------------------------------ | ----------------------------------------------- |
-| `@workspace/auth`                          | Server `getAuth()` (after `connectDb`)          |
-| `@workspace/auth/client`                   | Browser `authClient`                            |
-| `@workspace/auth/react`                    | React hooks (`useAuthSession`, auth mutations)  |
-| `@workspace/auth/nestjs`                   | Guards + decorators (`@CurrentOrganization`, …) |
-| `@workspace/auth/permissions`              | Platform AC + roles                             |
-| `@workspace/auth/permissions/organization` | Org AC + roles + sync check helpers             |
-| `@workspace/auth/types`                    | `JwtClaims`, `PlatformRoleName`                 |
-| `@workspace/auth/types/organization`       | Org entity types + role CRUD input types        |
-| `@workspace/auth/mobile`                   | Expo auth client                                |
-
-## DB schema (MongoDB)
-
-Better Auth uses the **MongoDB adapter** — auth collections are created automatically on first request. The `auth migrate` CLI applies to SQL adapters only (Drizzle, Prisma, etc.), not this template.
-
-After plugin or schema changes, verify against a fresh local database or update documents manually as needed.
-
-- **Single DB pool:** `getAuthDb()` / `getAuthMongoClient()` delegate to `@workspace/db` — do not create a second `MongoClient`.
-- **Lazy init:** call `connectDb()` before `getAuth()` (API: `DatabaseModule` + `DATABASE_READY`; CLI: `auth.cli.ts`).
-- **Sessions & rate limits:** stored in MongoDB via Better Auth adapter — no in-memory session store.
-- **Business API:** stateless JWT verification (`JwksGuard`); workspace from token, not client input.
-- **Rate limiting:** avoid in-memory counters in Nest. Prefer edge/gateway limits; when on Better Auth versions that support it, use `rateLimit: { storage: "database" }` (SQL adapters only for `auth migrate`).
+Do **not** use `checkRolePermission` when custom roles may apply — it only knows static roles.

@@ -1,6 +1,5 @@
 "use client"
 
-import { Icons } from "@workspace/ui-shadcn/components/icons"
 import { SiteFooter } from "@/components/landing"
 import type { FooterLinkGroup } from "@/components/landing"
 import { useTheme } from "@workspace/ui-shadcn/components/theme-provider"
@@ -8,6 +7,7 @@ import { footerNavigation, socialLinks } from "@/config/navigation"
 import { siteConfig } from "@/config/site"
 import Image from "next/image"
 import { useIsClient } from "@/hooks/use-is-client"
+import { Moon, Sun } from "lucide-react"
 
 const footerLinkGroups: FooterLinkGroup[] = [
   { title: "Features", links: [...footerNavigation.features] },
@@ -90,12 +90,8 @@ export function Footer() {
             aria-label="Toggle theme"
           >
             {!mounted && <div className="h-4 w-4" />}
-            {mounted && theme === "dark" && (
-              <Icons.LightMode className="h-4 w-4" />
-            )}
-            {mounted && theme !== "dark" && (
-              <Icons.DarkMode className="h-4 w-4" />
-            )}
+            {mounted && theme === "dark" && <Sun className="h-4 w-4" />}
+            {mounted && theme !== "dark" && <Moon className="h-4 w-4" />}
             <span className="font-sans text-sm">
               {!mounted && "Toggle theme"}
               {mounted && theme === "dark" && "Light mode"}

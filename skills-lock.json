@@ -125,7 +125,13 @@
       "source": "shadcn/ui",
       "sourceType": "github",
       "skillPath": "skills/shadcn/SKILL.md",
-      "computedHash": "ac9d0d69caac7de1d1e5647f3db3bcd2f13af355d6b3a78780fbf7fc80e8dca0"
+      "computedHash": "d81caa0f86aabab65b25e302d454f23a3328760386ed9078345584c0d5c8058e"
+    },
+    "shark-ui": {
+      "source": "sharkui-inc/shark-ui",
+      "sourceType": "github",
+      "skillPath": "skills/shark-ui/SKILL.md",
+      "computedHash": "a64e44b218843413d9ef1ea1514dd0941e631defe04eedabf72f125f2e36a99f"
     },
     "two-factor-authentication-best-practices": {
       "source": "better-auth/skills",

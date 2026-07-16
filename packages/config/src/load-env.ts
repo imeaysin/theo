@@ -9,6 +9,6 @@ export function loadRootEnvFile() {
   const envPath = join(root, ".env")
 
   if (existsSync(envPath)) {
-    config({ path: envPath })
+    config({ path: envPath, quiet: true })
   }
 }

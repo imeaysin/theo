@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query"
-import { useActiveOrganizationId } from "@workspace/auth/react"
+import { useActiveOrganizationId } from "@/lib/session"
 import { UploadResponseSchema, type UploadResponse } from "@workspace/contracts"
-import { toast } from "@workspace/ui-shadcn/components/sonner"
+import { toast } from "sonner"
 import { apiRoutes } from "@/config/api-routes"
 import { apiFetch } from "@/lib/api"
 

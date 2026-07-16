@@ -28,6 +28,9 @@ catalog:
   "@types/react-dom": 19.2.3
   better-auth: 1.6.23
   "@better-auth/passkey": 1.6.23
+  "@better-auth/api-key": 1.6.23
+  "@better-auth/expo": 1.6.23
+  "@better-auth/redis-storage": 1.6.23
   auth: 1.6.23 # Better Auth CLI (not @workspace/auth)
   "@nestjs/common": 11.1.27
   "@nestjs/core": 11.1.27
@@ -49,6 +52,11 @@ catalog:
   ai: ^4.1.41
   "@ai-sdk/react": ^1.1.13
   "@ai-sdk/openai": ^1.1.10
+  "@sentry/nestjs": ^9.47.0
+  "@sentry/react": ^9.47.0
+  "@opentelemetry/sdk-node": ^0.211.0
+  "@opentelemetry/auto-instrumentations-node": ^0.67.3
+  "@opentelemetry/exporter-trace-otlp-http": ^0.211.0
 
 overrides:
   react: 19.2.7
@@ -66,8 +74,11 @@ allowBuilds:
   esbuild: true
   msgpackr-extract: false
   "@swc/core": true
+  protobufjs: true
 
 minimumReleaseAgeExclude:
+  - "@better-auth/api-key@1.6.23"
+  - "@better-auth/expo@1.6.23"
   - "@better-auth/core@1.6.23"
   - "@better-auth/drizzle-adapter@1.6.23"
   - "@better-auth/kysely-adapter@1.6.23"
@@ -75,6 +86,7 @@ minimumReleaseAgeExclude:
   - "@better-auth/mongo-adapter@1.6.23"
   - "@better-auth/passkey@1.6.23"
   - "@better-auth/prisma-adapter@1.6.23"
+  - "@better-auth/redis-storage@1.6.23"
   - "@better-auth/telemetry@1.6.23"
   - "@nestjs/swagger@11.4.5"
   - "@turbo/darwin-64@2.10.2"

@@ -1,9 +1,7 @@
 import { AppSidebar } from "@/components/app-sidebar"
-import { AppOutletContext } from "@/features/auth/app-outlet-context"
-import { WorkspaceOnboardingGate } from "@/features/auth/components/workspace-onboarding-gate"
-import { useCreateOrganizationDialog } from "@/features/auth/hooks/use-create-organization-dialog"
 import { useEventStream } from "@/features/notifications/hooks/use-event-stream"
 import { useAppShellConfig } from "@/features/shell/use-app-shell-config"
+import { useEnsureActiveOrganization } from "@/features/shell/use-ensure-active-organization"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -18,17 +16,13 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@workspace/ui-shadcn/components/sidebar"
-import { Outlet, useLocation } from "react-router-dom"
+import { Link, Outlet, useLocation } from "react-router-dom"
 
-export const AppLayout = () => {
-  const createOrganization = useCreateOrganizationDialog()
-
+export function AppLayout() {
   const { navMain, brandLabel } = useAppShellConfig()
   const { pathname } = useLocation()
+  useEnsureActiveOrganization()
   useEventStream()
-  const outletContext: AppOutletContext = {
-    openCreateOrganization: createOrganization.openDialog,
-  }
 
   const currentNav = navMain.find(
     (n) =>
@@ -40,42 +34,45 @@ export const AppLayout = () => {
   const currentSubNav = currentNav?.items?.find(
     (n) => pathname === n.url || pathname.startsWith(`${n.url}/`)
   )
+
   return (
-    <WorkspaceOnboardingGate>
-      <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset>
-          <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 bg-background transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-            <div className="flex items-center gap-2 px-6">
-              <SidebarTrigger className="-ml-1" />
-              <Separator
-                orientation="vertical"
-                className="mr-2 data-[orientation=vertical]:h-4"
-              />
-              <Breadcrumb>
-                <BreadcrumbList>
-                  <BreadcrumbItem className="hidden md:block">
-                    <BreadcrumbLink href="#">
-                      {currentNav?.title ?? brandLabel}
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <header className="group-has-data-[collapsible=icon]:sidebar-wrapper:h-12 flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear">
+          <div className="flex items-center gap-2 px-4">
+            <SidebarTrigger className="-ml-1" />
+            <Separator
+              className="mr-2 data-vertical:h-4 data-vertical:self-auto"
+              orientation="vertical"
+            />
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem className="hidden md:block">
+                  {currentNav?.url ? (
+                    <BreadcrumbLink render={<Link to={currentNav.url} />}>
+                      {currentNav.title}
                     </BreadcrumbLink>
-                  </BreadcrumbItem>
-                  {currentSubNav && (
-                    <>
-                      <BreadcrumbSeparator className="hidden md:block" />
-                      <BreadcrumbItem>
-                        <BreadcrumbPage>{currentSubNav.title}</BreadcrumbPage>
-                      </BreadcrumbItem>
-                    </>
+                  ) : (
+                    <BreadcrumbPage>{brandLabel}</BreadcrumbPage>
                   )}
-                </BreadcrumbList>
-              </Breadcrumb>
-            </div>
-          </header>
-          <main className="flex flex-1 flex-col gap-6 p-6 pt-0">
-            <Outlet context={outletContext} />
-          </main>
-        </SidebarInset>
-      </SidebarProvider>
-    </WorkspaceOnboardingGate>
+                </BreadcrumbItem>
+                {currentSubNav ? (
+                  <>
+                    <BreadcrumbSeparator className="hidden md:block" />
+                    <BreadcrumbItem>
+                      <BreadcrumbPage>{currentSubNav.title}</BreadcrumbPage>
+                    </BreadcrumbItem>
+                  </>
+                ) : null}
+              </BreadcrumbList>
+            </Breadcrumb>
+          </div>
+        </header>
+        <main className="flex flex-1 flex-col gap-6 p-6 pt-0">
+          <Outlet />
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
   )
 }

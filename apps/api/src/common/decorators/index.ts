@@ -1,7 +1,10 @@
 export {
-  Public,
-  CurrentUser,
-  CurrentOrganization,
-  RequirePermission,
-  RequireOrgPermission,
+  AllowAnonymous,
+  OptionalAuth,
+  Session,
+  RequireRoles,
+  OrgRoles,
+  UserHasPermission,
+  MemberHasPermission,
+  type UserSession,
 } from "@workspace/auth/nestjs"

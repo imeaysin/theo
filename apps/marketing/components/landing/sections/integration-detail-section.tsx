@@ -33,7 +33,6 @@ export function IntegrationDetailSection({
       <PageContainer>
         <nav className="mb-8">
           <Button
-            asChild
             className="h-auto p-0 text-sm text-muted-foreground"
 
             variant="link"
@@ -83,7 +82,7 @@ export function IntegrationDetailSection({
             </Card>
           ) : null}
 
-          <Button asChild size="lg" variant="default">
+          <Button size="lg" variant="default">
             <a href={ctaHref}>{ctaLabel}</a>
           </Button>
         </div>

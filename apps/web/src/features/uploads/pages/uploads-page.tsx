@@ -9,7 +9,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@workspace/ui-shadcn/components/card"
+import {
+  Field,
+  FieldGroup,
+  FieldLabel,
+} from "@workspace/ui-shadcn/components/field"
 import { Input } from "@workspace/ui-shadcn/components/input"
+import { Spinner } from "@workspace/ui-shadcn/components/spinner"
 import { UploadIcon } from "lucide-react"
 import { useUploadFileMutation } from "@/features/uploads/hooks/use-upload"
 
@@ -43,19 +49,17 @@ export function UploadsPage() {
   }
 
   return (
-    <div>
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <div className="space-y-1">
-          <h2 className="text-2xl font-bold tracking-tight">Uploads</h2>
-          <p className="text-muted-foreground">
-            Upload files to the API (max 5 MB). Uses local storage in dev.
-          </p>
-        </div>
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-1">
+        <h2 className="text-2xl font-bold tracking-tight">Uploads</h2>
+        <p className="text-muted-foreground">
+          Upload files to the API (max 5 MB). Uses local storage in dev.
+        </p>
       </div>
       <Card className="max-w-lg">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
-            <UploadIcon className="size-4" aria-hidden />
+            <UploadIcon aria-hidden />
             Upload a file
           </CardTitle>
           <CardDescription>
@@ -67,22 +71,29 @@ export function UploadsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
-          <Input
-            ref={inputRef}
-            type="file"
-            accept="image/*,.pdf,.txt"
-            onChange={onFileChange}
-          />
+          <FieldGroup>
+            <Field>
+              <FieldLabel htmlFor="upload-file">File</FieldLabel>
+              <Input
+                accept="image/*,.pdf,.txt"
+                id="upload-file"
+                onChange={onFileChange}
+                ref={inputRef}
+                type="file"
+              />
+            </Field>
+          </FieldGroup>
           {selectedName ? (
             <p className="text-sm text-muted-foreground">
               Selected: {selectedName}
             </p>
           ) : null}
           <Button
-            type="button"
             disabled={!selectedName || uploadFile.isPending}
             onClick={() => void onUpload()}
+            type="button"
           >
+            {uploadFile.isPending ? <Spinner data-icon="inline-start" /> : null}
             Upload
           </Button>
           {lastUpload ? (

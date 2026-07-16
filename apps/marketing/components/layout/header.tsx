@@ -2,7 +2,6 @@
 
 import { LogEvents, track } from "@/lib/track"
 import { cn } from "@workspace/ui-shadcn/lib/utils"
-import { Icons } from "@workspace/ui-shadcn/components/icons"
 import { marketingEnv } from "@/config/env"
 import {
   appPrefetchRoutes,
@@ -21,6 +20,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { HeaderIntegrationsPreview } from "@/components/layout/header-integrations-preview"
 import type { Testimonial } from "@/components/sections/testimonials-section"
 import { defaultTestimonials } from "@/components/sections/testimonials-section"
+import { ArrowDown, Medal } from "lucide-react"
 
 // All testimonials for header rotation (includes default + new ones)
 const headerTestimonials: Testimonial[] = [
@@ -258,7 +258,7 @@ export function Header({
             aria-label={`${siteConfig.name} - Go to homepage`}
           >
             <div className="h-6 w-6">
-              <Icons.LogoSmall className="h-full w-full text-foreground" />
+              <Medal className="h-full w-full text-foreground" />
             </div>
             <span className="font-sans text-base text-foreground xl:hidden">
               {siteConfig.name.toLowerCase()}
@@ -293,7 +293,7 @@ export function Header({
                   className="flex items-center gap-1 px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
                 >
                   Features
-                  <Icons.ArrowDropDown
+                  <ArrowDown
                     className={`h-4 w-4 transition-transform duration-200 ${isFeaturesOpen ? "rotate-180" : ""}`}
                   />
                 </button>
@@ -555,7 +555,7 @@ export function Header({
                   className="flex items-center gap-1 px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
                 >
                   Resources
-                  <Icons.ArrowDropDown
+                  <ArrowDown
                     className={`h-4 w-4 transition-transform duration-200 ${isAppsOpen ? "rotate-180" : ""}`}
                   />
                 </button>
@@ -828,7 +828,7 @@ export function Header({
                   }}
                 >
                   <span>Features</span>
-                  <Icons.ArrowDropDown
+                  <ArrowDown
                     className={`h-6 w-6 transition-transform duration-200 ${
                       isMobileFeaturesOpen ? "rotate-180" : ""
                     }`}
@@ -914,7 +914,7 @@ export function Header({
                   }}
                 >
                   <span>Resources</span>
-                  <Icons.ArrowDropDown
+                  <ArrowDown
                     className={`h-6 w-6 transition-transform duration-200 ${
                       isMobileAppsOpen ? "rotate-180" : ""
                     }`}

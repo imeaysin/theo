@@ -46,7 +46,7 @@ describe("AppController (e2e)", () => {
       })
   })
 
-  it("GET /v1/me without bearer returns 401", () => {
-    return request(app.getHttpServer()).get("/v1/me").expect(401)
+  it("GET /v1/users/me without session returns 401", () => {
+    return request(app.getHttpServer()).get("/v1/users/me").expect(401)
   })
 })

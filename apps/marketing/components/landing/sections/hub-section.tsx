@@ -2,9 +2,9 @@
 
 import { Avatar, AvatarFallback } from "@workspace/ui-shadcn/components/avatar"
 import { Badge } from "@workspace/ui-shadcn/components/badge"
-import { Icons } from "@workspace/ui-shadcn/components/icons"
 import { PageContainer, SectionHeading } from "../layout"
 import { LinkCard } from "../link-card"
+import { Check } from "lucide-react"
 
 export interface HubCardItem {
   id: string
@@ -159,7 +159,7 @@ export function HubSection({
                 key={item}
                 className="flex items-start gap-3 text-sm text-muted-foreground"
               >
-                <Icons.Check className="mt-0.5 size-4 shrink-0 text-foreground" />
+                <Check className="mt-0.5 size-4 shrink-0 text-foreground" />
                 {item}
               </li>
             ))}

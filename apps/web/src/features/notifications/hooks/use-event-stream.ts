@@ -1,14 +1,21 @@
 import { useEffect, useRef } from "react"
 import { useQueryClient } from "@tanstack/react-query"
-import { authClient } from "@workspace/auth/client"
-import { DEFAULT_JWT_STORAGE_KEY, getBearerToken } from "@workspace/auth/react"
+import { useSession } from "@workspace/auth/client"
 import { env } from "@/config/env"
 import { apiRoutes } from "@/config/api-routes"
 import { notificationsQueryKey, unreadCountQueryKey } from "./use-notifications"
 
 type SSEEvent = {
-  type: string
-  [key: string]: unknown
+  readonly type: string
+}
+
+function isSSEEvent(value: unknown): value is SSEEvent {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "type" in value &&
+    typeof value.type === "string"
+  )
 }
 
 function parseSSELines(chunk: string): SSEEvent[] {
@@ -29,11 +36,14 @@ function parseSSELines(chunk: string): SSEEvent[] {
 
     try {
       const parsed: unknown = JSON.parse(data)
-      if (typeof parsed === "object" && parsed !== null && "type" in parsed) {
-        events.push(parsed as SSEEvent)
+      if (isSSEEvent(parsed)) {
+        events.push(parsed)
       }
-    } catch {
-      // non-JSON data frame — skip
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        continue
+      }
+      throw error
     }
   }
 
@@ -48,12 +58,9 @@ const NOTIFICATION_EVENT_TYPES = new Set([
   "notification.all-read",
 ])
 
-/**
- * Connects to the SSE event stream while the component is mounted.
- * Automatically invalidates notification queries when relevant events arrive.
- */
 export function useEventStream() {
   const queryClient = useQueryClient()
+  const { data: session } = useSession()
   const activeRef = useRef(true)
 
   useEffect(() => {
@@ -62,16 +69,13 @@ export function useEventStream() {
     let reconnectTimer: ReturnType<typeof setTimeout> | undefined
 
     async function connect() {
-      if (!activeRef.current) return
-
-      const token = await getBearerToken(authClient, DEFAULT_JWT_STORAGE_KEY)
-      if (!token || !activeRef.current) return
+      if (!activeRef.current || !session) return
 
       abortController = new AbortController()
 
       try {
         const response = await fetch(`${env.apiUrl}${apiRoutes.eventsStream}`, {
-          headers: { Authorization: `Bearer ${token}` },
+          credentials: "include",
           signal: abortController.signal,
         })
 
@@ -107,6 +111,7 @@ export function useEventStream() {
         }
       } catch (err: unknown) {
         if (err instanceof DOMException && err.name === "AbortError") return
+        if (err instanceof SyntaxError) return
       }
 
       if (activeRef.current) {
@@ -121,5 +126,5 @@ export function useEventStream() {
       abortController?.abort()
       if (reconnectTimer !== undefined) clearTimeout(reconnectTimer)
     }
-  }, [queryClient])
+  }, [queryClient, session])
 }

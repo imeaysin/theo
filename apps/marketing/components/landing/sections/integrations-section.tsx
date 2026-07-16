@@ -62,7 +62,7 @@ function MarqueeRow({
 
   return (
     <div
-      className={`flex ${animationClass} will-change-transform group-hover/integrations:[animation-play-state:paused]`}
+      className={`flex ${animationClass} will-change-transform group-hover/integrations:paused`}
     >
       {[0, 1].map((copy) => (
         <div
@@ -119,7 +119,7 @@ export function IntegrationsSection({
         </div>
 
         <div className="mt-8 text-center">
-          <Button asChild size="sm" variant="link">
+          <Button size="sm" variant="link">
             <a href={integrationsHref}>View all integrations</a>
           </Button>
         </div>

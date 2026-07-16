@@ -1,31 +1,40 @@
-import { Controller, Get } from "@nestjs/common"
-import {
-  ApiBearerAuth,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-} from "@nestjs/swagger"
-import type { JwtClaims } from "@workspace/auth/types"
-import { CurrentUser } from "@/common/decorators"
+import { Controller, Get, Req } from "@nestjs/common"
+import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger"
+import type { Request } from "express"
+import { Session, type UserSession } from "@/common/decorators"
 import { ApiAuthErrorResponses } from "@/common/decorators/api-error-responses.decorator"
 import { UsersService } from "./users.service"
 import { MeApiResponseDto } from "./dto"
 
 @ApiTags("users")
 @ApiAuthErrorResponses()
-@ApiBearerAuth("bearer")
 @Controller({ path: "users", version: "1" })
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get("me")
-  @ApiOperation({
-    summary: "Current user context",
-    description:
-      "Returns fast JWT claims for the bearer token without querying the database.",
-  })
+  @ApiOperation({ summary: "Current user context" })
   @ApiOkResponse({ type: MeApiResponseDto })
-  async getMe(@CurrentUser() user: JwtClaims) {
-    return this.usersService.getCurrentUserContext(user)
+  getMe(@Session() session: UserSession, @Req() request: Request) {
+    return this.usersService.getCurrentUserContext({
+      session,
+      headers: toWebHeaders(request),
+    })
   }
+}
+
+function toWebHeaders(request: Request): Headers {
+  const headers = new Headers()
+  for (const [key, value] of Object.entries(request.headers)) {
+    if (typeof value === "string") {
+      headers.set(key, value)
+      continue
+    }
+    if (Array.isArray(value)) {
+      for (const item of value) {
+        headers.append(key, item)
+      }
+    }
+  }
+  return headers
 }

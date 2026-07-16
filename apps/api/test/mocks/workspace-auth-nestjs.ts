@@ -1,25 +1,38 @@
-/// <reference types="jest" />
+export const AllowAnonymous = () => () => undefined
+export const OptionalAuth = () => () => undefined
+export const Session = () => () => undefined
+export const RequireRoles = () => () => undefined
+export const OrgRoles = () => () => undefined
+export const UserHasPermission = () => () => undefined
+export const MemberHasPermission = () => () => undefined
 
-import type { DynamicModule } from "@nestjs/common"
+export class WorkspaceAuthModule {}
 
-const noopDecorator = () => () => undefined
+export class AuthService {
+  constructor(_options?: object) {}
 
-export const Public = noopDecorator
-export const CurrentUser = noopDecorator
-export const CurrentOrganization = noopDecorator
-export const RequirePermission = noopDecorator
-export const RequireOrgPermission = noopDecorator
+  api = {
+    getActiveMemberRole: async () => ({ role: null as string | null }),
+  }
+}
 
-export const findOrganizationMemberRole = jest.fn()
-
-export class JwksGuard {}
-export class RbacGuard {}
-export class OrgRbacGuard {}
-
-export class AuthGuardsModule {
-  static register(): DynamicModule {
-    return {
-      module: class AuthGuardsModuleStub {},
-    }
+export type UserSession = {
+  user: {
+    id: string
+    email: string
+    emailVerified: boolean
+    name: string
+    role?: string | string[] | null
+    createdAt: Date
+    updatedAt: Date
+  }
+  session: {
+    id: string
+    userId: string
+    expiresAt: Date
+    token: string
+    createdAt: Date
+    updatedAt: Date
+    activeOrganizationId?: string | null
   }
 }

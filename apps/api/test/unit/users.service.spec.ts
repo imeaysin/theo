@@ -1,51 +1,62 @@
-import { findOrganizationMemberRole } from "@workspace/auth/nestjs"
-import type { JwtClaims } from "@workspace/auth/types"
+import type { UserSession } from "@workspace/auth/nestjs"
 import { UsersService } from "@/modules/users/users.service"
 
-jest.mock("@workspace/auth/nestjs", () => ({
-  findOrganizationMemberRole: jest.fn(),
-}))
-
-const findOrganizationMemberRoleMock = jest.mocked(findOrganizationMemberRole)
-
 describe("UsersService", () => {
-  const service = new UsersService()
+  const getActiveMemberRole = jest.fn()
+  const service = new UsersService({
+    api: { getActiveMemberRole },
+  })
+  const headers = new Headers()
 
-  const claims = {
-    id: "user-1",
-    email: "user@example.com",
-    emailVerified: true,
-    role: "user",
-    name: "User",
-    activeOrganizationId: "org-1",
-    organizationRole: "member",
-  } satisfies JwtClaims
+  const session = {
+    user: {
+      id: "user-1",
+      email: "user@example.com",
+      emailVerified: true,
+      name: "User",
+      role: "user",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    session: {
+      id: "session-1",
+      userId: "user-1",
+      expiresAt: new Date(),
+      token: "token",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      activeOrganizationId: "org-1",
+    },
+  } satisfies UserSession
 
   beforeEach(() => {
-    findOrganizationMemberRoleMock.mockReset()
+    getActiveMemberRole.mockReset()
   })
 
-  it("returns JWT claims with organization role resolved from the database", async () => {
-    findOrganizationMemberRoleMock.mockResolvedValue("admin")
+  it("returns session user context with organization role", async () => {
+    getActiveMemberRole.mockResolvedValue({ role: "owner" })
 
-    await expect(service.getCurrentUserContext(claims)).resolves.toEqual({
+    await expect(
+      service.getCurrentUserContext({ session, headers })
+    ).resolves.toEqual({
       id: "user-1",
       email: "user@example.com",
       role: "user",
       name: "User",
       activeOrganizationId: "org-1",
-      organizationRole: "admin",
+      organizationRole: "owner",
     })
-
-    expect(findOrganizationMemberRoleMock).toHaveBeenCalledWith(
-      "org-1",
-      "user-1"
-    )
   })
 
-  it("omits organization role lookup when no active workspace is set", async () => {
+  it("omits organization role when no active workspace is set", async () => {
     await expect(
-      service.getCurrentUserContext({ ...claims, activeOrganizationId: null })
+      service.getCurrentUserContext({
+        session: {
+          ...session,
+          session: { ...session.session, activeOrganizationId: undefined },
+        },
+        headers,
+      })
     ).resolves.toEqual({
       id: "user-1",
       email: "user@example.com",
@@ -55,6 +66,6 @@ describe("UsersService", () => {
       organizationRole: null,
     })
 
-    expect(findOrganizationMemberRoleMock).not.toHaveBeenCalled()
+    expect(getActiveMemberRole).not.toHaveBeenCalled()
   })
 })

@@ -18,3 +18,12 @@ Vite + React 19 + React Router 7 + TanStack Query.
 3. Add `apiRoutes` entry in `config/api-routes.ts` if it calls the API
 4. Create feature `routes.tsx` using `routeSegments`
 5. Register in `app/router.tsx` and `config/app-navigation.ts`
+
+## Org RBAC in the UI
+
+Use `useHasOrgPermission` / `useOrgPermissionFlags` from `src/hooks/use-org-permission.ts`
+so buttons match API `@MemberHasPermission` gates — including **custom** org roles.
+
+See [docs/org-roles-and-ui.md](../../docs/org-roles-and-ui.md). Organization management UI:
+`/organization/*` via Better Auth UI + `src/features/organization/`. Notes is the
+reference module for create/update/delete gating.

@@ -1,5 +1,6 @@
 import * as React from "react"
-import { PageError } from "@workspace/ui-shadcn/components/page-error"
+import { PageError } from "@/components/page-error"
+import { captureException } from "@/lib/sentry"
 
 type State = { error: Error | null }
 
@@ -11,6 +12,10 @@ export class AppErrorBoundary extends React.Component<
 
   static getDerivedStateFromError(error: Error): State {
     return { error }
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    captureException(error, { componentStack: errorInfo.componentStack })
   }
 
   reset = () => this.setState({ error: null })

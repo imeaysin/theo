@@ -1,13 +1,13 @@
 "use client"
 
 import { Button } from "@workspace/ui-shadcn/components/button"
-import { Icons } from "@workspace/ui-shadcn/components/icons"
 import { LogEvents, track } from "@/lib/track"
 import { marketingEnv } from "@/config/env"
 import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
+import { EyeClosed, Play } from "lucide-react"
 
 // Dynamic imports for animations (5,500+ lines - loaded after hero)
 const InboxMatchAnimation = dynamic(() =>
@@ -295,7 +295,7 @@ export function StartPage() {
               </div>
 
               <div className="flex flex-col items-center gap-3 pt-2">
-                <Button size="lg" variant="default" asChild>
+                <Button size="lg" variant="default">
                   <a
                     href={marketingEnv.appUrl}
                     onClick={() =>
@@ -524,7 +524,7 @@ export function StartPage() {
                 aria-label="Play video"
               >
                 <div className="pointer-events-auto flex h-12 w-12 items-center justify-center bg-muted transition-all duration-200 hover:scale-105 hover:bg-secondary sm:h-14 sm:w-14 md:h-16 md:w-16">
-                  <Icons.Play className="h-5 w-5 text-primary sm:h-6 sm:w-6 md:h-7 md:w-7" />
+                  <Play className="h-5 w-5 text-primary sm:h-6 sm:w-6 md:h-7 md:w-7" />
                 </div>
               </button>
             </div>
@@ -570,7 +570,7 @@ export function StartPage() {
                 className="bg-background-semi-transparent absolute top-4 right-4 z-10 hidden p-2 backdrop-blur-md transition-colors sm:block"
                 aria-label="Close dialog"
               >
-                <Icons.Close className="h-5 w-5 text-foreground" />
+                <EyeClosed className="h-5 w-5 text-foreground" />
               </button>
               <video
                 ref={modalVideoRef}

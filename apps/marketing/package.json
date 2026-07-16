@@ -15,7 +15,6 @@
     "@workspace/config": "workspace:*",
     "@fontsource-variable/geist-mono": "catalog:",
     "@fontsource/cal-sans": "catalog:",
-    "@workspace/auth": "workspace:*",
     "@workspace/ui-shadcn": "workspace:*",
     "framer-motion": "^11.18.2",
     "next": "catalog:",

@@ -1,10 +1,11 @@
 import {
   ExceptionFilter,
   Catch,
-  ArgumentsHost,
   HttpStatus,
+  type ArgumentsHost,
 } from "@nestjs/common"
 import { HttpAdapterHost } from "@nestjs/core"
+import { SentryExceptionCaptured } from "@sentry/nestjs"
 import { HttpErrorCode } from "@workspace/contracts"
 import { createLogger, getRequestId } from "@workspace/logger"
 import { createErrorEnvelope } from "./error-envelope.util"
@@ -15,6 +16,7 @@ export class GlobalExceptionsFilter implements ExceptionFilter {
 
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
+  @SentryExceptionCaptured()
   catch(exception: unknown, host: ArgumentsHost) {
     const { httpAdapter } = this.httpAdapterHost
     const ctx = host.switchToHttp()

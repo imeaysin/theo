@@ -3,7 +3,7 @@
 import type { ReactNode } from "react"
 import { Badge } from "@workspace/ui-shadcn/components/badge"
 import { Button } from "@workspace/ui-shadcn/components/button"
-import { Icons } from "@workspace/ui-shadcn/components/icons"
+import { ArrowBigUpIcon, Check } from "lucide-react"
 
 export interface GuideStep {
   title: string
@@ -36,13 +36,12 @@ export function GuideSection({ page }: { page: GuidePageData }) {
         <div className="px-4 pt-32 pb-16 sm:px-6 sm:pt-40 sm:pb-20 md:pt-48">
           <div className="mx-auto max-w-2xl">
             <Button
-              asChild
               className="mb-8 h-auto gap-2 p-0 text-sm text-muted-foreground hover:text-foreground"
 
               variant="link"
             >
               <a href={page.backLink.href}>
-                <Icons.ArrowBack size={16} />
+                <ArrowBigUpIcon size={16} />
                 {page.backLink.label}
               </a>
             </Button>
@@ -84,7 +83,6 @@ export function GuideSection({ page }: { page: GuidePageData }) {
                             <>
                               {" "}
                               <Button
-                                asChild
                                 className="inline h-auto p-0 text-foreground"
 
                                 size="sm"
@@ -119,7 +117,7 @@ export function GuideSection({ page }: { page: GuidePageData }) {
                         key={item}
                         className="flex items-start gap-2 text-sm text-muted-foreground"
                       >
-                        <Icons.Check className="mt-0.5 size-3.5 text-foreground" />
+                        <Check className="mt-0.5 size-3.5 text-foreground" />
                         {item}
                       </li>
                     ))}
