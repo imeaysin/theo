@@ -17,6 +17,8 @@ src/
     storage.ts         # Storage-only env
   client/
     index.ts           # Browser / Expo public env parsers
+  public/
+    index.ts           # Browser-safe product identity
   index.ts             # Re-exports full server env
 ```
 
@@ -33,6 +35,7 @@ src/
 | `apps/marketing`         | `@workspace/config/client`   | `parseMarketingEnv(process.env)`                              |
 | `apps/mobile`            | `@workspace/config/client`   | `parseMobileEnv(process.env)`                                 |
 | `@workspace/auth/client` | `@workspace/config/client`   | `parseClientPublicEnv()` (shared)                             |
+| Product UI               | `@workspace/config/public`   | Static product identity; no environment access                |
 
 ## Usage
 
@@ -63,6 +66,15 @@ import { parseWebEnv } from "@workspace/config/client"
 
 const { apiUrl, authUrl, appName } = parseWebEnv(import.meta.env)
 ```
+
+### Product identity
+
+```typescript
+import { productConfig } from "@workspace/config/public"
+```
+
+The `/public` entry is safe in server and client components. Long-form page
+content and UI composition remain inside the product app.
 
 ## Build phase
 

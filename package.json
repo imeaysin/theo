@@ -33,7 +33,7 @@
     "dev:api": "turbo dev --filter=api",
     "dev:web": "turbo dev --filter=web",
     "dev:marketing": "turbo dev --filter=marketing",
-    "dev:cap": "turbo dev --filter=cap",
+    "dev:theo": "turbo dev --filter=theo-site",
     "dev:mobile": "turbo dev --filter=mobile",
     "db:up": "bash scripts/db-up.sh",
     "db:down": "docker compose down",

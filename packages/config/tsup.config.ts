@@ -13,6 +13,7 @@ export default defineConfig((options) => ({
     "server/cache": "src/server/cache.ts",
     "server/payment": "src/server/payment.ts",
     "client/index": "src/client/index.ts",
+    "public/index": "src/public/index.ts",
   },
   format: ["esm", "cjs"],
   dts: true,

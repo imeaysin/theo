@@ -1,0 +1,69 @@
+# Theo — Open-Source Screen Recorder & Loom Alternative
+
+> Theo is a free, open-source screen recorder and async video messaging platform — a privacy-first alternative to Loom, Vidyard, and OBS. Record your screen, camera, and audio, then share an instant link or edit locally in a professional studio editor. Native desktop apps for macOS and Windows (built on Tauri + Rust, not Electron), a Linux .deb package, and a web viewer. Bring your own storage (Google Drive, any S3-compatible bucket, or fully local) so you own every recording.
+
+Made by Theo Software, Inc. Website: https://theo.example · Source (AGPLv3): https://github.com/imeaysin/theo
+
+For the full, detailed reference, see https://theo.example/llms-full.txt.
+
+## Three Modes, One App
+
+- **Instant Mode** — record and upload at once; a shareable link is live the moment you stop, with an auto-generated title, summary, chapters, and transcript.
+- **Studio Mode** — local, highest-quality recording with a full editor (backgrounds, camera overlay, auto-zoom, captions); free for personal use.
+- **Screenshot Mode** — capture a still, annotate it, and copy or share (Windows includes OCR).
+
+## Key Features
+
+- Record full screen, a window, a custom area, or camera-only, with microphone and system audio, up to 4K at 60fps with hardware-accelerated encoding.
+- Studio editor: backgrounds/wallpapers, camera positioning + blur, smart auto-zoom, cursor smoothing, captions, trim/split, speed 0.25x–3x, and styling presets.
+- Theo AI (Pro): auto titles, summaries, clickable chapters, and searchable transcripts.
+- Sharing & collaboration: instant links, embeds, threaded timestamped comments, emoji reactions, viewer analytics, password protection, custom domains, organizations, team workspaces, spaces, and folders.
+- Bring your own storage: Theo Cloud, Google Drive, any S3-compatible bucket (AWS S3, Cloudflare R2, MinIO, Backblaze B2, Wasabi, etc.), or fully local.
+- Export to MP4, GIF, or transparent MOV (captions to SRT); no watermarks on any plan.
+- Built-in Loom video importer; desktop automations with webhooks; REST API and webhooks.
+- `theo` CLI built for AI agents: `--json` on any command, `theo guide --json`, plus `record`, `export`, `upload`, `targets`, `doctor`, and more.
+
+## Platforms
+
+- macOS (Apple Silicon & Intel, recommended 13.1+), Windows 10/11, Linux x86_64 (.deb for Debian/Ubuntu), and a browser viewer.
+
+## Pricing
+
+- **Free** — personal use; Studio Mode + full local editor; 4K/60fps export; recordings limited to 5 minutes.
+- **Desktop License** — commercial use: $29/license/year or $58 one-time; unlimited local recording/editing; 20 cloud links/month.
+- **Theo Pro** — $12/user/month, or $8.16/user/month billed annually (save 32%): everything in Desktop plus unlimited cloud storage, all AI features, custom domain, password protection, viewer analytics, team workspaces, Loom importer, custom S3 & Google Drive, priority support.
+- **Enterprise** — custom: SLAs, SAML SSO & SCIM, managed self-hosting, volume discounts.
+- Discounts: STUDENT50 (30% off), MIGRATE20 (20% off first year for Loom switchers); volume discounts for teams 10+.
+
+## How Theo Compares
+
+- **vs Loom** — open source and self-hostable; from $8.16 vs $18/user/month; 4K on free & paid plans; custom domains on Pro; bring your own S3/Google Drive; built-in Loom importer; works offline.
+- **vs OBS Studio** — simpler, with instant cloud sharing and AI built in.
+- **vs Camtasia / ScreenFlow / Vidyard / Panopto** — free, open source, cross-platform, bring-your-own storage, self-hostable.
+
+## Use Cases
+
+Async team updates, bug reports & QA, product demos & sales, async code reviews, developer documentation, education & onboarding, and customer support.
+
+## Key Links
+
+- Full reference: https://theo.example/llms-full.txt
+- Home: https://theo.example
+- Pricing: https://theo.example/pricing
+- Features: https://theo.example/features
+- Download: https://theo.example/download
+- Docs: https://theo.example/docs
+- Loom alternative: https://theo.example/loom-alternative
+- Open-source screen recorder: https://theo.example/open-source-screen-recorder
+- Self-hosting: https://theo.example/self-hosting
+- REST API: https://theo.example/docs/api/rest-api
+- Source code: https://github.com/imeaysin/theo
+- Community (Discord): https://discord.gg/y8gdQ3WRN3
+
+## Common Questions
+
+- **Is Theo free?** Yes — 100% free for personal use with Studio Mode and the local editor; paid plans add commercial rights and cloud features.
+- **Is Theo a good Loom alternative?** Yes — the leading open-source Loom alternative, with instant sharing, AI summaries, custom storage, and a built-in importer at a lower price.
+- **Can I self-host Theo?** Yes — open source (AGPLv3) and fully self-hostable.
+- **Can I use my own storage?** Yes — Google Drive, any S3-compatible bucket, Theo Cloud, or fully local.
+- **Does Theo record system audio and 4K?** Yes — screen, camera, mic, and system audio up to 4K at 60fps.
