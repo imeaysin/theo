@@ -1217,9 +1217,6 @@ importers:
       '@base-ui/react':
         specifier: ^1.6.0
         version: 1.6.0(@date-fns/tz@1.5.0)(@types/react@19.2.17)(date-fns@4.4.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@fontsource-variable/geist':
-        specifier: ^5.2.9
-        version: 5.2.9
       '@shadcn/react':
         specifier: ^0.2.1
         version: 0.2.1(@types/react@19.2.17)(react@19.2.7)
@@ -3243,9 +3240,6 @@ packages:
 
   '@fontsource-variable/geist-mono@5.2.8':
     resolution: {integrity: sha512-KI5bj+hkkRiHttYHmccotUZ80ZuZyai+RwI1d7UId0clkx/jXxlo8qYK8j54WzmpBjtMoEMPyllV7faDcj+6RA==}
-
-  '@fontsource-variable/geist@5.2.9':
-    resolution: {integrity: sha512-TP+QSBG3wxKGPE33CbMy/L0Nu3qvJ6Fy81Yc4LnQ95xH+i+cfEp8fyU8/kfV14YwszxIFPhnoMTbjL71waVpyQ==}
 
   '@fontsource/cal-sans@5.2.3':
     resolution: {integrity: sha512-cY9d2LWfzzge3jSgh2IJmNEJdubuPnjfct/5Q/L/4Q5W9LlXRRZO403P0c3i1iPH4Y+IQ0gHgnJroPzL3KuxQQ==}
@@ -15215,8 +15209,6 @@ snapshots:
   '@floating-ui/utils@0.2.11': {}
 
   '@fontsource-variable/geist-mono@5.2.8': {}
-
-  '@fontsource-variable/geist@5.2.9': {}
 
   '@fontsource/cal-sans@5.2.3': {}
 

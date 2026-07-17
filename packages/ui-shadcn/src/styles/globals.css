@@ -1,15 +1,11 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
 
 @custom-variant dark (&:is(.dark *));
 @source "../../../apps/**/*.{ts,tsx}";
 @source "../../../components/**/*.{ts,tsx}";
 @source "../**/*.{ts,tsx}";
-@import "tailwindcss";
-
-@custom-variant dark (&:is(.dark *));
 
 :root {
   --background: oklch(1 0 0);
@@ -44,8 +40,8 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  --font-sans: Montserrat, ui-sans-serif, sans-serif, system-ui;
-  --font-serif: Montserrat, ui-sans-serif, sans-serif, system-ui;
+  --font-sans: ui-sans-serif, sans-serif, system-ui;
+  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   --font-mono:
     ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
     "Courier New", monospace;
@@ -105,8 +101,8 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.275 0 0);
   --sidebar-ring: oklch(0.556 0 0);
-  --font-sans: Montserrat, ui-sans-serif, sans-serif, system-ui;
-  --font-serif: Montserrat, ui-sans-serif, sans-serif, system-ui;
+  --font-sans: ui-sans-serif, sans-serif, system-ui;
+  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   --font-mono:
     ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
     "Courier New", monospace;
@@ -189,6 +185,6 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background font-sans text-foreground;
   }
 }

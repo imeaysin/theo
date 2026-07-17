@@ -241,7 +241,7 @@ const FooterColumn = ({
         type="button"
         aria-expanded={isOpen}
         onClick={() => setIsOpen((prev) => !prev)}
-        className="flex w-full items-center justify-between py-4 text-left text-lg font-semibold text-foreground lg:hidden"
+        className="flex w-full items-center justify-between py-4 text-left text-lg font-medium text-foreground lg:hidden"
       >
         {title}
         <FontAwesomeIcon
@@ -255,12 +255,12 @@ const FooterColumn = ({
       {titleHref ? (
         <Link
           href={titleHref}
-          className="hidden pb-2 text-lg font-semibold text-foreground transition-colors hover:text-muted-foreground lg:block"
+          className="hidden pb-2 text-lg font-medium text-foreground transition-colors hover:text-muted-foreground lg:block"
         >
           {title}
         </Link>
       ) : (
-        <h3 className="hidden pb-2 text-lg font-semibold text-foreground lg:block">
+        <h3 className="hidden pb-2 text-lg font-medium text-foreground lg:block">
           {title}
         </h3>
       )}

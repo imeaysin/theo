@@ -1,6 +1,44 @@
 import "@/app/globals.css"
 import type { Metadata } from "next"
+import localFont from "next/font/local"
 import type { PropsWithChildren } from "react"
+
+const capFont = localFont({
+  src: [
+    {
+      path: "../public/fonts/NeueMontreal-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/NeueMontreal-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/NeueMontreal-Medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/NeueMontreal-MediumItalic.woff2",
+      weight: "500",
+      style: "italic",
+    },
+    {
+      path: "../public/fonts/NeueMontreal-Italic.woff2",
+      weight: "400",
+      style: "italic",
+    },
+    {
+      path: "../public/fonts/NeueMontreal-BoldItalic.woff2",
+      weight: "700",
+      style: "italic",
+    },
+  ],
+  variable: "--font-sans",
+  preload: false,
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://cap.so"),
@@ -19,7 +57,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
-    <html lang="en">
+    <html className={capFont.variable} lang="en">
       <head>
         <link
           rel="apple-touch-icon"
