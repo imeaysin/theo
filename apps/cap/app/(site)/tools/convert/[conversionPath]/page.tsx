@@ -4,8 +4,8 @@ import {
   CONVERSION_CONFIGS,
   MediaFormatConverter,
   parseFormats,
-} from "@/components/tools/MediaFormatConverter"
-import { ToolsPageTemplate } from "@/components/tools/ToolsPageTemplate"
+} from "@/components/tools/media-format-converter"
+import { ToolsPageTemplate } from "@/components/tools/tools-page-template"
 import type { ToolPageContent } from "@/components/tools/types"
 import { createBreadcrumbSchema } from "@/utils/web-schema"
 

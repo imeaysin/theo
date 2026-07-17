@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import {
   AsyncVideoCodeReviewsPage,
   asyncVideoCodeReviewsContent,
-} from "@/components/pages/seo/AsyncVideoCodeReviewsPage"
+} from "@/components/pages/seo/async-video-code-reviews-page"
 import { createFAQSchema } from "@/utils/web-schema"
 
 export const metadata: Metadata = {

@@ -165,7 +165,7 @@ async function fetchLoomOEmbed(
 }
 
 async function getLoomDownloadUrl(loomVideoId: string): Promise<string | null> {
-  const requestVariants: Array<{ endpoint: string; includeBody: boolean }> = [
+  const requestVariants: { endpoint: string; includeBody: boolean }[] = [
     { endpoint: "transcoded-url", includeBody: true },
     { endpoint: "raw-url", includeBody: true },
     { endpoint: "transcoded-url", includeBody: false },

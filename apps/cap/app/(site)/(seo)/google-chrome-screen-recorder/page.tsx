@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import {
   GoogleChromeScreenRecorderPage,
   googleChromeScreenRecorderContent,
-} from "@/components/pages/seo/GoogleChromeScreenRecorderPage"
+} from "@/components/pages/seo/google-chrome-screen-recorder-page"
 import {
   createFAQSchema,
   createSoftwareApplicationSchema,

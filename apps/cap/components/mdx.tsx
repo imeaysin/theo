@@ -33,9 +33,8 @@ function Table({ data }: { data: TableData }) {
   )
 }
 
-interface CustomLinkProps {
+interface CustomLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string
-  [key: string]: any
 }
 
 function CustomLink({ href, ...rest }: CustomLinkProps) {
@@ -54,14 +53,10 @@ function CustomLink({ href, ...rest }: CustomLinkProps) {
   return <a target="_blank" rel="noopener noreferrer" {...rest} />
 }
 
-interface RoundedImageProps {
-  src: string
-  alt: string
-  [key: string]: any
-}
+type RoundedImageProps = React.ComponentProps<typeof Image>
 
-function RoundedImage(props: RoundedImageProps) {
-  return <Image src={props.src} alt={props.alt} className="rounded-lg" />
+function RoundedImage({ className, ...props }: RoundedImageProps) {
+  return <Image {...props} className={`rounded-lg ${className ?? ""}`} />
 }
 
 interface CalloutProps {
@@ -140,7 +135,7 @@ function slugify(str: string) {
 }
 
 function createHeading(level: number) {
-  return ({ children }: { children: string }) => {
+  function Heading({ children }: { children: string }) {
     const slug = slugify(children)
     return React.createElement(
       `h${level}`,
@@ -155,6 +150,8 @@ function createHeading(level: number) {
       children
     )
   }
+  Heading.displayName = `Heading${level}`
+  return Heading
 }
 
 const components = {
@@ -177,7 +174,7 @@ const rehypePrettyCodeOptions: RehypePrettyCodeOptions = {
   keepBackground: true,
 }
 
-export function CustomMDX(props: any) {
+export function CustomMDX(props: React.ComponentProps<typeof MDXRemote>) {
   return (
     <MDXRemote
       {...props}

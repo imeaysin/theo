@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { LicenseDeactivationPage } from "@/components/pages/LicenseDeactivationPage"
+import { LicenseDeactivationPage } from "@/components/pages/license-deactivation-page"
 
 export const metadata: Metadata = {
   title: "Deactivate License — Cap",

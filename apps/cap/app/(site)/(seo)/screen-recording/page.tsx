@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import {
   ScreenRecordingPage,
   screenRecordingContent,
-} from "@/components/pages/seo/ScreenRecordingPage"
+} from "@/components/pages/seo/screen-recording-page"
 import { createFAQSchema } from "@/utils/web-schema"
 
 export const metadata: Metadata = {

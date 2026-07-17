@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { LoomAlternativePage } from "@/components/pages/seo/LoomAlternativePage"
+import { LoomAlternativePage } from "@/components/pages/seo/loom-alternative-page"
 
 export const metadata: Metadata = {
   title:

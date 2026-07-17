@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { RemoteTeamCollaborationPage } from "@/components/pages/seo/RemoteTeamCollaborationPage"
+import { RemoteTeamCollaborationPage } from "@/components/pages/seo/remote-team-collaboration-page"
 
 export const metadata: Metadata = {
   title:

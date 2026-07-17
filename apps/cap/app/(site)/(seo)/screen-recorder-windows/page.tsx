@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { ScreenRecordWindowsPage } from "@/components/pages/seo/ScreenRecordWindowsPage"
+import { ScreenRecordWindowsPage } from "@/components/pages/seo/screen-record-windows-page"
 
 export const metadata: Metadata = {
   title: "Best Free Screen Recorder for Windows 10 & 11 | Cap",

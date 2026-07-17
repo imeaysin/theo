@@ -139,7 +139,7 @@ export const createSoftwareApplicationSchema = (
 }
 
 export const createBreadcrumbSchema = (
-  items: Array<{ name: string; url?: string }>
+  items: { name: string; url?: string }[]
 ) => ({
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
@@ -173,7 +173,7 @@ export const createVideoObjectSchema = (video: {
 })
 
 export const createFAQSchema = (
-  faqs: Array<{ question: string; answer: string }>
+  faqs: { question: string; answer: string }[]
 ) => ({
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -256,7 +256,7 @@ export const createHowToSchema = (params: {
   name: string
   description: string
   totalTime?: string
-  steps: Array<{ name: string; text: string }>
+  steps: { name: string; text: string }[]
 }) => ({
   "@context": "https://schema.org",
   "@type": "HowTo",

@@ -12,20 +12,20 @@ export default function App() {
           Privacy Policy
         </h1>
         <p className="mx-auto max-w-lg animate-in pb-10 text-lg text-muted-foreground delay-500 fade-in slide-in-from-bottom-4">
-          We've tried to make this privacy policy as simple and digestible as
-          possible. If you have any questions, please don't hesitate to reach
-          out to us.
+          We&apos;ve tried to make this privacy policy as simple and digestible
+          as possible. If you have any questions, please don&apos;t hesitate to
+          reach out to us.
         </p>
         <div className="animate-in text-left text-base leading-7 text-muted-foreground delay-500 fade-in slide-in-from-bottom-4 [&_h3]:mb-3 [&_h3]:text-2xl [&_h3]:font-semibold [&_h3]:text-foreground [&_ol]:flex [&_ol]:flex-col [&_ol]:gap-8 [&_p]:mb-5">
           <p>
-            At Cap Software, Inc. ("Cap," "we," "us," or "our"), we are
-            committed to protecting your privacy and ensuring the security of
-            your personal information. This Privacy Policy explains how we
-            collect, use, disclose, and safeguard your information when you use
-            our software application and services (collectively, the
-            "Services"). By using our Services, you consent to the collection,
-            use, and disclosure of your information as described in this Privacy
-            Policy.
+            At Cap Software, Inc. (&quot;Cap,&quot; &quot;we,&quot;
+            &quot;us,&quot; or &quot;our&quot;), we are committed to protecting
+            your privacy and ensuring the security of your personal information.
+            This Privacy Policy explains how we collect, use, disclose, and
+            safeguard your information when you use our software application and
+            services (collectively, the &quot;Services&quot;). By using our
+            Services, you consent to the collection, use, and disclosure of your
+            information as described in this Privacy Policy.
           </p>
           <ol>
             <li>
@@ -111,7 +111,7 @@ export default function App() {
               retention period is required or permitted by law.
             </li>
             <li>
-              <h3>Children's Privacy</h3>
+              <h3>Children&apos;s Privacy</h3>
               <br />
               Our Services are not intended for children under the age of 13. We
               do not knowingly collect personal information from children under
@@ -124,8 +124,8 @@ export default function App() {
               <br />
               We may update our Privacy Policy from time to time. We will notify
               you of any changes by posting the new Privacy Policy on this page
-              and updating the "Last Updated" date at the top of this Privacy
-              Policy.
+              and updating the &quot;Last Updated&quot; date at the top of this
+              Privacy Policy.
             </li>
             <li>
               <h3>Contact Us</h3>

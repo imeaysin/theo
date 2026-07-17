@@ -18,13 +18,13 @@ export interface ToolPageContent {
 
   featuresTitle: string
   featuresDescription: string
-  features: Array<{
+  features: {
     title: string
     description: string
-  }>
+  }[]
 
-  faqs?: Array<{
+  faqs?: {
     question: string
     answer: string
-  }>
+  }[]
 }

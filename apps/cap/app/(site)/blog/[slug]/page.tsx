@@ -3,16 +3,16 @@ import type { Metadata } from "next"
 import Image from "next/image"
 import { notFound } from "next/navigation"
 import { MDXRemote } from "next-mdx-remote/rsc"
-import { AuthorByline } from "@/components/blog/AuthorByline"
-import { BlogTemplate } from "@/components/blog/BlogTemplate"
-import { ReadyToGetStarted } from "@/components/ReadyToGetStarted"
-import { getBlogPosts } from "@/utils/blog"
+import { AuthorByline } from "@/components/blog/author-byline"
+import { BlogTemplate } from "@/components/blog/blog-template"
+import { ReadyToGetStarted } from "@/components/ready-to-get-started"
+import { getBlogPosts } from "@/lib/content/blog"
 import {
   getInteractiveBlogContent,
   isInteractiveBlogPost,
-} from "@/utils/blog-registry"
-import { calculateReadingTime } from "@/utils/readTime"
-import { Share } from "../_components/Share"
+} from "@/lib/content/blog-registry"
+import { calculateReadingTime } from "@/utils/read-time"
+import { Share } from "../_components/share"
 
 interface PostProps {
   params: Promise<{
@@ -106,8 +106,9 @@ export default async function PostPage(props: PostProps) {
               <span>
                 {format(
                   parseISO(
-                    (post.metadata as any).publishedAt ||
-                      new Date().toISOString()
+                    ("publishedAt" in post.metadata
+                      ? post.metadata.publishedAt
+                      : undefined) || new Date().toISOString()
                   ),
                   "MMMM dd, yyyy"
                 )}

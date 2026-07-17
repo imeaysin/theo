@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
-import { LoomDownloader } from "@/components/tools/LoomDownloader"
-import { ToolsPageTemplate } from "@/components/tools/ToolsPageTemplate"
+import { LoomDownloader } from "@/components/tools/loom-downloader"
+import { ToolsPageTemplate } from "@/components/tools/tools-page-template"
 import type { ToolPageContent } from "@/components/tools/types"
 import { createBreadcrumbSchema } from "@/utils/web-schema"
 

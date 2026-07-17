@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { StudentDiscountPage } from "@/components/pages/StudentDiscountPage"
+import { StudentDiscountPage } from "@/components/pages/student-discount-page"
 
 export const metadata: Metadata = {
   title: "Student Discount — Cap",

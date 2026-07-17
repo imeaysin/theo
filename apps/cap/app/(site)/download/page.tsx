@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { DownloadPage } from "@/components/pages/DownloadPage"
+import { DownloadPage } from "@/components/pages/download-page"
 
 export const metadata: Metadata = {
   title: "Download — Cap",

@@ -20,15 +20,16 @@ export default function DataProcessingAgreementPage() {
         </p>
         <div className="animate-in text-left text-base leading-7 text-muted-foreground delay-500 fade-in slide-in-from-bottom-4 [&_h3]:mb-3 [&_h3]:text-2xl [&_h3]:font-semibold [&_h3]:text-foreground [&_ol]:flex [&_ol]:flex-col [&_ol]:gap-8 [&_p]:mb-5">
           <p>
-            This Data Processing Agreement ("DPA") forms part of the Services
-            Agreement between Cap Software, Inc. ("Cap," "we," "us," or "our")
-            and the customer using Cap's services ("Customer," "you," or
-            "your"). Customer agrees to this DPA by entering into the Services
-            Agreement or by using the Services where Cap processes personal data
-            on Customer's behalf. This DPA applies to Cap's website, desktop
-            application, hosted services, recording and sharing workflows, team
-            workspaces, APIs, integrations, support, and related services
-            (collectively, the "Services").
+            This Data Processing Agreement (&quot;DPA&quot;) forms part of the
+            Services Agreement between Cap Software, Inc. (&quot;Cap,&quot;
+            &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) and the customer
+            using Cap&apos;s services (&quot;Customer,&quot; &quot;you,&quot; or
+            &quot;your&quot;). Customer agrees to this DPA by entering into the
+            Services Agreement or by using the Services where Cap processes
+            personal data on Customer&apos;s behalf. This DPA applies to
+            Cap&apos;s website, desktop application, hosted services, recording
+            and sharing workflows, team workspaces, APIs, integrations, support,
+            and related services (collectively, the &quot;Services&quot;).
           </p>
           <p>
             This DPA is designed to meet Article 28 of the GDPR, the UK GDPR,
@@ -41,65 +42,68 @@ export default function DataProcessingAgreementPage() {
             <li>
               <h3>Definitions</h3>
               <br />
-              "DPA" means this Data Processing Agreement, including its annexes.
+              &quot;DPA&quot; means this Data Processing Agreement, including
+              its annexes.
               <br />
-              "Services Agreement" means Cap's Terms of Service, an order form,
-              a subscription agreement, or any other written agreement governing
-              Customer's use of the Services.
+              &quot;Services Agreement&quot; means Cap&apos;s Terms of Service,
+              an order form, a subscription agreement, or any other written
+              agreement governing Customer&apos;s use of the Services.
               <br />
-              "Customer Content" means recordings, screen content, webcam video,
-              audio, transcripts, captions, titles, summaries, comments,
-              thumbnails, folders, workspace content, files, metadata, and other
-              content submitted to or generated through the Services by or for
-              Customer.
+              &quot;Customer Content&quot; means recordings, screen content,
+              webcam video, audio, transcripts, captions, titles, summaries,
+              comments, thumbnails, folders, workspace content, files, metadata,
+              and other content submitted to or generated through the Services
+              by or for Customer.
               <br />
-              "Customer Personal Data" means personal data contained in Customer
-              Content or otherwise processed by Cap on Customer's behalf as a
-              processor or subprocessor under the Services Agreement.
+              &quot;Customer Personal Data&quot; means personal data contained
+              in Customer Content or otherwise processed by Cap on
+              Customer&apos;s behalf as a processor or subprocessor under the
+              Services Agreement.
               <br />
-              "Data Protection Laws" means all privacy and data protection laws
-              applicable to Cap's processing of Customer Personal Data under the
-              Services Agreement, including Regulation (EU) 2016/679, the UK
-              GDPR, the Swiss Federal Act on Data Protection, the California
-              Consumer Privacy Act, and any implementing or supplemental laws.
+              &quot;Data Protection Laws&quot; means all privacy and data
+              protection laws applicable to Cap&apos;s processing of Customer
+              Personal Data under the Services Agreement, including Regulation
+              (EU) 2016/679, the UK GDPR, the Swiss Federal Act on Data
+              Protection, the California Consumer Privacy Act, and any
+              implementing or supplemental laws.
               <br />
-              "Security Incident" means a confirmed breach of security of Cap's
-              systems that leads to accidental or unlawful destruction, loss,
-              alteration, unauthorized disclosure of, or access to Customer
-              Personal Data.
+              &quot;Security Incident&quot; means a confirmed breach of security
+              of Cap&apos;s systems that leads to accidental or unlawful
+              destruction, loss, alteration, unauthorized disclosure of, or
+              access to Customer Personal Data.
               <br />
-              "Subprocessor" means a third party engaged by Cap to process
-              Customer Personal Data on Cap's behalf.
+              &quot;Subprocessor&quot; means a third party engaged by Cap to
+              process Customer Personal Data on Cap&apos;s behalf.
             </li>
             <li>
               <h3>Roles of the Parties</h3>
               <br />
               For Customer Personal Data, Customer is the controller and Cap is
               the processor. If Customer acts as a processor for another
-              controller, Cap acts as Customer's subprocessor and Customer is
-              responsible for ensuring that its instructions to Cap are
+              controller, Cap acts as Customer&apos;s subprocessor and Customer
+              is responsible for ensuring that its instructions to Cap are
               authorized by the relevant controller.
               <br />
               Cap acts as an independent controller for personal data that Cap
-              processes for its own business purposes rather than on Customer's
-              behalf, including account administration, billing, sales,
-              marketing, website analytics, security, fraud prevention, product
-              analytics, and legal compliance. Cap's Privacy Policy governs that
-              processing.
+              processes for its own business purposes rather than on
+              Customer&apos;s behalf, including account administration, billing,
+              sales, marketing, website analytics, security, fraud prevention,
+              product analytics, and legal compliance. Cap&apos;s Privacy Policy
+              governs that processing.
               <br />
               Customer decides what to record, upload, share, transcribe, store,
               delete, or otherwise process through the Services. Cap does not
-              decide the purpose of Customer's recordings or what personal data
-              Customer includes in Customer Content.
+              decide the purpose of Customer&apos;s recordings or what personal
+              data Customer includes in Customer Content.
             </li>
             <li>
               <h3>Customer Instructions</h3>
               <br />
-              Cap will process Customer Personal Data only on Customer's
+              Cap will process Customer Personal Data only on Customer&apos;s
               documented instructions, including the Services Agreement, this
-              DPA, Customer's product settings, Customer's use of the Services,
-              and written instructions submitted through support or other agreed
-              channels.
+              DPA, Customer&apos;s product settings, Customer&apos;s use of the
+              Services, and written instructions submitted through support or
+              other agreed channels.
               <br />
               Customer instructs Cap to process Customer Personal Data to
               provide, secure, maintain, support, troubleshoot, and improve the
@@ -119,9 +123,9 @@ export default function DataProcessingAgreementPage() {
               that it is no longer Customer Personal Data.
               <br />
               Optional AI features may process Customer Personal Data through
-              Subprocessors listed in Cap's trust portal. Customer decides
+              Subprocessors listed in Cap&apos;s trust portal. Customer decides
               whether to use those workflows and whether they are appropriate
-              for Customer's data and compliance needs.
+              for Customer&apos;s data and compliance needs.
               <br />
               Cap may use telemetry, metadata, usage information, and aggregated
               or de-identified information to operate, secure, analyze, and
@@ -145,10 +149,10 @@ export default function DataProcessingAgreementPage() {
               features, retention settings, or other available controls.
               <br />
               Customer will not submit special categories of personal data,
-              criminal conviction data, protected health information, children's
-              data, or other regulated data unless Customer has determined that
-              its use of the Services is lawful and appropriate for that data
-              and has implemented the required safeguards.
+              criminal conviction data, protected health information,
+              children&apos;s data, or other regulated data unless Customer has
+              determined that its use of the Services is lawful and appropriate
+              for that data and has implemented the required safeguards.
             </li>
             <li>
               <h3>U.S. State Privacy Terms</h3>
@@ -202,9 +206,9 @@ export default function DataProcessingAgreementPage() {
               terms that are at least as protective as the applicable
               data-processing obligations in this DPA.
               <br />
-              Cap remains responsible for each Subprocessor's performance of its
-              data-processing obligations. Cap maintains its current
-              Subprocessor list through Cap's trust portal at{" "}
+              Cap remains responsible for each Subprocessor&apos;s performance
+              of its data-processing obligations. Cap maintains its current
+              Subprocessor list through Cap&apos;s trust portal at{" "}
               <a href="https://trust.cap.so" rel="noreferrer" target="_blank">
                 trust.cap.so
               </a>{" "}
@@ -220,15 +224,15 @@ export default function DataProcessingAgreementPage() {
               replacement Subprocessor within 30 days after notice if Customer
               has reasonable data protection grounds for the objection. Cap will
               use reasonable efforts to address the objection. If Cap cannot
-              reasonably address the objection, Customer's sole remedy is to
-              stop using the affected Service feature or terminate the affected
-              portion of the Services before the new or replacement Subprocessor
-              is used for Customer Personal Data.
+              reasonably address the objection, Customer&apos;s sole remedy is
+              to stop using the affected Service feature or terminate the
+              affected portion of the Services before the new or replacement
+              Subprocessor is used for Customer Personal Data.
               <br />
               Providers selected, contracted, or configured directly by
-              Customer, including Customer's own S3-compatible storage provider,
-              identity provider, cloud account, or self-hosted infrastructure
-              provider, are not Cap Subprocessors.
+              Customer, including Customer&apos;s own S3-compatible storage
+              provider, identity provider, cloud account, or self-hosted
+              infrastructure provider, are not Cap Subprocessors.
             </li>
             <li>
               <h3>International Transfers</h3>
@@ -258,7 +262,7 @@ export default function DataProcessingAgreementPage() {
               of this DPA.
               <br />
               For the Standard Contractual Clauses, Customer is the data
-              exporter and Cap is the data importer. The parties' contact
+              exporter and Cap is the data importer. The parties&apos; contact
               details are the contact details in the Services Agreement, the
               applicable account, or the order document. The competent
               supervisory authority, governing law, and competent courts are
@@ -271,19 +275,21 @@ export default function DataProcessingAgreementPage() {
               For UK transfers, the UK International Data Transfer Addendum to
               the EU Standard Contractual Clauses applies as required by UK Data
               Protection Laws, with its tables completed by the Services
-              Agreement, this DPA, and Cap's trust portal. For Swiss transfers,
-              references to the GDPR are deemed to include the Swiss Federal Act
-              on Data Protection, references to EU supervisory authorities are
-              deemed to include the Swiss Federal Data Protection and
-              Information Commissioner, and data subjects in Switzerland may
-              exercise and enforce their rights as required by Swiss law.
+              Agreement, this DPA, and Cap&apos;s trust portal. For Swiss
+              transfers, references to the GDPR are deemed to include the Swiss
+              Federal Act on Data Protection, references to EU supervisory
+              authorities are deemed to include the Swiss Federal Data
+              Protection and Information Commissioner, and data subjects in
+              Switzerland may exercise and enforce their rights as required by
+              Swiss law.
               <br />
               Cap will provide reasonable information available to it, including
-              information in Cap's trust portal, to help Customer assess
+              information in Cap&apos;s trust portal, to help Customer assess
               transfer risks and safeguards. Customer remains responsible for
-              determining whether its use of the Services satisfies Customer's
-              transfer obligations. Cap will notify Customer if Cap determines
-              it can no longer comply with an applicable transfer mechanism.
+              determining whether its use of the Services satisfies
+              Customer&apos;s transfer obligations. Cap will notify Customer if
+              Cap determines it can no longer comply with an applicable transfer
+              mechanism.
             </li>
             <li>
               <h3>Data Subject Requests</h3>
@@ -306,11 +312,12 @@ export default function DataProcessingAgreementPage() {
               <br />
               Cap will provide reasonable assistance, taking into account the
               nature of the processing and the information available to Cap, to
-              help Customer meet Customer's obligations relating to security,
-              personal data breach notification, data protection impact
-              assessments, and prior consultation with supervisory authorities.
-              Cap may charge a reasonable fee for assistance that requires
-              material effort beyond standard product functionality or support.
+              help Customer meet Customer&apos;s obligations relating to
+              security, personal data breach notification, data protection
+              impact assessments, and prior consultation with supervisory
+              authorities. Cap may charge a reasonable fee for assistance that
+              requires material effort beyond standard product functionality or
+              support.
             </li>
             <li>
               <h3>Security Incident Notification</h3>
@@ -318,14 +325,14 @@ export default function DataProcessingAgreementPage() {
               Cap will notify Customer without undue delay after becoming aware
               of a Security Incident affecting Customer Personal Data and, where
               feasible, within 72 hours after becoming aware of the Security
-              Incident. Cap's notification will include information reasonably
-              available to Cap, which may include the nature of the incident,
-              affected data categories, affected data subjects, likely
+              Incident. Cap&apos;s notification will include information
+              reasonably available to Cap, which may include the nature of the
+              incident, affected data categories, affected data subjects, likely
               consequences, measures taken or proposed, and a contact point for
               follow-up.
               <br />
               Cap will take reasonable steps to contain, investigate, remediate,
-              and mitigate the effects of a Security Incident. Cap's
+              and mitigate the effects of a Security Incident. Cap&apos;s
               notification of or response to a Security Incident is not an
               admission of fault or liability.
             </li>
@@ -337,19 +344,19 @@ export default function DataProcessingAgreementPage() {
               made available in the Services. After termination or expiration of
               the Services Agreement, Cap will delete or return Customer
               Personal Data in accordance with the Services Agreement and
-              Customer's documented instructions, unless retention is required
-              by law.
+              Customer&apos;s documented instructions, unless retention is
+              required by law.
               <br />
               Deleted Customer Personal Data may remain in backups, logs, or
               archives for a limited period until overwritten or deleted through
-              Cap's normal retention cycles. During that period, Cap will
+              Cap&apos;s normal retention cycles. During that period, Cap will
               protect the retained data under this DPA and use it only for
               backup, recovery, security, legal compliance, or as otherwise
               required by law.
               <br />
               For self-hosted deployments or Customer-controlled storage,
               Customer is responsible for deleting Customer Personal Data from
-              infrastructure, backups, logs, and providers under Customer's
+              infrastructure, backups, logs, and providers under Customer&apos;s
               control.
             </li>
             <li>
@@ -358,7 +365,7 @@ export default function DataProcessingAgreementPage() {
               Cap will make available information reasonably necessary to
               demonstrate compliance with this DPA, including security
               documentation, product information, Subprocessor information, and
-              other materials available through Cap's trust portal, public
+              other materials available through Cap&apos;s trust portal, public
               documentation, or support channels.
               <br />
               If that information is not enough to demonstrate compliance with
@@ -375,7 +382,8 @@ export default function DataProcessingAgreementPage() {
               Customer will bear its audit costs unless the audit reveals a
               material breach of this DPA by Cap. Customer may not conduct
               penetration tests, vulnerability scans, social engineering, or
-              physical security reviews without Cap's prior written approval.
+              physical security reviews without Cap&apos;s prior written
+              approval.
             </li>
             <li>
               <h3>Government and Third-Party Requests</h3>
@@ -388,8 +396,8 @@ export default function DataProcessingAgreementPage() {
               or challenge it.
               <br />
               Cap will not voluntarily disclose Customer Personal Data to a
-              government authority except as required by law or with Customer's
-              instructions.
+              government authority except as required by law or with
+              Customer&apos;s instructions.
             </li>
             <li>
               <h3>Records</h3>
@@ -413,19 +421,19 @@ export default function DataProcessingAgreementPage() {
             <li>
               <h3>Liability</h3>
               <br />
-              Each party's liability under this DPA is subject to the exclusions
-              and limitations of liability in the Services Agreement, except to
-              the extent prohibited by Data Protection Laws or the applicable
-              Standard Contractual Clauses.
+              Each party&apos;s liability under this DPA is subject to the
+              exclusions and limitations of liability in the Services Agreement,
+              except to the extent prohibited by Data Protection Laws or the
+              applicable Standard Contractual Clauses.
             </li>
             <li>
               <h3>Changes to This DPA</h3>
               <br />
               Cap may update this DPA from time to time, provided that updates
-              do not materially reduce Cap's obligations for Customer Personal
-              Data during an active subscription term unless required by law or
-              agreed by Customer. Cap will post the updated DPA and update the
-              "Last Updated" date.
+              do not materially reduce Cap&apos;s obligations for Customer
+              Personal Data during an active subscription term unless required
+              by law or agreed by Customer. Cap will post the updated DPA and
+              update the &quot;Last Updated&quot; date.
             </li>
             <li>
               <h3>Contact</h3>
@@ -436,11 +444,11 @@ export default function DataProcessingAgreementPage() {
             <li>
               <h3>Annex I: Details of Processing</h3>
               <br />
-              Subject matter: Cap's provision of the Services under the Services
-              Agreement.
+              Subject matter: Cap&apos;s provision of the Services under the
+              Services Agreement.
               <br />
               Duration: The term of the Services Agreement and any period during
-              which Cap processes Customer Personal Data under Customer's
+              which Cap processes Customer Personal Data under Customer&apos;s
               documented instructions or as required by law.
               <br />
               Nature and purpose: Providing, operating, hosting, storing,
@@ -455,8 +463,8 @@ export default function DataProcessingAgreementPage() {
               encryption, deletion, and other operations necessary to provide
               the Services.
               <br />
-              Categories of data subjects: Customer's administrators, employees,
-              contractors, workspace members, invited users, viewers,
+              Categories of data subjects: Customer&apos;s administrators,
+              employees, contractors, workspace members, invited users, viewers,
               commenters, guests, prospects, customers, support contacts, and
               other individuals whose personal data appears in Customer Content.
               <br />
@@ -476,8 +484,8 @@ export default function DataProcessingAgreementPage() {
               upload, share, transcribe, or otherwise process that information
               through the Services.
               <br />
-              Customer obligations and rights: Customer's obligations and rights
-              are described in the Services Agreement, this DPA, and Data
+              Customer obligations and rights: Customer&apos;s obligations and
+              rights are described in the Services Agreement, this DPA, and Data
               Protection Laws.
             </li>
             <li>
@@ -544,8 +552,8 @@ export default function DataProcessingAgreementPage() {
               workflow automation, and other infrastructure or service providers
               needed to provide the Services.
               <br />
-              Cap's current Subprocessor list is maintained through Cap's trust
-              portal at{" "}
+              Cap&apos;s current Subprocessor list is maintained through
+              Cap&apos;s trust portal at{" "}
               <a href="https://trust.cap.so" rel="noreferrer" target="_blank">
                 trust.cap.so
               </a>{" "}
@@ -554,7 +562,7 @@ export default function DataProcessingAgreementPage() {
               the source of truth for Subprocessor names, purposes, processing
               locations, service categories, and related transfer information.
               <br />
-              Customer-controlled providers, including Customer's own
+              Customer-controlled providers, including Customer&apos;s own
               S3-compatible storage provider, identity provider, cloud account,
               or self-hosted infrastructure provider, are selected by Customer
               and are not Cap Subprocessors.

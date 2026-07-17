@@ -1,5 +1,5 @@
 import type React from "react"
-import { trackEvent } from "@/app/utils/analytics"
+import { trackEvent } from "@/lib/analytics"
 
 export const getDownloadUrl = (
   platform: string | null,
@@ -19,7 +19,7 @@ export const getDownloadUrl = (
 export const getDownloadButtonText = (
   platform: string | null,
   loading: boolean,
-  isIntel: boolean = false
+  isIntel = false
 ): string => {
   if (loading) {
     return "Download Cap"

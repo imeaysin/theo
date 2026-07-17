@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { InstantModePage } from "./InstantModePage"
+import { InstantModePage } from "./instant-mode-page"
 
 export const metadata: Metadata = {
   title: "Instant Mode - Quick Screen Recording & Sharing | Cap",

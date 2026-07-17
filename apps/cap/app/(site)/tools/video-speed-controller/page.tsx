@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
-import { SpeedController } from "@/components/tools/SpeedController"
-import { ToolsPageTemplate } from "@/components/tools/ToolsPageTemplate"
+import { SpeedController } from "@/components/tools/speed-controller"
+import { ToolsPageTemplate } from "@/components/tools/tools-page-template"
 import type { ToolPageContent } from "@/components/tools/types"
 import { createBreadcrumbSchema } from "@/utils/web-schema"
 

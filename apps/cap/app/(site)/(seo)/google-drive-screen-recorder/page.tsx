@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { GoogleDriveScreenRecorderPage } from "@/components/pages/seo/GoogleDriveScreenRecorderPage"
+import { GoogleDriveScreenRecorderPage } from "@/components/pages/seo/google-drive-screen-recorder-page"
 import { googleDriveScreenRecorderFaqs } from "@/components/pages/seo/google-drive-screen-recorder-faqs"
 import {
   createFAQSchema,

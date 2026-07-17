@@ -19,10 +19,10 @@ type BrowserFeatureTarget = {
 
 type SaveFilePickerOptions = {
   suggestedName?: string
-  types?: Array<{
+  types?: {
     description?: string
     accept: Record<string, string[]>
-  }>
+  }[]
 }
 
 type BrowserFileHandle = {
@@ -88,10 +88,10 @@ export class LoomBrowserConversionError extends Error {
   }
 }
 
-const REQUIRED_BROWSER_FEATURES: Array<{
+const REQUIRED_BROWSER_FEATURES: {
   key: BrowserConversionFeatureKey
   label: string
-}> = [
+}[] = [
   { key: "VideoDecoder", label: "WebCodecs video decoding" },
   { key: "VideoEncoder", label: "WebCodecs video encoding" },
   { key: "AudioDecoder", label: "WebCodecs audio decoding" },
@@ -467,7 +467,7 @@ async function fetchDashRepresentationBlob({
     representation.initUrl,
     ...representation.segments.map((s) => s.url),
   ]
-  const buffers: Array<ArrayBuffer> = new Array(resources.length)
+  const buffers = new Array<ArrayBuffer>(resources.length)
   let nextIndex = 0
 
   const worker = async () => {

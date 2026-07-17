@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { OnlineClassroomToolsPage } from "@/components/pages/seo/OnlineClassroomToolsPage"
+import { OnlineClassroomToolsPage } from "@/components/pages/seo/online-classroom-tools-page"
 
 export const metadata: Metadata = {
   title: "Online Classroom Tools: Empower Remote Teaching with Cap",

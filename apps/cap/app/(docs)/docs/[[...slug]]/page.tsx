@@ -1,10 +1,10 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { CustomMDX } from "@/components/mdx"
-import { extractHeadings, getDocBySlug } from "@/utils/docs"
-import { DocsBreadcrumbs } from "../_components/DocsBreadcrumbs"
-import { DocsPrevNext } from "../_components/DocsPrevNext"
-import { DocsTableOfContents } from "../_components/DocsTableOfContents"
+import { extractHeadings, getDocBySlug } from "@/lib/content/docs"
+import { DocsBreadcrumbs } from "../_components/docs-breadcrumbs"
+import { DocsPrevNext } from "../_components/docs-prev-next"
+import { DocsTableOfContents } from "../_components/docs-table-of-contents"
 
 interface DocPageProps {
   params: Promise<{ slug?: string[] }>

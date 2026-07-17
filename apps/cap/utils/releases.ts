@@ -62,7 +62,9 @@ export function parseDownloadsFromBody(body: string): ReleaseDownloads {
       ) {
         downloads["linux-deb"] = linuxValue
       }
-    } catch {}
+    } catch {
+      return downloads
+    }
   }
 
   return downloads

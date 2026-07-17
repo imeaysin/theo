@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { createBreadcrumbSchema } from "@/utils/web-schema"
-import { PageContent } from "./PageContent"
+import { PageContent } from "./page-content"
 
 export const metadata: Metadata = {
   title: "Online Tools | Free Browser-Based Utilities",

@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import {
   HipaaCompliantScreenRecordingPage,
   hipaaCompliantScreenRecordingContent,
-} from "@/components/pages/seo/HipaaCompliantScreenRecordingPage"
+} from "@/components/pages/seo/hipaa-compliant-screen-recording-page"
 import { createFAQSchema } from "@/utils/web-schema"
 
 export const metadata: Metadata = {

@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Script from "next/script"
-import { AgenciesPage } from "@/components/pages/seo/AgenciesPage"
+import { AgenciesPage } from "@/components/pages/seo/agencies-page"
 
 // Create FAQ structured data for SEO
 const createFaqStructuredData = () => {

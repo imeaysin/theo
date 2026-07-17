@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { FeaturesPage } from "./FeaturesPage"
+import { FeaturesPage } from "./features-page"
 
 export const metadata: Metadata = {
   title: "Features - Cap",

@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { MigrateFromLoomPage } from "@/components/pages/seo/MigrateFromLoomPage"
+import { MigrateFromLoomPage } from "@/components/pages/seo/migrate-from-loom-page"
 
 export const metadata: Metadata = {
   title: "Migrate from Loom to Cap | Import Your Loom Videos in Minutes",

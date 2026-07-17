@@ -1,9 +1,9 @@
 import type { PropsWithChildren } from "react"
-import { getDocSearchIndex } from "@/utils/docs"
-import { DocsHeader } from "./_components/DocsHeader"
-import { DocsMobileMenu } from "./_components/DocsMobileMenu"
-import { DocsSearch } from "./_components/DocsSearch"
-import { DocsSidebar } from "./_components/DocsSidebar"
+import { getDocSearchIndex } from "@/lib/content/docs"
+import { DocsHeader } from "./_components/docs-header"
+import { DocsMobileMenu } from "./_components/docs-mobile-menu"
+import { DocsSearch } from "./_components/docs-search"
+import { DocsSidebar } from "./_components/docs-sidebar"
 import { docsConfig } from "./docs-config"
 
 export default function DocsLayout(props: PropsWithChildren) {

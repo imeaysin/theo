@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { EmployeeOnboardingPlatformPage } from "@/components/pages/seo/EmployeeOnboardingPlatformPage"
+import { EmployeeOnboardingPlatformPage } from "@/components/pages/seo/employee-onboarding-platform-page"
 
 export const metadata: Metadata = {
   title: "Employee Onboarding Platform: Streamline New-Hire Training with Cap",

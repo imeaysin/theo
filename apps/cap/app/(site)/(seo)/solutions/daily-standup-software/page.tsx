@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { DailyStandupSoftwarePage } from "@/components/pages/seo/DailyStandupSoftwarePage"
+import { DailyStandupSoftwarePage } from "@/components/pages/seo/daily-standup-software-page"
 
 export const metadata: Metadata = {
   title: "Daily Standup Software: Streamline Your Agile Meetings with Cap",

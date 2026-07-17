@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
-import { MediaFormatConverter } from "@/components/tools/MediaFormatConverter"
-import { ToolsPageTemplate } from "@/components/tools/ToolsPageTemplate"
+import { MediaFormatConverter } from "@/components/tools/media-format-converter"
+import { ToolsPageTemplate } from "@/components/tools/tools-page-template"
 import type { ToolPageContent } from "@/components/tools/types"
 import { createBreadcrumbSchema } from "@/utils/web-schema"
 

@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import {
   MacScreenRecordingWithAudioPage,
   macScreenRecordingWithAudioContent,
-} from "@/components/pages/seo/MacScreenRecordingWithAudioPage"
+} from "@/components/pages/seo/mac-screen-recording-with-audio-page"
 import { createFAQSchema } from "@/utils/web-schema"
 
 export const metadata: Metadata = {

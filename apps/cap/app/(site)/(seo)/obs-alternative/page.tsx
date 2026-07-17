@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import {
   ObsAlternativePage,
   obsAlternativeContent,
-} from "@/components/pages/seo/ObsAlternativePage"
+} from "@/components/pages/seo/obs-alternative-page"
 import { createFAQSchema } from "@/utils/web-schema"
 
 export const metadata: Metadata = {

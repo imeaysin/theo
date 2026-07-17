@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { StudioModePage } from "./StudioModePage"
+import { StudioModePage } from "./studio-mode-page"
 
 export const metadata: Metadata = {
   title: "Studio Mode - Professional Screen Recording | Cap",

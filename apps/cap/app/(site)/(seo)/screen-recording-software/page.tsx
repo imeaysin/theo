@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { ScreenRecordingSoftwarePage } from "@/components/pages/seo/ScreenRecordingSoftwarePage"
+import { ScreenRecordingSoftwarePage } from "@/components/pages/seo/screen-recording-software-page"
 
 export const metadata: Metadata = {
   title: "Screen Recording Software — Free HD Screen Capture | Cap",

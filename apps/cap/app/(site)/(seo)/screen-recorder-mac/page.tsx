@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { ScreenRecordMacPage } from "@/components/pages/seo/ScreenRecordMacPage"
+import { ScreenRecordMacPage } from "@/components/pages/seo/screen-record-mac-page"
 
 export const metadata: Metadata = {
   title: "Best Screen Recorder for Mac | High-Quality, Free & Easy (2026)",
