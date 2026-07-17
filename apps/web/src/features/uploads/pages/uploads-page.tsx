@@ -17,6 +17,7 @@ import {
 import { Input } from "@workspace/ui-shadcn/components/input"
 import { Spinner } from "@workspace/ui-shadcn/components/spinner"
 import { UploadIcon } from "lucide-react"
+import { PageHeader } from "@/components/page-header"
 import { useUploadFileMutation } from "@/features/uploads/hooks/use-upload"
 
 export function UploadsPage() {
@@ -50,12 +51,10 @@ export function UploadsPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-1">
-        <h2 className="text-2xl font-bold tracking-tight">Uploads</h2>
-        <p className="text-muted-foreground">
-          Upload files to the API (max 5 MB). Uses local storage in dev.
-        </p>
-      </div>
+      <PageHeader
+        description="Upload files to the API (max 5 MB). Uses local storage in dev."
+        title="Uploads"
+      />
       <Card className="max-w-lg">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">

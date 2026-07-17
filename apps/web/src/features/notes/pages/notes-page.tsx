@@ -30,6 +30,14 @@ import {
   InputGroupInput,
 } from "@workspace/ui-shadcn/components/input-group"
 import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemGroup,
+  ItemMedia,
+  ItemTitle,
+} from "@workspace/ui-shadcn/components/item"
+import {
   Select,
   SelectContent,
   SelectGroup,
@@ -48,8 +56,9 @@ import {
 } from "lucide-react"
 import { useMemo, useState } from "react"
 import { authClient } from "@workspace/auth/client"
+import { PageHeader } from "@/components/page-header"
 import { NoteFormDialog } from "@/features/notes/components/note-form-dialog"
-import { NotesTable } from "@/features/notes/components/notes-table"
+import { NotesList } from "@/features/notes/components/notes-list"
 import {
   useBulkDeleteNotesMutation,
   useDeleteNoteMutation,
@@ -197,96 +206,96 @@ export function NotesPage() {
   return (
     <>
       <div className="flex flex-col gap-6">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="flex flex-col gap-1">
-            <h2 className="text-2xl font-bold tracking-tight">Notes</h2>
-            <p className="text-muted-foreground">
-              Create and manage your notes.
-            </p>
-          </div>
-          {canCreate.data ? (
-            <Button onClick={openCreateDialog}>
-              <PlusIcon data-icon="inline-start" />
-              New note
-            </Button>
-          ) : null}
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3">
-          <InputGroup className="flex-1">
-            <InputGroupAddon>
-              <SearchIcon />
-            </InputGroupAddon>
-            <InputGroupInput
-              aria-label="Search notes"
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search notes…"
-              value={search}
-            />
-          </InputGroup>
-          <Select
-            items={[...sortItems]}
-            onValueChange={(value) => {
-              if (value) setSort(value as SortOption)
-            }}
-            value={sort}
-          >
-            <SelectTrigger aria-label="Sort notes" className="w-40">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {sortItems.map((item) => (
-                  <SelectItem key={item.value} value={item.value}>
-                    {item.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
+        <PageHeader
+          actions={
+            <>
+              <InputGroup className="w-full sm:w-56">
+                <InputGroupAddon>
+                  <SearchIcon />
+                </InputGroupAddon>
+                <InputGroupInput
+                  aria-label="Search notes"
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Search"
+                  value={search}
+                />
+              </InputGroup>
+              <Select
+                items={[...sortItems]}
+                onValueChange={(value) => {
+                  if (value) setSort(value as SortOption)
+                }}
+                value={sort}
+              >
+                <SelectTrigger aria-label="Sort notes" className="w-40">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {sortItems.map((item) => (
+                      <SelectItem key={item.value} value={item.value}>
+                        {item.label}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              {canCreate.data ? (
+                <Button onClick={openCreateDialog}>
+                  <PlusIcon data-icon="inline-start" />
+                  New
+                </Button>
+              ) : null}
+            </>
+          }
+          description="Create and manage your notes."
+          title="Notes"
+        />
 
         {selectedIds.size > 0 && canDelete.data ? (
-          <div className="flex flex-wrap items-center gap-3 rounded-lg border bg-muted/40 px-4 py-3">
-            <p className="text-sm font-medium">{selectedIds.size} selected</p>
-            <Button
-              disabled={isMutating}
-              onClick={() =>
-                setDeleteTarget({ type: "bulk", count: selectedIds.size })
-              }
-              size="sm"
-              variant="destructive"
-            >
-              <Trash2Icon data-icon="inline-start" />
-              Delete selected
-            </Button>
-            <Button
-              disabled={isMutating}
-              onClick={() => setSelectedIds(new Set())}
-              size="sm"
-              variant="ghost"
-            >
-              Clear selection
-            </Button>
-          </div>
+          <Item variant="muted">
+            <ItemContent>
+              <ItemTitle>{selectedIds.size} selected</ItemTitle>
+            </ItemContent>
+            <ItemActions>
+              <Button
+                disabled={isMutating}
+                onClick={() =>
+                  setDeleteTarget({ type: "bulk", count: selectedIds.size })
+                }
+                size="sm"
+                variant="destructive"
+              >
+                <Trash2Icon data-icon="inline-start" />
+                Delete selected
+              </Button>
+              <Button
+                disabled={isMutating}
+                onClick={() => setSelectedIds(new Set())}
+                size="sm"
+                variant="ghost"
+              >
+                Clear selection
+              </Button>
+            </ItemActions>
+          </Item>
         ) : null}
 
         {isLoading ? (
-          <div className="overflow-hidden rounded-lg border">
+          <ItemGroup>
             {Array.from({ length: 3 }).map((_, index) => (
-              <div
-                className="flex items-center gap-3 border-b px-4 py-4 last:border-b-0"
-                key={index}
-              >
-                <Skeleton className="size-4 rounded-sm" />
-                <div className="flex flex-1 flex-col gap-2">
+              <Item key={index} variant="outline">
+                <ItemMedia>
+                  <Skeleton className="size-4 rounded-sm" />
+                </ItemMedia>
+                <ItemContent>
                   <Skeleton className="h-4 w-48" />
                   <Skeleton className="h-3 w-full max-w-md" />
                   <Skeleton className="h-3 w-24" />
-                </div>
-              </div>
+                </ItemContent>
+              </Item>
             ))}
-          </div>
+          </ItemGroup>
         ) : null}
 
         {isError ? (
@@ -345,7 +354,7 @@ export function NotesPage() {
         ) : null}
 
         {!isLoading && !isError && filteredNotes.length > 0 ? (
-          <NotesTable
+          <NotesList
             canDelete={canDelete.data === true}
             canUpdate={canUpdate.data === true}
             disabled={isMutating}

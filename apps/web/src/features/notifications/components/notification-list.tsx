@@ -2,6 +2,15 @@ import type { NotificationResponse } from "@workspace/contracts"
 import { dates } from "@/lib/dates"
 import { Button } from "@workspace/ui-shadcn/components/button"
 import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemGroup,
+  ItemMedia,
+  ItemTitle,
+} from "@workspace/ui-shadcn/components/item"
+import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
@@ -17,35 +26,29 @@ type NotificationItemProps = {
   disabled?: boolean
 }
 
-function NotificationItem({
+function NotificationListItem({
   notification,
   onMarkRead,
   onDelete,
   disabled,
 }: NotificationItemProps) {
   return (
-    <div
-      className={cn(
-        "group flex items-start gap-3 border-b px-4 py-3 last:border-b-0",
-        !notification.read && "bg-accent/30"
-      )}
-    >
-      <div
-        aria-hidden
-        className={cn(
-          "mt-1.5 size-2 shrink-0 rounded-full",
-          notification.read ? "bg-transparent" : "bg-primary"
-        )}
-      />
-
-      <div className="min-w-0 flex-1">
-        <p className="text-sm leading-snug font-medium">{notification.title}</p>
+    <Item role="listitem" variant={notification.read ? "outline" : "muted"}>
+      <ItemMedia>
+        <span
+          aria-hidden
+          className={cn(
+            "size-2 shrink-0 rounded-full",
+            notification.read ? "bg-transparent" : "bg-primary"
+          )}
+        />
+      </ItemMedia>
+      <ItemContent>
+        <ItemTitle>{notification.title}</ItemTitle>
         {notification.body ? (
-          <p className="mt-0.5 line-clamp-2 text-sm text-muted-foreground">
-            {notification.body}
-          </p>
+          <ItemDescription>{notification.body}</ItemDescription>
         ) : null}
-        <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
+        <ItemDescription className="flex flex-wrap items-center gap-2">
           <time>{dates.relativeTime(notification.createdAt)}</time>
           {notification.actionUrl ? (
             <Link
@@ -53,13 +56,12 @@ function NotificationItem({
               to={notification.actionUrl}
             >
               View
-              <ExternalLinkIcon />
+              <ExternalLinkIcon className="size-3.5" />
             </Link>
           ) : null}
-        </div>
-      </div>
-
-      <div className="flex shrink-0 items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+        </ItemDescription>
+      </ItemContent>
+      <ItemActions>
         {!notification.read ? (
           <Tooltip>
             <TooltipTrigger
@@ -69,7 +71,7 @@ function NotificationItem({
                   disabled={disabled}
                   onClick={() => onMarkRead(notification.id)}
                   size="icon-sm"
-                  variant="ghost"
+                  variant="outline"
                 />
               }
             >
@@ -86,7 +88,7 @@ function NotificationItem({
                 disabled={disabled}
                 onClick={() => onDelete(notification.id)}
                 size="icon-sm"
-                variant="ghost"
+                variant="outline"
               />
             }
           >
@@ -94,8 +96,8 @@ function NotificationItem({
           </TooltipTrigger>
           <TooltipContent>Delete notification</TooltipContent>
         </Tooltip>
-      </div>
-    </div>
+      </ItemActions>
+    </Item>
   )
 }
 
@@ -113,9 +115,9 @@ export function NotificationList({
   disabled,
 }: NotificationListProps) {
   return (
-    <div className="overflow-hidden rounded-lg border">
+    <ItemGroup>
       {notifications.map((notification) => (
-        <NotificationItem
+        <NotificationListItem
           disabled={disabled}
           key={notification.id}
           notification={notification}
@@ -123,6 +125,6 @@ export function NotificationList({
           onMarkRead={onMarkRead}
         />
       ))}
-    </div>
+    </ItemGroup>
   )
 }
