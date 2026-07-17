@@ -11,15 +11,18 @@ const Pricing = () => {
   return (
     <div className="mx-auto w-full max-w-[960px] px-5">
       <div className="mb-14 px-5 text-center">
-        <h2 className="text-gray-12 mb-3 w-full text-4xl font-medium tracking-tight">
+        <h2 className="mb-3 w-full text-4xl font-medium tracking-tight text-foreground">
           {homepageCopy.pricing.title}
         </h2>
-        <p className="text-gray-10 mx-auto w-full max-w-[640px] text-lg leading-[1.75rem]">
+        <p className="mx-auto w-full max-w-[640px] text-lg leading-[1.75rem] text-muted-foreground">
           {homepageCopy.pricing.subtitle}
         </p>
-        <div className="bg-gray-1 border-gray-5 mx-auto mt-6 flex w-fit items-center justify-center gap-2 rounded-full border px-5 py-2.5">
-          <FontAwesomeIcon className="size-3.5 text-red-500" icon={faHeart} />
-          <p className="text-gray-12 font-medium">
+        <div className="mx-auto mt-6 flex w-fit items-center justify-center gap-2 rounded-full border border-border bg-card px-5 py-2.5">
+          <FontAwesomeIcon
+            className="size-3.5 text-destructive"
+            icon={faHeart}
+          />
+          <p className="font-medium text-foreground">
             {homepageCopy.pricing.lovedBy}
           </p>
         </div>

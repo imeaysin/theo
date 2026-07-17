@@ -14,7 +14,7 @@ interface StepperProps {
 }
 
 const buttonClasses =
-  "flex justify-center items-center rounded-lg border shadow-sm transition-colors size-9 bg-gray-3 border-gray-5 text-gray-12 hover:bg-gray-5 hover:border-gray-6 active:bg-gray-6 disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none"
+  "flex justify-center items-center rounded-lg border shadow-sm transition-colors size-9 bg-muted border-border text-foreground hover:bg-muted hover:border-border active:bg-muted disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none"
 
 export const Stepper = ({
   label,
@@ -26,7 +26,9 @@ export const Stepper = ({
 }: StepperProps) => {
   return (
     <div className="flex items-center justify-between">
-      <span className="text-gray-11 text-sm font-medium">{label}</span>
+      <span className="text-base font-medium text-muted-foreground">
+        {label}
+      </span>
       <div className="flex items-center gap-1">
         <button
           type="button"
@@ -37,7 +39,7 @@ export const Stepper = ({
         >
           <FontAwesomeIcon icon={faMinus} className="size-3.5" />
         </button>
-        <span className="text-gray-12 w-10 text-center text-base font-semibold tabular-nums">
+        <span className="w-10 text-center text-base font-semibold text-foreground tabular-nums">
           <NumberFlow value={value} />
         </span>
         <button

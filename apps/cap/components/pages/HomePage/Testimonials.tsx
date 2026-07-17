@@ -1,7 +1,6 @@
 import { Button } from "@/components/cap-ui"
 import { motion } from "framer-motion"
 import Image from "next/image"
-import { useState } from "react"
 import { homepageCopy } from "../../../data/homepage-copy"
 import { testimonials } from "../../../data/testimonials"
 
@@ -24,7 +23,6 @@ interface TestimonialCardProps {
 
 // Testimonial card component
 const TestimonialCard: React.FC<TestimonialCardProps> = ({ item }) => {
-  const [isHovered, setIsHovered] = useState(false)
   // Destructure all properties from item, including position, rotation and zIndex
   const { name, handle, image, content, url, position, rotation, zIndex } = item
 
@@ -33,13 +31,10 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ item }) => {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="border-gray-5 h-fit min-w-[300px] cursor-pointer rounded-xl border bg-white p-6 shadow-lg transition-shadow duration-200 ease-in-out md:absolute md:h-auto md:w-full md:max-w-[300px] md:min-w-min"
+      className="h-fit min-w-[300px] cursor-pointer rounded-xl border border-border bg-card p-6 shadow-lg transition-shadow duration-200 ease-in-out hover:shadow-xl md:absolute md:h-auto md:w-full md:max-w-[300px] md:min-w-min"
       style={{
         ...position,
         transformOrigin: "center center",
-        boxShadow: isHovered
-          ? "0 20px 25px rgba(0, 0, 0, 0.1)"
-          : "0 4px 10px rgba(0, 0, 0, 0.05)",
       }}
       initial={{
         rotate: rotation,
@@ -52,11 +47,9 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ item }) => {
         zIndex: 50,
         transition: { duration: 0.3, ease: "easeOut" },
       }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
     >
       <div className="mb-4 flex items-center">
-        <div className="relative mr-3 h-12 w-12 overflow-hidden rounded-full border-2 border-gray-100">
+        <div className="relative mr-3 size-12 overflow-hidden rounded-full border-2 border-border">
           <Image
             src={image}
             key={image}
@@ -66,11 +59,11 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ item }) => {
           />
         </div>
         <div>
-          <h4 className="text-gray-12 text-lg font-semibold">{name}</h4>
-          <p className="text-gray-10 text-sm">{handle}</p>
+          <h4 className="text-lg font-semibold text-foreground">{name}</h4>
+          <p className="text-sm text-muted-foreground">{handle}</p>
         </div>
       </div>
-      <p className="text-gray-10 text-sm leading-relaxed">{content}</p>
+      <p className="text-sm leading-relaxed text-muted-foreground">{content}</p>
     </motion.a>
   )
 }
@@ -120,10 +113,10 @@ const Testimonials = () => {
   return (
     <div className="mx-auto w-full max-w-[1200px] md:px-5">
       <div className="mb-16 px-5 text-center">
-        <h2 className="text-gray-12 mx-auto mb-3 w-full text-4xl font-medium text-balance">
+        <h2 className="mx-auto mb-3 w-full text-4xl font-medium text-balance text-foreground">
           {homepageCopy.testimonials.title}
         </h2>
-        <p className="text-gray-10 mx-auto w-full max-w-[400px] text-lg leading-[1.75rem]">
+        <p className="mx-auto w-full max-w-[400px] text-lg leading-7 text-muted-foreground">
           {homepageCopy.testimonials.subtitle}
         </p>
       </div>

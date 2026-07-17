@@ -188,7 +188,7 @@ const complianceBadges: { label: string; content: ReactNode }[] = [
 
 const ComplianceBadges = () => (
   <div>
-    <div className="text-gray-10 flex flex-wrap items-center gap-2.5">
+    <div className="flex flex-wrap items-center gap-2.5 text-muted-foreground">
       {complianceBadges.map(({ label, content }) => (
         <Link
           key={label}
@@ -197,7 +197,7 @@ const ComplianceBadges = () => (
           rel="noopener noreferrer"
           title={`${label} — in progress`}
           aria-label={`${label} compliance in progress. View Cap's Trust Portal`}
-          className="text-gray-9 hover:text-gray-12 transition-colors"
+          className="text-muted-foreground transition-colors hover:text-foreground"
         >
           <svg
             viewBox="0 0 44 44"
@@ -218,7 +218,9 @@ const ComplianceBadges = () => (
         </Link>
       ))}
     </div>
-    <p className="text-gray-9 mt-2 text-[11px]">Certifications in progress</p>
+    <p className="mt-2 text-sm text-muted-foreground">
+      Certifications in progress
+    </p>
   </div>
 )
 
@@ -234,17 +236,17 @@ const FooterColumn = ({
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div className="border-gray-4 border-b lg:border-none">
+    <div className="border-b border-border lg:border-none">
       <button
         type="button"
         aria-expanded={isOpen}
         onClick={() => setIsOpen((prev) => !prev)}
-        className="text-gray-12 flex w-full items-center justify-between py-4 text-left text-lg font-semibold lg:hidden"
+        className="flex w-full items-center justify-between py-4 text-left text-lg font-semibold text-foreground lg:hidden"
       >
         {title}
         <FontAwesomeIcon
           icon={faChevronDown}
-          className={`text-gray-10 size-3.5 transition-transform duration-200 ${
+          className={`size-3.5 text-muted-foreground transition-transform duration-200 ${
             isOpen ? "rotate-180" : ""
           }`}
         />
@@ -253,12 +255,12 @@ const FooterColumn = ({
       {titleHref ? (
         <Link
           href={titleHref}
-          className="text-gray-12 hover:text-gray-11 hidden pb-2 text-lg font-semibold transition-colors lg:block"
+          className="hidden pb-2 text-lg font-semibold text-foreground transition-colors hover:text-muted-foreground lg:block"
         >
           {title}
         </Link>
       ) : (
-        <h3 className="text-gray-12 hidden pb-2 text-lg font-semibold lg:block">
+        <h3 className="hidden pb-2 text-lg font-semibold text-foreground lg:block">
           {title}
         </h3>
       )}
@@ -273,7 +275,7 @@ const FooterColumn = ({
             {links.map((link) => (
               <li key={`${link.href}:${link.label}`}>
                 <Link
-                  className="text-gray-10 hover:text-gray-12 transition-colors"
+                  className="text-muted-foreground transition-colors hover:text-foreground"
                   href={link.href}
                   target={link.isExternal ? "_blank" : undefined}
                 >
@@ -290,8 +292,8 @@ const FooterColumn = ({
 
 export const Footer = () => {
   return (
-    <footer className="border-gray-4 relative overflow-hidden border-t">
-      <div className="wrapper relative pt-20 pb-10">
+    <footer className="relative overflow-hidden border-t border-border bg-muted/20">
+      <div className="relative mx-auto w-full max-w-7xl px-5 pt-20 pb-10 sm:px-8 lg:px-10">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute bottom-0 left-1/2 w-[700px] -translate-x-1/2 translate-y-2/3 opacity-[0.05] select-none sm:w-[1000px] lg:w-[1300px]"
@@ -304,10 +306,10 @@ export const Footer = () => {
         </div>
 
         <div className="relative z-10">
-          <div className="flex flex-col gap-12 xl:flex-row xl:gap-16">
-            <div className="xl:w-[260px] xl:shrink-0">
+          <div className="flex flex-col gap-12 2xl:flex-row 2xl:gap-16">
+            <div className="2xl:w-64 2xl:shrink-0">
               <Logo className="h-auto w-[104px]" />
-              <p className="text-gray-11 mt-5 max-w-sm text-sm leading-6">
+              <p className="mt-5 max-w-sm text-sm leading-6 text-muted-foreground">
                 The open source alternative to Loom. Lightweight, powerful, and
                 cross-platform — record and share in seconds.
               </p>
@@ -319,7 +321,7 @@ export const Footer = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.label}
-                    className="border-gray-4 text-gray-10 hover:text-gray-12 hover:border-gray-6 hover:bg-gray-3 flex size-9 items-center justify-center rounded-full border transition-colors"
+                    className="flex size-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-border hover:bg-muted hover:text-foreground"
                   >
                     <FontAwesomeIcon icon={social.icon} className="size-4" />
                   </a>
@@ -327,7 +329,7 @@ export const Footer = () => {
               </div>
             </div>
 
-            <div className="border-gray-4 grid flex-1 grid-cols-1 border-t lg:grid-cols-5 lg:gap-x-8 lg:gap-y-10 lg:border-none">
+            <div className="grid min-w-0 flex-1 grid-cols-1 border-t border-border lg:grid-cols-3 lg:gap-x-10 lg:gap-y-10 lg:border-none xl:grid-cols-5 xl:gap-x-8">
               <FooterColumn title="Product" links={footerLinks.product} />
               <FooterColumn
                 title="Additional Links"
@@ -343,32 +345,32 @@ export const Footer = () => {
             </div>
           </div>
 
-          <div className="border-gray-4 mt-20 flex flex-col gap-6 border-t pt-8 sm:flex-row sm:items-end sm:justify-between">
+          <div className="mt-20 flex flex-col gap-6 border-t border-border pt-8 sm:flex-row sm:items-end sm:justify-between">
             <div className="flex flex-col gap-4">
               <ComplianceBadges />
-              <p className="text-gray-9 text-sm">
+              <p className="text-sm text-muted-foreground">
                 © Cap Software, Inc. {new Date().getFullYear()}.
               </p>
             </div>
             <div className="flex flex-wrap gap-x-8 gap-y-2">
-              <a
-                className="text-gray-9 hover:text-gray-12 text-sm transition-colors"
+              <Link
+                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                 href="/terms"
               >
                 Terms of Service
-              </a>
-              <a
-                className="text-gray-9 hover:text-gray-12 text-sm transition-colors"
+              </Link>
+              <Link
+                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                 href="/privacy"
               >
                 Privacy Policy
-              </a>
-              <a
-                className="text-gray-9 hover:text-gray-12 text-sm transition-colors"
+              </Link>
+              <Link
+                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                 href="/dpa"
               >
                 Data Processing Agreement
-              </a>
+              </Link>
             </div>
           </div>
         </div>

@@ -31,7 +31,7 @@ export const CommercialCard = () => {
     <article
       onMouseEnter={() => artRef.current?.playHoverAnimation()}
       onMouseLeave={() => artRef.current?.playDefaultAnimation()}
-      className="bg-gray-1 border-gray-5 flex flex-col rounded-2xl border p-8"
+      className="flex flex-col rounded-2xl border border-border bg-card p-8"
     >
       <div className="mb-4 -ml-3 size-14">
         <WhenVisible className="size-full">
@@ -39,7 +39,7 @@ export const CommercialCard = () => {
         </WhenVisible>
       </div>
       <div className="flex items-center gap-1.5">
-        <h3 className="text-gray-12 text-lg font-semibold">{copy.title}</h3>
+        <h3 className="text-lg font-semibold text-foreground">{copy.title}</h3>
         <Tooltip
           position="top"
           delayDuration={150}
@@ -49,27 +49,27 @@ export const CommercialCard = () => {
           <button
             type="button"
             aria-label="What's included in the Desktop License?"
-            className="text-gray-9 hover:text-gray-11 transition-colors"
+            className="text-muted-foreground transition-colors hover:text-muted-foreground"
           >
             <FontAwesomeIcon icon={faCircleInfo} className="size-3.5" />
           </button>
         </Tooltip>
       </div>
-      <p className="text-gray-10 mt-1.5 min-h-[40px] text-sm leading-relaxed">
+      <p className="mt-1.5 min-h-[40px] text-base leading-relaxed text-muted-foreground">
         {copy.description}
       </p>
 
       <div className="mt-6 flex items-baseline gap-1.5">
-        <span className="text-gray-12 text-4xl font-semibold tracking-tight tabular-nums">
+        <span className="text-4xl font-semibold tracking-tight text-foreground tabular-nums">
           $<NumberFlow value={perLicense} />
         </span>
-        <span className="text-gray-10 text-sm">/ license</span>
+        <span className="text-base text-muted-foreground">/ license</span>
       </div>
-      <p className="text-gray-10 mt-1 text-sm">
+      <p className="mt-1 text-base text-muted-foreground">
         {isYearly ? "billed yearly" : "one-time payment"}
       </p>
 
-      <div className="mt-6 min-h-[120px] space-y-3">
+      <div className="mt-6 flex min-h-[120px] flex-col gap-3">
         <BillingToggle
           ariaLabel="Billing option for Desktop License"
           value={isYearly ? "yearly" : "lifetime"}
@@ -87,8 +87,8 @@ export const CommercialCard = () => {
           decrementLabel="Decrease license count"
           incrementLabel="Increase license count"
         />
-        <p className="text-gray-10 text-sm">
-          <span className="text-gray-12 font-medium">
+        <p className="text-base text-muted-foreground">
+          <span className="font-medium text-foreground">
             $<NumberFlow value={total} />
           </span>{" "}
           {isYearly ? "billed yearly" : "one-time"}
@@ -98,23 +98,25 @@ export const CommercialCard = () => {
       <Button
         variant="outline"
         size="lg"
-        href="/signup"
+        href="https://cap.so/signup"
         className="mt-6 w-full font-medium"
         aria-label="Purchase Commercial License"
       >
         {copy.cta}
       </Button>
 
-      <div className="border-gray-4 mt-8 border-t pt-8">
-        <p className="text-gray-12 mb-4 text-sm font-medium">What's included</p>
-        <ul className="space-y-3">
+      <div className="mt-8 border-t border-border pt-8">
+        <p className="mb-4 text-base font-medium text-foreground">
+          What's included
+        </p>
+        <ul className="flex flex-col gap-3">
           {copy.features.map((feature) => (
             <PlanFeature key={feature}>{feature}</PlanFeature>
           ))}
         </ul>
         <a
           href="/docs/commercial-license"
-          className="text-gray-10 hover:text-gray-12 mt-5 inline-block text-sm underline transition-colors"
+          className="mt-5 inline-block text-base text-muted-foreground underline transition-colors hover:text-foreground"
         >
           Learn more about the commercial license
         </a>

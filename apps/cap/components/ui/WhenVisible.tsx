@@ -17,7 +17,7 @@ interface WhenVisibleProps {
   className?: string
 }
 
-// Renders `fallback` until the wrapper scrolls within `rootMargin` of the
+// Renders `fallback` until the container scrolls within `rootMargin` of the
 // viewport, then mounts `children`. Used to keep heavy client-only widgets
 // (e.g. Rive canvases) out of the initial render while the surrounding section
 // is still server-rendered.

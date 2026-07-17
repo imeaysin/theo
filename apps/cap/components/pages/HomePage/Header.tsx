@@ -2,6 +2,7 @@
 "use client"
 
 import { Button } from "@/components/cap-ui"
+import { Input } from "@workspace/ui-shadcn/components/input"
 import { faArrowRight, faPlay } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import clsx from "clsx"
@@ -45,12 +46,12 @@ const sendDownloadLink = async (_email: string) => {
 }
 
 const HERO_MODE_COLORS = {
-  instant: "text-amber-600",
-  studio: "text-blue-11",
-  screenshot: "text-violet-600",
+  instant: "text-primary",
+  studio: "text-primary",
+  screenshot: "text-primary",
 } as const
 
-const TITLE_LEADING = "leading-[2.25rem] md:leading-[3.5rem]"
+const TITLE_LEADING = "leading-tight"
 
 const trackHomepageEvent = (
   eventName: string,
@@ -227,7 +228,7 @@ const Header = ({ serverHomepageCopyVariant = "" }: HeaderProps) => {
         <div className="mx-auto w-full max-w-2xl xl:ml-[100px] xl:max-w-[530px] 2xl:mt-12 2xl:ml-[150px]">
           <div className="flex w-full max-w-[650px] flex-col text-center md:text-left">
             <div className="mb-5 flex justify-center md:justify-start">
-              <div className="border-gray-4 bg-gray-2 inline-flex gap-1 rounded-full border p-1">
+              <div className="inline-flex gap-1 rounded-full border border-border bg-muted p-1">
                 {heroModes.map((mode, index) => {
                   const isActive = index === activeModeIndex
                   const Icon = HERO_MODE_ICONS[mode.id]
@@ -245,7 +246,7 @@ const Header = ({ serverHomepageCopyVariant = "" }: HeaderProps) => {
                       {isActive && (
                         <motion.span
                           layoutId="heroModeHighlight"
-                          className="bg-gray-1 border-gray-5 absolute inset-0 rounded-full border shadow-sm"
+                          className="absolute inset-0 rounded-full border border-border bg-card shadow-sm"
                           transition={{
                             type: "spring",
                             stiffness: 400,
@@ -255,14 +256,16 @@ const Header = ({ serverHomepageCopyVariant = "" }: HeaderProps) => {
                       )}
                       <Icon
                         className={clsx(
-                          "relative z-[1] size-3.5 transition-colors",
-                          isActive ? HERO_MODE_COLORS[mode.id] : "text-gray-9"
+                          "relative z-1 size-3.5 transition-colors",
+                          isActive
+                            ? HERO_MODE_COLORS[mode.id]
+                            : "text-muted-foreground"
                         )}
                       />
                       <span
                         className={clsx(
-                          "relative z-[1] whitespace-nowrap transition-colors",
-                          isActive ? "text-gray-12" : "text-gray-10"
+                          "relative z-1 whitespace-nowrap transition-colors",
+                          isActive ? "text-foreground" : "text-muted-foreground"
                         )}
                       >
                         {mode.label}
@@ -282,7 +285,7 @@ const Header = ({ serverHomepageCopyVariant = "" }: HeaderProps) => {
                     "block text-sm font-semibold italic",
                     activeMode
                       ? HERO_MODE_COLORS[activeMode.id]
-                      : "text-gray-10"
+                      : "text-muted-foreground"
                   )}
                   initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -294,7 +297,7 @@ const Header = ({ serverHomepageCopyVariant = "" }: HeaderProps) => {
               </AnimatePresence>
             </div>
 
-            <h1 className="relative z-10 mb-6 flex h-[4.5rem] flex-col justify-center text-[2.25rem] leading-[2.25rem] font-medium text-black md:h-[7rem] md:text-[3.75rem] md:leading-[3.5rem]">
+            <h1 className="relative z-10 mb-6 flex min-h-20 flex-col justify-center text-4xl leading-tight font-medium text-foreground md:min-h-28 md:text-6xl">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.span
                   key={activeMode?.id ?? activeModeIndex}
@@ -314,7 +317,7 @@ const Header = ({ serverHomepageCopyVariant = "" }: HeaderProps) => {
               </AnimatePresence>
             </h1>
 
-            <p className="mx-auto mb-4 max-w-3xl text-lg leading-7 text-zinc-500 md:mx-0">
+            <p className="mx-auto mb-4 max-w-3xl text-lg leading-7 text-muted-foreground md:mx-0">
               {headerContent.description}
             </p>
           </div>
@@ -323,7 +326,9 @@ const Header = ({ serverHomepageCopyVariant = "" }: HeaderProps) => {
             <div className="mb-5 hidden flex-col gap-4 md:flex">
               <div className="flex flex-wrap items-center gap-4">
                 {downloadButton}
-                <span className="text-sm font-medium text-gray-500">or</span>
+                <span className="text-sm font-medium text-muted-foreground">
+                  or
+                </span>
                 <ChromeExtensionButton
                   variant="white"
                   onClick={() =>
@@ -344,7 +349,7 @@ const Header = ({ serverHomepageCopyVariant = "" }: HeaderProps) => {
               </div>
               <div className="flex items-center gap-2">
                 {upgradeButton}
-                <span className="text-gray-10 max-w-[240px] text-sm leading-snug">
+                <span className="max-w-[240px] text-sm leading-snug text-muted-foreground">
                   Cap Pro gives you unlimited cloud sharing, AI summaries &amp;
                   team features
                 </span>
@@ -359,8 +364,8 @@ const Header = ({ serverHomepageCopyVariant = "" }: HeaderProps) => {
 
           <div className="mb-5 flex flex-col gap-3 md:hidden">
             {emailStatus === "sent" ? (
-              <div className="rounded-xl border border-green-200 bg-green-50 px-4 py-3">
-                <p className="text-sm font-medium text-green-800">
+              <div className="rounded-xl border border-border bg-muted px-4 py-3">
+                <p className="text-base font-medium text-foreground">
                   Check your inbox! We've sent the download links to{" "}
                   <strong>{email}</strong>.
                 </p>
@@ -370,23 +375,24 @@ const Header = ({ serverHomepageCopyVariant = "" }: HeaderProps) => {
                 onSubmit={handleEmailSubmit}
                 className="flex flex-col gap-2"
               >
-                <input
+                <Input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@email.com"
                   required
-                  className="w-full rounded-full border border-gray-300 bg-white px-4 py-2.5 text-sm text-black placeholder:text-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                  className="w-full"
                 />
-                <button
+                <Button
                   type="submit"
                   disabled={isPending}
-                  className="w-full rounded-full bg-black px-5 py-2.5 text-sm font-medium text-white transition-opacity disabled:opacity-60"
+                  className="w-full"
+                  size="lg"
                 >
                   {isPending ? "Sending..." : "Email me the download link"}
-                </button>
+                </Button>
                 {emailStatus === "error" && (
-                  <p className="text-xs text-red-600">{emailError}</p>
+                  <p className="text-sm text-destructive">{emailError}</p>
                 )}
               </form>
             )}
@@ -401,7 +407,7 @@ const Header = ({ serverHomepageCopyVariant = "" }: HeaderProps) => {
                   })
                 }
               />
-              <span className="text-gray-10 text-center text-xs">
+              <span className="text-center text-sm text-muted-foreground">
                 Cap Pro gives you unlimited cloud sharing, AI summaries &amp;
                 team features
               </span>
@@ -411,18 +417,18 @@ const Header = ({ serverHomepageCopyVariant = "" }: HeaderProps) => {
           <div className="mb-3 flex justify-center md:justify-start">
             <Link
               href="/migrate-from-loom"
-              className="group text-gray-11 hover:text-gray-12 inline-flex items-center gap-2 text-sm font-medium transition-colors"
+              className="group inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               <LoomMark size={15} />
               Coming from Loom? Bring your library with you
               <FontAwesomeIcon
                 icon={faArrowRight}
-                className="text-gray-9 size-3 transition-transform group-hover:translate-x-0.5"
+                className="size-3 text-muted-foreground transition-transform group-hover:translate-x-0.5"
               />
             </Link>
           </div>
 
-          <p className="text-gray-10 text-center text-sm md:text-left">
+          <p className="text-center text-sm text-muted-foreground md:text-left">
             {homepageCopy.header.cta.freeVersionText}
           </p>
 
@@ -440,31 +446,31 @@ const Header = ({ serverHomepageCopyVariant = "" }: HeaderProps) => {
                   is_intel: Boolean(isIntel),
                 })
               }
-              className="text-gray-10 hover:text-gray-12 mt-2 text-sm underline"
+              className="mt-2 text-sm text-muted-foreground underline hover:text-foreground"
             >
               {homepageCopy.header.cta.seeOtherOptionsText}
             </Link>
           </div>
 
           <div className="mt-14">
-            <p className="text-gray-10 mb-4 text-center text-sm italic md:text-left">
+            <p className="mb-4 text-center text-sm text-muted-foreground italic md:text-left">
               Trusted by <strong>40,000+</strong> teams, builders and creators
             </p>
             <LogoMarquee />
           </div>
         </div>
 
-        <div className="-top-[22%] w-full drop-shadow-2xl lg:-right-[400px] xl:absolute xl:max-w-[1000px] 2xl:-right-[300px] 2xl:max-w-[1200px]">
+        <div className="top-[-22%] w-full drop-shadow-2xl lg:right-[-400px] xl:absolute xl:max-w-[1000px] 2xl:right-[-300px] 2xl:max-w-[1200px]">
           {/* Play Button*/}
           <motion.div
             whileTap={{ scale: 0.95 }}
             whileHover={{ scale: 1.05 }}
             onClick={() => setVideoToggled(true)}
-            className="xs:top-[180px] relative inset-x-0 top-[35vw] z-10 mx-auto flex size-[100px] cursor-pointer items-center justify-center rounded-full bg-blue-500 shadow-[0px_60px_40px_3px_rgba(0,0,0,0.4)] sm:top-[35vw] md:size-[150px] xl:top-[350px] xl:left-[-120px] 2xl:top-[400px]"
+            className="xs:top-[180px] relative inset-x-0 top-[35vw] z-10 mx-auto flex size-[100px] cursor-pointer items-center justify-center rounded-full bg-primary shadow-xl sm:top-[35vw] md:size-[150px] xl:top-[350px] xl:left-[-120px] 2xl:top-[400px]"
           >
             <FontAwesomeIcon
               icon={faPlay}
-              className="size-8 text-white md:size-12"
+              className="size-8 text-primary-foreground md:size-12"
             />
           </motion.div>
           <Image

@@ -28,9 +28,9 @@ export const ProCard = () => {
     <article
       onMouseEnter={() => artRef.current?.playHoverAnimation()}
       onMouseLeave={() => artRef.current?.playDefaultAnimation()}
-      className="bg-gray-1 relative flex flex-col rounded-2xl p-8 shadow-xl ring-2 shadow-blue-500/10 ring-blue-500"
+      className="relative flex flex-col rounded-2xl bg-card p-8 shadow-xl ring-2 shadow-primary/10 ring-primary"
     >
-      <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-blue-500 px-3 py-1 text-xs font-semibold whitespace-nowrap text-white">
+      <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-1 text-base font-semibold whitespace-nowrap text-primary-foreground">
         Most popular
       </span>
 
@@ -39,23 +39,23 @@ export const ProCard = () => {
           <ProArt ref={artRef} />
         </WhenVisible>
       </div>
-      <h3 className="text-gray-12 text-lg font-semibold">{copy.title}</h3>
-      <p className="text-gray-10 mt-1.5 min-h-[40px] text-sm leading-relaxed">
+      <h3 className="text-lg font-semibold text-foreground">{copy.title}</h3>
+      <p className="mt-1.5 min-h-[40px] text-base leading-relaxed text-muted-foreground">
         Everything in Desktop, plus unlimited cloud sharing, AI, and team
         collaboration.
       </p>
 
       <div className="mt-6 flex items-baseline gap-1.5">
-        <span className="text-gray-12 text-4xl font-semibold tracking-tight tabular-nums">
+        <span className="text-4xl font-semibold tracking-tight text-foreground tabular-nums">
           $<NumberFlow value={perUser} />
         </span>
-        <span className="text-gray-10 text-sm">/ user / month</span>
+        <span className="text-base text-muted-foreground">/ user / month</span>
       </div>
-      <p className="text-gray-10 mt-1 text-sm">
+      <p className="mt-1 text-base text-muted-foreground">
         billed {isAnnually ? "annually" : "monthly"}
       </p>
 
-      <div className="mt-6 min-h-[120px] space-y-3">
+      <div className="mt-6 flex min-h-[120px] flex-col gap-3">
         <BillingToggle
           ariaLabel="Billing cycle for Cap Pro"
           value={isAnnually ? "annual" : "monthly"}
@@ -73,9 +73,9 @@ export const ProCard = () => {
           decrementLabel="Decrease user count"
           incrementLabel="Increase user count"
         />
-        <p className="text-gray-10 text-sm">
+        <p className="text-base text-muted-foreground">
           Total:{" "}
-          <span className="text-gray-12 font-medium">
+          <span className="font-medium text-foreground">
             $<NumberFlow value={isAnnually ? yearlyTotal : monthlyTotal} />
           </span>{" "}
           {isAnnually ? "/ year" : "/ month"}
@@ -85,18 +85,18 @@ export const ProCard = () => {
       <Button
         variant="blue"
         size="lg"
-        href="/signup"
+        href="https://cap.so/signup"
         className="mt-6 w-full font-medium"
         aria-label="Purchase Cap Pro License"
       >
         {copy.cta}
       </Button>
 
-      <div className="border-gray-4 mt-8 border-t pt-8">
-        <p className="text-gray-12 mb-4 text-sm font-medium">
+      <div className="mt-8 border-t border-border pt-8">
+        <p className="mb-4 text-base font-medium text-foreground">
           Everything in Desktop License, plus:
         </p>
-        <ul className="space-y-3">
+        <ul className="flex flex-col gap-3">
           {copy.features.slice(1).map((feature) => (
             <PlanFeature key={feature}>{feature}</PlanFeature>
           ))}

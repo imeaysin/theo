@@ -83,7 +83,9 @@ const UpgradeToPro = ({
       variant="blue"
     >
       {shouldLoad && <ProRiveArt onReady={handleReady} />}
-      <p className="relative left-5 font-medium text-white">{text}</p>
+      <p className="relative left-5 font-medium text-primary-foreground">
+        {text}
+      </p>
     </Button>
   )
 }

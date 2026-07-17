@@ -15,12 +15,12 @@ export const PlanFeature = ({ children, strong }: PlanFeatureProps) => {
     <li className="flex items-start gap-3">
       <FontAwesomeIcon
         icon={faCheck}
-        className="mt-1 size-3.5 shrink-0 text-blue-500"
+        className="mt-1 size-3.5 shrink-0 text-primary"
       />
       <span
         className={classNames(
-          "text-sm leading-relaxed",
-          strong ? "text-gray-12 font-medium" : "text-gray-11"
+          "text-base leading-relaxed",
+          strong ? "font-medium text-foreground" : "text-muted-foreground"
         )}
       >
         {children}

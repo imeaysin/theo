@@ -164,7 +164,7 @@ const MobileMenu = ({ stars }: MobileMenuProps) => {
         aria-expanded={open}
         aria-controls={menuId}
         onClick={() => setOpen(true)}
-        className="text-gray-12 hover:bg-gray-3 -mr-1 inline-flex size-10 items-center justify-center rounded-full transition-colors active:scale-95"
+        className="-mr-1 inline-flex size-10 items-center justify-center rounded-full text-foreground transition-colors hover:bg-muted active:scale-95"
       >
         <Menu className="size-6" strokeWidth={2} aria-hidden="true" />
       </button>
@@ -176,7 +176,7 @@ const MobileMenu = ({ stars }: MobileMenuProps) => {
               role="dialog"
               aria-modal="true"
               aria-label="Site navigation"
-              className="fixed inset-0 z-[100] lg:hidden"
+              className="fixed inset-0 z-100 lg:hidden"
             >
               <button
                 type="button"
@@ -184,14 +184,14 @@ const MobileMenu = ({ stars }: MobileMenuProps) => {
                 tabIndex={-1}
                 onClick={() => setOpen(false)}
                 className={classNames(
-                  "absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ease-out motion-reduce:transition-none",
+                  "absolute inset-0 bg-foreground/50 backdrop-blur-sm transition-opacity duration-300 ease-out motion-reduce:transition-none",
                   active ? "opacity-100" : "opacity-0"
                 )}
               />
 
               <div
                 className={classNames(
-                  "bg-gray-1 absolute inset-x-0 top-0 flex h-[100dvh] flex-col overflow-hidden transition-opacity duration-300 ease-out motion-reduce:transition-none",
+                  "absolute inset-x-0 top-0 flex h-dvh flex-col overflow-hidden bg-card transition-opacity duration-300 ease-out motion-reduce:transition-none",
                   active ? "opacity-100" : "opacity-0"
                 )}
               >
@@ -201,17 +201,14 @@ const MobileMenu = ({ stars }: MobileMenuProps) => {
                     aria-label="Cap home"
                     onClick={() => setOpen(false)}
                   >
-                    <Logo
-                      viewBoxDimensions="0 0 120 40"
-                      style={{ width: 84, height: 36 }}
-                    />
+                    <Logo viewBoxDimensions="0 0 120 40" className="h-9 w-20" />
                   </Link>
                   <button
                     ref={closeRef}
                     type="button"
                     aria-label="Close menu"
                     onClick={() => setOpen(false)}
-                    className="border-gray-4 text-gray-12 hover:bg-gray-3 inline-flex size-10 items-center justify-center rounded-full border transition-colors active:scale-95"
+                    className="inline-flex size-10 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:bg-muted active:scale-95"
                   >
                     <X className="size-5" strokeWidth={2} aria-hidden="true" />
                   </button>
@@ -219,7 +216,7 @@ const MobileMenu = ({ stars }: MobileMenuProps) => {
 
                 <div className="flex-1 overflow-y-auto overscroll-contain px-5 pt-2 pb-6">
                   <nav aria-label="Primary">
-                    <ul className="list-none space-y-1">
+                    <ul className="flex list-none flex-col gap-1">
                       {primaryLinks.map((link, index) => (
                         <li
                           key={link.href}
@@ -236,7 +233,7 @@ const MobileMenu = ({ stars }: MobileMenuProps) => {
                           <Link
                             href={link.href}
                             onClick={() => setOpen(false)}
-                            className="text-gray-12 hover:bg-gray-3 -mx-4 flex h-12 items-center rounded-xl px-4 text-xl font-medium transition-colors"
+                            className="-mx-4 flex h-12 items-center rounded-xl px-4 text-xl font-medium text-foreground transition-colors hover:bg-muted"
                           >
                             {link.text}
                           </Link>
@@ -245,9 +242,9 @@ const MobileMenu = ({ stars }: MobileMenuProps) => {
                     </ul>
                   </nav>
 
-                  <div className="bg-gray-4 my-5 h-px" />
+                  <div className="my-5 h-px bg-muted" />
 
-                  <ul className="list-none space-y-1">
+                  <ul className="flex list-none flex-col gap-1">
                     {secondaryLinks.map((link, index) => (
                       <li
                         key={link.href}
@@ -265,7 +262,7 @@ const MobileMenu = ({ stars }: MobileMenuProps) => {
                           href={link.href}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-gray-11 hover:bg-gray-3 hover:text-gray-12 -mx-4 flex h-11 items-center gap-3 rounded-xl px-4 transition-colors"
+                          className="-mx-4 flex h-11 items-center gap-3 rounded-xl px-4 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                         >
                           {link.icon}
                           <span className="text-base font-medium">
@@ -279,10 +276,10 @@ const MobileMenu = ({ stars }: MobileMenuProps) => {
                   </ul>
                 </div>
 
-                <div className="border-gray-4 bg-gray-1 shrink-0 space-y-3 border-t px-5 pt-4 pb-[calc(env(safe-area-inset-bottom)+24px)]">
+                <div className="flex shrink-0 flex-col gap-3 border-t border-border bg-card px-5 pt-4 pb-[calc(env(safe-area-inset-bottom)+24px)]">
                   <Button
                     variant="dark"
-                    href="/signup"
+                    href="https://cap.so/signup"
                     size="lg"
                     className="w-full font-medium"
                     onClick={() => setOpen(false)}
@@ -291,7 +288,7 @@ const MobileMenu = ({ stars }: MobileMenuProps) => {
                   </Button>
                   <Button
                     variant="gray"
-                    href="/login"
+                    href="https://cap.so/login"
                     size="lg"
                     className="w-full font-medium"
                     onClick={() => setOpen(false)}

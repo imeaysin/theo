@@ -193,7 +193,7 @@ const MockSharePage = () => {
   }, [])
 
   return (
-    <div ref={containerRef} className="bg-gray-2 select-none">
+    <div ref={containerRef} className="bg-muted select-none">
       <motion.div
         className="px-4 pt-4 md:px-6 md:pt-6"
         initial={{ opacity: 0, y: 10 }}
@@ -201,36 +201,36 @@ const MockSharePage = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.4, delay: 0.2 }}
       >
-        <h3 className="text-gray-12 text-sm font-medium md:text-lg">
+        <h3 className="text-sm font-medium text-foreground md:text-lg">
           How to build a React component
         </h3>
         <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2">
-            <div className="h-6 w-6 shrink-0 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 md:h-7 md:w-7" />
+            <div className="h-6 w-6 shrink-0 rounded-full bg-linear-to-br from-primary/20 to-primary/20 md:h-7 md:w-7" />
             <div className="flex flex-col">
-              <span className="text-gray-12 text-[11px] font-medium md:text-xs">
+              <span className="text-xs font-medium text-foreground md:text-xs">
                 John Doe
               </span>
-              <span className="text-gray-10 text-[10px] md:text-[11px]">
+              <span className="text-xs text-muted-foreground md:text-xs">
                 2 minutes ago
               </span>
             </div>
           </div>
           <motion.button
             type="button"
-            className="border-gray-5 text-gray-11 hover:bg-gray-2 flex w-fit cursor-pointer items-center gap-1.5 rounded-lg border bg-white px-2.5 py-1 text-[10px] font-medium transition-colors md:px-3 md:py-1.5 md:text-xs"
+            className="flex w-fit cursor-pointer items-center gap-1.5 rounded-lg border border-border bg-background px-2.5 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted md:px-3 md:py-1.5 md:text-xs"
             onClick={handleCopyLink}
             whileTap={{ scale: 0.95 }}
           >
             {linkCopied ? (
               <>
-                <Check className="size-3 text-green-500" />
-                <span className="text-green-600">Copied!</span>
+                <Check className="size-3 text-primary" />
+                <span className="text-primary">Copied!</span>
               </>
             ) : (
               <>
                 cap.link/m4k92x
-                <Copy className="text-gray-9 size-3" />
+                <Copy className="size-3 text-muted-foreground" />
               </>
             )}
           </motion.button>
@@ -245,7 +245,7 @@ const MockSharePage = () => {
         transition={{ duration: 0.5, delay: 0.3 }}
       >
         <div className="flex-1">
-          <div className="border-gray-5 group relative block aspect-video w-full overflow-hidden rounded-xl border bg-gradient-to-br from-neutral-100 to-neutral-200 md:rounded-2xl">
+          <div className="group relative block aspect-video w-full overflow-hidden rounded-xl border border-border bg-linear-to-br from-muted to-muted md:rounded-2xl">
             <video
               ref={videoRef}
               className="absolute inset-0 h-full w-full object-cover"
@@ -259,21 +259,21 @@ const MockSharePage = () => {
 
             <button
               type="button"
-              className="absolute inset-0 z-[5] cursor-pointer bg-transparent"
+              className="absolute inset-0 z-5 cursor-pointer bg-transparent"
               onClick={handlePlayPause}
             />
 
             <AnimatePresence>
               {!isPlaying && (
                 <motion.div
-                  className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-black/20"
+                  className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-foreground/20"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.15 }}
                 >
                   <motion.div
-                    className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 shadow-lg backdrop-blur-sm md:h-14 md:w-14"
+                    className="flex h-10 w-10 items-center justify-center rounded-full bg-background/90 shadow-lg backdrop-blur-sm md:h-14 md:w-14"
                     initial={{ scale: 0.8 }}
                     animate={{ scale: 1 }}
                     exit={{ scale: 0.8 }}
@@ -284,7 +284,7 @@ const MockSharePage = () => {
                     }}
                   >
                     <Play
-                      className="text-gray-12 ml-0.5 size-4 md:size-6"
+                      className="ml-0.5 size-4 text-foreground md:size-6"
                       fill="currentColor"
                     />
                   </motion.div>
@@ -297,7 +297,7 @@ const MockSharePage = () => {
                 isPlaying ? "opacity-0 group-hover:opacity-100" : "opacity-100"
               }`}
             >
-              <div className="flex items-center gap-1.5 bg-gradient-to-t from-black/60 to-transparent px-2 py-1.5 md:px-3 md:py-2">
+              <div className="flex items-center gap-1.5 bg-linear-to-t from-foreground/50 to-transparent px-2 py-1.5 md:px-3 md:py-2">
                 <button
                   type="button"
                   className="shrink-0 cursor-pointer"
@@ -305,23 +305,23 @@ const MockSharePage = () => {
                 >
                   {isPlaying ? (
                     <Pause
-                      className="size-3 text-white md:size-4"
-                      fill="white"
+                      className="size-3 text-primary-foreground md:size-4"
+                      fill="currentColor"
                     />
                   ) : (
                     <Play
-                      className="ml-px size-3 text-white md:size-4"
-                      fill="white"
+                      className="ml-px size-3 text-primary-foreground md:size-4"
+                      fill="currentColor"
                     />
                   )}
                 </button>
-                <div className="relative h-0.5 flex-1 overflow-hidden rounded-full bg-white/30 md:h-1">
+                <div className="relative h-0.5 flex-1 overflow-hidden rounded-full bg-background/30 md:h-1">
                   <div
-                    className="absolute top-0 left-0 h-full rounded-full bg-white/80"
+                    className="absolute top-0 left-0 h-full rounded-full bg-background/80"
                     style={{ width: `${progress}%` }}
                   />
                 </div>
-                <span className="shrink-0 font-mono text-[7px] text-white/70 md:text-[9px]">
+                <span className="shrink-0 font-mono text-xs text-primary-foreground/70 md:text-xs">
                   {formatTime(videoRef.current?.currentTime || 0)} /{" "}
                   {formatTime(videoRef.current?.duration || 0)}
                 </span>
@@ -330,8 +330,8 @@ const MockSharePage = () => {
           </div>
         </div>
 
-        <div className="border-gray-5 hidden w-56 flex-col overflow-hidden rounded-xl border bg-white md:rounded-2xl lg:flex xl:w-64">
-          <div className="border-gray-4 flex border-b">
+        <div className="hidden w-56 flex-col overflow-hidden rounded-xl border border-border bg-background md:rounded-2xl lg:flex xl:w-64">
+          <div className="flex border-b border-border">
             {(
               [
                 ["activity", "Activity"],
@@ -342,10 +342,10 @@ const MockSharePage = () => {
               <button
                 key={key}
                 type="button"
-                className={`flex-1 cursor-pointer px-3 py-2 text-[10px] font-medium transition-colors ${
+                className={`flex-1 cursor-pointer px-3 py-2 text-xs font-medium transition-colors ${
                   activeTab === key
-                    ? "text-gray-12 border-b-2 border-blue-500"
-                    : "text-gray-9 hover:text-gray-11"
+                    ? "border-b-2 border-primary text-foreground"
+                    : "text-muted-foreground hover:text-muted-foreground"
                 }`}
                 onClick={() => handleTabClick(key)}
               >
@@ -358,30 +358,30 @@ const MockSharePage = () => {
               {activeTab === "activity" && (
                 <motion.div
                   key="activity"
-                  className="space-y-3"
+                  className="flex flex-col gap-3"
                   initial={{ opacity: 0, x: -8 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 8 }}
                   transition={{ duration: 0.15 }}
                 >
                   <div className="flex items-start gap-2">
-                    <div className="mt-0.5 h-5 w-5 shrink-0 rounded-full bg-green-100" />
+                    <div className="mt-0.5 h-5 w-5 shrink-0 rounded-full bg-primary/10" />
                     <div>
-                      <span className="text-gray-12 text-[10px] font-medium">
+                      <span className="text-xs font-medium text-foreground">
                         Sarah M.
                       </span>
-                      <p className="text-gray-10 mt-0.5 text-[9px]">
+                      <p className="mt-0.5 text-xs text-muted-foreground">
                         This is really helpful, thanks!
                       </p>
                     </div>
                   </div>
                   <div className="flex items-start gap-2">
-                    <div className="mt-0.5 h-5 w-5 shrink-0 rounded-full bg-amber-100" />
+                    <div className="mt-0.5 h-5 w-5 shrink-0 rounded-full bg-accent" />
                     <div>
-                      <span className="text-gray-12 text-[10px] font-medium">
+                      <span className="text-xs font-medium text-foreground">
                         Mike R.
                       </span>
-                      <p className="text-gray-10 mt-0.5 text-[9px]">
+                      <p className="mt-0.5 text-xs text-muted-foreground">
                         Great walkthrough
                       </p>
                     </div>
@@ -389,10 +389,10 @@ const MockSharePage = () => {
                   <div className="flex items-start gap-2">
                     <div className="mt-0.5 h-5 w-5 shrink-0 rounded-full bg-purple-100" />
                     <div>
-                      <span className="text-gray-12 text-[10px] font-medium">
+                      <span className="text-xs font-medium text-foreground">
                         Alex K.
                       </span>
-                      <p className="text-gray-10 mt-0.5 text-[9px]">
+                      <p className="mt-0.5 text-xs text-muted-foreground">
                         Can you share the repo?
                       </p>
                     </div>
@@ -407,10 +407,10 @@ const MockSharePage = () => {
                   exit={{ opacity: 0, x: 8 }}
                   transition={{ duration: 0.15 }}
                 >
-                  <span className="text-gray-8 flex items-center gap-1 text-[9px] font-medium">
+                  <span className="flex items-center gap-1 text-xs font-medium text-muted-foreground">
                     <Sparkles className="size-2.5" /> Generated by Cap AI
                   </span>
-                  <p className="text-gray-11 mt-1.5 text-[9px] leading-relaxed">
+                  <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
                     A step-by-step walkthrough of building a reusable React
                     component from scratch, covering props, state management,
                     and testing best practices.
@@ -420,35 +420,35 @@ const MockSharePage = () => {
               {activeTab === "transcript" && (
                 <motion.div
                   key="transcript"
-                  className="space-y-2"
+                  className="flex flex-col gap-2"
                   initial={{ opacity: 0, x: -8 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 8 }}
                   transition={{ duration: 0.15 }}
                 >
                   <div className="flex gap-2">
-                    <span className="w-6 shrink-0 text-[9px] text-blue-500">
+                    <span className="w-6 shrink-0 text-xs text-primary">
                       0:00
                     </span>
-                    <span className="text-gray-11 text-[9px]">
+                    <span className="text-xs text-muted-foreground">
                       Hey everyone, today we're going to build a React
                       component...
                     </span>
                   </div>
                   <div className="flex gap-2">
-                    <span className="w-6 shrink-0 text-[9px] text-blue-500">
+                    <span className="w-6 shrink-0 text-xs text-primary">
                       0:12
                     </span>
-                    <span className="text-gray-11 text-[9px]">
+                    <span className="text-xs text-muted-foreground">
                       First, let's set up our project structure and install the
                       dependencies...
                     </span>
                   </div>
                   <div className="flex gap-2">
-                    <span className="w-6 shrink-0 text-[9px] text-blue-500">
+                    <span className="w-6 shrink-0 text-xs text-primary">
                       0:28
                     </span>
-                    <span className="text-gray-11 text-[9px]">
+                    <span className="text-xs text-muted-foreground">
                       Now let's create our component file and define the
                       props...
                     </span>
@@ -467,12 +467,12 @@ const MockSharePage = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.4, delay: 0.4 }}
       >
-        <div className="border-gray-5 relative flex w-fit items-center gap-1 rounded-full border bg-white p-1.5 md:gap-1.5 md:p-2">
+        <div className="relative flex w-fit items-center gap-1 rounded-full border border-border bg-background p-1.5 md:gap-1.5 md:p-2">
           {EMOJIS.map((emoji, i) => (
             <motion.button
               key={emoji}
               type="button"
-              className="hover:bg-gray-2 font-emoji relative flex size-6 cursor-pointer items-center justify-center rounded-full text-xs md:size-8 md:text-base"
+              className="font-emoji relative flex size-6 cursor-pointer items-center justify-center rounded-full text-xs hover:bg-muted md:size-8 md:text-base"
               onClick={() => handleEmojiClick(emoji, i)}
               whileTap={{ scale: 1.4 }}
               transition={{
@@ -485,7 +485,7 @@ const MockSharePage = () => {
               <AnimatePresence>
                 {(emojiCounts[emoji] || 0) > 0 && (
                   <motion.span
-                    className="absolute -top-1 -right-1 flex h-[14px] min-w-[14px] items-center justify-center rounded-full bg-blue-500 px-0.5 text-[7px] font-bold text-white"
+                    className="absolute -top-1 -right-1 flex h-[14px] min-w-[14px] items-center justify-center rounded-full bg-primary px-0.5 text-xs font-bold text-primary-foreground"
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     key={emojiCounts[emoji]}
@@ -513,10 +513,10 @@ const MockSharePage = () => {
             ))}
           </AnimatePresence>
 
-          <div className="bg-gray-5 mx-1 hidden h-4 w-px sm:block md:mx-2" />
+          <div className="mx-1 hidden h-4 w-px bg-muted sm:block md:mx-2" />
           <motion.button
             type="button"
-            className="bg-gray-12 flex cursor-pointer items-center gap-1 rounded-full px-2.5 py-1 text-[9px] font-medium text-white md:px-3 md:py-1.5 md:text-[10px]"
+            className="flex cursor-pointer items-center gap-1 rounded-full bg-foreground px-2.5 py-1 text-xs font-medium text-primary-foreground md:px-3 md:py-1.5 md:text-xs"
             whileTap={{ scale: 0.92 }}
             onClick={() => setShowCommentInput((prev) => !prev)}
           >
@@ -535,12 +535,12 @@ const MockSharePage = () => {
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <div className="border-gray-5 flex items-center gap-2 rounded-xl border bg-white p-2">
-              <div className="h-5 w-5 shrink-0 rounded-full bg-gradient-to-br from-blue-400 to-blue-600" />
-              <div className="text-gray-8 flex-1 text-[10px] select-none">
+            <div className="flex items-center gap-2 rounded-xl border border-border bg-background p-2">
+              <div className="h-5 w-5 shrink-0 rounded-full bg-linear-to-br from-primary/20 to-primary/20" />
+              <div className="flex-1 text-xs text-muted-foreground select-none">
                 Add a comment...
               </div>
-              <div className="bg-gray-12 rounded-full px-2 py-0.5 text-[8px] font-medium text-white">
+              <div className="rounded-full bg-foreground px-2 py-0.5 text-xs font-medium text-primary-foreground">
                 Send
               </div>
             </div>
@@ -555,20 +555,20 @@ const MockSharePage = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.4, delay: 0.5 }}
       >
-        <div className="border-gray-3 rounded-xl border bg-white p-3 md:rounded-2xl md:p-4">
-          <h4 className="text-gray-12 text-xs font-medium md:text-sm">
+        <div className="rounded-xl border border-border bg-background p-3 md:rounded-2xl md:p-4">
+          <h4 className="text-xs font-medium text-foreground md:text-sm">
             Summary
           </h4>
-          <span className="text-gray-8 text-[9px] font-medium md:text-[10px]">
+          <span className="text-xs font-medium text-muted-foreground md:text-xs">
             Generated by Cap AI
           </span>
-          <p className="text-gray-11 mt-1.5 text-[10px] leading-relaxed md:mt-2 md:text-xs">
+          <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground md:mt-2 md:text-xs">
             A step-by-step walkthrough of building a reusable React component
             from scratch, covering props, state management, and testing best
             practices for production apps.
           </p>
 
-          <h4 className="text-gray-12 mt-3 mb-1.5 text-xs font-medium md:mt-4 md:mb-2 md:text-sm">
+          <h4 className="mt-3 mb-1.5 text-xs font-medium text-foreground md:mt-4 md:mb-2 md:text-sm">
             Chapters
           </h4>
           <div className="divide-gray-3 divide-y">
@@ -581,25 +581,25 @@ const MockSharePage = () => {
                 key={chapter.time}
                 type="button"
                 className={`flex w-full cursor-pointer items-center rounded px-1.5 py-1.5 transition-colors md:px-2 md:py-2 ${
-                  activeChapter === i ? "bg-blue-50" : "hover:bg-gray-2"
+                  activeChapter === i ? "bg-primary" : "hover:bg-muted"
                 }`}
                 onClick={() => setActiveChapter(activeChapter === i ? null : i)}
                 whileTap={{ scale: 0.98 }}
               >
                 <span
-                  className={`w-10 shrink-0 text-left text-[9px] md:w-14 md:text-xs ${
+                  className={`w-10 shrink-0 text-left text-xs md:w-14 md:text-xs ${
                     activeChapter === i
-                      ? "font-medium text-blue-500"
-                      : "text-gray-9"
+                      ? "font-medium text-primary"
+                      : "text-muted-foreground"
                   }`}
                 >
                   {chapter.time}
                 </span>
                 <span
-                  className={`text-[10px] md:text-xs ${
+                  className={`text-xs md:text-xs ${
                     activeChapter === i
-                      ? "font-medium text-blue-600"
-                      : "text-gray-12"
+                      ? "font-medium text-primary"
+                      : "text-foreground"
                   }`}
                 >
                   {chapter.title}
@@ -623,8 +623,8 @@ const MockSharePage = () => {
               damping: 25,
             }}
           >
-            <div className="bg-gray-12 flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] font-medium whitespace-nowrap text-white shadow-lg md:gap-2 md:px-4 md:py-2 md:text-xs">
-              <Check className="size-3 text-green-400 md:size-3.5" />
+            <div className="flex items-center gap-1.5 rounded-full bg-foreground px-3 py-1.5 text-xs font-medium whitespace-nowrap text-primary-foreground shadow-lg md:gap-2 md:px-4 md:py-2 md:text-xs">
+              <Check className="size-3 text-primary md:size-3.5" />
               Link copied to clipboard
             </div>
           </motion.div>
@@ -666,12 +666,12 @@ const InstantModeDetail = () => {
           >
             <Zap fill="yellow" className="size-5" strokeWidth={1.5} />
           </motion.div>
-          <span className="text-sm font-medium tracking-wider text-amber-600 uppercase">
+          <span className="text-sm font-medium tracking-wider text-primary uppercase">
             Instant Mode
           </span>
         </motion.div>
         <motion.h2
-          className="text-gray-12 mb-3 text-3xl font-medium md:text-4xl"
+          className="mb-3 text-3xl font-medium text-foreground md:text-4xl"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -680,7 +680,7 @@ const InstantModeDetail = () => {
           Share your screen or webcam instantly
         </motion.h2>
         <motion.p
-          className="text-gray-10 mx-auto max-w-[600px] text-base md:text-lg"
+          className="mx-auto max-w-[600px] text-base text-muted-foreground md:text-lg"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -702,8 +702,8 @@ const InstantModeDetail = () => {
         }}
         className="relative"
       >
-        <div className="pointer-events-none absolute -inset-4 rounded-3xl bg-gradient-to-b from-amber-100/40 via-amber-50/20 to-transparent blur-2xl md:-inset-8" />
-        <div className="border-gray-5 bg-gray-2 relative overflow-hidden rounded-2xl border shadow-xl shadow-black/5">
+        <div className="pointer-events-none absolute -inset-4 rounded-3xl bg-linear-to-b from-primary/20 via-primary/20 to-transparent blur-2xl md:-inset-8" />
+        <div className="relative overflow-hidden rounded-2xl border border-border bg-muted shadow-xl">
           <MockSharePage />
         </div>
       </motion.div>
@@ -727,14 +727,14 @@ const InstantModeDetail = () => {
                 damping: 25,
               },
             }}
-            className="border-gray-5 bg-gray-1 flex items-start gap-2.5 rounded-xl border p-3 transition-shadow hover:border-amber-200 hover:shadow-md sm:gap-3 sm:p-4"
+            className="flex items-start gap-2.5 rounded-xl border border-border bg-card p-3 transition-shadow hover:border-primary hover:shadow-md sm:gap-3 sm:p-4"
           >
-            <div className="mt-0.5 shrink-0 text-amber-600">{feature.icon}</div>
+            <div className="mt-0.5 shrink-0 text-primary">{feature.icon}</div>
             <div>
-              <h4 className="text-gray-12 text-sm font-medium">
+              <h4 className="text-sm font-medium text-foreground">
                 {feature.title}
               </h4>
-              <p className="text-gray-10 mt-0.5 text-xs">
+              <p className="mt-0.5 text-xs text-muted-foreground">
                 {feature.description}
               </p>
             </div>

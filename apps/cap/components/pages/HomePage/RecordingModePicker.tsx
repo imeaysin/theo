@@ -1,5 +1,6 @@
 "use client"
 
+import { cn } from "@workspace/ui-shadcn/lib/utils"
 import { AnimatePresence, motion } from "framer-motion"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { InstantIcon, ScreenshotIcon, StudioIcon } from "./modeIcons"
@@ -38,10 +39,6 @@ const modes: ModeOption[] = [
 ]
 
 const AUTO_CYCLE_INTERVAL = 3500
-
-const PILL_GAP = { base: 16, md: 20 }
-const PILL_PADDING = { base: 12, md: 14 }
-const CIRCLE_SIZE = { base: 72, md: 88 }
 
 const RecordingModePicker = () => {
   const [selected, setSelected] = useState<ModeId>("instant")
@@ -88,7 +85,7 @@ const RecordingModePicker = () => {
   const selectedMode = modes.find((m) => m.id === selected)
 
   return (
-    <div ref={containerRef} className="mx-auto w-full max-w-[1000px] px-5">
+    <section ref={containerRef} className="mx-auto w-full max-w-5xl px-5">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -96,13 +93,13 @@ const RecordingModePicker = () => {
         transition={{ duration: 0.6 }}
         className="mb-8 text-center md:mb-14"
       >
-        <span className="text-gray-9 mb-3 inline-block text-xs font-semibold tracking-[0.2em] uppercase">
+        <span className="mb-3 inline-block text-xs font-semibold tracking-[0.2em] text-muted-foreground uppercase">
           3 Modes
         </span>
-        <h2 className="text-gray-12 mb-3 text-3xl font-medium md:text-4xl">
+        <h2 className="mb-3 text-3xl font-medium text-foreground md:text-4xl">
           One app, every workflow
         </h2>
-        <p className="text-gray-10 mx-auto max-w-[600px] text-base md:text-lg">
+        <p className="mx-auto max-w-2xl text-base text-muted-foreground md:text-lg">
           Whether you need speed, studio quality, or a quick screenshot — Cap
           has a mode for it.
         </p>
@@ -115,165 +112,53 @@ const RecordingModePicker = () => {
         transition={{ duration: 0.5, delay: 0.15 }}
         className="flex flex-col items-center"
       >
-        <div className="relative">
+        <div className="relative" role="tablist" aria-label="Recording mode">
           <div
-            className="border-gray-5 bg-gray-3 absolute top-0 right-0 left-0 rounded-full border md:hidden"
-            style={{
-              height: `${CIRCLE_SIZE.base + PILL_PADDING.base * 2}px`,
-            }}
+            aria-hidden="true"
+            className="absolute inset-x-0 top-0 h-24 rounded-full border border-border bg-muted md:h-28"
           />
-          <div
-            className="border-gray-5 bg-gray-3 absolute top-0 right-0 left-0 hidden rounded-full border md:block"
-            style={{
-              height: `${CIRCLE_SIZE.md + PILL_PADDING.md * 2}px`,
-            }}
-          />
-
-          <div
-            className="relative grid grid-cols-3 md:hidden"
-            style={{
-              gap: `${PILL_GAP.base}px`,
-              padding: `${PILL_PADDING.base}px`,
-            }}
-          >
-            {modes.map((mode) => {
-              const isSelected = selected === mode.id
-
-              return (
-                <div
-                  key={mode.id}
-                  className="flex flex-col items-center"
-                  style={{ width: `${CIRCLE_SIZE.base}px` }}
+          <div className="relative grid grid-cols-3 gap-4 p-3 md:gap-5 md:p-3.5">
+            {modes.map((mode) => (
+              <button
+                key={mode.id}
+                type="button"
+                role="tab"
+                aria-selected={selected === mode.id}
+                aria-label={mode.title}
+                onClick={() => handleSelect(mode.id)}
+                className="group flex w-18 flex-col items-center gap-3 md:w-22 md:gap-4"
+              >
+                <span
+                  className={cn(
+                    "relative flex size-18 items-center justify-center rounded-full text-muted-foreground transition-colors duration-200 group-hover:bg-border group-hover:text-foreground md:size-22",
+                    selected === mode.id && "bg-border text-foreground"
+                  )}
                 >
-                  <motion.button
-                    type="button"
-                    onClick={() => handleSelect(mode.id)}
-                    className="relative flex cursor-pointer items-center justify-center rounded-full"
-                    style={{
-                      width: `${CIRCLE_SIZE.base}px`,
-                      height: `${CIRCLE_SIZE.base}px`,
-                    }}
-                    animate={{
-                      backgroundColor: isSelected
-                        ? "var(--gray-7)"
-                        : "var(--gray-3)",
-                    }}
-                    whileHover={{
-                      backgroundColor: "var(--gray-7)",
-                    }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    {isSelected && (
-                      <motion.div
-                        className="absolute inset-0 rounded-full"
-                        layoutId="modeRing"
-                        style={{
-                          boxShadow:
-                            "0 0 0 3px var(--gray-1), 0 0 0 5px var(--blue-9)",
-                        }}
-                        transition={{
-                          type: "spring",
-                          stiffness: 400,
-                          damping: 30,
-                        }}
-                      />
-                    )}
-                    <mode.icon
-                      className={`size-7 transition-colors duration-200 ${
-                        isSelected ? "text-gray-12" : "text-gray-10"
-                      }`}
+                  {selected === mode.id && (
+                    <motion.span
+                      layoutId="mode-ring"
+                      className="absolute inset-0 rounded-full ring-2 ring-primary ring-offset-3 ring-offset-background"
+                      transition={{
+                        type: "spring",
+                        stiffness: 400,
+                        damping: 30,
+                      }}
                     />
-                  </motion.button>
-
-                  <motion.span
-                    className="mt-3 cursor-pointer text-sm font-medium whitespace-nowrap"
-                    onClick={() => handleSelect(mode.id)}
-                    animate={{
-                      color: isSelected ? "var(--gray-12)" : "var(--gray-9)",
-                      opacity: isSelected ? 1 : 0.6,
-                    }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    {mode.title}
-                  </motion.span>
-                </div>
-              )
-            })}
-          </div>
-
-          <div
-            className="relative hidden grid-cols-3 md:grid"
-            style={{
-              gap: `${PILL_GAP.md}px`,
-              padding: `${PILL_PADDING.md}px`,
-            }}
-          >
-            {modes.map((mode) => {
-              const isSelected = selected === mode.id
-
-              return (
-                <div
-                  key={mode.id}
-                  className="flex flex-col items-center"
-                  style={{ width: `${CIRCLE_SIZE.md}px` }}
+                  )}
+                  <mode.icon className="size-7 md:size-8" />
+                </span>
+                <span
+                  className={cn(
+                    "text-sm font-medium text-muted-foreground transition-colors",
+                    selected === mode.id && "text-foreground"
+                  )}
                 >
-                  <motion.button
-                    type="button"
-                    onClick={() => handleSelect(mode.id)}
-                    className="relative flex cursor-pointer items-center justify-center rounded-full"
-                    style={{
-                      width: `${CIRCLE_SIZE.md}px`,
-                      height: `${CIRCLE_SIZE.md}px`,
-                    }}
-                    animate={{
-                      backgroundColor: isSelected
-                        ? "var(--gray-7)"
-                        : "var(--gray-3)",
-                    }}
-                    whileHover={{
-                      backgroundColor: "var(--gray-7)",
-                    }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    {isSelected && (
-                      <motion.div
-                        className="absolute inset-0 rounded-full"
-                        layoutId="modeRingMd"
-                        style={{
-                          boxShadow:
-                            "0 0 0 3px var(--gray-1), 0 0 0 5.5px var(--blue-9)",
-                        }}
-                        transition={{
-                          type: "spring",
-                          stiffness: 400,
-                          damping: 30,
-                        }}
-                      />
-                    )}
-                    <mode.icon
-                      className={`size-8 transition-colors duration-200 ${
-                        isSelected ? "text-gray-12" : "text-gray-10"
-                      }`}
-                    />
-                  </motion.button>
-
-                  <motion.span
-                    className="mt-4 cursor-pointer text-[15px] font-medium whitespace-nowrap"
-                    onClick={() => handleSelect(mode.id)}
-                    animate={{
-                      color: isSelected ? "var(--gray-12)" : "var(--gray-9)",
-                      opacity: isSelected ? 1 : 0.6,
-                    }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    {mode.title}
-                  </motion.span>
-                </div>
-              )
-            })}
+                  {mode.title}
+                </span>
+              </button>
+            ))}
           </div>
         </div>
-
         <AnimatePresence mode="wait">
           {selectedMode && (
             <motion.div
@@ -282,16 +167,16 @@ const RecordingModePicker = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
-              className="mt-6 max-w-[480px] px-2 text-center md:mt-8"
+              className="mt-7 min-h-14 max-w-lg px-2 text-center md:mt-9"
             >
-              <p className="text-gray-10 text-base leading-relaxed">
+              <p className="text-base leading-relaxed text-muted-foreground">
                 {selectedMode.description}
               </p>
             </motion.div>
           )}
         </AnimatePresence>
       </motion.div>
-    </div>
+    </section>
   )
 }
 

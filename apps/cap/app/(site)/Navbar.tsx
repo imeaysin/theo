@@ -10,25 +10,21 @@ interface NavbarProps {
 
 export const Navbar = ({ stars }: NavbarProps) => {
   return (
-    <header className="fixed top-4 right-0 left-0 z-[51] lg:top-6">
-      <nav className="relative mx-auto h-fit w-full max-w-[calc(100%-20px)] rounded-full border border-zinc-200 bg-white p-2 lg:max-w-fit">
+    <header className="fixed top-4 right-0 left-0 z-51 lg:top-6">
+      <nav className="relative mx-auto h-fit w-full max-w-[calc(100%-20px)] rounded-full border border-border bg-background p-2 lg:max-w-fit">
         <div className="mx-auto flex h-full max-w-5xl items-center justify-between gap-12 transition-all">
           <div className="flex items-center">
             <Link passHref href="/home">
               <Logo
-                className="transition-all duration-200 ease-out"
+                className="h-10 w-24 transition-all duration-200 ease-out"
                 viewBoxDimensions="0 0 120 40"
-                style={{
-                  width: 90,
-                  height: 40,
-                }}
               />
             </Link>
             <div className="hidden lg:flex">
               <DesktopNavLinks />
             </div>
           </div>
-          <div className="hidden items-center space-x-2 lg:flex">
+          <div className="hidden items-center gap-2 lg:flex">
             <Button
               variant="outline"
               icon={
@@ -43,7 +39,7 @@ export const Navbar = ({ stars }: NavbarProps) => {
             </Button>
             <Button
               variant="gray"
-              href="/login"
+              href="https://cap.so/login"
               size="sm"
               className="w-full font-medium sm:w-auto"
             >
@@ -51,7 +47,7 @@ export const Navbar = ({ stars }: NavbarProps) => {
             </Button>
             <Button
               variant="dark"
-              href="/signup"
+              href="https://cap.so/signup"
               size="sm"
               className="w-full font-medium sm:w-auto"
             >

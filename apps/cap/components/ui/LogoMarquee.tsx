@@ -1,3 +1,4 @@
+import Image from "next/image"
 import type React from "react"
 
 interface LogoMarqueeProps {
@@ -44,7 +45,7 @@ export const LogoMarquee: React.FC<LogoMarqueeProps> = ({ className = "" }) => {
   return (
     <div className={`relative w-full overflow-hidden ${className}`}>
       {/* Fade gradient on the left side */}
-      <div className="absolute top-0 left-0 z-10 h-full w-12 bg-gradient-to-r from-[#F2F2F2] to-transparent"></div>
+      <div className="absolute top-0 left-0 z-10 h-full w-12 bg-linear-to-r from-background to-transparent"></div>
 
       <div className="animate-marquee flex">
         {/* First set of logos */}
@@ -53,13 +54,12 @@ export const LogoMarquee: React.FC<LogoMarqueeProps> = ({ className = "" }) => {
             key={`logo-1-${index}`}
             className="mx-5 flex shrink-0 items-center justify-center"
           >
-            <img
+            <Image
               alt={logo.alt}
               loading="lazy"
               width={logo.width}
               height={logo.height}
-              decoding="async"
-              style={{ color: "transparent", opacity: 0.5 }}
+              className="opacity-50"
               src={logo.src}
             />
           </div>
@@ -71,13 +71,12 @@ export const LogoMarquee: React.FC<LogoMarqueeProps> = ({ className = "" }) => {
             key={`logo-2-${index}`}
             className="mx-5 flex shrink-0 items-center justify-center"
           >
-            <img
+            <Image
               alt={logo.alt}
               loading="lazy"
               width={logo.width}
               height={logo.height}
-              decoding="async"
-              style={{ color: "transparent", opacity: 0.5 }}
+              className="opacity-50"
               src={logo.src}
             />
           </div>
@@ -85,7 +84,7 @@ export const LogoMarquee: React.FC<LogoMarqueeProps> = ({ className = "" }) => {
       </div>
 
       {/* Fade gradient on the right side */}
-      <div className="absolute top-0 right-0 z-10 h-full w-12 bg-gradient-to-l from-[#F2F2F2] to-transparent"></div>
+      <div className="absolute top-0 right-0 z-10 h-full w-12 bg-linear-to-l from-background to-transparent"></div>
     </div>
   )
 }

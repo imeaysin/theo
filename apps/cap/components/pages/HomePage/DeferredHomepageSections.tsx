@@ -13,7 +13,7 @@ import Testimonials from "./Testimonials"
 
 export function DeferredHomepageSections() {
   return (
-    <div className="space-y-20 sm:space-y-[120px] lg:space-y-[180px]">
+    <div className="flex flex-col gap-20 sm:gap-28 lg:gap-40">
       <RecordingModePicker />
       <InstantModeDetail />
       <StudioModeDetail />

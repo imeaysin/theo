@@ -115,7 +115,7 @@ export const PlatformIcons: React.FC<PlatformIconsProps> = ({
             width="1em"
             height="1em"
             fill="currentColor"
-            className="text-gray-12 size-[24px] opacity-90"
+            className="size-[24px] text-foreground opacity-90"
             viewBox="0 0 384 512"
           >
             <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9m-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3" />
@@ -124,7 +124,7 @@ export const PlatformIcons: React.FC<PlatformIconsProps> = ({
       </div>
       <div>
         <a
-          href="/download/windows"
+          href="https://cap.so/download/windows"
           onClick={() =>
             trackEvent("download_cta_clicked", {
               source_page: source,
@@ -142,8 +142,7 @@ export const PlatformIcons: React.FC<PlatformIconsProps> = ({
             width="1em"
             height="1em"
             fill="currentColor"
-            style={{ marginTop: "1.5px" }}
-            className="text-gray-12 size-[24px] opacity-90"
+            className="mt-px size-6 text-foreground opacity-90"
             viewBox="0 0 256 256"
           >
             <path d="M112 144v51.64a8 8 0 0 1-8 8 8.5 8.5 0 0 1-1.43-.13l-64-11.64A8 8 0 0 1 32 184v-40a8 8 0 0 1 8-8h64a8 8 0 0 1 8 8m-2.87-89.78a8 8 0 0 0-6.56-1.73l-64 11.64A8 8 0 0 0 32 72v40a8 8 0 0 0 8 8h64a8 8 0 0 0 8-8V60.36a8 8 0 0 0-2.87-6.14M216 136h-80a8 8 0 0 0-8 8v57.45a8 8 0 0 0 6.57 7.88l80 14.54a7.6 7.6 0 0 0 1.43.13 8 8 0 0 0 8-8v-72a8 8 0 0 0-8-8m5.13-102.14a8 8 0 0 0-6.56-1.73l-80 14.55a8 8 0 0 0-6.57 7.87V112a8 8 0 0 0 8 8h80a8 8 0 0 0 8-8V40a8 8 0 0 0-2.87-6.14" />
@@ -153,7 +152,7 @@ export const PlatformIcons: React.FC<PlatformIconsProps> = ({
       </div>
       <div>
         <a
-          href="/download/linux-deb"
+          href="https://cap.so/download/linux-deb"
           onClick={() =>
             trackEvent("download_cta_clicked", {
               source_page: source,
@@ -171,7 +170,7 @@ export const PlatformIcons: React.FC<PlatformIconsProps> = ({
             width="1em"
             height="1em"
             fill="currentColor"
-            className="text-gray-12 size-[24px] opacity-90"
+            className="size-[24px] text-foreground opacity-90"
             viewBox="0 0 24 24"
           >
             <path d="M12 2a4.5 4.5 0 0 0-4.5 4.5c0 1.35.4 2.4.84 3.52.24.62.5 1.27.7 2.02C6.53 13.5 5 16.14 5 19.5 5 21.16 6.34 22 8 22c1.16 0 2.26-.5 3.06-1.28.58.18 1.3.28 2.06.28s1.48-.1 2.06-.28C15.98 21.5 17.08 22 18.24 22 19.9 22 21 21.16 21 19.5c0-3.36-1.53-6-4.04-7.46.2-.75.46-1.4.7-2.02.44-1.12.84-2.17.84-3.52A4.5 4.5 0 0 0 14 2h-2Zm-1.5 4.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm4.5 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM10.2 9h3.6c-.27.47-.92 1-1.8 1s-1.53-.53-1.8-1ZM8 20.5c-.92 0-1.5-.36-1.5-1 0-2.5 1.02-4.55 2.76-5.72.2 1.66.58 3.6 1.24 5.08-.56.94-1.52 1.64-2.5 1.64Zm10.24 0c-.98 0-1.94-.7-2.5-1.64.66-1.48 1.04-3.42 1.24-5.08 1.74 1.17 2.52 3.22 2.52 5.72 0 .64-.34 1-1.26 1Z" />

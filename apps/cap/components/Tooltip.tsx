@@ -1,6 +1,7 @@
 "use client"
 
 import { cn as classNames } from "@workspace/ui-shadcn/lib/utils"
+import { Kbd, KbdGroup } from "@workspace/ui-shadcn/components/kbd"
 import {
   Tooltip as TooltipRoot,
   TooltipContent,
@@ -40,16 +41,11 @@ const Tooltip = ({
         >
           {content}
           {kbd && (
-            <div className="flex items-center gap-1">
+            <KbdGroup>
               {kbd.map((key, index) => (
-                <div
-                  className="bg-gray-3 border-gray-4 shadow-gray-3/50 flex size-5 min-w-fit items-center justify-center rounded-md border px-1 shadow-sm"
-                  key={index.toString()}
-                >
-                  <kbd className="text-gray-10 text-[11px]">{key}</kbd>
-                </div>
+                <Kbd key={index.toString()}>{key}</Kbd>
               ))}
-            </div>
+            </KbdGroup>
           )}
         </TooltipContent>
       </TooltipRoot>

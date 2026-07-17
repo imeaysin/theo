@@ -23,21 +23,21 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import UpgradeToPro from "../_components/UpgradeToPro"
 
 const GRADIENTS = [
-  "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-  "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
-  "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
-  "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",
-  "linear-gradient(135deg, #fa709a 0%, #fee140 100%)",
-  "linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)",
+  "linear-gradient(135deg, var(--primary), var(--accent))",
+  "linear-gradient(135deg, var(--accent), var(--destructive))",
+  "linear-gradient(135deg, var(--primary), var(--secondary))",
+  "linear-gradient(135deg, var(--secondary), var(--accent))",
+  "linear-gradient(135deg, var(--destructive), var(--accent))",
+  "linear-gradient(135deg, var(--muted-foreground), var(--accent))",
 ]
 
 const GRADIENT_COLORS: [string, string][] = [
-  ["#667eea", "#764ba2"],
-  ["#f093fb", "#f5576c"],
-  ["#4facfe", "#00f2fe"],
-  ["#43e97b", "#38f9d7"],
-  ["#fa709a", "#fee140"],
-  ["#a18cd1", "#fbc2eb"],
+  ["var(--primary)", "var(--accent)"],
+  ["var(--accent)", "var(--destructive)"],
+  ["var(--primary)", "var(--secondary)"],
+  ["var(--secondary)", "var(--accent)"],
+  ["var(--destructive)", "var(--accent)"],
+  ["var(--muted-foreground)", "var(--accent)"],
 ]
 
 interface AutoConfig {
@@ -132,8 +132,10 @@ const InteractiveSlider = ({
   return (
     <div>
       <div className="mb-1.5 flex items-center justify-between">
-        <span className="text-gray-11 text-[9px] font-medium">{label}</span>
-        <span className="text-gray-9 font-mono text-[8px]">
+        <span className="text-xs font-medium text-muted-foreground">
+          {label}
+        </span>
+        <span className="font-mono text-xs text-muted-foreground">
           {value}
           {unit}
         </span>
@@ -158,16 +160,16 @@ const InteractiveSlider = ({
           setDragging(false)
         }}
       >
-        <div className="bg-gray-4 relative h-1 w-full rounded-full">
+        <div className="relative h-1 w-full rounded-full bg-muted">
           <div
-            className="absolute top-0 left-0 h-full rounded-full bg-blue-500"
+            className="absolute top-0 left-0 h-full rounded-full bg-primary"
             style={{
               width: `${pct}%`,
               transition: dragging ? "none" : "width 0.6s ease",
             }}
           />
           <div
-            className="absolute top-1/2 h-3 w-3 rounded-full border-2 border-blue-500 bg-white shadow-sm shadow-blue-200/50"
+            className="absolute top-1/2 h-3 w-3 rounded-full border-2 border-primary bg-background shadow-sm shadow-primary/10"
             style={{
               left: `${pct}%`,
               transform: "translate(-50%, -50%)",
@@ -181,41 +183,41 @@ const InteractiveSlider = ({
 }
 
 const MockScreenContent = () => (
-  <div className="h-full w-full overflow-hidden bg-white">
-    <div className="flex items-center gap-1 border-b border-gray-200/70 bg-gray-50/80 px-2 py-1.5">
+  <div className="h-full w-full overflow-hidden bg-background">
+    <div className="flex items-center gap-1 border-b border-border bg-muted px-2 py-1.5">
       <div className="flex gap-1">
-        <div className="h-1.5 w-1.5 rounded-full bg-[#FF5F57]" />
-        <div className="h-1.5 w-1.5 rounded-full bg-[#FFBD2E]" />
-        <div className="h-1.5 w-1.5 rounded-full bg-[#28C840]" />
+        <div className="h-1.5 w-1.5 rounded-full bg-destructive" />
+        <div className="h-1.5 w-1.5 rounded-full bg-accent" />
+        <div className="h-1.5 w-1.5 rounded-full bg-primary" />
       </div>
-      <div className="mx-auto h-2 max-w-[60px] flex-1 rounded bg-gray-200/60" />
+      <div className="mx-auto h-2 max-w-[60px] flex-1 rounded bg-muted" />
     </div>
     <div className="flex h-[calc(100%-22px)]">
-      <div className="flex w-5 flex-col gap-1.5 border-r border-gray-200/70 bg-gray-50/50 p-1 pt-2">
-        <div className="aspect-square w-full rounded bg-blue-100/80" />
-        <div className="aspect-square w-full rounded bg-gray-200/60" />
-        <div className="aspect-square w-full rounded bg-gray-200/60" />
+      <div className="flex w-5 flex-col gap-1.5 border-r border-border bg-muted p-1 pt-2">
+        <div className="aspect-square w-full rounded bg-primary/80" />
+        <div className="aspect-square w-full rounded bg-muted" />
+        <div className="aspect-square w-full rounded bg-muted" />
       </div>
       <div className="flex-1 p-2">
-        <div className="mb-2 h-2 w-3/4 rounded bg-gray-200/70" />
-        <div className="mb-1 h-1.5 w-full rounded bg-gray-200/50" />
-        <div className="mb-3 h-1.5 w-5/6 rounded bg-gray-200/50" />
+        <div className="mb-2 h-2 w-3/4 rounded bg-muted" />
+        <div className="mb-1 h-1.5 w-full rounded bg-muted" />
+        <div className="mb-3 h-1.5 w-5/6 rounded bg-muted" />
         <div className="mb-2 grid grid-cols-2 gap-1.5">
-          <div className="rounded-lg border border-blue-100/80 bg-blue-50 p-2">
-            <div className="mb-1.5 h-1.5 w-3/4 rounded bg-blue-200/50" />
-            <div className="h-1 w-full rounded bg-blue-100/70" />
+          <div className="rounded-lg border border-primary/80 bg-primary p-2">
+            <div className="mb-1.5 h-1.5 w-3/4 rounded bg-primary/50" />
+            <div className="h-1 w-full rounded bg-primary/70" />
           </div>
-          <div className="rounded-lg border border-gray-200/60 bg-gray-50 p-2">
-            <div className="mb-1.5 h-1.5 w-2/3 rounded bg-gray-200/50" />
-            <div className="h-1 w-full rounded bg-gray-100" />
+          <div className="rounded-lg border border-border bg-muted p-2">
+            <div className="mb-1.5 h-1.5 w-2/3 rounded bg-muted" />
+            <div className="h-1 w-full rounded bg-muted" />
           </div>
         </div>
         <div className="flex gap-1.5">
-          <div className="flex h-4 items-center rounded bg-blue-500 px-3">
-            <div className="h-1 w-6 rounded bg-white/40" />
+          <div className="flex h-4 items-center rounded bg-primary px-3">
+            <div className="h-1 w-6 rounded bg-background/40" />
           </div>
-          <div className="flex h-4 items-center rounded border border-gray-200/80 bg-gray-100 px-3">
-            <div className="h-1 w-8 rounded bg-gray-300/70" />
+          <div className="flex h-4 items-center rounded border border-border bg-muted px-3">
+            <div className="h-1 w-8 rounded bg-muted" />
           </div>
         </div>
       </div>
@@ -234,23 +236,20 @@ const CursorSvg = ({ size = 18 }: { size?: number }) => {
       xmlns="http://www.w3.org/2000/svg"
       role="img"
       aria-label="Cursor"
-      style={{
-        filter:
-          "drop-shadow(0 2px 6px rgba(0,0,0,0.25)) drop-shadow(0 1px 2px rgba(0,0,0,0.15))",
-      }}
+      className="drop-shadow-md"
     >
       <title>Cursor</title>
       <path
         fillRule="evenodd"
         clipRule="evenodd"
         d="M4.501 3.2601L12.884 11.6611C13.937 12.7171 13.19 14.5191 11.699 14.5191L10.475 14.519L11.6908 17.4067C11.9038 17.9127 11.9068 18.4727 11.6998 18.9817C11.4918 19.4917 11.0978 19.8897 10.5898 20.1027C10.3338 20.2097 10.0658 20.2637 9.7918 20.2637C8.9608 20.2637 8.2158 19.7687 7.8938 19.0027L6.616 15.965L5.784 16.7031C4.703 17.6591 3 16.8921 3 15.4481V3.8811C3 3.0971 3.947 2.7051 4.501 3.2601Z"
-        fill="white"
+        className="fill-primary-foreground"
       />
       <path
         fillRule="evenodd"
         clipRule="evenodd"
         d="M4 4.53033C4 4.39933 4.159 4.33333 4.251 4.42633L12.159 12.3513C12.59 12.7833 12.284 13.5203 11.674 13.5203L8.97 13.5188L10.7696 17.7947C10.9966 18.3347 10.7426 18.9557 10.2036 19.1817C9.6626 19.4087 9.0426 19.1557 8.8166 18.6167L6.999 14.2928L5.139 15.9403C4.723 16.3083 4.0811 16.0518 4.007 15.5285L4 15.4273V4.53033Z"
-        fill="black"
+        className="fill-foreground"
       />
     </svg>
   )
@@ -339,8 +338,6 @@ const MockEditor = () => {
     setIsPlaying((prev) => !prev)
   }, [handleInteraction])
 
-  const shadowFraction = shadow / 100
-
   return (
     <motion.div
       className="absolute inset-0 flex flex-col overflow-hidden select-none"
@@ -362,41 +359,41 @@ const MockEditor = () => {
 					100% { width: 100%; }
 				}
 			`}</style>
-      <div className="border-gray-4 bg-gray-2 flex shrink-0 items-center justify-between border-b px-3 py-2 md:px-4 md:py-2.5">
+      <div className="flex shrink-0 items-center justify-between border-b border-border bg-muted px-3 py-2 md:px-4 md:py-2.5">
         <div className="flex items-center gap-2">
           <div className="flex gap-1.5">
             <motion.div
-              className="h-2 w-2 cursor-pointer rounded-full bg-[#FF5F57] md:h-2.5 md:w-2.5"
+              className="h-2 w-2 cursor-pointer rounded-full bg-destructive md:h-2.5 md:w-2.5"
               whileHover={{ scale: 1.4 }}
               whileTap={{ scale: 0.7 }}
               onClick={handleRedDot}
             />
             <motion.div
-              className="h-2 w-2 cursor-pointer rounded-full bg-[#FFBD2E] md:h-2.5 md:w-2.5"
+              className="h-2 w-2 cursor-pointer rounded-full bg-accent md:h-2.5 md:w-2.5"
               whileHover={{ scale: 1.4 }}
               whileTap={{ scale: 0.7 }}
             />
             <motion.div
-              className="h-2 w-2 cursor-pointer rounded-full bg-[#28C840] md:h-2.5 md:w-2.5"
+              className="h-2 w-2 cursor-pointer rounded-full bg-primary md:h-2.5 md:w-2.5"
               whileHover={{ scale: 1.4 }}
               whileTap={{ scale: 0.7 }}
             />
           </div>
-          <span className="text-gray-10 ml-1 text-[9px] md:ml-2 md:text-[10px]">
+          <span className="ml-1 text-xs text-muted-foreground md:ml-2 md:text-xs">
             My Recording.cap
           </span>
         </div>
         <div className="flex items-center gap-1.5 md:gap-2">
           <motion.button
             type="button"
-            className="border-gray-5 text-gray-11 flex min-w-[40px] cursor-pointer items-center justify-center gap-1 rounded-md border px-2 py-0.5 text-[8px] font-medium md:px-2.5 md:py-1 md:text-[9px]"
+            className="flex min-w-[40px] cursor-pointer items-center justify-center gap-1 rounded-md border border-border px-2 py-0.5 text-xs font-medium text-muted-foreground md:px-2.5 md:py-1 md:text-xs"
             whileTap={{ scale: 0.93 }}
             onClick={handleShare}
           >
             {shareCopied ? (
               <>
-                <Check className="size-2 text-green-500 md:size-2.5" />
-                <span className="text-green-600">Copied!</span>
+                <Check className="size-2 text-primary md:size-2.5" />
+                <span className="text-primary">Copied!</span>
               </>
             ) : (
               "Share"
@@ -404,7 +401,7 @@ const MockEditor = () => {
           </motion.button>
           <motion.button
             type="button"
-            className="flex min-w-[40px] cursor-pointer items-center justify-center gap-1 overflow-hidden rounded-md bg-blue-500 px-2 py-0.5 text-[8px] font-medium text-white md:px-2.5 md:py-1 md:text-[9px]"
+            className="flex min-w-[40px] cursor-pointer items-center justify-center gap-1 overflow-hidden rounded-md bg-primary px-2 py-0.5 text-xs font-medium text-primary-foreground md:px-2.5 md:py-1 md:text-xs"
             whileTap={{ scale: 0.93 }}
             onClick={handleExport}
           >
@@ -423,14 +420,14 @@ const MockEditor = () => {
               {exportState === "exporting" && (
                 <motion.div
                   key="exporting"
-                  className="h-1.5 w-8 overflow-hidden rounded-full bg-white/20 md:w-10"
+                  className="h-1.5 w-8 overflow-hidden rounded-full bg-background/20 md:w-10"
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.15 }}
                 >
                   <motion.div
-                    className="h-full rounded-full bg-white"
+                    className="h-full rounded-full bg-background"
                     initial={{ width: "0%" }}
                     animate={{ width: "100%" }}
                     transition={{ duration: 1.8, ease: "easeInOut" }}
@@ -446,7 +443,7 @@ const MockEditor = () => {
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.15 }}
                 >
-                  <Check className="size-2.5 text-green-300" />
+                  <Check className="size-2.5 text-primary" />
                   Done!
                 </motion.span>
               )}
@@ -456,10 +453,10 @@ const MockEditor = () => {
       </div>
 
       <div className="flex min-h-0 flex-1">
-        <div className="bg-gray-3 relative flex flex-1 items-center justify-center overflow-hidden p-3 md:p-6">
+        <div className="relative flex flex-1 items-center justify-center overflow-hidden bg-muted p-3 md:p-6">
           <div className="relative aspect-video w-full overflow-hidden rounded-md">
             <motion.div
-              className="absolute inset-0 bg-[#e8e8e8]"
+              className="absolute inset-0 bg-muted"
               initial={false}
               animate={{ opacity: gradientIndex === -1 ? 1 : 0 }}
               transition={{ duration: 0.6 }}
@@ -487,14 +484,12 @@ const MockEditor = () => {
               transition={{ duration: 0.8, ease: EASE }}
             >
               <motion.div
-                className="h-full w-full overflow-hidden"
+                className={`h-full w-full overflow-hidden ${
+                  shadow > 0 ? "shadow-xl" : "shadow-none"
+                }`}
                 initial={false}
                 animate={{
                   borderRadius: `${rounded}px`,
-                  boxShadow:
-                    shadowFraction > 0
-                      ? `0 25px 50px -12px rgba(0,0,0,${0.35 * shadowFraction}), 0 12px 24px -8px rgba(0,0,0,${0.2 * shadowFraction})`
-                      : "0 0 0 0px rgba(0,0,0,0)",
                 }}
                 transition={{ duration: 0.8, ease: EASE }}
               >
@@ -525,7 +520,7 @@ const MockEditor = () => {
               </motion.div>
             </div>
 
-            <div className="absolute right-0 bottom-0 left-0 z-30 flex items-center gap-1.5 bg-gradient-to-t from-black/40 to-transparent px-2 py-1.5">
+            <div className="absolute right-0 bottom-0 left-0 z-30 flex items-center gap-1.5 bg-linear-to-t from-foreground/50 to-transparent px-2 py-1.5">
               <motion.button
                 type="button"
                 className="shrink-0 cursor-pointer"
@@ -533,14 +528,20 @@ const MockEditor = () => {
                 whileTap={{ scale: 0.8 }}
               >
                 {isPlaying ? (
-                  <Pause className="size-3 text-white" fill="white" />
+                  <Pause
+                    className="size-3 text-primary-foreground"
+                    fill="currentColor"
+                  />
                 ) : (
-                  <Play className="ml-px size-3 text-white" fill="white" />
+                  <Play
+                    className="ml-px size-3 text-primary-foreground"
+                    fill="currentColor"
+                  />
                 )}
               </motion.button>
-              <div className="relative h-0.5 flex-1 overflow-hidden rounded-full bg-white/30">
+              <div className="relative h-0.5 flex-1 overflow-hidden rounded-full bg-background/30">
                 <div
-                  className="absolute top-0 left-0 h-full rounded-full bg-white/80"
+                  className="absolute top-0 left-0 h-full rounded-full bg-background/80"
                   style={{
                     width: "0%",
                     animation: `previewProgress ${PREVIEW_CURSOR_DURATION}s linear infinite`,
@@ -548,7 +549,7 @@ const MockEditor = () => {
                   }}
                 />
               </div>
-              <span className="shrink-0 font-mono text-[8px] text-white/70">
+              <span className="shrink-0 font-mono text-xs text-primary-foreground/70">
                 0:12
               </span>
             </div>
@@ -559,13 +560,13 @@ const MockEditor = () => {
               {!userInteracted && AUTO_CONFIGS[autoStep] && (
                 <motion.div
                   key={autoStep}
-                  className="flex items-center gap-1.5 rounded-lg bg-black/75 px-2.5 py-1 text-[9px] font-medium text-white backdrop-blur-sm"
+                  className="flex items-center gap-1.5 rounded-lg bg-foreground/75 px-2.5 py-1 text-xs font-medium text-primary-foreground backdrop-blur-sm"
                   initial={{ opacity: 0, y: 4 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -4 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <div className="h-1 w-1 rounded-full bg-blue-400" />
+                  <div className="h-1 w-1 rounded-full bg-primary" />
                   {autoStep === 0 || autoStep === 5
                     ? "Background"
                     : autoStep === 1
@@ -581,28 +582,28 @@ const MockEditor = () => {
           </div>
         </div>
 
-        <div className="border-gray-4 bg-gray-1 hidden w-40 shrink-0 flex-col overflow-hidden border-l md:flex lg:w-48 xl:w-52">
-          <div className="border-gray-4 flex shrink-0 items-center justify-around border-b px-2 py-2">
-            <div className="rounded-md bg-blue-50 p-1 text-blue-600 lg:p-1.5">
+        <div className="hidden w-40 shrink-0 flex-col overflow-hidden border-l border-border bg-card md:flex lg:w-48 xl:w-52">
+          <div className="flex shrink-0 items-center justify-around border-b border-border px-2 py-2">
+            <div className="rounded-md bg-primary p-1 text-primary lg:p-1.5">
               <ImageIcon className="size-3" />
             </div>
-            <div className="text-gray-8 rounded-md p-1 lg:p-1.5">
+            <div className="rounded-md p-1 text-muted-foreground lg:p-1.5">
               <Camera className="size-3" />
             </div>
-            <div className="text-gray-8 rounded-md p-1 lg:p-1.5">
+            <div className="rounded-md p-1 text-muted-foreground lg:p-1.5">
               <Volume2 className="size-3" />
             </div>
-            <div className="text-gray-8 rounded-md p-1 lg:p-1.5">
+            <div className="rounded-md p-1 text-muted-foreground lg:p-1.5">
               <MousePointer2 className="size-3" />
             </div>
-            <div className="text-gray-8 rounded-md p-1 lg:p-1.5">
+            <div className="rounded-md p-1 text-muted-foreground lg:p-1.5">
               <MessageSquare className="size-3" />
             </div>
           </div>
 
-          <div className="flex-1 space-y-3 overflow-y-auto p-2.5 lg:space-y-3.5 lg:p-3">
+          <div className="flex flex-1 flex-col gap-3 overflow-y-auto p-2.5 lg:gap-3.5 lg:p-3">
             <div>
-              <span className="text-gray-11 mb-2 block text-[9px] font-medium">
+              <span className="mb-2 block text-xs font-medium text-muted-foreground">
                 Background
               </span>
               <div className="flex flex-wrap gap-1.5">
@@ -615,17 +616,17 @@ const MockEditor = () => {
                     whileTap={{ scale: 0.85 }}
                   >
                     <motion.div
-                      className="h-4 w-4 shrink-0 rounded-full lg:h-5 lg:w-5"
+                      className={`size-4 shrink-0 rounded-full lg:size-5 ${
+                        gradientIndex === i
+                          ? "ring-2 ring-primary ring-offset-2 ring-offset-background"
+                          : "ring-1 ring-border"
+                      }`}
                       style={{
                         background: `linear-gradient(135deg, ${from}, ${to})`,
                       }}
                       initial={false}
                       animate={{
                         scale: gradientIndex === i ? 1.15 : 1,
-                        boxShadow:
-                          gradientIndex === i
-                            ? "0 0 0 1.5px white, 0 0 0 2.5px rgba(59,130,246,0.5)"
-                            : "0 0 0 0.5px rgba(0,0,0,0.1)",
                       }}
                       transition={{ duration: 0.3 }}
                     />
@@ -664,7 +665,7 @@ const MockEditor = () => {
               onInteract={handleInteraction}
             />
 
-            <div className="border-gray-4 border-t pt-2">
+            <div className="border-t border-border pt-2">
               <InteractiveSlider
                 label="Cursor Size"
                 value={cursorSize}
@@ -694,18 +695,18 @@ const StudioModeDetail = () => {
       >
         <div className="mb-4 flex items-center justify-center gap-2">
           <Clapperboard
-            fill="var(--blue-9)"
+            fill="var(--primary)"
             className="size-5"
             strokeWidth={1.5}
           />
-          <span className="text-blue-11 text-sm font-medium tracking-wider uppercase">
+          <span className="text-sm font-medium tracking-wider text-primary uppercase">
             Studio Mode
           </span>
         </div>
-        <h2 className="text-gray-12 mb-3 text-3xl font-medium md:text-4xl">
+        <h2 className="mb-3 text-3xl font-medium text-foreground md:text-4xl">
           Record in full quality, edit before you share
         </h2>
-        <p className="text-gray-10 mx-auto max-w-[600px] text-base md:text-lg">
+        <p className="mx-auto max-w-[600px] text-base text-muted-foreground md:text-lg">
           Studio mode records at the highest quality directly to your device —
           no compression, no upload. Then customize backgrounds, padding,
           corners, and more before sharing.
@@ -723,11 +724,8 @@ const StudioModeDetail = () => {
         }}
         className="relative"
       >
-        <div className="pointer-events-none absolute -inset-4 rounded-3xl bg-gradient-to-b from-blue-100/40 via-blue-50/20 to-transparent blur-2xl md:-inset-8" />
-        <div
-          className="border-gray-5 relative overflow-hidden rounded-xl border bg-white shadow-xl shadow-black/5 md:rounded-2xl"
-          style={{ aspectRatio: "16/10", minHeight: "220px" }}
-        >
+        <div className="pointer-events-none absolute -inset-4 rounded-3xl bg-linear-to-b from-primary/20 via-primary/20 to-transparent blur-2xl md:-inset-8" />
+        <div className="relative aspect-video min-h-56 overflow-hidden rounded-xl border border-border bg-background shadow-xl md:rounded-2xl">
           <MockEditor />
         </div>
       </motion.div>
@@ -742,14 +740,14 @@ const StudioModeDetail = () => {
         {studioFeatures.map((feature) => (
           <div
             key={feature.title}
-            className="border-gray-5 bg-gray-1 flex items-start gap-2.5 rounded-xl border p-3 sm:gap-3 sm:p-4"
+            className="flex items-start gap-2.5 rounded-xl border border-border bg-card p-3 sm:gap-3 sm:p-4"
           >
-            <div className="text-blue-11 mt-0.5 shrink-0">{feature.icon}</div>
+            <div className="mt-0.5 shrink-0 text-primary">{feature.icon}</div>
             <div>
-              <h4 className="text-gray-12 text-sm font-medium">
+              <h4 className="text-sm font-medium text-foreground">
                 {feature.title}
               </h4>
-              <p className="text-gray-10 mt-0.5 text-xs">
+              <p className="mt-0.5 text-xs text-muted-foreground">
                 {feature.description}
               </p>
             </div>

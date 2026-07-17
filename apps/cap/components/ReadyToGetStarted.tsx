@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/cap-ui"
 import { useDetectPlatform } from "hooks/useDetectPlatform"
+import Image from "next/image"
 import Link from "next/link"
 import { getPlatformIcon } from "@/utils/platform"
 import { homepageCopy } from "../data/homepage-copy"
@@ -12,21 +13,20 @@ export function ReadyToGetStarted() {
   const loading = platform === null
 
   return (
-    <div
-      className="border-gray-5 relative mx-auto my-[150px] flex min-h-[300px] w-[calc(100%-20px)] max-w-[1000px] flex-col justify-center overflow-hidden rounded-[20px] border bg-white p-8 md:my-[200px] md:bg-center lg:my-[250px]"
-      style={{
-        backgroundImage: "url('/illustrations/ctabg.svg')",
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
-      }}
-    >
-      <div className="wrapper relative z-10 mx-auto flex h-full flex-col items-center justify-center">
+    <div className="relative mx-auto my-32 flex min-h-80 w-full max-w-5xl flex-col justify-center overflow-hidden rounded-2xl border border-border bg-background p-8 md:my-40 lg:my-48">
+      <Image
+        src="/illustrations/ctabg.svg"
+        alt=""
+        fill
+        className="object-cover"
+      />
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-screen-2xl flex-col items-center justify-center px-5 sm:px-8 lg:px-10">
         <div className="mx-auto mb-8 max-w-[800px] text-center">
-          <h2 className="text-gray-12 mb-3 text-3xl md:text-4xl">
+          <h2 className="mb-3 text-3xl text-foreground md:text-4xl">
             {homepageCopy.readyToGetStarted.title}
           </h2>
         </div>
-        <div className="mb-8 flex w-full flex-col items-center justify-center space-y-4 sm:flex-row sm:space-y-0 sm:space-x-2">
+        <div className="mb-8 flex w-full flex-col items-center justify-center gap-4 sm:flex-row sm:gap-2">
           <Button
             variant="dark"
             href="/pricing"
@@ -43,7 +43,7 @@ export function ReadyToGetStarted() {
             or,{" "}
             <Link
               href="/loom-alternative"
-              className="hover:text-gray-12 font-semibold underline"
+              className="font-semibold underline hover:text-foreground"
             >
               Switch from Loom
             </Link>

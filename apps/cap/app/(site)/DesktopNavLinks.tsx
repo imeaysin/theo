@@ -45,7 +45,7 @@ const Links: NavItem[] = [
         href: "/features/studio-mode",
         icon: (
           <Clapperboard
-            fill="var(--blue-9)"
+            fill="var(--primary)"
             className="size-4"
             strokeWidth={1.5}
           />
@@ -160,7 +160,7 @@ export function DesktopNavLinks() {
 
   return (
     <nav aria-label="Main">
-      <ul className="flex list-none items-center space-x-0 px-0">
+      <ul className="flex list-none items-center px-0">
         {Links.map((link) => {
           const isOpen = openDropdown === link.label
 
@@ -186,8 +186,8 @@ export function DesktopNavLinks() {
                     onClick={() => setOpenDropdown(link.label)}
                     className={classNames(
                       navigationMenuTriggerStyle(),
-                      "text-gray-10 hover:text-blue-9 focus:text-blue-9 flex items-center gap-1 px-2 py-0 text-sm font-medium transition-colors",
-                      isOpen && "text-blue-9"
+                      "flex items-center gap-1 px-2 py-0 text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus:text-primary",
+                      isOpen && "text-primary"
                     )}
                   >
                     {link.label}
@@ -210,23 +210,23 @@ export function DesktopNavLinks() {
                   >
                     <div className="relative" style={dropdownStyle(link.width)}>
                       <span
-                        className="absolute -top-[7px] left-1/2 z-10 size-3.5 -translate-x-1/2 rotate-45 rounded-tl-[4px] border-t border-l border-zinc-200/70 bg-white"
+                        className="absolute top-[-7px] left-1/2 z-10 size-3.5 -translate-x-1/2 rotate-45 rounded-tl-[4px] border-t border-l border-border bg-background"
                         aria-hidden="true"
                       />
-                      <div className="relative overflow-hidden rounded-2xl border border-zinc-200/70 bg-white shadow-xl">
+                      <div className="relative overflow-hidden rounded-2xl border border-border bg-background shadow-xl">
                         <ul className="grid list-none grid-cols-2 gap-1.5 p-3">
                           {link.dropdown.map((sublink) => (
                             <li key={sublink.href}>
                               <Link
                                 href={sublink.href}
                                 onClick={closeDropdown}
-                                className="group/item hover:bg-gray-2 focus-visible:bg-gray-2 block rounded-xl p-3 transition-colors duration-200 outline-none"
+                                className="group/item block rounded-xl p-3 transition-colors duration-200 outline-none hover:bg-muted focus-visible:bg-muted"
                               >
-                                <div className="text-gray-12 mb-0.5 flex items-center gap-2 text-sm font-semibold">
+                                <div className="mb-0.5 flex items-center gap-2 text-sm font-semibold text-foreground">
                                   {sublink.icon}
                                   <span>{sublink.label}</span>
                                 </div>
-                                <p className="line-clamp-2 text-[13px] leading-snug text-zinc-500">
+                                <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
                                   {sublink.sub}
                                 </p>
                               </Link>
@@ -243,7 +243,7 @@ export function DesktopNavLinks() {
                   onClick={closeDropdown}
                   className={classNames(
                     navigationMenuTriggerStyle(),
-                    "text-gray-10 hover:text-blue-9 focus:text-blue-9 px-2 py-0 text-sm font-medium"
+                    "px-2 py-0 text-sm font-medium text-muted-foreground hover:text-primary focus:text-primary"
                   )}
                 >
                   {link.label}

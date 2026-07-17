@@ -90,10 +90,10 @@ const features: Feature[] = homepageCopy.features.features.map(
 const Features = () => {
   return (
     <div className="mx-auto max-w-[1440px] px-5 text-center">
-      <h2 className="text-gray-12 mb-3 text-4xl font-medium">
+      <h2 className="mb-3 text-4xl font-medium text-foreground">
         {homepageCopy.features.title}
       </h2>
-      <p className="text-gray-10 mx-auto w-full max-w-[600px] text-lg leading-[1.75rem]">
+      <p className="mx-auto w-full max-w-[600px] text-lg leading-7 text-muted-foreground">
         {homepageCopy.features.subtitle}
       </p>
       <div className="mt-[52px] flex flex-col gap-4">
@@ -170,7 +170,7 @@ const FeatureCard = ({
   return (
     <div
       className={clsx(
-        "bg-gray-1 border-gray-5 flex flex-col justify-evenly gap-10 rounded-xl border p-6 text-left md:p-8",
+        "flex flex-col justify-evenly gap-10 rounded-xl border border-border bg-card p-6 text-left md:p-8",
         className
       )}
     >
@@ -181,7 +181,7 @@ const FeatureCard = ({
           left: relative?.left,
           right: relative?.right,
         }}
-        className="relative flex-1 flex-grow content-center justify-center"
+        className="relative flex-1 grow content-center justify-center"
       >
         {art ? (
           <BentoArt artboard={art.artboard} className={art.className} />
@@ -189,7 +189,7 @@ const FeatureCard = ({
       </div>
       <div className="flex h-fit flex-col justify-end gap-2">
         <h3 className="text-lg font-medium">{title}</h3>
-        <p className="text-gray-10 text-base">{description}</p>
+        <p className="text-base text-muted-foreground">{description}</p>
       </div>
     </div>
   )

@@ -41,7 +41,7 @@ export const TextReveal: FC<TextRevealProps> = ({ children, className }) => {
         <span
           ref={targetRef}
           className={
-            "text-gray-12 flex flex-wrap justify-center gap-y-4 p-5 text-center text-3xl font-medium md:gap-y-8 md:text-[52px]"
+            "flex flex-wrap justify-center gap-y-4 p-5 text-center text-3xl font-medium text-foreground md:gap-y-8 md:text-5xl"
           }
         >
           {words.map((word, i) => {
@@ -70,7 +70,7 @@ const Word: FC<WordProps> = ({ children, progress, range }) => {
   return (
     <span className="xl:lg-3 relative mx-1 lg:mx-1.5">
       <span className="absolute opacity-30">{children}</span>
-      <motion.span style={{ opacity: opacity }} className="text-gray-12">
+      <motion.span style={{ opacity: opacity }} className="text-foreground">
         {children}
       </motion.span>
     </span>
