@@ -5,7 +5,7 @@ import {
   type JobsEnv,
 } from "../schemas/server"
 
-/** Background jobs — used by `@workspace/jobs` and `apps/api`. */
+/** Background jobs — consumed by `apps/api/src/common/jobs` (BullMQ). */
 export const jobsEnv = createEnv(
   jobsEnvSchema,
   pickServerDefaults(["JOBS_PROVIDER", "REDIS_URL", "JOBS_QUEUE_NAME"])

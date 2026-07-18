@@ -36,6 +36,21 @@ export function createAuth() {
       client: getAuthMongoClient(),
     }),
     secondaryStorage: createAuthSecondaryStorage(),
+    rateLimit: {
+      enabled: true,
+      storage: "secondary-storage",
+      window: 60,
+      max: 100,
+      customRules: {
+        "/sign-in/email": { window: 60, max: 5 },
+        "/sign-up/email": { window: 60, max: 3 },
+        "/two-factor/verify-totp": { window: 60, max: 5 },
+        "/two-factor/verify-otp": { window: 60, max: 5 },
+        "/two-factor/send-otp": { window: 60, max: 3 },
+        "/request-password-reset": { window: 60, max: 3 },
+        "/forget-password": { window: 60, max: 3 },
+      },
+    },
     session: {
       expiresIn: SESSION_EXPIRES_IN_SECONDS,
       updateAge: SESSION_UPDATE_AGE_SECONDS,

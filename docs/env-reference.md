@@ -26,11 +26,12 @@ All apps read the **root** `.env` via `@workspace/config`. Copy from [`.env.exam
 
 ## Storage
 
-| Variable             | Default                         | Notes                               |
-| -------------------- | ------------------------------- | ----------------------------------- |
-| `STORAGE_PROVIDER`   | `local`                         | `local` or `s3`                     |
-| `STORAGE_LOCAL_PATH` | `./uploads`                     | API serves `/uploads` in local mode |
-| `STORAGE_LOCAL_URL`  | `http://localhost:4000/uploads` | Public URL prefix                   |
+| Variable                 | Default                         | Notes                                         |
+| ------------------------ | ------------------------------- | --------------------------------------------- |
+| `STORAGE_PROVIDER`       | `local`                         | `local` or `s3`                               |
+| `STORAGE_LOCAL_PATH`     | `./uploads`                     | Local filesystem root                         |
+| `STORAGE_LOCAL_URL`      | `http://localhost:4000/uploads` | URL prefix for signed local downloads         |
+| `STORAGE_SIGNING_SECRET` | _(empty → BETTER_AUTH_SECRET)_  | HMAC secret for local `/uploads?exp&sig` URLs |
 
 ## Email
 

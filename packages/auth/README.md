@@ -8,6 +8,10 @@ Shared authentication and authorization for Theo.
 
 No custom JWT bearer layer. Org/admin plugins require Mongo; Redis holds hot session data for multi-instance hosts.
 
+**Rate limiting:** Better Auth `rateLimit` uses Redis secondary storage (enabled in all environments) with stricter caps on sign-in, sign-up, 2FA, and password-reset paths. Nest's `/v1` IP rate limiter intentionally skips `/api/auth`.
+
+**API keys:** Organization-scoped Better Auth API keys (`org_` prefix) are managed via the web UI for BA api-key features. They do **not** authenticate Nest `/v1` business routes — those use cookie sessions.
+
 ## Access control (org roles)
 
 Source of truth: `src/access/roles.ts` (exported as `@workspace/auth/access`).

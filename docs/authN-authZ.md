@@ -49,22 +49,22 @@ Better Auth's built-in `createAccessControl` handles RBAC. CASL handles the ABAC
 
 **What it actually covers for your needs:**
 
-| Need                                    | Better Auth feature                                                                          |
-| --------------------------------------- | -------------------------------------------------------------------------------------------- |
-| Email/password auth                     | Built-in (`emailAndPassword: { enabled: true }`)                                             |
-| OAuth (Google, GitHub, etc.)            | Built-in `socialProviders`                                                                   |
-| 2FA / TOTP                              | `twoFactor()` plugin                                                                         |
-| Passkeys                                | `passkey()` plugin                                                                           |
-| Session management                      | Built-in, JWE cookie cache since v1.4                                                        |
-| Stateless (DB-less) only                | Supported by BA, **not used in Theo** — org/admin/apiKey need Mongo                          |
-| Serverless-friendly sessions            | Redis `secondaryStorage` + Mongo (`storeSessionInDatabase`) via `@better-auth/redis-storage` |
-| Multi-org / multi-tenant                | `organization()` plugin                                                                      |
-| Predefined roles (owner/admin/member)   | Built into `organization` + `admin` plugins                                                  |
-| Custom user-defined roles at runtime    | `organization({ dynamicAccessControl: { enabled: true } })`                                  |
-| Machine-to-machine (API keys)           | `@better-auth/api-key` plugin (separate package)                                             |
-| User admin (ban, impersonate, set-role) | `admin()` plugin                                                                             |
-| NestJS integration                      | `@thallesp/nestjs-better-auth` (community, beta Fastify support)                             |
-| Expo / React Native                     | `@better-auth/expo` package                                                                  |
+| Need                                     | Better Auth feature                                                                          |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------- |
+| Email/password auth                      | Built-in (`emailAndPassword: { enabled: true }`)                                             |
+| OAuth (Google, GitHub, etc.)             | Built-in `socialProviders`                                                                   |
+| 2FA / TOTP                               | `twoFactor()` plugin                                                                         |
+| Passkeys                                 | `passkey()` plugin                                                                           |
+| Session management                       | Built-in, JWE cookie cache since v1.4                                                        |
+| Stateless (DB-less) only                 | Supported by BA, **not used in Theo** — org/admin/apiKey need Mongo                          |
+| Serverless-friendly sessions             | Redis `secondaryStorage` + Mongo (`storeSessionInDatabase`) via `@better-auth/redis-storage` |
+| Multi-org / multi-tenant                 | `organization()` plugin                                                                      |
+| Predefined roles (owner/admin/member)    | Built into `organization` + `admin` plugins                                                  |
+| Custom user-defined roles at runtime     | `organization({ dynamicAccessControl: { enabled: true } })`                                  |
+| Org API keys (BA plugin, not Nest `/v1`) | `@better-auth/api-key` — org-owned keys; Nest routes still use cookie sessions               |
+| User admin (ban, impersonate, set-role)  | `admin()` plugin                                                                             |
+| NestJS integration                       | `@thallesp/nestjs-better-auth` (community, beta Fastify support)                             |
+| Expo / React Native                      | `@better-auth/expo` package                                                                  |
 
 ### CASL v7 — Isomorphic ABAC Layer
 
@@ -843,27 +843,29 @@ Theo keeps Mongo (`mongodbAdapter`) because `organization`, `admin`, `twoFactor`
 2. **`session.storeSessionInDatabase: true`** — also write sessions to Mongo so data survives Redis flush.
 3. **No `cookieCache`** — BA org `create` updates `activeOrganizationId` in storage but does not refresh the browser `session_data` cookie. Cookie cache would serve a stale session until expiry. Redis already avoids a Mongo hit per `getSession`.
 
-Hosting notes: run Redis (`docker compose` service `redis`). Prefer pooled Mongo (Atlas). Cloudflare Workers need `nodejs_compat`. Do not add a custom JWT bearer layer — cookies + Better Auth session (and optional `x-api-key`) are the supported paths.
+Hosting notes: run Redis (`docker compose` service `redis`). Prefer pooled Mongo (Atlas). Cloudflare Workers need `nodejs_compat`. Do not add a custom JWT bearer layer — cookie sessions are the supported path for Nest `/v1` routes.
+
+Auth abuse protection: Better Auth `rateLimit` (Redis secondary storage) covers `/api/auth/*`. Nest's IP rate limiter skips those paths on purpose.
 
 ---
 
 ## Edge Cases (Validated)
 
-| Edge Case                                           | Correct Solution                                                                                                                    |
-| --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| **Multi-role user**                                 | Better Auth stores multiple roles as comma-separated string. Split on `,` before checking.                                          |
-| **Dynamic role not found in `checkRolePermission`** | Expected — `checkRolePermission` is synchronous and static only. Use `hasPermission` API for dynamic roles.                         |
-| **`ac` types erased on client**                     | Define `ac` + `roles` in a client-safe shared file. Never import from a server-only module. Never cast them.                        |
-| **Expo New Architecture required**                  | `@better-auth/expo` requires SDK 55 + New Architecture. Legacy arch not supported.                                                  |
-| **NestJS body parser conflict**                     | Set `bodyParser: false` in `NestFactory.create`. Better Auth handles body parsing.                                                  |
-| **Serverless cold start**                           | Redis secondary storage for sessions + pooled Mongo. Avoid cookieCache with org create until BA refreshes `session_data`.           |
-| **ABAC (ownership checks)**                         | Better Auth can't do this natively. Use CASL conditions: `can('update', 'Project', { ownerId: user.id })`.                          |
-| **Client-side UI gating**                           | Use CASL `<Can>` component. Zero server round-trip. Isomorphic in Expo too.                                                         |
-| **Org data isolation**                              | Always extract `organizationId` from verified session (not from request body). Use as scope on all DB queries.                      |
-| **Admin plugin dynamic roles**                      | Not supported (open GitHub issue #4557). Admin plugin roles are static/code-defined only. Dynamic roles = organization plugin only. |
-| **API Key auth for NestJS routes**                  | Add `x-api-key` header. With `enableSessionForAPIKeys: true`, BA validates key and populates session like a normal request.         |
-| **SSO for enterprise orgs**                         | Better Auth has `sso()` plugin (enterprise feature). Fixed SSO SSRF vulnerability in v1.6 — ensure you're on latest.                |
-| **Token secret rotation**                           | Use `BETTER_AUTH_SECRETS` (plural, comma-separated) env var — docs confirm rolling without invalidating existing sessions.          |
+| Edge Case                                           | Correct Solution                                                                                                                                                                                                 |
+| --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Multi-role user**                                 | Better Auth stores multiple roles as comma-separated string. Split on `,` before checking.                                                                                                                       |
+| **Dynamic role not found in `checkRolePermission`** | Expected — `checkRolePermission` is synchronous and static only. Use `hasPermission` API for dynamic roles.                                                                                                      |
+| **`ac` types erased on client**                     | Define `ac` + `roles` in a client-safe shared file. Never import from a server-only module. Never cast them.                                                                                                     |
+| **Expo New Architecture required**                  | `@better-auth/expo` requires SDK 55 + New Architecture. Legacy arch not supported.                                                                                                                               |
+| **NestJS body parser conflict**                     | Set `bodyParser: false` in `NestFactory.create`. Better Auth handles body parsing.                                                                                                                               |
+| **Serverless cold start**                           | Redis secondary storage for sessions + pooled Mongo. Avoid cookieCache with org create until BA refreshes `session_data`.                                                                                        |
+| **ABAC (ownership checks)**                         | Better Auth can't do this natively. Use CASL conditions: `can('update', 'Project', { ownerId: user.id })`.                                                                                                       |
+| **Client-side UI gating**                           | Use CASL `<Can>` component. Zero server round-trip. Isomorphic in Expo too.                                                                                                                                      |
+| **Org data isolation**                              | Always extract `organizationId` from verified session (not from request body). Use as scope on all DB queries.                                                                                                   |
+| **Admin plugin dynamic roles**                      | Not supported (open GitHub issue #4557). Admin plugin roles are static/code-defined only. Dynamic roles = organization plugin only.                                                                              |
+| **API Key auth for NestJS routes**                  | **Not enabled.** Org-owned Better Auth API keys (`org_` prefix) are managed in the UI for BA api-key features only. Nest `/v1` routes require cookie sessions. Do not send `x-api-key` expecting a Nest session. |
+| **SSO for enterprise orgs**                         | Better Auth has `sso()` plugin (enterprise feature). Fixed SSO SSRF vulnerability in v1.6 — ensure you're on latest.                                                                                             |
+| **Token secret rotation**                           | Use `BETTER_AUTH_SECRETS` (plural, comma-separated) env var — docs confirm rolling without invalidating existing sessions.                                                                                       |
 
 ---
 

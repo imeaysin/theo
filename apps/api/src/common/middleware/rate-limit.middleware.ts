@@ -38,6 +38,7 @@ async function isAllowed(
 }
 
 function shouldSkip(path: string): boolean {
+  // Better Auth owns /api/auth abuse protection via rateLimit in createAuth().
   return (
     path.startsWith("/api/auth") ||
     path.startsWith("/docs") ||

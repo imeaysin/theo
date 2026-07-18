@@ -3,14 +3,15 @@ import type { INestApplication } from "@nestjs/common"
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger"
 import { cleanupOpenApiDoc } from "nestjs-zod"
 import { createLogger } from "@workspace/logger"
-import { storageEnv, resolveStorageLocalPath } from "@workspace/config/storage"
+import { storageEnv } from "@workspace/config/storage"
 
 import compression from "compression"
-import express from "express"
 import helmet from "helmet"
 import { env } from "@workspace/config"
 import { applyRateLimit } from "./middleware/rate-limit.middleware"
 import { applyRequestContext } from "./middleware/request-context.middleware"
+import { createLocalDownloadMiddleware } from "./storage/local-download.middleware"
+import { createLocalStorageConfig } from "./storage/storage.module"
 
 function applySecurity(app: INestApplication) {
   app.use(
@@ -61,7 +62,7 @@ function applySwagger(app: INestApplication) {
 function applyLocalUploads(app: INestApplication) {
   if (storageEnv.STORAGE_PROVIDER !== "local") return
 
-  app.use("/uploads", express.static(resolveStorageLocalPath()))
+  app.use("/uploads", createLocalDownloadMiddleware(createLocalStorageConfig()))
 }
 
 /** Shared bootstrap used by `main.ts` and e2e tests. */

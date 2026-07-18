@@ -11,7 +11,7 @@ Full-stack monorepo template: NestJS API, Vite web app, Next.js marketing site, 
 | Marketing | `apps/marketing` | Next.js 16                         | 3000 |
 | Mobile    | `apps/mobile`    | Expo 56, Expo Router               | 8081 |
 
-Shared packages live in `packages/` (`auth`, `config`, `contracts`, `db`, `email`, `ui`, …). Tooling presets are in `tooling/`.
+Shared packages live in `packages/` (`auth`, `config`, `contracts`, `db`, `email`, `ui-shadcn`, `storage`, `payment`, …). Tooling presets are in `tooling/`.
 
 ## Quick start
 
@@ -54,6 +54,7 @@ Set `BETTER_AUTH_SECRET` to the output. OAuth providers are optional — leave b
 | `pnpm dev:api`           | API only                                    |
 | `pnpm dev:web`           | Web app only                                |
 | `pnpm dev:marketing`     | Marketing site only                         |
+| `pnpm dev:mobile`        | Expo mobile only                            |
 | `pnpm db:up`             | Start MongoDB via Docker Compose            |
 | `pnpm db:down`           | Stop MongoDB                                |
 | `pnpm build`             | Production build (all workspaces)           |
@@ -83,16 +84,16 @@ Sign in → **Dashboard → Notes** to list/create/delete notes via the API. Or 
 
 ## Adding UI components
 
-Components live in `packages/ui`. Use the shadcn CLI from the repo root:
+Components live in `packages/ui-shadcn`. Use the shadcn CLI from the repo root:
 
 ```bash
-pnpm dlx shadcn@latest add button -c packages/ui
+pnpm dlx shadcn@latest add button -c packages/ui-shadcn
 ```
 
 Import in any app:
 
 ```tsx
-import { Button } from "@workspace/ui/components/button"
+import { Button } from "@workspace/ui-shadcn/components/button"
 ```
 
 ## Adding an API module
@@ -156,33 +157,34 @@ This template follows official patterns for each layer of the stack.
 
 ### React (`apps/web`)
 
-| Pattern                                                          | Where                       |
-| ---------------------------------------------------------------- | --------------------------- |
-| Vite SPA for authenticated product (client-side routing)         | `apps/web`                  |
-| `StrictMode`, error boundary, TanStack Query                     | `main.tsx`, `providers.tsx` |
-| Root `.env` via Vite `envDir`                                    | `vite.config.ts`            |
-| Shared UI from `@workspace/ui` (source, no duplicate components) | imports                     |
+| Pattern                                                                 | Where                       |
+| ----------------------------------------------------------------------- | --------------------------- |
+| Vite SPA for authenticated product (client-side routing)                | `apps/web`                  |
+| `StrictMode`, error boundary, TanStack Query                            | `main.tsx`, `providers.tsx` |
+| Root `.env` via Vite `envDir`                                           | `vite.config.ts`            |
+| Shared UI from `@workspace/ui-shadcn` (source, no duplicate components) | imports                     |
 
 **Why Vite for web and Next for marketing?** The product app is a SPA behind auth (React Router). Marketing is SSR/static-friendly public pages — each framework fits its job.
 
 ### Shared packages
 
-| Package                    | Role                                                                                               |
-| -------------------------- | -------------------------------------------------------------------------------------------------- |
-| `@workspace/config`        | Single root `.env`, Zod validation, dev URL constants                                              |
-| `@workspace/contracts`     | Zod schemas shared by API + clients                                                                |
-| `@workspace/auth`          | Better Auth config + Nest/Next/Expo adapters — **[authorization docs](./packages/auth/README.md)** |
-| `@workspace/ui`            | Components consumed as source (`transpilePackages` in Next, direct import in Vite)                 |
-| `@workspace/db`            | Shared Mongoose connection for API and auth                                                        |
-| `@workspace/cache`         | Cache abstraction (memory / Redis)                                                                 |
-| `@workspace/jobs`          | Job queue abstraction (inline / redis)                                                             |
-| `@workspace/notifications` | Push delivery (console / expo)                                                                     |
-| `@workspace/realtime`      | Event bus (memory / redis pub/sub)                                                                 |
-| `@workspace/redis`         | ioredis client factory                                                                             |
-| `@workspace/email`         | Resend + React Email templates for auth emails                                                     |
-| `@workspace/storage`       | File upload providers (local / S3)                                                                 |
-| `@workspace/logger`        | Structured logging (pino)                                                                          |
-| `@workspace/dates`         | Shared date formatting helpers                                                                     |
+| Package                    | Role                                                                                              |
+| -------------------------- | ------------------------------------------------------------------------------------------------- |
+| `@workspace/config`        | Single root `.env`, Zod validation, dev URL constants                                             |
+| `@workspace/contracts`     | Zod schemas shared by API + clients                                                               |
+| `@workspace/auth`          | Better Auth config + Nest/web/Expo adapters — **[authorization docs](./packages/auth/README.md)** |
+| `@workspace/ui-shadcn`     | Components consumed as source (`transpilePackages` in Next, direct import in Vite)                |
+| `@workspace/db`            | Shared Mongoose connection for API and auth                                                       |
+| `@workspace/cache`         | Cache abstraction (memory / Redis)                                                                |
+| `@workspace/notifications` | Push delivery (console / expo)                                                                    |
+| `@workspace/payment`       | Payment adapters (bKash / SSLCommerz)                                                             |
+| `@workspace/redis`         | ioredis client factory                                                                            |
+| `@workspace/email`         | Resend + React Email templates for auth emails                                                    |
+| `@workspace/storage`       | File upload providers (local HMAC-signed downloads / S3)                                          |
+| `@workspace/logger`        | Structured logging (pino)                                                                         |
+| `@workspace/dates`         | Shared date formatting helpers                                                                    |
+
+Jobs (BullMQ) and realtime (Socket.IO) live in `apps/api/src/common/`, not as shared packages.
 
 ## CI
 

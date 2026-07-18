@@ -139,7 +139,7 @@ export class NotificationsService {
 
     for (const userId of input.userIds) {
       try {
-        this.realtimeGateway.broadcastEvent(`user:${userId}`, {
+        this.realtimeGateway.emitToUser(userId, "notification.created", {
           type: "notification.created",
           title: input.title,
           notificationType: input.type,

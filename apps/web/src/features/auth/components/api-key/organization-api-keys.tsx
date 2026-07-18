@@ -21,6 +21,9 @@ export type OrganizationApiKeysProps = {
  * `/organization/has-permission` endpoint isn't usable for `apiKey:*` checks
  * (it doesn't pass `allowCreatorAllPermissions` and the default org AC has no
  * `apiKey` statements), so we gate on role directly.
+ *
+ * Keys authenticate Better Auth api-key flows for the organization — they do
+ * not grant cookie sessions for Nest `/v1` business routes.
  */
 export function OrganizationApiKeys({ className }: OrganizationApiKeysProps) {
   const { authClient } = useAuth()
@@ -42,10 +45,16 @@ export function OrganizationApiKeys({ className }: OrganizationApiKeysProps) {
   }
 
   return (
-    <ApiKeys
-      className={className}
-      organizationId={activeOrganization?.id}
-      isPending={activeOrganizationPending}
-    />
+    <div className={className}>
+      <p className="mb-4 text-sm text-muted-foreground">
+        Organization API keys are for Better Auth api-key features. They do not
+        authenticate Nest <code className="text-xs">/v1</code> routes — those
+        use cookie sessions.
+      </p>
+      <ApiKeys
+        organizationId={activeOrganization?.id}
+        isPending={activeOrganizationPending}
+      />
+    </div>
   )
 }

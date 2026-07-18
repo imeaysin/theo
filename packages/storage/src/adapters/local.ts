@@ -26,14 +26,34 @@ import type {
   LocalStorageConfig,
 } from "../types"
 import { StorageError } from "../types"
+import {
+  buildLocalSignedDownloadUrl,
+  verifyLocalDownloadSignature,
+} from "../local-signed-url"
 
 export class LocalStorageAdapter implements StorageProvider {
   private readonly basePath: string
   private readonly baseUrl: string
+  private readonly signingSecret: string
 
   constructor(config: LocalStorageConfig) {
     this.basePath = resolve(config.basePath.replace(/\/+$/, ""))
     this.baseUrl = config.baseUrl.replace(/\/+$/, "")
+    this.signingSecret = config.signingSecret
+  }
+
+  /** Absolute filesystem path for a storage-relative key (path-traversal safe). */
+  absolutePath(path: string): string {
+    return this.resolve(path)
+  }
+
+  verifyDownloadSignature(path: string, exp: string, sig: string): boolean {
+    return verifyLocalDownloadSignature({
+      path,
+      exp,
+      sig,
+      signingSecret: this.signingSecret,
+    })
   }
 
   private resolve(path: string): string {
@@ -67,7 +87,7 @@ export class LocalStorageAdapter implements StorageProvider {
 
     return {
       path: input.path,
-      url: this.getUrl(input.path),
+      url: await this.getSignedDownloadUrl(input.path),
     }
   }
 
@@ -131,7 +151,7 @@ export class LocalStorageAdapter implements StorageProvider {
 
     return {
       path: input.destinationPath,
-      url: this.getUrl(input.destinationPath),
+      url: await this.getSignedDownloadUrl(input.destinationPath),
     }
   }
 
@@ -160,7 +180,7 @@ export class LocalStorageAdapter implements StorageProvider {
 
     return {
       path: input.destinationPath,
-      url: this.getUrl(input.destinationPath),
+      url: await this.getSignedDownloadUrl(input.destinationPath),
     }
   }
 
@@ -234,9 +254,22 @@ export class LocalStorageAdapter implements StorageProvider {
 
   async getSignedDownloadUrl(
     path: string,
-    _options?: SignedUrlOptions
+    options?: SignedUrlOptions
   ): Promise<string> {
-    return this.getUrl(path)
+    try {
+      return buildLocalSignedDownloadUrl(
+        this.baseUrl,
+        path,
+        this.signingSecret,
+        options?.expiresInSeconds
+      )
+    } catch (cause) {
+      throw new StorageError(
+        `Signed download URL generation failed: ${path}`,
+        "PROVIDER_ERROR",
+        cause
+      )
+    }
   }
 
   async getSignedUploadUrl(

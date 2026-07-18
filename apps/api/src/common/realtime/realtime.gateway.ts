@@ -7,14 +7,31 @@ import {
   MessageBody,
   ConnectedSocket,
 } from "@nestjs/websockets"
+import { Inject, UsePipes } from "@nestjs/common"
+import type { IncomingHttpHeaders } from "node:http"
 import { Server, Socket } from "socket.io"
+import { AuthService } from "@workspace/auth/nestjs"
+import { env } from "@workspace/config"
 import { createLogger } from "@workspace/logger"
-import { UsePipes } from "@nestjs/common"
 import { ZodValidationPipe } from "nestjs-zod"
 import { z } from "zod"
 import { createZodDto } from "nestjs-zod/dto"
 
-// Example of a type-safe incoming payload using our Zod pipeline conventions
+function fromNodeHeaders(nodeHeaders: IncomingHttpHeaders): Headers {
+  const webHeaders = new Headers()
+  for (const [key, value] of Object.entries(nodeHeaders)) {
+    if (value === undefined) continue
+    if (Array.isArray(value)) {
+      for (const entry of value) {
+        webHeaders.append(key, entry)
+      }
+    } else {
+      webHeaders.set(key, value)
+    }
+  }
+  return webHeaders
+}
+
 const PingPayloadSchema = z.object({
   message: z.string().min(1),
   timestamp: z.string().datetime(),
@@ -22,9 +39,18 @@ const PingPayloadSchema = z.object({
 
 class PingPayloadDto extends createZodDto(PingPayloadSchema) {}
 
+type SocketUserData = {
+  userId?: string
+}
+
+const corsOrigins = env.ALLOWED_ORIGINS.split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean)
+
 @WebSocketGateway({
   cors: {
-    origin: "*", // Or map to allowedOrigins from config
+    origin: corsOrigins,
+    credentials: true,
   },
 })
 export class RealtimeGateway
@@ -35,21 +61,48 @@ export class RealtimeGateway
 
   private readonly logger = createLogger("RealtimeGateway")
 
-  handleConnection(client: Socket) {
-    // Note: To make this fully authenticated in the future, we can parse cookies
-    // or headers using @workspace/auth helpers directly here.
-    const token =
-      client.handshake.auth.token || client.handshake.headers.authorization
+  constructor(
+    @Inject(AuthService)
+    private readonly authService: AuthService
+  ) {}
 
-    this.logger.info(
-      { clientId: client.id, hasToken: !!token },
-      "Client connected to websocket"
-    )
+  async handleConnection(client: Socket) {
+    try {
+      const session = await this.authService.api.getSession({
+        headers: fromNodeHeaders(client.handshake.headers),
+      })
+
+      if (!session?.user?.id) {
+        this.logger.info(
+          { clientId: client.id },
+          "websocket connection rejected — no session"
+        )
+        client.disconnect(true)
+        return
+      }
+
+      const userId = session.user.id
+      const data = client.data as SocketUserData
+      data.userId = userId
+      await client.join(`user:${userId}`)
+
+      this.logger.info(
+        { clientId: client.id, userId },
+        "Client connected to websocket"
+      )
+    } catch (err) {
+      this.logger.warn(
+        { err, clientId: client.id },
+        "websocket connection rejected — session lookup failed"
+      )
+      client.disconnect(true)
+    }
   }
 
   handleDisconnect(client: Socket) {
+    const data = client.data as SocketUserData
     this.logger.info(
-      { clientId: client.id },
+      { clientId: client.id, userId: data.userId },
       "Client disconnected from websocket"
     )
   }
@@ -65,7 +118,6 @@ export class RealtimeGateway
       "Received ping event"
     )
 
-    // Using strictly typed responses
     return {
       event: "pong",
       data: {
@@ -74,8 +126,7 @@ export class RealtimeGateway
     }
   }
 
-  // Example of broadcasting to all clients with type-safety
-  broadcastEvent<T>(event: string, payload: T) {
-    this.server.emit(event, payload)
+  emitToUser<T>(userId: string, event: string, payload: T): void {
+    this.server.to(`user:${userId}`).emit(event, payload)
   }
 }

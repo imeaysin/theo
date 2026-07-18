@@ -14,6 +14,7 @@ export const storageEnv = createEnv(
     "STORAGE_PROVIDER",
     "STORAGE_LOCAL_PATH",
     "STORAGE_LOCAL_URL",
+    "STORAGE_SIGNING_SECRET",
     "STORAGE_S3_BUCKET",
     "STORAGE_S3_REGION",
     "STORAGE_S3_ENDPOINT",

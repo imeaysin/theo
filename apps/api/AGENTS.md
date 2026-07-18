@@ -1,6 +1,6 @@
 # API app — agent guide
 
-NestJS 11 REST API with Better Auth sessions, MongoDB, and CQRS feature modules.
+NestJS 11 REST API with Better Auth sessions, MongoDB, and Light-CQRS feature modules.
 
 ## Module structure (copy from `notes`)
 
@@ -21,17 +21,18 @@ modules/<feature>/
 
 ## Cross-cutting (`src/common/`)
 
-| Path                          | Role                                                                    |
-| ----------------------------- | ----------------------------------------------------------------------- |
-| `configure-app.ts`            | CORS, helmet, versioning, swagger (`cleanupOpenApiDoc`), static uploads |
-| `interceptors/`               | HTTP logging (with `requestId`), success envelope transform             |
-| `middleware/`                 | Request ID propagation, MongoDB-backed `/v1/*` rate limiting            |
-| `jobs/`                       | Job queue provider (`@workspace/jobs`) — `inline` or `redis` (BullMQ)   |
-| `filters/`                    | Global exception handler (machine-readable `code`)                      |
-| `decorators/`                 | Re-exports from `@workspace/auth/nestjs` + OpenAPI error helpers        |
-| `exceptions/`                 | Base `DomainException` for throwing pure domain errors                  |
-| `storage/storage.module.ts`   | `STORAGE` provider from `@workspace/storage`                            |
-| `database/database.module.ts` | Global `DATABASE_READY` + injectable Mongo connection                   |
+| Path                          | Role                                                                             |
+| ----------------------------- | -------------------------------------------------------------------------------- |
+| `configure-app.ts`            | CORS, helmet, versioning, swagger (`cleanupOpenApiDoc`), signed local `/uploads` |
+| `interceptors/`               | HTTP logging (with `requestId`), success envelope transform                      |
+| `middleware/`                 | Request ID propagation, MongoDB-backed `/v1/*` rate limiting                     |
+| `jobs/`                       | BullMQ job queue (Redis)                                                         |
+| `realtime/`                   | Socket.IO gateway (session cookie auth, user rooms)                              |
+| `filters/`                    | Global exception handler (machine-readable `code`)                               |
+| `decorators/`                 | Re-exports from `@workspace/auth/nestjs` + OpenAPI error helpers                 |
+| `exceptions/`                 | Base `DomainException` for throwing pure domain errors                           |
+| `storage/storage.module.ts`   | `STORAGE` provider from `@workspace/storage`                                     |
+| `database/database.module.ts` | Global `DATABASE_READY` + injectable Mongo connection                            |
 
 ## Auth
 

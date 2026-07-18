@@ -120,6 +120,8 @@ export type LocalStorageConfig = {
   provider: "local"
   basePath: string
   baseUrl: string
+  /** HMAC secret for time-limited download URLs. */
+  signingSecret: string
 }
 
 export type S3StorageConfig = {

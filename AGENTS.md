@@ -1,15 +1,14 @@
 # Theo monorepo — agent guide
 
-pnpm workspace template: NestJS API, Vite React web app, Next.js marketing site, shared packages.
+pnpm workspace template: NestJS API, Vite React web app, Next.js marketing site, Expo mobile, shared packages.
 
 ## Layout
 
 ```text
 apps/
-  api/          NestJS — CQRS feature modules, Jest (unit + e2e)
+  api/          NestJS — Light-CQRS feature modules, Jest (unit + e2e)
   web/          Vite + React Router — Vitest in test/
   marketing/    Next.js 16 landing — see apps/marketing/AGENTS.md
-  theo/         Frontend-only Theo product site — see apps/theo/AGENTS.md
   mobile/       Expo — do not modify unless explicitly asked
 packages/
   auth/           Better Auth server + Nest guards + React hooks
@@ -19,10 +18,9 @@ packages/
   dates/          Date formatting helpers (date-fns)
   db/             MongoDB connection layer (Mongoose)
   email/          Transactional email (Resend + React Email)
-  jobs/           Job queue (inline / BullMQ)
   logger/         Structured logging (pino)
   notifications/  Push delivery (Expo / console)
-  realtime/       Event bus (memory / Redis pub/sub)
+  payment/        Payment adapters (bKash / SSLCommerz) — wired in API
   redis/          ioredis client factory
   storage/        File upload providers (local / S3)
   ui-shadcn/      Shared React UI (shadcn + app shell)
@@ -30,14 +28,16 @@ tooling/        eslint-config, typescript-config, vitest-config
 docs/           Human docs (architecture, features, deployment)
 ```
 
+Jobs (BullMQ) and realtime (Socket.IO) live under `apps/api/src/common/` — they are not shared packages.
+
 ## Commands (from repo root)
 
-| Script                                                                   | Purpose                      |
-| ------------------------------------------------------------------------ | ---------------------------- |
-| `pnpm dev`                                                               | All apps with a `dev` script |
-| `pnpm dev:api` / `dev:web` / `dev:marketing` / `dev:theo` / `dev:mobile` | Single app                   |
-| `pnpm lint` / `typecheck` / `test` / `build`                             | CI parity                    |
-| `pnpm db:up`                                                             | MongoDB via Docker Compose   |
+| Script                                                      | Purpose                      |
+| ----------------------------------------------------------- | ---------------------------- |
+| `pnpm dev`                                                  | All apps with a `dev` script |
+| `pnpm dev:api` / `dev:web` / `dev:marketing` / `dev:mobile` | Single app                   |
+| `pnpm lint` / `typecheck` / `test` / `build`                | CI parity                    |
+| `pnpm db:up`                                                | MongoDB via Docker Compose   |
 
 Set `SKIP_ENV_VALIDATION=true` when env is incomplete locally.
 
@@ -45,7 +45,7 @@ Set `SKIP_ENV_VALIDATION=true` when env is incomplete locally.
 
 ### API (`apps/api`)
 
-- **Pattern:** controller → Service Orchestrator (Pragmatic Light-CQRS) → Command / Query Repository.
+- **Pattern:** controller → Service Orchestrator (Pragmatic Light-CQRS) → Command / Query Repository. No `@nestjs/cqrs` package.
 - **Events:** Decoupled architecture using strictly-typed Event Classes (e.g., `UserDeletedEvent`) and `@nestjs/event-emitter`.
 - **Reference module:** `src/modules/notes/` (domain, dto, repository, listeners, service, controller).
 - **Validation & OpenAPI:** Zod schemas in `@workspace/contracts` (with `.meta()` / `.describe()`). API uses `nestjs-zod` (`createZodDto`, global `ZodValidationPipe`, `cleanupOpenApiDoc` for `/docs`). Request bodies use `.strict()` (reject unknown keys).
@@ -69,7 +69,7 @@ Set `SKIP_ENV_VALIDATION=true` when env is incomplete locally.
 
 ## Do not
 
-- Over-engineer (no custom CQRS abstractions beyond `@nestjs/cqrs`).
+- Over-engineer (no custom CQRS abstractions; Light-CQRS service + repositories is enough).
 - Duplicate contract shapes outside `@workspace/contracts`.
 - Change `apps/mobile/` unless explicitly asked.
 - Assume stock Next.js 15 APIs — marketing uses Next 16 (see `apps/marketing/AGENTS.md`).

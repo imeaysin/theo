@@ -5,7 +5,7 @@ import {
   type RealtimeEnv,
 } from "../schemas/server"
 
-/** Event bus config — used by `@workspace/realtime`. */
+/** Realtime config — reserved for `apps/api/src/common/realtime` (Socket.IO). */
 export const realtimeEnv = createEnv(
   realtimeEnvSchema,
   pickServerDefaults(["REALTIME_PROVIDER", "REDIS_URL"])
