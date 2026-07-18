@@ -44,17 +44,8 @@ const supportChannels: SupportChannel[] = [
 
 const quickLinks = [
   { label: "FAQs", href: "/faq" },
-  { label: "Self-hosting guide", href: "/self-hosting" },
-  {
-    label: "System status",
-    href: "https://theo.openstatus.dev/",
-    isExternal: true,
-  },
-  {
-    label: "Trust portal",
-    href: "https://trust.theo.example",
-    isExternal: true,
-  },
+  { label: "Features", href: "/features" },
+  { label: "Pricing", href: "/pricing" },
 ]
 
 export function SupportPage() {
@@ -106,8 +97,6 @@ export function SupportPage() {
             <li key={link.label}>
               <Link
                 href={link.href}
-                target={link.isExternal ? "_blank" : undefined}
-                rel={link.isExternal ? "noopener noreferrer" : undefined}
                 className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
               >
                 {link.label}

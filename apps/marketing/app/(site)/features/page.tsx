@@ -1,10 +1,10 @@
 import type { Metadata } from "next"
+import { productConfig } from "@workspace/config/public"
 import { FeaturesPage } from "./features-page"
 
 export const metadata: Metadata = {
-  title: "Features - Theo",
-  description:
-    "Discover all the powerful features Theo offers for screen recording, sharing, and collaboration. From AI-powered tools to advanced editing capabilities.",
+  title: `Features — ${productConfig.name}`,
+  description: productConfig.description,
 }
 
 export default function Page() {

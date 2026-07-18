@@ -218,7 +218,7 @@ export const homeContent: HomeContent = {
       {
         title: "Cross-platform for your team",
         description:
-          "Native apps for macOS and Windows, plus a Chrome extension when browser recording is the right fit.",
+          "Native apps for macOS and Windows that feel at home on each platform.",
       },
       {
         title: "Quality that looks professional",
@@ -328,7 +328,6 @@ export const homeContent: HomeContent = {
         "Password protected shares",
         "Viewer analytics & engagement",
         "Team workspaces",
-        "Import tools for common video libraries",
         "Custom S3 bucket & Google Drive support",
         "Priority support & early features",
       ],

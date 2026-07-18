@@ -7,19 +7,17 @@ Frontend-only Next.js 16 marketing / landing site for this monorepo template.
 - Brand, URLs, emails: `@workspace/config/public` (`productConfig`)
 - Home content & Pro pricing: `content/home.ts` + `lib/pricing.ts`
 - Testimonials: `content/testimonials.ts`
-- Chrome extension URL: `lib/chrome-extension.ts`
 
-This template does **not** ship a docs site — keep product docs elsewhere (or add a new app) if you need them.
+## Kept routes
+
+`/`, `/features`, `/download`, `/pricing`, `/blog`, `/about`, `/support`, `/faq`, `/testimonials`, `/privacy`, `/terms`
 
 ## Rules
 
-- Preserve the landing page sections, responsive behavior, animations, and
-  content hierarchy — swap copy/assets via the config files above.
-- Do not add API routes, authentication, database code, storage, workflows, or
-  product-specific backend packages into this app.
-- Build controls and primitives with `@workspace/ui-shadcn`.
-- Inherit fonts and theme tokens from `@workspace/ui-shadcn/globals.css`.
-- Use semantic color and type-scale utilities; do not add raw colors or
-  pixel-sized text.
-- Apply `font-sans` on the document body so marketing fonts win over shared
-  fallbacks (do not edit `packages/ui-shadcn` globals for this).
+- Preserve landing sections, responsive behavior, and content hierarchy — swap
+  copy/assets via the config files above.
+- Do not add API routes, authentication, database code, or product backends.
+- Build with `@workspace/ui-shadcn` semantic tokens only (no raw colors).
+- Apply `font-sans` on the document body (do not edit `packages/ui-shadcn` globals).
+- This template does not ship docs, SEO landing farms, browser extensions, or
+  video tools — keep those out unless you deliberately add them back.

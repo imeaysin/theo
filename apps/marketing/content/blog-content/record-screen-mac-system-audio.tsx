@@ -97,7 +97,7 @@ export const recordScreenMacContent = {
               <li>In QuickTime, choose <strong>File → New Screen Recording</strong>, click the chevron next to the record button, and pick <strong>BlackHole</strong> as the input.</li>
               <li>Record. When you're done, switch your output back to your speakers — otherwise your Mac stays silent.</li>
             </ol>
-            <p>The catch: BlackHole routes system audio into the "microphone" slot, so recording your voice <strong>and</strong> system sound together means stacking an Aggregate Device on top of all this — the multi-step dance Theo skips entirely. <a href="/screen-recorder-mac">See how Theo compares as a Mac screen recorder</a>.</p>
+            <p>The catch: BlackHole routes system audio into the "microphone" slot, so recording your voice <strong>and</strong> system sound together means stacking an Aggregate Device on top of all this — the multi-step dance Theo skips entirely. <a href="/features">See how Theo compares as a Mac screen recorder</a>.</p>
           `,
         },
       ],
@@ -240,7 +240,7 @@ export const recordScreenMacContent = {
     },
     {
       text: "Best screen recorder for Mac",
-      url: "/screen-recorder-mac",
+      url: "/features",
     },
     {
       text: "How to screen record (any device)",
@@ -248,7 +248,7 @@ export const recordScreenMacContent = {
     },
     {
       text: "Theo vs Loom",
-      url: "/loom-alternative",
+      url: "/features",
     },
   ],
 }

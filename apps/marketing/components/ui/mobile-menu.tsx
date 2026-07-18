@@ -1,6 +1,7 @@
 "use client"
 
 import { Button, Logo } from "@/components/product-ui"
+import { productConfig } from "@workspace/config/public"
 import { cn as classNames } from "@workspace/ui-shadcn/lib/utils"
 import { Menu, X } from "lucide-react"
 import Link from "next/link"
@@ -27,11 +28,12 @@ interface NavLink {
 }
 
 const primaryLinks: NavLink[] = [
+  { href: "/features", text: "Features" },
   { href: "/pricing", text: "Pricing" },
   { href: "/download", text: "Download" },
   { href: "/blog", text: "Blog" },
   { href: "/about", text: "About" },
-  { href: "/testimonials", text: "Testimonials" },
+  { href: "/support", text: "Support" },
   { href: "/faq", text: "FAQs" },
 ]
 
@@ -299,7 +301,7 @@ const MobileMenu = ({ stars }: MobileMenuProps) => {
                 <div className="flex shrink-0 flex-col gap-3 border-t border-border bg-card px-5 pt-4 pb-[calc(env(safe-area-inset-bottom)+24px)]">
                   <Button
                     variant="dark"
-                    href="https://theo.example/signup"
+                    href={`${productConfig.siteUrl}/signup`}
                     size="lg"
                     className="w-full font-medium"
                     onClick={() => setOpen(false)}
@@ -308,7 +310,7 @@ const MobileMenu = ({ stars }: MobileMenuProps) => {
                   </Button>
                   <Button
                     variant="gray"
-                    href="https://theo.example/login"
+                    href={`${productConfig.siteUrl}/login`}
                     size="lg"
                     className="w-full font-medium"
                     onClick={() => setOpen(false)}

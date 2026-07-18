@@ -193,47 +193,6 @@ export const createProductSchema = () => ({
   },
 })
 
-export const createComparisonTableSchema = () => ({
-  "@context": "https://schema.org",
-  "@type": "Table",
-  about: `Feature comparison between ${productConfig.name} and Loom screen recorders`,
-  mainEntity: {
-    "@type": "ItemList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Open Source",
-        item: {
-          "@type": "PropertyValue",
-          name: productConfig.name,
-          value: "Yes",
-        },
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Pricing",
-        item: {
-          "@type": "PropertyValue",
-          name: productConfig.name,
-          value: "$8.16/month per user",
-        },
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: "4K Recording",
-        item: {
-          "@type": "PropertyValue",
-          name: productConfig.name,
-          value: "Available in free & paid plans",
-        },
-      },
-    ],
-  },
-})
-
 export const createHowToSchema = (params: {
   name: string
   description: string

@@ -1,31 +1,23 @@
 "use client"
 
 import { Button, Logo } from "@/components/product-ui"
-import { ChromeExtensionButton } from "@/components/chrome-extension-button"
-import { LogoMarquee } from "@/components/ui/logo-marquee"
-import {
-  THEO_CHROME_EXTENSION_URL,
-  CHROME_EXTENSION_BUTTON_CLASS,
-} from "@/lib/chrome-extension"
+import UpgradeToPro from "@/components/upgrade-to-pro"
+import { homeContent } from "@/content/home"
 import {
   getDownloadButtonText,
   getDownloadUrl,
   getPlatformIcon,
   PlatformIcons,
 } from "@/utils/platform"
-import { homeContent } from "@/content/home"
-import UpgradeToPro from "@/components/upgrade-to-pro"
-import VideoModal from "./video-modal"
 import { productConfig } from "@workspace/config/public"
 import { faPlay } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import clsx from "clsx"
 import { AnimatePresence } from "framer-motion"
 import { useDetectPlatform } from "hooks/use-detect-platform"
-import { useIsChromium } from "hooks/use-is-chromium"
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
+import VideoModal from "./video-modal"
 
 const trackHomepageEvent = (
   eventName: string,
@@ -43,7 +35,6 @@ interface HeaderProps {
 const Header = ({ serverHomepageCopyVariant = "" }: HeaderProps) => {
   const [videoToggled, setVideoToggled] = useState(false)
   const { platform, isIntel } = useDetectPlatform()
-  const isChromium = useIsChromium()
   const displayPlatform = platform ?? "macos"
   const primaryDownloadUrl =
     platform === "windows" ? "/download" : getDownloadUrl(platform, isIntel)
@@ -59,55 +50,6 @@ const Header = ({ serverHomepageCopyVariant = "" }: HeaderProps) => {
 
   const headerContent = getHeaderContent()
   const announcement = homeContent.header.announcement
-
-  const downloadButton = (
-    <Button
-      variant="dark"
-      href={primaryDownloadUrl}
-      onClick={() =>
-        trackHomepageEvent("download_cta_clicked", {
-          source_page: "home_header",
-          cta_location: "primary",
-          target_url: primaryDownloadUrl,
-          detected_platform: platform ?? "unknown",
-          is_intel: Boolean(isIntel),
-        })
-      }
-      size="lg"
-      className="flex max-w-fit items-center justify-center font-medium"
-    >
-      {getPlatformIcon(displayPlatform)}
-      {getDownloadButtonText(displayPlatform, false, isIntel)}
-    </Button>
-  )
-
-  const secondaryCta = isChromium ? (
-    <ChromeExtensionButton
-      variant="white"
-      onClick={() =>
-        trackHomepageEvent("download_cta_clicked", {
-          source_page: "home_header",
-          cta_location: "chrome_extension_secondary",
-          target: "chrome_extension",
-          target_url: THEO_CHROME_EXTENSION_URL,
-          detected_platform: platform ?? "unknown",
-          is_intel: Boolean(isIntel),
-        })
-      }
-      className={clsx(CHROME_EXTENSION_BUTTON_CLASS, "max-w-fit font-medium")}
-    />
-  ) : (
-    <UpgradeToPro
-      text={homeContent.header.cta.primaryButton}
-      onClick={() =>
-        trackHomepageEvent("pricing_cta_clicked", {
-          source_page: "home_header",
-          cta_location: "secondary",
-          target_url: "/pricing",
-        })
-      }
-    />
-  )
 
   return (
     <div className="mx-auto mt-[90px] mb-[60px] w-full max-w-[1920px] overflow-x-hidden sm:mb-[100px] md:mt-[140px] md:mb-[160px] md:overflow-visible xl:min-h-[700px]">
@@ -140,8 +82,34 @@ const Header = ({ serverHomepageCopyVariant = "" }: HeaderProps) => {
 
           <div className="mb-5 flex flex-col items-center gap-3 md:items-start">
             <div className="flex flex-wrap items-center justify-center gap-3 md:justify-start">
-              {downloadButton}
-              {secondaryCta}
+              <Button
+                variant="dark"
+                href={primaryDownloadUrl}
+                onClick={() =>
+                  trackHomepageEvent("download_cta_clicked", {
+                    source_page: "home_header",
+                    cta_location: "primary",
+                    target_url: primaryDownloadUrl,
+                    detected_platform: platform ?? "unknown",
+                    is_intel: Boolean(isIntel),
+                  })
+                }
+                size="lg"
+                className="flex max-w-fit items-center justify-center font-medium"
+              >
+                {getPlatformIcon(displayPlatform)}
+                {getDownloadButtonText(displayPlatform, false, isIntel)}
+              </Button>
+              <UpgradeToPro
+                text={homeContent.header.cta.primaryButton}
+                onClick={() =>
+                  trackHomepageEvent("pricing_cta_clicked", {
+                    source_page: "home_header",
+                    cta_location: "secondary",
+                    target_url: "/pricing",
+                  })
+                }
+              />
             </div>
             <p className="text-center text-sm text-muted-foreground md:text-left">
               {homeContent.header.cta.freeVersionText}
@@ -191,13 +159,6 @@ const Header = ({ serverHomepageCopyVariant = "" }: HeaderProps) => {
             className="relative inset-0 h-auto w-full object-cover opacity-90"
           />
         </div>
-      </div>
-
-      <div className="mx-auto mt-16 max-w-5xl px-5 xl:mt-24">
-        <p className="mb-4 text-center text-sm text-muted-foreground italic">
-          Trusted by teams, builders, and creators
-        </p>
-        <LogoMarquee />
       </div>
 
       <AnimatePresence>

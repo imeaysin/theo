@@ -195,11 +195,11 @@ export const recordScreenWindowsContent = {
     },
     {
       text: "Video Trimmer Tool",
-      url: "/tools/trim",
+      url: "/features",
     },
     {
       text: "Speed Controller Tool",
-      url: "/tools/speed",
+      url: "/features",
     },
   ],
 }
