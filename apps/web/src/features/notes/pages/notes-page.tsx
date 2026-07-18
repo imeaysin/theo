@@ -17,6 +17,7 @@ import {
 } from "@workspace/ui-shadcn/components/alert-dialog"
 import { Button } from "@workspace/ui-shadcn/components/button"
 import { DataTable } from "@workspace/ui-shadcn/components/data-table"
+import { DataTableSkeleton } from "@workspace/ui-shadcn/components/data-table-skeleton"
 import {
   Empty,
   EmptyContent,
@@ -31,16 +32,7 @@ import {
   ItemContent,
   ItemTitle,
 } from "@workspace/ui-shadcn/components/item"
-import { Skeleton } from "@workspace/ui-shadcn/components/skeleton"
 import { Spinner } from "@workspace/ui-shadcn/components/spinner"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@workspace/ui-shadcn/components/table"
 import {
   CircleAlertIcon,
   FileTextIcon,
@@ -200,32 +192,7 @@ export function NotesPage() {
           </Item>
         ) : null}
 
-        {isLoading ? (
-          <div className="overflow-hidden rounded-lg border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  {Array.from({ length: 4 }).map((_, index) => (
-                    <TableHead key={index}>
-                      <Skeleton className="h-4 w-20" />
-                    </TableHead>
-                  ))}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {Array.from({ length: 5 }).map((_, rowIndex) => (
-                  <TableRow key={rowIndex}>
-                    {Array.from({ length: 4 }).map((_, cellIndex) => (
-                      <TableCell key={cellIndex}>
-                        <Skeleton className="h-4 w-full" />
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        ) : null}
+        {isLoading ? <DataTableSkeleton columnCount={4} /> : null}
 
         {isError ? (
           <Alert variant="destructive">

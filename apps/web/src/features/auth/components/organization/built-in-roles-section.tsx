@@ -1,11 +1,6 @@
 import { Badge } from "@workspace/ui-shadcn/components/badge"
-import {
-  Item,
-  ItemContent,
-  ItemDescription,
-  ItemGroup,
-  ItemTitle,
-} from "@workspace/ui-shadcn/components/item"
+import { Card, CardContent } from "@workspace/ui-shadcn/components/card"
+import { Separator } from "@workspace/ui-shadcn/components/separator"
 import {
   BUILT_IN_ROLE_DESCRIPTIONS,
   STATIC_ORG_ROLES,
@@ -22,23 +17,26 @@ export function BuiltInRolesSection() {
         title="Built-in roles"
       />
 
-      <ItemGroup>
-        {STATIC_ORG_ROLES.map((role) => (
-          <Item key={role} role="listitem" variant="outline">
-            <ItemContent>
-              <ItemTitle className="gap-2">
-                {formatRoleLabel(role)}
-                {!isAssignableBuiltInRole(role) ? (
-                  <Badge variant="secondary">System</Badge>
-                ) : null}
-              </ItemTitle>
-              <ItemDescription>
-                {BUILT_IN_ROLE_DESCRIPTIONS[role]}
-              </ItemDescription>
-            </ItemContent>
-          </Item>
-        ))}
-      </ItemGroup>
+      <Card className="gap-0 py-0">
+        <CardContent className="p-0">
+          {STATIC_ORG_ROLES.map((role, index) => (
+            <div key={role}>
+              {index > 0 ? <Separator /> : null}
+              <div className="flex flex-col gap-1 px-4 py-4">
+                <div className="flex items-center gap-2 text-sm font-medium">
+                  {formatRoleLabel(role)}
+                  {!isAssignableBuiltInRole(role) ? (
+                    <Badge variant="secondary">System</Badge>
+                  ) : null}
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  {BUILT_IN_ROLE_DESCRIPTIONS[role]}
+                </p>
+              </div>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
     </div>
   )
 }
