@@ -4,11 +4,12 @@ pnpm workspace template: NestJS API, Vite React web app, Next.js marketing site,
 
 ## Layout
 
-```
+```text
 apps/
   api/          NestJS — CQRS feature modules, Jest (unit + e2e)
   web/          Vite + React Router — Vitest in test/
   marketing/    Next.js 16 landing — see apps/marketing/AGENTS.md
+  theo/         Frontend-only Theo product site — see apps/theo/AGENTS.md
   mobile/       Expo — do not modify unless explicitly asked
 packages/
   auth/           Better Auth server + Nest guards + React hooks
@@ -31,12 +32,12 @@ docs/           Human docs (architecture, features, deployment)
 
 ## Commands (from repo root)
 
-| Script                                                      | Purpose                      |
-| ----------------------------------------------------------- | ---------------------------- |
-| `pnpm dev`                                                  | All apps with a `dev` script |
-| `pnpm dev:api` / `dev:web` / `dev:marketing` / `dev:mobile` | Single app                   |
-| `pnpm lint` / `typecheck` / `test` / `build`                | CI parity                    |
-| `pnpm db:up`                                                | MongoDB via Docker Compose   |
+| Script                                                                   | Purpose                      |
+| ------------------------------------------------------------------------ | ---------------------------- |
+| `pnpm dev`                                                               | All apps with a `dev` script |
+| `pnpm dev:api` / `dev:web` / `dev:marketing` / `dev:theo` / `dev:mobile` | Single app                   |
+| `pnpm lint` / `typecheck` / `test` / `build`                             | CI parity                    |
+| `pnpm db:up`                                                             | MongoDB via Docker Compose   |
 
 Set `SKIP_ENV_VALIDATION=true` when env is incomplete locally.
 

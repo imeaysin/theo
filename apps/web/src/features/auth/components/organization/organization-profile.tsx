@@ -19,7 +19,7 @@ import { Label } from "@workspace/ui-shadcn/components/label"
 import { Skeleton } from "@workspace/ui-shadcn/components/skeleton"
 import { Spinner } from "@workspace/ui-shadcn/components/spinner"
 import { organizationPlugin } from "@/lib/auth/organization-plugin"
-import { cn } from "@workspace/ui-shadcn/lib/utils"
+import { SectionHeader } from "@/components/page-header"
 import { ChangeOrganizationLogo } from "@/features/auth/components/organization/change-organization-logo"
 import { SlugField } from "@/features/auth/components/organization/slug-field"
 
@@ -123,10 +123,8 @@ export function OrganizationProfile({ className }: OrganizationProfileProps) {
   }
 
   return (
-    <div>
-      <h2 className={cn("mb-3 text-sm font-semibold")}>
-        {organizationLocalization.organizationProfile}
-      </h2>
+    <div className="flex flex-col gap-3">
+      <SectionHeader title={organizationLocalization.organizationProfile} />
 
       <Card className={className}>
         <CardContent>

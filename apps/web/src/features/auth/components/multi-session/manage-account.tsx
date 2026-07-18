@@ -13,7 +13,6 @@ import { ArrowLeftRight, LogOut, MoreHorizontal } from "lucide-react"
 import { toast } from "sonner"
 import { UserView } from "@/features/auth/components/user/user-view"
 import { Button, buttonVariants } from "@workspace/ui-shadcn/components/button"
-import { Card, CardContent } from "@workspace/ui-shadcn/components/card"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -63,63 +62,61 @@ export function ManageAccount({
   const isBusy = isSwitching || isRevoking
 
   return (
-    <Card className="border-0 bg-transparent shadow-none ring-0">
-      <CardContent className="flex items-center justify-between gap-3">
-        <UserView user={deviceSession?.user} isPending={isPending} />
+    <div className="flex items-center justify-between gap-3 px-4 py-4">
+      <UserView user={deviceSession?.user} isPending={isPending} />
 
-        {deviceSession && isActive && (
-          <Button
-            className="shrink-0"
-            variant="outline"
-            size="sm"
-            onClick={() =>
-              revokeSession({ sessionToken: deviceSession.session.token })
-            }
+      {deviceSession && isActive && (
+        <Button
+          className="shrink-0"
+          variant="outline"
+          size="sm"
+          onClick={() =>
+            revokeSession({ sessionToken: deviceSession.session.token })
+          }
+          disabled={isBusy}
+        >
+          {isRevoking ? <Spinner /> : <LogOut />}
+          {localization.auth.signOut}
+        </Button>
+      )}
+
+      {deviceSession && !isActive && (
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "icon-sm" }),
+              "shrink-0"
+            )}
             disabled={isBusy}
           >
-            {isRevoking ? <Spinner /> : <LogOut />}
-            {localization.auth.signOut}
-          </Button>
-        )}
+            <MoreHorizontal />
+          </DropdownMenuTrigger>
 
-        {deviceSession && !isActive && (
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              className={cn(
-                buttonVariants({ variant: "ghost", size: "icon-sm" }),
-                "shrink-0"
-              )}
-              disabled={isBusy}
+          <DropdownMenuContent align="end" className="min-w-fit">
+            <DropdownMenuItem
+              onClick={() =>
+                setActiveSession({
+                  sessionToken: deviceSession.session.token,
+                })
+              }
             >
-              <MoreHorizontal />
-            </DropdownMenuTrigger>
+              <ArrowLeftRight className="text-muted-foreground" />
+              {multiSessionLocalization.switchAccount}
+            </DropdownMenuItem>
 
-            <DropdownMenuContent align="end" className="min-w-fit">
-              <DropdownMenuItem
-                onClick={() =>
-                  setActiveSession({
-                    sessionToken: deviceSession.session.token,
-                  })
-                }
-              >
-                <ArrowLeftRight className="text-muted-foreground" />
-                {multiSessionLocalization.switchAccount}
-              </DropdownMenuItem>
-
-              <DropdownMenuItem
-                onClick={() =>
-                  revokeSession({
-                    sessionToken: deviceSession.session.token,
-                  })
-                }
-              >
-                <LogOut className="text-muted-foreground" />
-                {localization.auth.signOut}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )}
-      </CardContent>
-    </Card>
+            <DropdownMenuItem
+              onClick={() =>
+                revokeSession({
+                  sessionToken: deviceSession.session.token,
+                })
+              }
+            >
+              <LogOut className="text-muted-foreground" />
+              {localization.auth.signOut}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
+    </div>
   )
 }

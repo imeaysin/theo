@@ -4,7 +4,14 @@ import { useAuthPlugin } from "@better-auth-ui/react"
 import { Fingerprint } from "lucide-react"
 
 import { Button } from "@workspace/ui-shadcn/components/button"
-import { Card, CardContent } from "@workspace/ui-shadcn/components/card"
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@workspace/ui-shadcn/components/empty"
 import { passkeyPlugin } from "@/lib/auth/passkey-plugin"
 
 export type PasskeysEmptyProps = {
@@ -15,26 +22,21 @@ export function PasskeysEmpty({ onAddPress }: PasskeysEmptyProps) {
   const { localization: passkeyLocalization } = useAuthPlugin(passkeyPlugin)
 
   return (
-    <Card className="border-0 bg-transparent shadow-none ring-0">
-      <CardContent className="flex flex-col items-center justify-center gap-4">
-        <div className="flex size-10 items-center justify-center rounded-md bg-muted">
-          <Fingerprint className="size-4.5" />
-        </div>
-
-        <div className="flex flex-col items-center justify-center gap-1 text-center">
-          <p className="text-sm font-semibold">
-            {passkeyLocalization.noPasskeys}
-          </p>
-
-          <p className="text-xs text-muted-foreground">
-            {passkeyLocalization.passkeysDescription}
-          </p>
-        </div>
-
+    <Empty className="border-0 p-0">
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <Fingerprint />
+        </EmptyMedia>
+        <EmptyTitle>{passkeyLocalization.noPasskeys}</EmptyTitle>
+        <EmptyDescription>
+          {passkeyLocalization.passkeysDescription}
+        </EmptyDescription>
+      </EmptyHeader>
+      <EmptyContent>
         <Button size="sm" onClick={onAddPress}>
           {passkeyLocalization.addPasskey}
         </Button>
-      </CardContent>
-    </Card>
+      </EmptyContent>
+    </Empty>
   )
 }

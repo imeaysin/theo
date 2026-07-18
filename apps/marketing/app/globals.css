@@ -1,136 +1,23 @@
 @import "@workspace/ui-shadcn/globals.css";
 
-@theme inline {
-  --animate-dropdown-fade: dropdown-fade 0.15s ease-out forwards;
-  --animate-dropdown-slide: dropdown-slide 0.2s ease-out forwards;
-  --animate-mobile-slide: mobile-slide 0.2s ease-out forwards;
-  --animate-marquee-left: marquee-left 30s linear infinite;
-  --animate-marquee-left-slow: marquee-left 35s linear infinite;
-  --animate-marquee-right: marquee-right 28s linear infinite;
-  --animate-fade-blur-in: fade-blur-in 0.7s ease-out forwards;
+@source "../**/*.{ts,tsx}";
 
-  --container-landing: 87.5rem;
-  --animate-pulse-glow: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+@theme {
+  --animate-marquee: marquee 30s linear infinite;
 
-  @keyframes pulse-glow {
-    0%,
-    100% {
-      opacity: 0.2;
-      transform: scale(1);
-      box-shadow: 0 0 0 0 color-mix(in oklch, var(--success) 40%, transparent);
-    }
-
-    50% {
-      opacity: 0.4;
-      transform: scale(1.2);
-      box-shadow: 0 0 0 4px color-mix(in oklch, var(--success) 20%, transparent);
-    }
-  }
-
-  @keyframes dropdown-fade {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
-  }
-
-  @keyframes dropdown-slide {
-    from {
-      opacity: 0;
-      transform: translateX(-10px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  @keyframes mobile-slide {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes marquee-left {
-    from {
-      transform: translateX(0);
-    }
-
+  @keyframes marquee {
     to {
       transform: translateX(-50%);
     }
   }
-
-  @keyframes marquee-right {
-    from {
-      transform: translateX(-50%);
-    }
-
-    to {
-      transform: translateX(0);
-    }
-  }
-
-  @keyframes fade-blur-in {
-    from {
-      opacity: 0;
-      filter: blur(8px);
-    }
-
-    to {
-      opacity: 1;
-      filter: blur(0);
-    }
-  }
 }
 
-@layer utilities {
-  .bg-background-semi-transparent {
-    position: relative;
+@layer base {
+  html {
+    scroll-behavior: smooth;
   }
 
-  .bg-background-semi-transparent::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-color: var(--background);
-    opacity: 0.8;
-    z-index: -1;
-    pointer-events: none;
+  body {
+    overflow-x: clip;
   }
-}
-
-@utility landing-grid-bg {
-  background-image:
-    linear-gradient(to right, var(--border) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
-  background-size: 4rem 4rem;
-}
-
-@utility marquee-fade-left {
-  background-image: linear-gradient(
-    to right,
-    var(--background) 0%,
-    color-mix(in oklch, var(--background) 80%, transparent) 50%,
-    transparent 100%
-  );
-}
-
-@utility marquee-fade-right {
-  background-image: linear-gradient(
-    to left,
-    var(--background) 0%,
-    color-mix(in oklch, var(--background) 80%, transparent) 50%,
-    transparent 100%
-  );
 }

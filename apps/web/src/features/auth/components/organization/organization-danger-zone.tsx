@@ -10,6 +10,7 @@ import type { ComponentProps } from "react"
 import { Card, CardContent } from "@workspace/ui-shadcn/components/card"
 import { Separator } from "@workspace/ui-shadcn/components/separator"
 import { cn } from "@workspace/ui-shadcn/lib/utils"
+import { SectionHeader } from "@/components/page-header"
 import { DeleteOrganization } from "@/features/auth/components/organization/delete-organization"
 import { DeleteOrganizationSkeleton } from "@/features/auth/components/organization/delete-organization-skeleton"
 import { LeaveOrganization } from "@/features/auth/components/organization/leave-organization"
@@ -40,10 +41,11 @@ export function OrganizationDangerZone({
   const canDelete = !!deletePermission?.success
 
   return (
-    <div className={cn("flex w-full flex-col", className)} {...props}>
-      <h2 className="mb-3 text-sm font-semibold text-destructive">
-        {localization.settings.dangerZone}
-      </h2>
+    <div className={cn("flex w-full flex-col gap-3", className)} {...props}>
+      <SectionHeader
+        title={localization.settings.dangerZone}
+        titleClassName="text-destructive"
+      />
 
       <Card>
         <CardContent>

@@ -1,46 +1,41 @@
 import { Badge } from "@workspace/ui-shadcn/components/badge"
-import { Card } from "@workspace/ui-shadcn/components/card"
+import { Card, CardContent } from "@workspace/ui-shadcn/components/card"
+import { Separator } from "@workspace/ui-shadcn/components/separator"
 import {
   BUILT_IN_ROLE_DESCRIPTIONS,
   STATIC_ORG_ROLES,
   formatRoleLabel,
   isAssignableBuiltInRole,
 } from "@/features/organization/lib/organization-roles"
+import { SectionHeader } from "@/components/page-header"
 
 export function BuiltInRolesSection() {
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex flex-col gap-1">
-        <h3 className="text-sm font-semibold">Built-in roles</h3>
-        <p className="text-xs text-muted-foreground">
-          Defined in code for every organization. Owner cannot be assigned via
-          invite.
-        </p>
-      </div>
+      <SectionHeader
+        description="Defined in code for every organization. Owner cannot be assigned via invite."
+        title="Built-in roles"
+      />
 
-      <Card className="overflow-hidden p-0">
-        <ul className="divide-y divide-border">
-          {STATIC_ORG_ROLES.map((role) => (
-            <li
-              key={role}
-              className="flex items-start justify-between gap-4 px-4 py-3"
-            >
-              <div className="flex min-w-0 flex-col gap-0.5">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium">
-                    {formatRoleLabel(role)}
-                  </span>
+      <Card className="gap-0 py-0">
+        <CardContent className="p-0">
+          {STATIC_ORG_ROLES.map((role, index) => (
+            <div key={role}>
+              {index > 0 ? <Separator /> : null}
+              <div className="flex flex-col gap-1 px-4 py-4">
+                <div className="flex items-center gap-2 text-sm font-medium">
+                  {formatRoleLabel(role)}
                   {!isAssignableBuiltInRole(role) ? (
                     <Badge variant="secondary">System</Badge>
                   ) : null}
                 </div>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   {BUILT_IN_ROLE_DESCRIPTIONS[role]}
                 </p>
               </div>
-            </li>
+            </div>
           ))}
-        </ul>
+        </CardContent>
       </Card>
     </div>
   )

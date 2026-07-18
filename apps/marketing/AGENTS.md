@@ -1,20 +1,23 @@
-<!-- BEGIN:nextjs-agent-rules -->
+# Marketing landing template
 
-# Marketing app — agent guide
+Frontend-only Next.js 16 marketing / landing site for this monorepo template.
 
-Next.js **16** — APIs and conventions differ from Next 15 and from training data.
+## Customize first
 
-Before writing or changing routes, layouts, or data APIs, read the relevant guide in:
+- Brand, URLs, emails: `@workspace/config/public` (`productConfig`)
+- Home content & Pro pricing: `content/home.ts` + `lib/pricing.ts`
+- Testimonials: `content/testimonials.ts`
 
-`node_modules/next/dist/docs/`
+## Kept routes
 
-Heed deprecation notices in those docs.
+`/`, `/features`, `/download`, `/pricing`, `/blog`, `/about`, `/support`, `/faq`, `/testimonials`, `/privacy`, `/terms`
 
-## Scope
+## Rules
 
-Static marketing site: landing page, policy/terms placeholders. No auth or API calls.
-
-## Commands
-
-`pnpm dev:marketing` from repo root, or `pnpm dev` inside `apps/marketing/`.
-<!-- END:nextjs-agent-rules -->
+- Preserve landing sections, responsive behavior, and content hierarchy — swap
+  copy/assets via the config files above.
+- Do not add API routes, authentication, database code, or product backends.
+- Build with `@workspace/ui-shadcn` semantic tokens only (no raw colors).
+- Apply `font-sans` on the document body (do not edit `packages/ui-shadcn` globals).
+- This template does not ship docs, SEO landing farms, browser extensions, or
+  video tools — keep those out unless you deliberately add them back.

@@ -1,5 +1,5 @@
 import type { NoteResponse } from "@workspace/contracts"
-import { dates } from "@/lib/dates"
+import type { RowSelectionState } from "@tanstack/react-table"
 import {
   Alert,
   AlertDescription,
@@ -16,6 +16,8 @@ import {
   AlertDialogTitle,
 } from "@workspace/ui-shadcn/components/alert-dialog"
 import { Button } from "@workspace/ui-shadcn/components/button"
+import { DataTable } from "@workspace/ui-shadcn/components/data-table"
+import { DataTableSkeleton } from "@workspace/ui-shadcn/components/data-table-skeleton"
 import {
   Empty,
   EmptyContent,
@@ -25,69 +27,30 @@ import {
   EmptyTitle,
 } from "@workspace/ui-shadcn/components/empty"
 import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@workspace/ui-shadcn/components/input-group"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@workspace/ui-shadcn/components/select"
-import { Skeleton } from "@workspace/ui-shadcn/components/skeleton"
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemTitle,
+} from "@workspace/ui-shadcn/components/item"
 import { Spinner } from "@workspace/ui-shadcn/components/spinner"
 import {
   CircleAlertIcon,
   FileTextIcon,
   PlusIcon,
-  SearchIcon,
   Trash2Icon,
 } from "lucide-react"
 import { useMemo, useState } from "react"
 import { authClient } from "@workspace/auth/client"
+import { PageHeader } from "@/components/page-header"
 import { NoteFormDialog } from "@/features/notes/components/note-form-dialog"
-import { NotesTable } from "@/features/notes/components/notes-table"
+import { getNotesColumns } from "@/features/notes/components/notes-columns"
+import { matchesNoteSearch } from "@/features/notes/lib/matches-note-search"
 import {
   useBulkDeleteNotesMutation,
   useDeleteNoteMutation,
   useNotesQuery,
 } from "@/features/notes/hooks/use-notes"
 import { useHasOrgPermission } from "@/hooks/use-org-permission"
-
-type SortOption = "newest" | "oldest" | "title-asc" | "title-desc"
-
-const sortItems = [
-  { label: "Newest first", value: "newest" },
-  { label: "Oldest first", value: "oldest" },
-  { label: "Title A–Z", value: "title-asc" },
-  { label: "Title Z–A", value: "title-desc" },
-] as const satisfies readonly { label: string; value: SortOption }[]
-
-function sortNotes(items: NoteResponse[], sort: SortOption) {
-  const sorted = [...items]
-  switch (sort) {
-    case "oldest":
-      return sorted.sort(
-        (a, b) =>
-          dates.parseISO(a.updatedAt).getTime() -
-          dates.parseISO(b.updatedAt).getTime()
-      )
-    case "title-asc":
-      return sorted.sort((a, b) => a.title.localeCompare(b.title))
-    case "title-desc":
-      return sorted.sort((a, b) => b.title.localeCompare(a.title))
-    case "newest":
-    default:
-      return sorted.sort(
-        (a, b) =>
-          dates.parseISO(b.updatedAt).getTime() -
-          dates.parseISO(a.updatedAt).getTime()
-      )
-  }
-}
 
 export function NotesPage() {
   const { data: organization } = authClient.useActiveOrganization()
@@ -107,9 +70,7 @@ export function NotesPage() {
   const deleteNote = useDeleteNoteMutation()
   const bulkDeleteNotes = useBulkDeleteNotesMutation()
 
-  const [search, setSearch] = useState("")
-  const [sort, setSort] = useState<SortOption>("newest")
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
 
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingNote, setEditingNote] = useState<NoteResponse | null>(null)
@@ -120,18 +81,11 @@ export function NotesPage() {
     | null
   >(null)
 
-  const filteredNotes = useMemo(() => {
-    const items = data?.items ?? []
-    const query = search.trim().toLowerCase()
-    const filtered = query
-      ? items.filter(
-          (note) =>
-            note.title.toLowerCase().includes(query) ||
-            note.body.toLowerCase().includes(query)
-        )
-      : items
-    return sortNotes(filtered, sort)
-  }, [data?.items, search, sort])
+  const notes = data?.items ?? []
+  const selectedIds = useMemo(
+    () => Object.keys(rowSelection).filter((id) => rowSelection[id]),
+    [rowSelection]
+  )
 
   const isMutating = deleteNote.isPending || bulkDeleteNotes.isPending
 
@@ -145,43 +99,42 @@ export function NotesPage() {
     setDialogOpen(true)
   }
 
-  function toggleSelection(noteId: string, checked: boolean) {
-    setSelectedIds((current) => {
-      const next = new Set(current)
-      if (checked) next.add(noteId)
-      else next.delete(noteId)
-      return next
-    })
-  }
-
-  function toggleSelectAll(checked: boolean, noteIds: string[]) {
-    setSelectedIds((current) => {
-      const next = new Set(current)
-      if (checked) {
-        for (const id of noteIds) next.add(id)
-      } else {
-        for (const id of noteIds) next.delete(id)
-      }
-      return next
-    })
-  }
+  const columns = useMemo(
+    () =>
+      getNotesColumns({
+        canUpdate: canUpdate.data === true,
+        canDelete: canDelete.data === true,
+        disabled: isMutating,
+        onEdit: openEditDialog,
+        onDelete: (note) =>
+          setDeleteTarget({
+            type: "single",
+            id: note.id,
+            title: note.title,
+          }),
+      }),
+    [canUpdate.data, canDelete.data, isMutating]
+  )
 
   async function confirmDelete() {
     if (!deleteTarget) return
 
     if (deleteTarget.type === "single") {
       await deleteNote.mutateAsync(deleteTarget.id)
+      setRowSelection((current) => {
+        const next = { ...current }
+        delete next[deleteTarget.id]
+        return next
+      })
     } else {
-      await bulkDeleteNotes.mutateAsync({ ids: [...selectedIds] })
-      setSelectedIds(new Set())
+      await bulkDeleteNotes.mutateAsync({ ids: selectedIds })
+      setRowSelection({})
     }
 
     setDeleteTarget(null)
   }
 
-  const hasNotes = (data?.items.length ?? 0) > 0
-  const showEmptySearch =
-    !isLoading && !isError && hasNotes && filteredNotes.length === 0
+  const hasNotes = notes.length > 0
   const showEmptyInitial = !isLoading && !isError && !hasNotes
 
   const deleteDialogDescription = (() => {
@@ -197,97 +150,49 @@ export function NotesPage() {
   return (
     <>
       <div className="flex flex-col gap-6">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="flex flex-col gap-1">
-            <h2 className="text-2xl font-bold tracking-tight">Notes</h2>
-            <p className="text-muted-foreground">
-              Create and manage your notes.
-            </p>
-          </div>
-          {canCreate.data ? (
-            <Button onClick={openCreateDialog}>
-              <PlusIcon data-icon="inline-start" />
-              New note
-            </Button>
-          ) : null}
-        </div>
+        <PageHeader
+          actions={
+            canCreate.data ? (
+              <Button onClick={openCreateDialog}>
+                <PlusIcon data-icon="inline-start" />
+                New
+              </Button>
+            ) : null
+          }
+          description="Create and manage your notes."
+          title="Notes"
+        />
 
-        <div className="flex flex-wrap items-center gap-3">
-          <InputGroup className="flex-1">
-            <InputGroupAddon>
-              <SearchIcon />
-            </InputGroupAddon>
-            <InputGroupInput
-              aria-label="Search notes"
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search notes…"
-              value={search}
-            />
-          </InputGroup>
-          <Select
-            items={[...sortItems]}
-            onValueChange={(value) => {
-              if (value) setSort(value as SortOption)
-            }}
-            value={sort}
-          >
-            <SelectTrigger aria-label="Sort notes" className="w-40">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {sortItems.map((item) => (
-                  <SelectItem key={item.value} value={item.value}>
-                    {item.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
-
-        {selectedIds.size > 0 && canDelete.data ? (
-          <div className="flex flex-wrap items-center gap-3 rounded-lg border bg-muted/40 px-4 py-3">
-            <p className="text-sm font-medium">{selectedIds.size} selected</p>
-            <Button
-              disabled={isMutating}
-              onClick={() =>
-                setDeleteTarget({ type: "bulk", count: selectedIds.size })
-              }
-              size="sm"
-              variant="destructive"
-            >
-              <Trash2Icon data-icon="inline-start" />
-              Delete selected
-            </Button>
-            <Button
-              disabled={isMutating}
-              onClick={() => setSelectedIds(new Set())}
-              size="sm"
-              variant="ghost"
-            >
-              Clear selection
-            </Button>
-          </div>
-        ) : null}
-
-        {isLoading ? (
-          <div className="overflow-hidden rounded-lg border">
-            {Array.from({ length: 3 }).map((_, index) => (
-              <div
-                className="flex items-center gap-3 border-b px-4 py-4 last:border-b-0"
-                key={index}
+        {selectedIds.length > 0 && canDelete.data ? (
+          <Item variant="muted">
+            <ItemContent>
+              <ItemTitle>{selectedIds.length} selected</ItemTitle>
+            </ItemContent>
+            <ItemActions>
+              <Button
+                disabled={isMutating}
+                onClick={() =>
+                  setDeleteTarget({ type: "bulk", count: selectedIds.length })
+                }
+                size="sm"
+                variant="destructive"
               >
-                <Skeleton className="size-4 rounded-sm" />
-                <div className="flex flex-1 flex-col gap-2">
-                  <Skeleton className="h-4 w-48" />
-                  <Skeleton className="h-3 w-full max-w-md" />
-                  <Skeleton className="h-3 w-24" />
-                </div>
-              </div>
-            ))}
-          </div>
+                <Trash2Icon data-icon="inline-start" />
+                Delete selected
+              </Button>
+              <Button
+                disabled={isMutating}
+                onClick={() => setRowSelection({})}
+                size="sm"
+                variant="ghost"
+              >
+                Clear selection
+              </Button>
+            </ItemActions>
+          </Item>
         ) : null}
+
+        {isLoading ? <DataTableSkeleton columnCount={4} /> : null}
 
         {isError ? (
           <Alert variant="destructive">
@@ -329,38 +234,16 @@ export function NotesPage() {
           </Empty>
         ) : null}
 
-        {showEmptySearch ? (
-          <Empty className="border border-dashed">
-            <EmptyHeader>
-              <EmptyMedia variant="icon">
-                <SearchIcon />
-              </EmptyMedia>
-              <EmptyTitle>No matching notes</EmptyTitle>
-              <EmptyDescription>
-                Nothing matches &ldquo;{search.trim()}&rdquo;. Try a different
-                search term.
-              </EmptyDescription>
-            </EmptyHeader>
-          </Empty>
-        ) : null}
-
-        {!isLoading && !isError && filteredNotes.length > 0 ? (
-          <NotesTable
-            canDelete={canDelete.data === true}
-            canUpdate={canUpdate.data === true}
-            disabled={isMutating}
-            notes={filteredNotes}
-            onDelete={(note) =>
-              setDeleteTarget({
-                type: "single",
-                id: note.id,
-                title: note.title,
-              })
-            }
-            onEdit={openEditDialog}
-            onSelect={toggleSelection}
-            onSelectAll={toggleSelectAll}
-            selectedIds={selectedIds}
+        {!isLoading && !isError && hasNotes ? (
+          <DataTable
+            columns={columns}
+            data={notes}
+            filterFn={matchesNoteSearch}
+            filterPlaceholder="Filter notes..."
+            getRowId={(note) => note.id}
+            initialSorting={[{ id: "updatedAt", desc: true }]}
+            onRowSelectionChange={setRowSelection}
+            rowSelection={rowSelection}
           />
         ) : null}
       </div>

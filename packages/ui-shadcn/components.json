@@ -10,14 +10,17 @@
     "cssVariables": true
   },
   "iconLibrary": "lucide",
+  "rtl": false,
+  "menuColor": "default",
+  "menuAccent": "subtle",
   "aliases": {
     "components": "@workspace/ui-shadcn/components",
     "utils": "@workspace/ui-shadcn/lib/utils",
-    "hooks": "@workspace/ui-shadcn/hooks",
+    "ui": "@workspace/ui-shadcn/components",
     "lib": "@workspace/ui-shadcn/lib",
-    "ui": "@workspace/ui-shadcn/components"
+    "hooks": "@workspace/ui-shadcn/hooks"
   },
-  "rtl": false,
-  "menuColor": "default",
-  "menuAccent": "subtle"
+  "registries": {
+    "@coss": "https://coss.com/ui/r/{name}.json"
+  }
 }

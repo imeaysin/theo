@@ -18,6 +18,7 @@ import {
 } from "@workspace/ui-shadcn/components/tabs"
 import { organizationPlugin } from "@/lib/auth/organization-plugin"
 import { cn } from "@workspace/ui-shadcn/lib/utils"
+import { PageHeader } from "@/components/page-header"
 import { OrganizationPeople } from "@/features/auth/components/organization/organization-people"
 import { OrganizationRoles } from "@/features/auth/components/organization/organization-roles"
 import { OrganizationSettings } from "@/features/auth/components/organization/organization-settings"
@@ -132,82 +133,99 @@ export function Organization({
 
   const rolesPath = organizationViewPaths.organization.roles ?? "roles"
 
+  const pageCopy = {
+    settings: {
+      title: localization.settings.settings,
+      description: "Manage organization profile, API keys, and danger zone.",
+    },
+    people: {
+      title: organizationLocalization.people,
+      description: "Manage members and invitations for this organization.",
+    },
+    roles: {
+      title: "Roles",
+      description: "Review built-in roles and create custom permission sets.",
+    },
+  } as const
+
   return (
-    <Tabs
-      value={currentView}
-      className={cn("w-full gap-4 md:gap-6", className)}
-    >
-      <div className={cn(hideNav && "hidden")}>
-        <TabsList aria-label={localization.settings.settings}>
-          <TabsTrigger
-            value="settings"
-            className="gap-1"
-            onClick={() =>
-              navigate({
-                to: organizationHref({
-                  basePath: basePaths.organization,
-                  slug,
-                  slugPrefix,
-                  segment: organizationViewPaths.organization.settings,
-                }),
-              })
-            }
-          >
-            <SettingsIcon className="text-muted-foreground" />
+    <div className={cn("flex w-full flex-col gap-6", className)}>
+      <PageHeader
+        description={pageCopy[currentView].description}
+        title={pageCopy[currentView].title}
+      />
 
-            {localization.settings.settings}
-          </TabsTrigger>
+      <Tabs value={currentView} className="w-full gap-4 md:gap-6">
+        <div className={cn(hideNav && "hidden")}>
+          <TabsList aria-label={localization.settings.settings}>
+            <TabsTrigger
+              value="settings"
+              className="gap-1"
+              onClick={() =>
+                navigate({
+                  to: organizationHref({
+                    basePath: basePaths.organization,
+                    slug,
+                    slugPrefix,
+                    segment: organizationViewPaths.organization.settings,
+                  }),
+                })
+              }
+            >
+              <SettingsIcon className="text-muted-foreground" />
+              {localization.settings.settings}
+            </TabsTrigger>
 
-          <TabsTrigger
-            value="people"
-            className="gap-1"
-            onClick={() =>
-              navigate({
-                to: organizationHref({
-                  basePath: basePaths.organization,
-                  slug,
-                  slugPrefix,
-                  segment: organizationViewPaths.organization.people,
-                }),
-              })
-            }
-          >
-            <UserIcon className="text-muted-foreground" />
+            <TabsTrigger
+              value="people"
+              className="gap-1"
+              onClick={() =>
+                navigate({
+                  to: organizationHref({
+                    basePath: basePaths.organization,
+                    slug,
+                    slugPrefix,
+                    segment: organizationViewPaths.organization.people,
+                  }),
+                })
+              }
+            >
+              <UserIcon className="text-muted-foreground" />
+              {organizationLocalization.people}
+            </TabsTrigger>
 
-            {organizationLocalization.people}
-          </TabsTrigger>
+            <TabsTrigger
+              value="roles"
+              className="gap-1"
+              onClick={() =>
+                navigate({
+                  to: organizationHref({
+                    basePath: basePaths.organization,
+                    slug,
+                    slugPrefix,
+                    segment: rolesPath,
+                  }),
+                })
+              }
+            >
+              <ShieldIcon className="text-muted-foreground" />
+              Roles
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
-          <TabsTrigger
-            value="roles"
-            className="gap-1"
-            onClick={() =>
-              navigate({
-                to: organizationHref({
-                  basePath: basePaths.organization,
-                  slug,
-                  slugPrefix,
-                  segment: rolesPath,
-                }),
-              })
-            }
-          >
-            <ShieldIcon className="text-muted-foreground" />
-            Roles
-          </TabsTrigger>
-        </TabsList>
-      </div>
+        <TabsContent value="settings" tabIndex={-1}>
+          <OrganizationSettings />
+        </TabsContent>
 
-      <TabsContent value="settings" tabIndex={-1}>
-        <OrganizationSettings />
-      </TabsContent>
+        <TabsContent value="people" tabIndex={-1}>
+          <OrganizationPeople />
+        </TabsContent>
 
-      <TabsContent value="people" tabIndex={-1}>
-        <OrganizationPeople />
-      </TabsContent>
-
-      <TabsContent value="roles" tabIndex={-1}>
-        <OrganizationRoles />
-      </TabsContent>
-    </Tabs>
+        <TabsContent value="roles" tabIndex={-1}>
+          <OrganizationRoles />
+        </TabsContent>
+      </Tabs>
+    </div>
   )
 }

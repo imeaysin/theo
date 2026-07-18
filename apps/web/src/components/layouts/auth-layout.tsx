@@ -6,7 +6,7 @@ export function AuthLayout() {
   return (
     <div className="flex min-h-svh flex-col items-center justify-center px-4 py-10">
       <Link
-        className="mb-8 font-heading text-lg font-semibold tracking-tight"
+        className="font-heading mb-8 text-lg font-semibold tracking-tight"
         to={routes.home}
       >
         {site.name}

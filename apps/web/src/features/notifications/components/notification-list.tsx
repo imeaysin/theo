@@ -1,103 +1,20 @@
+"use client"
+
 import type { NotificationResponse } from "@workspace/contracts"
+import type { ColumnDef } from "@tanstack/react-table"
 import { dates } from "@/lib/dates"
 import { Button } from "@workspace/ui-shadcn/components/button"
+import { Badge } from "@workspace/ui-shadcn/components/badge"
+import { DataTable } from "@workspace/ui-shadcn/components/data-table"
+import { DataTableColumnHeader } from "@workspace/ui-shadcn/components/data-table-column-header"
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@workspace/ui-shadcn/components/tooltip"
-import { cn } from "@workspace/ui-shadcn/lib/utils"
 import { CheckIcon, ExternalLinkIcon, Trash2Icon } from "lucide-react"
+import { useMemo } from "react"
 import { Link } from "react-router-dom"
-
-type NotificationItemProps = {
-  notification: NotificationResponse
-  onMarkRead: (id: string) => void
-  onDelete: (id: string) => void
-  disabled?: boolean
-}
-
-function NotificationItem({
-  notification,
-  onMarkRead,
-  onDelete,
-  disabled,
-}: NotificationItemProps) {
-  return (
-    <div
-      className={cn(
-        "group flex items-start gap-3 border-b px-4 py-3 last:border-b-0",
-        !notification.read && "bg-accent/30"
-      )}
-    >
-      <div
-        aria-hidden
-        className={cn(
-          "mt-1.5 size-2 shrink-0 rounded-full",
-          notification.read ? "bg-transparent" : "bg-primary"
-        )}
-      />
-
-      <div className="min-w-0 flex-1">
-        <p className="text-sm leading-snug font-medium">{notification.title}</p>
-        {notification.body ? (
-          <p className="mt-0.5 line-clamp-2 text-sm text-muted-foreground">
-            {notification.body}
-          </p>
-        ) : null}
-        <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
-          <time>{dates.relativeTime(notification.createdAt)}</time>
-          {notification.actionUrl ? (
-            <Link
-              className="inline-flex items-center gap-1 text-primary hover:underline"
-              to={notification.actionUrl}
-            >
-              View
-              <ExternalLinkIcon />
-            </Link>
-          ) : null}
-        </div>
-      </div>
-
-      <div className="flex shrink-0 items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-        {!notification.read ? (
-          <Tooltip>
-            <TooltipTrigger
-              render={
-                <Button
-                  aria-label="Mark as read"
-                  disabled={disabled}
-                  onClick={() => onMarkRead(notification.id)}
-                  size="icon-sm"
-                  variant="ghost"
-                />
-              }
-            >
-              <CheckIcon />
-            </TooltipTrigger>
-            <TooltipContent>Mark as read</TooltipContent>
-          </Tooltip>
-        ) : null}
-        <Tooltip>
-          <TooltipTrigger
-            render={
-              <Button
-                aria-label="Delete notification"
-                disabled={disabled}
-                onClick={() => onDelete(notification.id)}
-                size="icon-sm"
-                variant="ghost"
-              />
-            }
-          >
-            <Trash2Icon />
-          </TooltipTrigger>
-          <TooltipContent>Delete notification</TooltipContent>
-        </Tooltip>
-      </div>
-    </div>
-  )
-}
 
 type NotificationListProps = {
   notifications: NotificationResponse[]
@@ -106,23 +23,149 @@ type NotificationListProps = {
   disabled?: boolean
 }
 
+function matchesNotificationSearch(
+  notification: NotificationResponse,
+  query: string
+) {
+  const normalized = query.trim().toLowerCase()
+  if (!normalized) return true
+
+  return (
+    notification.title.toLowerCase().includes(normalized) ||
+    (notification.body?.toLowerCase().includes(normalized) ?? false)
+  )
+}
+
+function getNotificationColumns({
+  onMarkRead,
+  onDelete,
+  disabled,
+}: Omit<
+  NotificationListProps,
+  "notifications"
+>): ColumnDef<NotificationResponse>[] {
+  return [
+    {
+      accessorKey: "title",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Notification" />
+      ),
+      cell: ({ row }) => {
+        const notification = row.original
+        return (
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2">
+              {!notification.read ? (
+                <Badge variant="secondary">Unread</Badge>
+              ) : null}
+              <span className="font-medium">{notification.title}</span>
+            </div>
+            {notification.body ? (
+              <p className="max-w-md truncate text-muted-foreground">
+                {notification.body}
+              </p>
+            ) : null}
+          </div>
+        )
+      },
+    },
+    {
+      accessorKey: "createdAt",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="When" />
+      ),
+      cell: ({ row }) => (
+        <time className="whitespace-nowrap text-muted-foreground">
+          {dates.relativeTime(row.original.createdAt)}
+        </time>
+      ),
+    },
+    {
+      id: "link",
+      enableHiding: false,
+      enableSorting: false,
+      cell: ({ row }) => {
+        const actionUrl = row.original.actionUrl
+        if (!actionUrl) return null
+        return (
+          <Link
+            className="inline-flex items-center gap-1 text-primary hover:underline"
+            to={actionUrl}
+          >
+            View
+            <ExternalLinkIcon className="size-3.5" />
+          </Link>
+        )
+      },
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      enableSorting: false,
+      cell: ({ row }) => {
+        const notification = row.original
+        return (
+          <div className="flex items-center justify-end gap-2">
+            {!notification.read ? (
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <Button
+                      aria-label="Mark as read"
+                      disabled={disabled}
+                      onClick={() => onMarkRead(notification.id)}
+                      size="icon-sm"
+                      variant="outline"
+                    />
+                  }
+                >
+                  <CheckIcon />
+                </TooltipTrigger>
+                <TooltipContent>Mark as read</TooltipContent>
+              </Tooltip>
+            ) : null}
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <Button
+                    aria-label="Delete notification"
+                    disabled={disabled}
+                    onClick={() => onDelete(notification.id)}
+                    size="icon-sm"
+                    variant="outline"
+                  />
+                }
+              >
+                <Trash2Icon />
+              </TooltipTrigger>
+              <TooltipContent>Delete notification</TooltipContent>
+            </Tooltip>
+          </div>
+        )
+      },
+    },
+  ]
+}
+
 export function NotificationList({
   notifications,
   onMarkRead,
   onDelete,
   disabled,
 }: NotificationListProps) {
+  const columns = useMemo(
+    () => getNotificationColumns({ onMarkRead, onDelete, disabled }),
+    [onMarkRead, onDelete, disabled]
+  )
+
   return (
-    <div className="overflow-hidden rounded-lg border">
-      {notifications.map((notification) => (
-        <NotificationItem
-          disabled={disabled}
-          key={notification.id}
-          notification={notification}
-          onDelete={onDelete}
-          onMarkRead={onMarkRead}
-        />
-      ))}
-    </div>
+    <DataTable
+      columns={columns}
+      data={notifications}
+      filterFn={matchesNotificationSearch}
+      filterPlaceholder="Filter notifications..."
+      getRowId={(notification) => notification.id}
+      initialSorting={[{ id: "createdAt", desc: true }]}
+    />
   )
 }

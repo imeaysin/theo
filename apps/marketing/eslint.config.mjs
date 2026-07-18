@@ -4,9 +4,6 @@ import { nextJsConfig } from "@workspace/eslint-config/next-js"
 export default [
   ...nextJsConfig,
   {
-    rules: {
-      "max-params": ["error", 2],
-      "no-nested-ternary": "error",
-    },
+    ignores: [".next/**", "next-env.d.ts", "public/gif.worker.js"],
   },
 ]

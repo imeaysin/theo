@@ -61,6 +61,11 @@
       "types": "./dist/client/index.d.ts",
       "import": "./dist/client/index.js",
       "require": "./dist/client/index.cjs"
+    },
+    "./public": {
+      "types": "./dist/public/index.d.ts",
+      "import": "./dist/public/index.js",
+      "require": "./dist/public/index.cjs"
     }
   },
   "scripts": {

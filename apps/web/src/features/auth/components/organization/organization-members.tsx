@@ -9,13 +9,17 @@ import {
   useListOrganizationMembers,
   useSession,
 } from "@better-auth-ui/react"
-import type { Member } from "better-auth/client"
-import { ChevronUp, Filter, Search, X } from "lucide-react"
-import { type ComponentProps, type ReactNode, useMemo, useState } from "react"
-
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@workspace/ui-shadcn/components/empty"
 import { Badge } from "@workspace/ui-shadcn/components/badge"
 import { Button, buttonVariants } from "@workspace/ui-shadcn/components/button"
-import { Card } from "@workspace/ui-shadcn/components/card"
+import { DataTable } from "@workspace/ui-shadcn/components/data-table"
+import { DataTableSkeleton } from "@workspace/ui-shadcn/components/data-table-skeleton"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,41 +27,30 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@workspace/ui-shadcn/components/dropdown-menu"
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@workspace/ui-shadcn/components/input-group"
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@workspace/ui-shadcn/components/table"
+import { Filter, Users, X } from "lucide-react"
+import { type ComponentProps, useMemo, useState } from "react"
+
 import { organizationPlugin } from "@/lib/auth/organization-plugin"
 import { cn } from "@workspace/ui-shadcn/lib/utils"
+import { SectionHeader } from "@/components/page-header"
 import { InviteMemberDialog } from "@/features/auth/components/organization/invite-member-dialog"
-import { OrganizationMemberRow } from "@/features/auth/components/organization/organization-member-row"
-import { OrganizationMemberRowSkeleton } from "@/features/auth/components/organization/organization-member-row-skeleton"
-
-type SortDirection = "ascending" | "descending"
-
-type SortDescriptor = {
-  column: string
-  direction: SortDirection
-}
+import {
+  getOrganizationMembersColumns,
+  matchesOrganizationMemberSearch,
+} from "@/features/auth/components/organization/organization-members-columns"
 
 /** Props for the `OrganizationMembers` component. */
 export type OrganizationMembersProps = {
   className?: string
+  hideInvite?: boolean
 }
 
 /**
- * Organization members table with title, invite control, and per-row actions.
+ * Organization members list with filters and per-row actions.
  */
 export function OrganizationMembers({
   className,
+  hideInvite,
   ...props
 }: OrganizationMembersProps & ComponentProps<"div">) {
   const { authClient } = useAuth()
@@ -89,220 +82,124 @@ export function OrganizationMembers({
     updatePermissionPending ||
     deletePermissionPending
 
-  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>()
   const [roleFilter, setRoleFilter] = useState("all")
-  const [search, setSearch] = useState("")
-
-  const filteredMembers = useMemo(() => {
-    return membersData?.members.filter(
-      (member) =>
-        (roleFilter === "all" || member.role === roleFilter) &&
-        (member.user.name.toLowerCase().includes(search.toLowerCase()) ||
-          member.user.email.toLowerCase().includes(search.toLowerCase()))
-    )
-  }, [search, membersData?.members, roleFilter])
-
-  const sortedMembers = useMemo(() => {
-    if (!sortDescriptor) return filteredMembers
-    if (!filteredMembers) return filteredMembers
-
-    return [...filteredMembers].sort((a, b) => {
-      const col = sortDescriptor.column as keyof Member | "user"
-      const first =
-        col === "user" ? a.user.name || a.user.email : String(a[col])
-      const second =
-        col === "user" ? b.user.name || b.user.email : String(b[col])
-
-      let cmp = first.localeCompare(second)
-      if (sortDescriptor.direction === "descending") {
-        cmp *= -1
-      }
-
-      return cmp
-    })
-  }, [sortDescriptor, filteredMembers])
-
   const [inviteOpen, setInviteOpen] = useState(false)
+
+  const members = useMemo(() => {
+    const items = membersData?.members ?? []
+    if (roleFilter === "all") return items
+    return items.filter((member) => member.role === roleFilter)
+  }, [membersData?.members, roleFilter])
 
   const isOwner = membersData?.members.some(
     (member) => member.role === "owner" && member.userId === session?.user.id
   )
 
-  function toggleSort(column: string) {
-    setSortDescriptor((current) => {
-      if (current?.column !== column) {
-        return { column, direction: "ascending" }
-      }
-      if (current.direction === "ascending") {
-        return { column, direction: "descending" }
-      }
-      return undefined
+  const columns = useMemo(() => {
+    if (!activeOrganization) return []
+    return getOrganizationMembersColumns({
+      isOwner,
+      organization: activeOrganization,
+      roleLabels: roles,
     })
-  }
+  }, [activeOrganization, isOwner, roles])
+
+  const hasMembers = (membersData?.members.length ?? 0) > 0
+  const showEmptyInitial = !isPending && !hasMembers
 
   return (
     <div className={cn("flex flex-col gap-3", className)} {...props}>
-      <div className="flex items-end justify-between gap-3">
-        <h3 className="truncate text-sm font-semibold">
-          {organizationLocalization.members}
-        </h3>
-
-        <Button
-          className="shrink-0"
-          size="sm"
-          disabled={isPending}
-          onClick={() => setInviteOpen(true)}
-        >
-          {organizationLocalization.inviteMember}
-        </Button>
-      </div>
-
-      <div className="flex flex-col gap-4">
-        <div className="flex items-center gap-3">
-          <InputGroup className="min-w-0 sm:w-[220px]">
-            <InputGroupInput
-              type="search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              aria-label={organizationLocalization.search}
-              placeholder={organizationLocalization.search}
+      <SectionHeader
+        actions={
+          !hideInvite ? (
+            <Button
+              size="sm"
               disabled={isPending}
-            />
-
-            <InputGroupAddon>
-              <Search className="text-muted-foreground" />
-            </InputGroupAddon>
-          </InputGroup>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              className={cn(buttonVariants({ size: "sm", variant: "outline" }))}
-              disabled={isPending}
+              onClick={() => setInviteOpen(true)}
             >
-              <Filter />
+              {organizationLocalization.inviteMember}
+            </Button>
+          ) : null
+        }
+        title={organizationLocalization.members}
+      />
 
-              {organizationLocalization.role}
-            </DropdownMenuTrigger>
+      {isPending ? <DataTableSkeleton columnCount={3} /> : null}
 
-            <DropdownMenuContent align="start">
-              <DropdownMenuRadioGroup
-                value={roleFilter}
-                onValueChange={setRoleFilter}
-              >
-                <DropdownMenuRadioItem value="all">
-                  {organizationLocalization.all}
-                </DropdownMenuRadioItem>
+      {showEmptyInitial ? (
+        <Empty className="border border-dashed">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <Users />
+            </EmptyMedia>
+            <EmptyTitle>{organizationLocalization.members}</EmptyTitle>
+            <EmptyDescription>
+              Invite teammates to collaborate in this organization.
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      ) : null}
 
-                {Object.entries(roles).map(([role, label]) => (
-                  <DropdownMenuRadioItem key={role} value={role}>
-                    {label}
-                  </DropdownMenuRadioItem>
-                ))}
-              </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-
-        {roleFilter !== "all" && (
-          <Badge variant="secondary" className="w-fit gap-1">
-            {organizationLocalization.role}:{" "}
-            <span className="capitalize">
-              {roles?.[roleFilter] ?? roleFilter}
-            </span>
-            <button
-              type="button"
-              aria-label={organizationLocalization.clear}
-              className="inline-flex cursor-pointer items-center text-muted-foreground hover:text-foreground"
-              onClick={() => setRoleFilter("all")}
-            >
-              <X className="size-3" />
-            </button>
-          </Badge>
-        )}
-
-        <Card className="p-0">
-          <Table aria-label={organizationLocalization.members}>
-            <TableHeader>
-              <TableRow>
-                <SortableTableHead
-                  sortDirection={
-                    sortDescriptor?.column === "user"
-                      ? sortDescriptor.direction
-                      : undefined
-                  }
-                  onClick={() => toggleSort("user")}
+      {!isPending && activeOrganization && hasMembers ? (
+        <DataTable
+          columns={columns}
+          data={members}
+          filterFn={matchesOrganizationMemberSearch}
+          filterPlaceholder={organizationLocalization.search}
+          getRowId={(member) => member.id}
+          initialSorting={[{ id: "user", desc: false }]}
+          toolbar={
+            <div className="flex flex-wrap items-center gap-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  className={cn(
+                    buttonVariants({ size: "sm", variant: "outline" })
+                  )}
                 >
-                  {organizationLocalization.member}
-                </SortableTableHead>
-
-                <SortableTableHead
-                  sortDirection={
-                    sortDescriptor?.column === "role"
-                      ? sortDescriptor.direction
-                      : undefined
-                  }
-                  onClick={() => toggleSort("role")}
-                >
+                  <Filter />
                   {organizationLocalization.role}
-                </SortableTableHead>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start">
+                  <DropdownMenuRadioGroup
+                    value={roleFilter}
+                    onValueChange={setRoleFilter}
+                  >
+                    <DropdownMenuRadioItem value="all">
+                      {organizationLocalization.all}
+                    </DropdownMenuRadioItem>
+                    {Object.entries(roles).map(([role, label]) => (
+                      <DropdownMenuRadioItem key={role} value={role}>
+                        {label}
+                      </DropdownMenuRadioItem>
+                    ))}
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
 
-                <TableHead className="text-end">
-                  {organizationLocalization.actions}
-                </TableHead>
-              </TableRow>
-            </TableHeader>
+              {roleFilter !== "all" ? (
+                <Badge variant="secondary" className="w-fit gap-1">
+                  {organizationLocalization.role}:{" "}
+                  <span className="capitalize">
+                    {roles?.[roleFilter] ?? roleFilter}
+                  </span>
+                  <button
+                    type="button"
+                    aria-label={organizationLocalization.clear}
+                    className="inline-flex cursor-pointer items-center text-muted-foreground hover:text-foreground"
+                    onClick={() => setRoleFilter("all")}
+                  >
+                    <X className="size-3" />
+                  </button>
+                </Badge>
+              ) : null}
+            </div>
+          }
+        />
+      ) : null}
 
-            <TableBody>
-              {isPending ? (
-                <OrganizationMemberRowSkeleton />
-              ) : (
-                !!activeOrganization &&
-                sortedMembers?.map((member) => (
-                  <OrganizationMemberRow
-                    key={member.id}
-                    member={member}
-                    isOwner={isOwner}
-                    organization={activeOrganization}
-                  />
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </Card>
-      </div>
-
-      <InviteMemberDialog open={inviteOpen} onOpenChange={setInviteOpen} />
+      {!hideInvite ? (
+        <InviteMemberDialog open={inviteOpen} onOpenChange={setInviteOpen} />
+      ) : null}
     </div>
-  )
-}
-
-function SortableTableHead({
-  children,
-  sortDirection,
-  onClick,
-}: {
-  children: ReactNode
-  sortDirection?: SortDirection
-  onClick: () => void
-}) {
-  return (
-    <TableHead aria-sort={sortDirection ?? "none"}>
-      <button
-        type="button"
-        onClick={onClick}
-        className="flex w-full items-center gap-2 text-left font-medium"
-      >
-        {children}
-
-        {!!sortDirection && (
-          <ChevronUp
-            className={cn(
-              "size-3 transition-transform duration-100 ease-out",
-              sortDirection === "descending" ? "rotate-180" : ""
-            )}
-          />
-        )}
-      </button>
-    </TableHead>
   )
 }
