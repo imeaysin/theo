@@ -205,7 +205,7 @@ export const recordScreenMacContent = {
     {
       question: "Is there a time limit on recordings?",
       answer:
-        "Theo's Studio Mode records locally with no time limit — record for as long as you need and export the full length. On the free plan, Instant Mode (the instantly shareable links) is capped at 5 minutes per recording; upgrading lifts that theo.",
+        "The desktop app records locally with no time limit — record for as long as you need and export the full length. On the free plan, cloud share links have a length cap; upgrading to Pro lifts that limit.",
     },
     {
       question: "Can I record system audio and my microphone at the same time?",
@@ -247,7 +247,7 @@ export const recordScreenMacContent = {
       url: "/how-to-screen-record",
     },
     {
-      text: "Theo vs Loom",
+      text: "Product overview",
       url: "/features",
     },
   ],

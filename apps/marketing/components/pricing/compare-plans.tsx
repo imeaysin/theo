@@ -35,7 +35,7 @@ const sections: FeatureSection[] = [
     title: "Recording & editing",
     rows: [
       {
-        label: "Studio Mode with full editor",
+        label: "Full desktop editor",
         free: true,
         desktop: true,
         pro: true,
@@ -79,12 +79,17 @@ const sections: FeatureSection[] = [
         pro: true,
       },
       {
-        label: "Custom S3 bucket & Google Drive support",
+        label: "Bring-your-own storage",
         free: false,
         desktop: false,
         pro: true,
       },
-      { label: "Loom video importer", free: false, desktop: false, pro: true },
+      {
+        label: "Content migration tools",
+        free: false,
+        desktop: false,
+        pro: true,
+      },
     ],
   },
   {

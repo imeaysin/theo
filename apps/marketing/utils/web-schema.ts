@@ -37,17 +37,7 @@ export const createSoftwareApplicationSchema = (
 ) => {
   const testimonialsToUse = testimonials || allTestimonials
 
-  const rogerTestimonial = allTestimonials.find(
-    (t) => t.handle === "@_rogermattos"
-  )
-  const selectedTestimonials = rogerTestimonial
-    ? [
-        rogerTestimonial,
-        ...testimonialsToUse
-          .filter((t) => t.handle !== "@_rogermattos")
-          .slice(0, 4),
-      ]
-    : testimonialsToUse.slice(0, 5)
+  const selectedTestimonials = testimonialsToUse.slice(0, 5)
 
   const reviews = selectedTestimonials.map((testimonial) => ({
     "@type": "Review",
@@ -75,13 +65,12 @@ export const createSoftwareApplicationSchema = (
     url: productConfig.siteUrl,
     downloadUrl: productUrl("/download"),
     featureList: [
-      "Screen recording up to 4K resolution",
-      "60fps recording",
-      "Instant sharing with links",
-      "Studio mode for professional editing",
-      "Built-in thread commenting",
+      "High-resolution capture",
+      "Fast shareable links",
+      "Desktop editor for polished demos",
+      "Built-in comments and collaboration",
       "Custom domain support",
-      "Bring your own storage (Google Drive & S3)",
+      "Bring-your-own storage",
       "Cross-platform (Mac & Windows)",
       "Open source",
       "Privacy-focused",
@@ -92,14 +81,15 @@ export const createSoftwareApplicationSchema = (
         price: "0",
         priceCurrency: "USD",
         name: "Free Plan",
-        description: "Studio mode for personal use, 5-minute shareable links",
+        description:
+          "Local capture for personal use with limited shareable links",
       },
       {
         "@type": "Offer",
         price: "8.16",
         priceCurrency: "USD",
         name: "Pro Plan",
-        priceValidUntil: "2025-12-31",
+        priceValidUntil: "2026-12-31",
         description: "Full features for professional use",
         eligibleQuantity: {
           "@type": "QuantitativeValue",

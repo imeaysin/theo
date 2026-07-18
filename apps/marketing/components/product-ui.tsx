@@ -65,6 +65,14 @@ const sizeMap = {
   icon: "icon",
 } as const
 
+const productVariantClass: Partial<Record<ProductButtonVariant, string>> = {
+  dark: "rounded-full border-transparent bg-foreground text-background hover:bg-foreground/90",
+  blue: "rounded-full border border-blue-800 bg-blue-600 text-white shadow-[0_1.50px_0_0_rgba(255,255,255,0.20)_inset] hover:bg-blue-700",
+  white:
+    "rounded-full border-border bg-background text-foreground shadow-[0_1px_2px_rgba(0,0,0,0.08)] hover:bg-muted",
+  primary: "rounded-full",
+}
+
 export function Button({
   className,
   variant = "primary",
@@ -79,11 +87,15 @@ export function Button({
   ...props
 }: ButtonProps) {
   const sharedVariant = variantMap[variant]
-  const classes = buttonVariants({
-    variant: sharedVariant,
-    size: sizeMap[size],
-    className,
-  })
+  const classes = cn(
+    buttonVariants({
+      variant: sharedVariant,
+      size: sizeMap[size],
+    }),
+    productVariantClass[variant],
+    size === "lg" && "h-12 px-5 text-base",
+    className
+  )
 
   const content = (
     <>
@@ -110,7 +122,7 @@ export function Button({
 
   return (
     <SharedButton
-      className={className}
+      className={classes}
       variant={sharedVariant}
       size={sizeMap[size]}
       disabled={disabled}

@@ -150,18 +150,18 @@ export const homeContent: HomeContent = {
     modes: [
       {
         id: "instant",
-        label: "Instant",
-        title: "Record and share in seconds",
+        label: "Launch",
+        title: "Ship your product story",
       },
       {
         id: "studio",
-        label: "Studio",
-        title: "Record and edit locally",
+        label: "Build",
+        title: "Customize every detail",
       },
       {
         id: "screenshot",
-        label: "Screenshot",
-        title: "Capture, annotate and copy",
+        label: "Grow",
+        title: "Scale with your team",
       },
     ],
     links: [
@@ -178,21 +178,21 @@ export const homeContent: HomeContent = {
       seeOtherOptionsText: "More download options",
     },
   },
-  textReveal: "Record. Edit. Share.",
+  textReveal: "Build. Launch. Grow.",
   recordingModes: {
-    title: "Three modes, zero compromise",
+    title: "One product, three ways to start",
     subtitle:
-      "Instant Mode uploads as you record, so a shareable link is ready the moment you stop. Studio Mode keeps everything local for pixel-perfect editing. Screenshot, when a single frame is enough.",
+      "Pick the path that fits your workflow — ship quickly, refine locally, or capture a single moment.",
     modes: [
       {
-        name: "Instant Mode",
+        name: "Quick share",
         description:
-          "Hit record, stop, share link. Your video is live in seconds with auto-generated captions, a title, summary, chapters, and more.",
+          "Create something useful, get a link, and share it with your team in minutes.",
       },
       {
-        name: "Studio Mode",
+        name: "Full editor",
         description:
-          "Professional recordings with local editing, custom backgrounds, and export options for demos, tutorials, and presentations.",
+          "Take your time polishing demos, tutorials, and presentations before you publish.",
       },
     ],
   },
@@ -202,18 +202,18 @@ export const homeContent: HomeContent = {
       "Every feature is designed to save time and keep your workflow clean.",
     features: [
       {
-        title: "Your storage, your rules",
-        description: `Connect your own Google Drive or S3 bucket, use ${productConfig.name} Cloud, or keep everything local. You're never locked into our infrastructure.`,
+        title: "Your data, your rules",
+        description: `Keep content local, use ${productConfig.name} Cloud, or connect your own storage. You're never locked in.`,
       },
       {
-        title: "Privacy by default, sharing by choice",
+        title: "Privacy by default",
         description:
-          "Instant sharing when you need it, local recording when you want it. Share publicly or privately, password-protect sensitive recordings, or keep them local only.",
+          "Share when you need to, stay private when you don't. Password-protect sensitive links or keep everything offline.",
       },
       {
-        title: "Async collaboration that works",
+        title: "Collaboration that moves",
         description:
-          "Comments, reactions, and transcripts keep conversations moving without another meeting.",
+          "Comments, reactions, and searchable transcripts keep conversations going without another meeting.",
       },
       {
         title: "Cross-platform for your team",
@@ -223,16 +223,16 @@ export const homeContent: HomeContent = {
       {
         title: "Quality that looks professional",
         description:
-          "4K recording, 60fps capture, and intelligent compression that keeps file sizes reasonable.",
+          "High-resolution capture and smart compression so files stay sharp without being huge.",
       },
       {
-        title: "Truly open source",
-        description: `See exactly how ${productConfig.name} works, contribute features you need, or self-host for complete control.`,
+        title: "Open and customizable",
+        description: `Fork ${productConfig.name}, contribute features you need, or self-host for complete control.`,
       },
       {
-        title: `Speed up your workflow with ${productConfig.name} AI`,
+        title: `Speed up with ${productConfig.name} AI`,
         description:
-          "Auto-generated titles, summaries, clickable chapters, and transcriptions for every recording.",
+          "Auto-generated titles, summaries, chapters, and transcriptions for every share.",
       },
     ],
   },
@@ -240,28 +240,28 @@ export const homeContent: HomeContent = {
     eyebrow: `Why ${productConfig.name}`,
     title: "Built to be yours",
     subtitle:
-      "Every feature respects how you actually work — your storage, your platform, your workflow.",
+      "Every feature respects how you work — your storage, your platform, your workflow.",
     cards: [
       {
         key: "storage",
         title: "Bring your own storage",
-        description: `Plug in your own Google Drive or S3 bucket, route to ${productConfig.name} Cloud, or keep recordings entirely local.`,
+        description: `Use ${productConfig.name} Cloud, keep files local, or plug in storage you already trust.`,
       },
       {
         key: "ai",
         title: `${productConfig.name} AI does the busywork`,
         description:
-          "Every recording gets an AI-generated title, summary, clickable chapters, and a fully searchable transcript.",
+          "Every share gets an AI-generated title, summary, chapters, and a searchable transcript.",
       },
       {
         key: "async",
         title: "Async conversations that move",
         description:
-          "Threaded comments, emoji reactions, and viewer analytics turn one-way videos into two-way conversations.",
+          "Threaded comments, reactions, and viewer analytics turn one-way updates into two-way conversations.",
       },
       {
         key: "native",
-        title: "Native, not an Electron tab",
+        title: "Native performance",
         description:
           "Built for genuine native performance on macOS and Windows — fast and lightweight.",
       },
@@ -275,7 +275,7 @@ export const homeContent: HomeContent = {
         key: "pixel",
         title: "Pixel-perfect capture",
         description:
-          "Record up to 4K at 60fps with hardware-accelerated encoding.",
+          "Record in high resolution with hardware-accelerated encoding.",
       },
     ],
     cta: {
@@ -285,7 +285,7 @@ export const homeContent: HomeContent = {
   },
   testimonials: {
     title: "Loved by builders, trusted by teams",
-    subtitle: `Join thousands who've made ${productConfig.name} their daily driver for visual communication.`,
+    subtitle: `Join teams who use ${productConfig.name} for clear, visual communication.`,
     cta: "Read more testimonials",
   },
   pricing: {
@@ -295,13 +295,13 @@ export const homeContent: HomeContent = {
     lovedBy: "Trusted by teams and creators",
     commercial: {
       title: "Desktop License",
-      description: `A commercial license for the ${productConfig.name} desktop app — unlimited local recording and editing.`,
+      description: `A commercial license for the ${productConfig.name} desktop app — unlimited local capture and editing.`,
       features: [
         "Commercial usage rights",
         "Unlimited local recordings & editing",
-        "Studio Mode with full editor",
-        "20 cloud shareable links / month (up to 5 min each)",
-        "Export to any format",
+        "Full desktop editor",
+        "Limited cloud shareable links / month",
+        "Export to common formats",
         "Community support",
       ],
       cta: "Get Desktop License",
@@ -319,16 +319,16 @@ export const homeContent: HomeContent = {
       badge: "Best value",
       title: `${productConfig.name} Pro`,
       description:
-        "Everything in Desktop plus unlimited cloud features for seamless sharing and collaboration.",
+        "Everything in Desktop plus unlimited cloud features for sharing and collaboration.",
       features: [
         "Everything in Desktop License",
         "Unlimited cloud storage & bandwidth",
-        "Auto-generated titles, summaries, clickable chapters, and transcriptions",
+        "Auto-generated titles, summaries, chapters, and transcriptions",
         "Custom domain (app.yourdomain.com)",
         "Password protected shares",
         "Viewer analytics & engagement",
         "Team workspaces",
-        "Custom S3 bucket & Google Drive support",
+        "Bring-your-own storage",
         "Priority support & early features",
       ],
       cta: "Get Started",
@@ -352,28 +352,28 @@ export const homeContent: HomeContent = {
       },
       {
         question: "Is there a free version?",
-        answer: `Yes. ${productConfig.name} is free for personal use. Studio Mode has unlimited local recording with no watermarks. Instant Mode share links on the free plan are capped at 5 minutes — upgrade to ${productConfig.name} Pro for unlimited Instant Mode and cloud collaboration.`,
+        answer: `Yes. ${productConfig.name} is free for personal use. Upgrade to ${productConfig.name} Pro when you need unlimited cloud sharing and team features.`,
       },
       {
         question: "How long can I record on the free version?",
-        answer: `Studio Mode is unlimited on the free plan. Instant Mode (shareable cloud links) is capped at 5 minutes per recording until you upgrade to ${productConfig.name} Pro.`,
+        answer: `Local recording on the free plan is unlimited. Cloud share links have a length limit until you upgrade to ${productConfig.name} Pro.`,
       },
       {
         question: `How does ${productConfig.name} AI work?`,
-        answer: `${productConfig.name} AI generates titles, summaries, clickable chapters, and transcriptions. It's included with ${productConfig.name} Pro with no usage limits.`,
+        answer: `${productConfig.name} AI generates titles, summaries, chapters, and transcriptions. It's included with ${productConfig.name} Pro with no usage limits.`,
       },
       {
-        question: `How is ${productConfig.name} different from closed SaaS recorders?`,
+        question: `How is ${productConfig.name} different from closed SaaS tools?`,
         answer: `${productConfig.name} is open source, supports custom storage, works offline in the desktop app, and lets you own your content.`,
       },
       {
-        question: "What happens to my recordings if I cancel?",
+        question: "What happens to my content if I cancel?",
         answer:
-          "Your recordings are yours. If you cancel Pro, existing shares remain active and you can export everything. Downgrade to free to keep recording locally, or self-host to maintain all features.",
+          "Your content is yours. If you cancel Pro, existing shares remain active and you can export everything. Downgrade to free to keep working locally, or self-host to maintain all features.",
       },
       {
         question: "Do you offer team plans?",
-        answer: `Yes. ${productConfig.name} Pro includes team workspaces for organizing recordings, permissions, and collaboration. Volume discounts are available for larger teams.`,
+        answer: `Yes. ${productConfig.name} Pro includes team workspaces for organizing content, permissions, and collaboration. Volume discounts are available for larger teams.`,
       },
       {
         question: "Which platforms do you support?",
@@ -389,8 +389,8 @@ export const homeContent: HomeContent = {
         answer: `Security is core to ${productConfig.name}. As an open source project, the code is auditable. Bring-your-own storage and self-hosting keep data under your control.`,
       },
       {
-        question: "What about GDPR/HIPAA compliance?",
-        answer: `${productConfig.name} Pro lets you bring your own storage (including regional S3 or Google Drive) for GDPR. Self-hosting gives full control for HIPAA and similar requirements.`,
+        question: "What about compliance?",
+        answer: `${productConfig.name} Pro lets you bring your own storage for regional requirements. Self-hosting gives full control for stricter compliance needs.`,
       },
     ],
   },

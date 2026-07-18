@@ -42,49 +42,35 @@ export const LogoMarquee: React.FC<LogoMarqueeProps> = ({ className = "" }) => {
     { src: "/logos/tesla.svg", alt: "Tesla Logo", width: 100, height: 30 },
   ]
 
+  const track = (keyPrefix: string) =>
+    logos.map((logo, index) => (
+      <div
+        key={`${keyPrefix}-${index}`}
+        className="mx-4 flex h-10 shrink-0 items-center justify-center sm:mx-5"
+      >
+        <Image
+          alt={logo.alt}
+          loading="lazy"
+          width={logo.width}
+          height={logo.height}
+          className="h-auto max-h-8 w-auto opacity-50"
+          src={logo.src}
+        />
+      </div>
+    ))
+
   return (
-    <div className={`relative w-full overflow-hidden ${className}`}>
-      {/* Fade gradient on the left side */}
-      <div className="absolute top-0 left-0 z-10 h-full w-12 bg-linear-to-r from-background to-transparent"></div>
+    <div className={`relative w-full min-w-0 overflow-hidden ${className}`}>
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-linear-to-r from-background to-transparent sm:w-12" />
 
-      <div className="animate-marquee flex">
-        {/* First set of logos */}
-        {logos.map((logo, index) => (
-          <div
-            key={`logo-1-${index}`}
-            className="mx-5 flex shrink-0 items-center justify-center"
-          >
-            <Image
-              alt={logo.alt}
-              loading="lazy"
-              width={logo.width}
-              height={logo.height}
-              className="opacity-50"
-              src={logo.src}
-            />
-          </div>
-        ))}
-
-        {/* Duplicate set of logos for seamless looping */}
-        {logos.map((logo, index) => (
-          <div
-            key={`logo-2-${index}`}
-            className="mx-5 flex shrink-0 items-center justify-center"
-          >
-            <Image
-              alt={logo.alt}
-              loading="lazy"
-              width={logo.width}
-              height={logo.height}
-              className="opacity-50"
-              src={logo.src}
-            />
-          </div>
-        ))}
+      <div className="animate-marquee flex w-max">
+        <div className="flex shrink-0 items-center">{track("a")}</div>
+        <div className="flex shrink-0 items-center" aria-hidden>
+          {track("b")}
+        </div>
       </div>
 
-      {/* Fade gradient on the right side */}
-      <div className="absolute top-0 right-0 z-10 h-full w-12 bg-linear-to-l from-background to-transparent"></div>
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-linear-to-l from-background to-transparent sm:w-12" />
     </div>
   )
 }

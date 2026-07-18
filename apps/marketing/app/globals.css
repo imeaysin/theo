@@ -3,6 +3,7 @@
 @source "../**/*.{ts,tsx}";
 
 @theme {
+  --breakpoint-xs: 475px;
   --animate-marquee: marquee 30s linear infinite;
 
   @keyframes marquee {

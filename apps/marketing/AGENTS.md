@@ -8,9 +8,12 @@ Frontend-only Next.js 16 marketing / landing site for this monorepo template.
 - Home content & Pro pricing: `content/home.ts` + `lib/pricing.ts`
 - Testimonials: `content/testimonials.ts`
 
+Keep copy generic — this is a landing template, not Cap/Loom product marketing.
+Swap names, claims, and social proof for your brand before shipping.
+
 ## Kept routes
 
-`/`, `/features`, `/download`, `/pricing`, `/blog`, `/about`, `/support`, `/faq`, `/testimonials`, `/privacy`, `/terms`
+`/`, `/features`, `/download`, `/pricing`, `/blog`, `/about`, `/support`, `/faq`, `/testimonials`, `/privacy`, `/terms`, `/migrate`
 
 ## Rules
 

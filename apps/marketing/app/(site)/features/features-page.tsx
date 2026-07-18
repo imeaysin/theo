@@ -1,6 +1,7 @@
 "use client"
 
 import { Button } from "@/components/product-ui"
+import { productConfig } from "@workspace/config/public"
 import {
   faBolt,
   faCamera,
@@ -48,9 +49,9 @@ interface Feature {
 const features: Feature[] = [
   {
     icon: faVideo,
-    title: "Instant & Studio Modes",
+    title: "Quick share & full editor",
     description:
-      "Choose between quick shareable recordings or professional local editing with Studio Mode",
+      "Ship a link in minutes, or take your time polishing demos and tutorials locally",
     category: "recording",
     size: "medium",
   },
@@ -175,9 +176,9 @@ const features: Feature[] = [
   },
   {
     icon: faShareNodes,
-    title: "Instant Shareable Links",
+    title: "Shareable links",
     description:
-      "Share recordings instantly with a simple link - no downloads required",
+      "Share content instantly with a simple link — no downloads required",
     category: "sharing",
   },
   {
@@ -225,15 +226,15 @@ const features: Feature[] = [
     icon: faServer,
     title: "Bring Your Own Storage",
     description:
-      "Connect your own Google Drive or S3 bucket for complete data ownership",
+      "Connect storage you already trust for complete data ownership",
     category: "privacy",
     isPro: true,
   },
   {
     icon: faShieldAlt,
-    title: "Local Recording",
+    title: "Local-first option",
     description:
-      "Record and store everything locally with Theo Studio Mode - your data never leaves your device",
+      "Keep everything on your device when you need recordings to stay offline",
     category: "privacy",
     size: "medium",
   },
@@ -248,15 +249,15 @@ const features: Feature[] = [
   {
     icon: faServer,
     title: "Self-Hosting",
-    description: "Deploy Theo on your own infrastructure for ultimate control",
+    description: `Deploy ${productConfig.name} on your own infrastructure for ultimate control`,
     category: "privacy",
   },
 
   {
     icon: faDownload,
-    title: "Loom Video Importer",
+    title: "Easy migration",
     description:
-      "Switching from Loom? Import your existing Loom recordings directly into Theo and keep all your content in one place",
+      "Bring existing libraries and content into one place as you switch tools",
     category: "platform",
     size: "medium",
   },
@@ -350,7 +351,7 @@ export const FeaturesPage = () => {
     <div className="min-h-screen">
       <div className="relative z-10 w-full px-5 pt-32 pb-20">
         <div className="mx-auto w-full max-w-5xl px-5 text-center sm:px-8">
-          <h1 className="relative z-10 mb-4 text-3xl leading-[2.5rem] font-medium md:text-6xl md:leading-[4rem]">
+          <h1 className="relative z-10 mb-4 text-3xl leading-10 font-medium md:text-6xl md:leading-16">
             The screen recorder for
             <br />
             <span className="text-muted-foreground">teams and creators</span>
@@ -384,7 +385,7 @@ export const FeaturesPage = () => {
       </div>
 
       <div className="mx-auto w-full max-w-screen-2xl px-5 pb-32 sm:px-8 lg:px-10">
-        <div className="grid grid-flow-dense auto-rows-[minmax(200px,_auto)] grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-flow-dense auto-rows-[minmax(200px,auto)] grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {features.map((feature, index) => {
             const sizeClasses = {
               small: "col-span-1",
@@ -408,7 +409,7 @@ export const FeaturesPage = () => {
                   {feature.isPro && (
                     <Link
                       href="/pricing"
-                      className="ml-2 inline-flex items-center rounded-full bg-gradient-to-br from-primary/20 to-primary/20 px-2 py-1 text-xs font-medium text-primary-foreground transition-all duration-200 hover:from-primary/20 hover:to-primary/20"
+                      className="ml-2 inline-flex items-center rounded-full bg-linear-to-br from-primary/20 to-primary/20 px-2 py-1 text-xs font-medium text-primary-foreground transition-all duration-200 hover:from-primary/20 hover:to-primary/20"
                     >
                       Theo Pro
                     </Link>
