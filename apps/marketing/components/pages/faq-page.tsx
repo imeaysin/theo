@@ -1,5 +1,6 @@
 "use client"
 
+import { productConfig } from "@workspace/config/public"
 import Link from "next/link"
 
 interface FaqItem {
@@ -11,50 +12,37 @@ interface FaqItem {
   }
 }
 
+const name = productConfig.name
+
 const faqContent: FaqItem[] = [
   {
-    title: "Who is Theo for?",
-    answer:
-      "Theo is for anyone who wants to record, edit, and share videos. It's a lightweight, powerful tool for creators, educators, marketers, developers, and remote teams who want to communicate more effectively through screen recordings.",
+    title: `Who is ${name} for?`,
+    answer: `${name} is a sample product for this landing template. Use it as a starting point for creators, educators, marketers, developers, and teams who need a clear way to create and share updates.`,
   },
   {
     title: "How much does it cost?",
-    answer:
-      "Theo offers a free version for personal use. You can upgrade to Theo Pro for just $8.16/month (when billed annually) to unlock unlimited cloud storage, unlimited recording length, custom domain support, advanced team features, password-protected videos, analytics, and priority support. We also offer commercial licenses and self-hosted options for businesses.",
+    answer: `${name} offers a free tier for personal use. Upgrade to ${name} Pro for cloud storage, longer shares, team features, analytics, and priority support. See the pricing page for current numbers — replace them with yours.`,
   },
   {
-    title: "Which platforms does Theo support?",
-    answer:
-      "Theo is cross-platform and works on macOS (both Apple Silicon and Intel) and Windows. For macOS, we recommend version 13.1 or newer. For Windows, we recommend Windows 10 or newer.",
+    title: `Which platforms does ${name} support?`,
+    answer: `${name} targets macOS (Apple Silicon and Intel) and Windows. Shareable links work in any modern browser.`,
   },
   {
-    title: "What makes Theo different from Loom?",
-    answer:
-      "Theo is open source, privacy-focused, and lets you own your data. You can connect your own Google Drive or custom S3 storage buckets, self-host the entire platform, and get a lightweight, faster experience. We focus strongly on design, user experience, and building with our community at the center of everything we do. Plus, our built-in Loom video importer makes switching effortless.",
+    title: `What makes ${name} different?`,
+    answer: `${name} is positioned as open source, privacy-focused, and flexible about storage. Customize this answer to match your real differentiators.`,
   },
   {
-    title: "Can I import my Loom videos to Theo?",
-    answer:
-      "Yes! Theo Pro includes a built-in Loom video importer that lets you seamlessly transfer your existing Loom recordings into Theo. Just paste your Loom video links and Theo handles the rest — keeping all your content organized in one place.",
-  },
-  {
-    title: "Can I self-host Theo?",
-    answer:
-      "Yes! Theo can be self-hosted on your own infrastructure, giving you full control over your data.",
+    title: `Can I self-host ${name}?`,
+    answer: `Yes — this template assumes self-hosting is available. Update this FAQ if your product ships differently.`,
   },
   {
     title: "Is there a commercial license available?",
-    answer:
-      "Yes, we offer commercial licenses for businesses that want to use the Theo desktop app. The commercial license includes the Theo Recorder + Editor with local-only features. Our Pro plan also includes a commercial license for the desktop app.",
-    link: {
-      text: "Deactivate your license",
-      href: "/deactivate-license",
-    },
+    answer: `Yes. Paid plans include commercial usage rights for the desktop app. Adjust this copy for your licensing model.`,
   },
   {
-    title: "What happens after the beta period ends?",
+    title: "What happens after early adopter pricing ends?",
     answer:
-      "Early adopters will keep their special pricing for the lifetime of their subscription, even after we move out of beta and adjust our regular pricing. This is our way of thanking our early supporters.",
+      "Early adopters keep their locked-in pricing for the lifetime of their subscription. Thank early supporters — or remove this if it doesn't apply.",
   },
 ]
 

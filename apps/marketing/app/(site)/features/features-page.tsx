@@ -1,6 +1,7 @@
 "use client"
 
 import { Button } from "@/components/product-ui"
+import { productConfig } from "@workspace/config/public"
 import {
   faBolt,
   faCamera,
@@ -48,9 +49,9 @@ interface Feature {
 const features: Feature[] = [
   {
     icon: faVideo,
-    title: "Instant & Studio Modes",
+    title: "Quick share & full editor",
     description:
-      "Choose between quick shareable recordings or professional local editing with Studio Mode",
+      "Ship a link in minutes, or take your time polishing demos and tutorials locally",
     category: "recording",
     size: "medium",
   },
@@ -175,9 +176,9 @@ const features: Feature[] = [
   },
   {
     icon: faShareNodes,
-    title: "Instant Shareable Links",
+    title: "Shareable links",
     description:
-      "Share recordings instantly with a simple link - no downloads required",
+      "Share content instantly with a simple link — no downloads required",
     category: "sharing",
   },
   {
@@ -225,15 +226,15 @@ const features: Feature[] = [
     icon: faServer,
     title: "Bring Your Own Storage",
     description:
-      "Connect your own Google Drive or S3 bucket for complete data ownership",
+      "Connect storage you already trust for complete data ownership",
     category: "privacy",
     isPro: true,
   },
   {
     icon: faShieldAlt,
-    title: "Local Recording",
+    title: "Local-first option",
     description:
-      "Record and store everything locally with Theo Studio Mode - your data never leaves your device",
+      "Keep everything on your device when you need recordings to stay offline",
     category: "privacy",
     size: "medium",
   },
@@ -248,15 +249,15 @@ const features: Feature[] = [
   {
     icon: faServer,
     title: "Self-Hosting",
-    description: "Deploy Theo on your own infrastructure for ultimate control",
+    description: `Deploy ${productConfig.name} on your own infrastructure for ultimate control`,
     category: "privacy",
   },
 
   {
     icon: faDownload,
-    title: "Loom Video Importer",
+    title: "Easy migration",
     description:
-      "Switching from Loom? Import your existing Loom recordings directly into Theo and keep all your content in one place",
+      "Bring existing libraries and content into one place as you switch tools",
     category: "platform",
     size: "medium",
   },

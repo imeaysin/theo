@@ -5,22 +5,7 @@ import { homeContent } from "@/content/home"
 import { type Testimonial, testimonials } from "@/content/testimonials"
 import Image from "next/image"
 
-const FEATURED_HANDLES = [
-  "@olivialawson.co",
-  "Holoholo App",
-  "@BilalBudhani",
-  "@Greg__LD",
-  "@eveningkid",
-  "@BorhadeHrushi",
-] as const
-
-const featured: Testimonial[] = FEATURED_HANDLES.map((handle) => {
-  const item = testimonials.find((t) => t.handle === handle)
-  if (!item) {
-    throw new Error(`Missing featured testimonial: ${handle}`)
-  }
-  return item
-})
+const featured: Testimonial[] = testimonials.slice(0, 6)
 
 function TestimonialCard({ name, handle, image, content, url }: Testimonial) {
   return (
