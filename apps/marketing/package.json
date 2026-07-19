@@ -10,27 +10,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^6.7.2",
-    "@fortawesome/free-brands-svg-icons": "^6.7.2",
-    "@fortawesome/free-solid-svg-icons": "^6.7.2",
-    "@fortawesome/react-fontawesome": "^0.2.2",
-    "@number-flow/react": "^0.5.9",
-    "@rive-app/canvas": "2.38.5",
-    "@rive-app/react-canvas": "^4.18.7",
     "@workspace/config": "workspace:*",
     "@workspace/ui": "workspace:*",
-    "clsx": "^2.1.1",
-    "date-fns": "catalog:",
-    "framer-motion": "^11.18.2",
-    "lucide-react": "catalog:",
-    "motion": "catalog:",
     "next": "catalog:",
-    "next-mdx-remote": "catalog:",
     "react": "catalog:",
-    "react-dom": "catalog:",
-    "rehype-pretty-code": "catalog:",
-    "remark-gfm": "catalog:",
-    "sonner": "catalog:"
+    "react-dom": "catalog:"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "catalog:",

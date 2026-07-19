@@ -4,6 +4,6 @@ import { nextJsConfig } from "@workspace/eslint-config/next-js"
 export default [
   ...nextJsConfig,
   {
-    ignores: [".next/**", "next-env.d.ts", "public/gif.worker.js"],
+    ignores: [".next/**", "next-env.d.ts"],
   },
 ]

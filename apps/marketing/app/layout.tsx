@@ -60,7 +60,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
     <html className={productFont.variable} lang="en" suppressHydrationWarning>
       <body className="font-sans antialiased" suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <main className="w-full">{children}</main>
+          {children}
         </ThemeProvider>
       </body>
     </html>

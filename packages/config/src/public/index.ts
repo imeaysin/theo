@@ -19,9 +19,9 @@ export const productConfig = {
   name: "Theo",
   shortName: "Theo",
   legalName: "Theo Software, Inc.",
-  tagline: "Beautiful product demos, owned by you.",
+  tagline: "Full-stack monorepo template.",
   description:
-    "Theo is a lightweight product template for recording, editing, and sharing polished videos — customize this config for your brand.",
+    "Theo is an open-source monorepo template — NestJS API, Vite web app, Next.js marketing site, Expo mobile, and shared packages. Fork it and ship your product.",
   siteUrl: "https://theo.example",
   repositoryUrl: "https://github.com/imeaysin/theo",
   supportEmail: "support@theo.example",

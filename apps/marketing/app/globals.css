@@ -2,17 +2,6 @@
 
 @source "../**/*.{ts,tsx}";
 
-@theme {
-  --breakpoint-xs: 475px;
-  --animate-marquee: marquee 30s linear infinite;
-
-  @keyframes marquee {
-    to {
-      transform: translateX(-50%);
-    }
-  }
-}
-
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -20,11 +9,17 @@
 
   body {
     overflow-x: clip;
-    background-image: radial-gradient(
-      ellipse 120% 80% at 50% -20%,
-      color-mix(in oklch, var(--foreground) 4%, transparent),
-      transparent 55%
-    );
+    background-image:
+      radial-gradient(
+        ellipse 90% 60% at 10% -10%,
+        color-mix(in oklch, var(--foreground) 5%, transparent),
+        transparent 50%
+      ),
+      radial-gradient(
+        ellipse 70% 50% at 90% 110%,
+        color-mix(in oklch, var(--foreground) 4%, transparent),
+        transparent 55%
+      );
     background-attachment: fixed;
   }
 }
