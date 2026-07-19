@@ -7,6 +7,7 @@ Frontend-only Next.js 16 marketing / landing site for this monorepo template.
 - Brand, URLs, emails: `@workspace/config/public` (`productConfig`)
 - Home content & Pro pricing: `content/home.ts` + `lib/pricing.ts`
 - Testimonials: `content/testimonials.ts`
+- Desktop nav mega-menu links: `config/navigation.ts`
 
 Keep copy generic — this is a landing template. Prefer flat content objects and
 thin page components over wrappers / deferred barrels / unused A/B variants.
