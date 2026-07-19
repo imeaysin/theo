@@ -47,6 +47,8 @@
     "NEXT_PHASE",
     "SKIP_ENV_VALIDATION",
     "DEV",
+    "PROD",
+    "MODE",
     "STORAGE_PROVIDER",
     "STORAGE_LOCAL_PATH",
     "STORAGE_LOCAL_URL",

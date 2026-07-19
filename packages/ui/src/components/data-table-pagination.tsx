@@ -35,7 +35,7 @@ function getPageItems(pageIndex: number, pageCount: number) {
   }
 
   const current = pageIndex
-  const items: Array<number | "ellipsis-start" | "ellipsis-end"> = [0]
+  const items: (number | "ellipsis-start" | "ellipsis-end")[] = [0]
 
   if (current > 2) {
     items.push("ellipsis-start")

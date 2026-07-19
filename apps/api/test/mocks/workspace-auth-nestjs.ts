@@ -9,7 +9,9 @@ export const MemberHasPermission = () => () => undefined
 export class WorkspaceAuthModule {}
 
 export class AuthService {
-  constructor(_options?: object) {}
+  constructor(_options?: object) {
+    /* empty */
+  }
 
   api = {
     getActiveMemberRole: async () => ({ role: null as string | null }),

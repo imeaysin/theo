@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "lint": "eslint",
+    "lint": "eslint . --max-warnings 0",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit"
   },
@@ -32,19 +32,15 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@eslint/js": "^10",
     "@tailwindcss/vite": "^4",
     "@turbo/gen": "^2.9.15",
     "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^10",
-    "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-react-refresh": "^0.5.2",
-    "globals": "^17",
+    "@workspace/eslint-config": "workspace:*",
+    "eslint": "catalog:",
     "tailwindcss": "^4",
-    "typescript": "~6",
-    "typescript-eslint": "^8"
+    "typescript": "catalog:"
   },
   "exports": {
     "./globals.css": "./src/styles/globals.css",
