@@ -20,5 +20,11 @@
 
   body {
     overflow-x: clip;
+    background-image: radial-gradient(
+      ellipse 120% 80% at 50% -20%,
+      color-mix(in oklch, var(--foreground) 4%, transparent),
+      transparent 55%
+    );
+    background-attachment: fixed;
   }
 }

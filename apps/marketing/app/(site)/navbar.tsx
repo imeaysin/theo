@@ -7,50 +7,51 @@ import { DesktopNavLinks } from "./desktop-nav-links"
 
 export const Navbar = ({ stars }: { stars?: string }) => {
   return (
-    <header className="fixed top-4 right-0 left-0 z-51 lg:top-6">
-      <nav className="relative mx-auto h-fit w-full max-w-[calc(100%-20px)] rounded-full border border-border bg-background p-2 lg:max-w-fit">
-        <div className="mx-auto flex h-full max-w-5xl items-center justify-between gap-12 transition-all">
-          <div className="flex items-center">
-            <Link passHref href="/">
-              <Logo className="h-10 w-24 transition-all duration-200 ease-out" />
-            </Link>
-            <div className="hidden lg:flex">
-              <DesktopNavLinks />
-            </div>
+    <header className="fixed top-0 right-0 left-0 z-50 px-3 pt-3 sm:px-4 sm:pt-4">
+      <nav className="mx-auto flex h-14 w-full max-w-5xl items-center justify-between gap-4 rounded-2xl border border-border/80 bg-background/80 px-3 shadow-sm backdrop-blur-xl supports-backdrop-filter:bg-background/70 sm:px-4">
+        <div className="flex min-w-0 items-center gap-1">
+          <Link
+            href="/"
+            className="shrink-0 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <Logo className="h-8" />
+          </Link>
+          <div className="hidden lg:flex">
+            <DesktopNavLinks />
           </div>
-          <div className="hidden items-center gap-2 lg:flex">
-            <Button
-              variant="outline"
-              icon={
-                <Image src="/github.svg" alt="Github" width={16} height={16} />
-              }
-              target="_blank"
-              href={productConfig.repositoryUrl}
-              size="sm"
-              className="w-full font-medium sm:w-auto"
-            >
-              {`GitHub${stars ? ` (${stars})` : ""}`}
-            </Button>
-            <Button
-              variant="gray"
-              href={`${productConfig.siteUrl}/login`}
-              size="sm"
-              className="w-full font-medium sm:w-auto"
-            >
-              Login
-            </Button>
-            <Button
-              variant="dark"
-              href={`${productConfig.siteUrl}/signup`}
-              size="sm"
-              className="w-full font-medium sm:w-auto"
-            >
-              Sign Up
-            </Button>
-          </div>
-          <div className="lg:hidden">
-            <MobileMenu stars={stars} />
-          </div>
+        </div>
+
+        <div className="hidden items-center gap-2 lg:flex">
+          <Button
+            variant="ghost"
+            icon={<Image src="/github.svg" alt="" width={16} height={16} />}
+            target="_blank"
+            href={productConfig.repositoryUrl}
+            size="sm"
+            className="font-medium text-muted-foreground hover:text-foreground"
+          >
+            {stars ? `GitHub ${stars}` : "GitHub"}
+          </Button>
+          <Button
+            variant="ghost"
+            href={`${productConfig.siteUrl}/login`}
+            size="sm"
+            className="font-medium"
+          >
+            Login
+          </Button>
+          <Button
+            variant="dark"
+            href={`${productConfig.siteUrl}/signup`}
+            size="sm"
+            className="font-medium"
+          >
+            Sign up
+          </Button>
+        </div>
+
+        <div className="lg:hidden">
+          <MobileMenu stars={stars} />
         </div>
       </nav>
     </header>

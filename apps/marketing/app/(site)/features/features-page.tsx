@@ -357,10 +357,10 @@ export const FeaturesPage = () => {
             <span className="text-muted-foreground">teams and creators</span>
           </h1>
           <p className="mx-auto mb-8 max-w-3xl text-base text-muted-foreground sm:text-xl">
-            Whether you&apos;re a solo creator or a global agency, Theo scales
-            with you. Record in 4K, collaborate seamlessly, maintain brand
-            consistency, and ship content faster. All while keeping full control
-            of your data.
+            Whether you&apos;re a solo creator or a global agency,{" "}
+            {productConfig.name} scales with you. Record in high quality,
+            collaborate seamlessly, maintain brand consistency, and ship content
+            faster — while keeping control of your data.
           </p>
 
           <div className="flex flex-col items-center justify-center gap-2 sm:flex-row sm:gap-2">
@@ -370,15 +370,15 @@ export const FeaturesPage = () => {
               size="lg"
               className="flex w-full items-center justify-center text-base font-medium sm:w-auto"
             >
-              Download Theo Free
+              Download {productConfig.name}
             </Button>
             <Button
               href="/pricing"
-              variant="blue"
+              variant="outline"
               size="lg"
               className="flex w-full items-center justify-center text-base font-medium sm:w-auto"
             >
-              Upgrade to Theo Pro
+              Get {productConfig.name} Pro
             </Button>
           </div>
         </div>
@@ -442,8 +442,8 @@ export const FeaturesPage = () => {
         <div className="mx-auto w-full max-w-screen-2xl px-5 text-center sm:px-8 lg:px-10">
           <h2 className="mb-4 text-3xl font-medium">Ready to get started?</h2>
           <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground">
-            Join thousands of users who are already creating better recordings
-            with Theo.
+            Join teams already shipping clearer updates with{" "}
+            {productConfig.name}.
           </p>
           <div className="flex flex-col justify-center gap-4 sm:flex-row">
             <Button
@@ -452,7 +452,7 @@ export const FeaturesPage = () => {
               size="lg"
               className="font-medium"
             >
-              Download Theo Free
+              Download {productConfig.name}
             </Button>
             <Button
               href="/pricing"

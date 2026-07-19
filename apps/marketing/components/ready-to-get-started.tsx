@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/product-ui"
 import { useDetectPlatform } from "hooks/use-detect-platform"
-import Image from "next/image"
 import Link from "next/link"
 import { getPlatformIcon } from "@/utils/platform"
 import { homeContent } from "@/content/home"
@@ -13,37 +12,35 @@ export function ReadyToGetStarted() {
   const loading = platform === null
 
   return (
-    <div className="relative mx-auto my-32 flex min-h-80 w-full max-w-5xl flex-col justify-center overflow-hidden rounded-2xl border border-border bg-background p-8 md:my-40 lg:my-48">
-      <Image
-        src="/illustrations/ctabg.svg"
-        alt=""
-        fill
-        className="object-cover"
-      />
-      <div className="relative z-10 mx-auto flex h-full w-full max-w-screen-2xl flex-col items-center justify-center px-5 sm:px-8 lg:px-10">
-        <div className="mx-auto mb-8 max-w-[800px] text-center">
-          <h2 className="mb-3 text-3xl text-foreground md:text-4xl">
+    <div className="mx-auto my-24 w-full max-w-4xl px-5 md:my-32">
+      <div className="relative overflow-hidden rounded-3xl border border-border bg-[linear-gradient(180deg,color-mix(in_oklch,var(--muted)_70%,transparent),var(--background))] px-6 py-14 text-center sm:px-10 md:py-16">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(ellipse_at_top,color-mix(in_oklch,var(--foreground)_6%,transparent),transparent)]"
+        />
+        <div className="relative z-10 mx-auto max-w-lg">
+          <h2 className="text-3xl font-medium tracking-tight text-balance text-foreground md:text-4xl">
             {homeContent.readyToGetStarted.title}
           </h2>
-        </div>
-        <div className="mb-8 flex w-full flex-col items-center justify-center gap-4 sm:flex-row sm:gap-2">
-          <Button
-            variant="dark"
-            href="/download"
-            size="lg"
-            className="w-fit font-medium"
-          >
-            {!loading && getPlatformIcon(platform)}
-            {homeContent.readyToGetStarted.buttons.secondary}
-          </Button>
-          <UpgradeToPro text={homeContent.readyToGetStarted.buttons.primary} />
-        </div>
-        <div>
-          <p className="text-muted-foreground">
+          <div className="mt-8 flex w-full flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+            <Button
+              variant="dark"
+              href="/download"
+              size="lg"
+              className="justify-center font-medium"
+            >
+              {!loading && getPlatformIcon(platform)}
+              {homeContent.readyToGetStarted.buttons.secondary}
+            </Button>
+            <UpgradeToPro
+              text={homeContent.readyToGetStarted.buttons.primary}
+            />
+          </div>
+          <p className="mt-5 text-sm text-muted-foreground">
             or{" "}
             <Link
               href="/pricing"
-              className="font-medium text-foreground underline"
+              className="font-medium text-foreground underline underline-offset-4"
             >
               view pricing
             </Link>

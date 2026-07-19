@@ -11,6 +11,10 @@ Frontend-only Next.js 16 marketing / landing site for this monorepo template.
 Keep copy generic — this is a landing template, not Cap/Loom product marketing.
 Swap names, claims, and social proof for your brand before shipping.
 
+Visual direction: clean, premium, simple — brand-first hero, soft atmosphere,
+`rounded-xl` controls, semantic tokens only. Avoid Cap-style mode pills,
+blue Pro Rive buttons, and pill-floating nav clones.
+
 ## Kept routes
 
 `/`, `/features`, `/download`, `/pricing`, `/blog`, `/about`, `/support`, `/faq`, `/testimonials`, `/privacy`, `/terms`, `/migrate`

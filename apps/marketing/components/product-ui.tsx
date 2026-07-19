@@ -66,11 +66,14 @@ const sizeMap = {
 } as const
 
 const productVariantClass: Partial<Record<ProductButtonVariant, string>> = {
-  dark: "rounded-full border-transparent bg-foreground text-background hover:bg-foreground/90",
-  blue: "rounded-full border border-blue-800 bg-blue-600 text-white shadow-[0_1.50px_0_0_rgba(255,255,255,0.20)_inset] hover:bg-blue-700",
+  dark: "rounded-xl border-transparent bg-foreground text-background hover:bg-foreground/90",
+  blue: "rounded-xl border-transparent bg-foreground text-background hover:bg-foreground/90",
   white:
-    "rounded-full border-border bg-background text-foreground shadow-[0_1px_2px_rgba(0,0,0,0.08)] hover:bg-muted",
-  primary: "rounded-full",
+    "rounded-xl border-border bg-background text-foreground hover:bg-muted",
+  primary: "rounded-xl",
+  outline: "rounded-xl",
+  gray: "rounded-xl",
+  ghost: "rounded-xl",
 }
 
 export function Button({

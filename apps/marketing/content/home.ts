@@ -171,10 +171,9 @@ export const homeContent: HomeContent = {
       { label: "Open source", href: productConfig.repositoryUrl },
     ],
     cta: {
-      primaryButton: `Upgrade to ${productConfig.name} Pro`,
+      primaryButton: `Get ${productConfig.name} Pro`,
       secondaryButton: "View on GitHub",
-      freeVersionText:
-        "No credit card required. Start free, upgrade when you need more.",
+      freeVersionText: "Free to start. No credit card required.",
       seeOtherOptionsText: "More download options",
     },
   },
@@ -395,9 +394,9 @@ export const homeContent: HomeContent = {
     ],
   },
   readyToGetStarted: {
-    title: "Ready to get started?",
+    title: "Ready when you are",
     buttons: {
-      primary: `Upgrade to ${productConfig.name} Pro`,
+      primary: `Get ${productConfig.name} Pro`,
       secondary: "Download for free",
     },
   },

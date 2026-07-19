@@ -1,7 +1,6 @@
 "use client"
 
 import { navigationMenuTriggerStyle } from "@/components/product-ui"
-import { productConfig } from "@workspace/config/public"
 import { cn as classNames } from "@workspace/ui/lib/utils"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -19,7 +18,7 @@ export function DesktopNavLinks() {
   const pathname = usePathname()
 
   return (
-    <ul className="flex list-none items-center gap-1 pl-4">
+    <ul className="flex list-none items-center gap-0.5 pl-3">
       {Links.map((link) => {
         const isActive =
           pathname === link.href || pathname.startsWith(`${link.href}/`)
@@ -29,7 +28,7 @@ export function DesktopNavLinks() {
               href={link.href}
               className={classNames(
                 navigationMenuTriggerStyle(),
-                "px-3 font-medium",
+                "rounded-lg px-2.5 text-sm font-medium",
                 isActive ? "text-foreground" : "text-muted-foreground"
               )}
             >
@@ -38,19 +37,6 @@ export function DesktopNavLinks() {
           </li>
         )
       })}
-      <li>
-        <a
-          href={productConfig.repositoryUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={classNames(
-            navigationMenuTriggerStyle(),
-            "px-3 font-medium text-muted-foreground"
-          )}
-        >
-          GitHub
-        </a>
-      </li>
     </ul>
   )
 }

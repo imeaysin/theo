@@ -91,15 +91,18 @@ const features: Feature[] = homeContent.features.features.map(
 
 const Features = () => {
   return (
-    <div className="mx-auto max-w-[1440px] px-5 text-center">
-      <h2 className="mb-3 text-4xl font-medium text-foreground">
+    <div className="mx-auto max-w-6xl px-5 text-center">
+      <p className="mb-3 text-xs font-medium tracking-[0.14em] text-muted-foreground uppercase">
+        Features
+      </p>
+      <h2 className="mb-3 text-3xl font-medium tracking-tight text-balance text-foreground md:text-4xl">
         {homeContent.features.title}
       </h2>
-      <p className="mx-auto w-full max-w-[600px] text-lg leading-7 text-muted-foreground">
+      <p className="mx-auto w-full max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
         {homeContent.features.subtitle}
       </p>
-      <div className="mt-[52px] flex flex-col gap-4">
-        <div className="mx-auto grid w-full grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="mt-12 flex flex-col gap-3 md:mt-14 md:gap-4">
+        <div className="mx-auto grid w-full grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
           {features.slice(3, 5).map((feature) => (
             <FeatureCard
               key={feature.title}
@@ -112,7 +115,7 @@ const Features = () => {
           ))}
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4">
           {features.slice(0, 3).map((feature) => (
             <FeatureCard
               key={feature.title}
@@ -124,7 +127,7 @@ const Features = () => {
           ))}
         </div>
 
-        <div className="mx-auto grid w-full grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="mx-auto grid w-full grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
           {features.slice(5, 7).map((feature) => (
             <FeatureCard
               key={feature.title}
@@ -140,9 +143,9 @@ const Features = () => {
       <div className="mt-10">
         <Button
           href="/features"
-          variant="dark"
+          variant="outline"
           size="lg"
-          className="inline-flex"
+          className="inline-flex font-medium"
         >
           View all features
         </Button>
@@ -172,7 +175,7 @@ const FeatureCard = ({
   return (
     <div
       className={clsx(
-        "flex flex-col justify-evenly gap-10 rounded-xl border border-border bg-card p-6 text-left md:p-8",
+        "flex flex-col justify-evenly gap-8 rounded-2xl border border-border/80 bg-card/60 p-6 text-left md:gap-10 md:p-8",
         className
       )}
     >

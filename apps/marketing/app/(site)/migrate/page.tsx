@@ -22,8 +22,8 @@ export default function MigratePage() {
         <Button href="/download" variant="dark" size="lg">
           Download for free
         </Button>
-        <Button href="/pricing" variant="blue" size="lg">
-          Upgrade to {productConfig.name} Pro
+        <Button href="/pricing" variant="outline" size="lg">
+          Get {productConfig.name} Pro
         </Button>
       </div>
       <Link
