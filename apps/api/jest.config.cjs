@@ -1,3 +1,5 @@
+process.env.SKIP_ENV_VALIDATION ??= "true"
+
 module.exports = {
   moduleFileExtensions: ["js", "json", "ts"],
   rootDir: ".",

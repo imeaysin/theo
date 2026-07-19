@@ -20,6 +20,7 @@ export async function createE2eApp(): Promise<{
     .compile()
 
   const app = moduleFixture.createNestApplication({ bodyParser: false })
+  app.enableShutdownHooks()
   configureApp(app)
   await app.init()
 

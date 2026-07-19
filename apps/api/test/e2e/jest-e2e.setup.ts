@@ -3,11 +3,3 @@
 import "reflect-metadata"
 import "../jest-setup"
 import "../support/mocks/register"
-
-jest.mock("@thallesp/nestjs-better-auth", () => ({
-  AuthModule: {
-    forRootAsync: () => ({
-      module: class AuthModuleE2eStub {},
-    }),
-  },
-}))
