@@ -38,6 +38,11 @@ export function SignInPage() {
     defaultAuthenticatedRoute
   )
 
+  function clearAuthError() {
+    if (formError) setFormError(null)
+    if (verifyEmailHref) setVerifyEmailHref(null)
+  }
+
   async function onSubmit(values: SignInInput) {
     setFormError(null)
     setVerifyEmailHref(null)
@@ -102,7 +107,7 @@ export function SignInPage() {
               autoComplete="email"
               id="email"
               type="email"
-              {...form.register("email")}
+              {...form.register("email", { onChange: clearAuthError })}
             />
             <FieldError errors={[emailError]} />
           </Field>
@@ -113,27 +118,38 @@ export function SignInPage() {
               autoComplete="current-password"
               id="password"
               type="password"
-              {...form.register("password")}
+              {...form.register("password", { onChange: clearAuthError })}
             />
             <FieldError errors={[passwordError]} />
           </Field>
         </FieldGroup>
+
         <div className="flex justify-end">
           <Link
-            className="text-sm text-muted-foreground underline underline-offset-2 transition-colors hover:text-foreground"
+            className="text-sm text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
             to={routes.forgotPassword}
           >
             Forgot password?
           </Link>
         </div>
+
         {formError ? (
-          <p className="text-sm text-destructive">{formError}</p>
+          <p className="text-sm text-destructive" role="alert">
+            {formError}
+            {verifyEmailHref ? (
+              <>
+                {" "}
+                <Link
+                  className="underline underline-offset-4"
+                  to={verifyEmailHref}
+                >
+                  Resend verification
+                </Link>
+              </>
+            ) : null}
+          </p>
         ) : null}
-        {verifyEmailHref ? (
-          <Link className="text-sm underline" to={verifyEmailHref}>
-            Resend or open verification instructions
-          </Link>
-        ) : null}
+
         <Button
           className="w-full"
           disabled={isSubmitting}
