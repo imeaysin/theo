@@ -76,15 +76,17 @@ function PreviewCard({
   return (
     <NavigationMenuLink
       render={<Link href={href} />}
-      className="flex min-h-[200px] flex-col items-stretch gap-0 overflow-hidden rounded-2xl border border-border bg-background p-0 hover:border-foreground/20 hover:bg-background"
+      className="flex flex-row items-center gap-3 rounded-xl border border-border/80 bg-muted/30 p-3 hover:border-foreground/15 hover:bg-muted/50"
     >
-      <div className="flex flex-1 items-center justify-center bg-muted/40 p-6">
-        <Logo hideLogoName className="size-12 opacity-40" />
-      </div>
-      <div className="border-t border-border p-3">
-        <p className="text-xs font-medium text-foreground">{title}</p>
-        <p className="mt-0.5 text-xs text-muted-foreground">{description}</p>
-      </div>
+      <span className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-border/60 bg-background">
+        <Logo hideLogoName className="size-5 opacity-70" />
+      </span>
+      <span className="flex min-w-0 flex-col gap-0.5 text-left">
+        <span className="text-sm font-medium text-foreground">{title}</span>
+        <span className="line-clamp-2 text-xs leading-snug text-muted-foreground">
+          {description}
+        </span>
+      </span>
     </NavigationMenuLink>
   )
 }
@@ -140,7 +142,7 @@ export function Navbar({ stars }: { stars?: string }) {
                         <MegaNavLink key={item.href} {...item} />
                       ))}
                     </ul>
-                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:col-span-2">
+                    <div className="flex flex-col gap-2 md:col-span-2">
                       <PreviewCard
                         href="/features"
                         title="Product overview"
@@ -188,7 +190,7 @@ export function Navbar({ stars }: { stars?: string }) {
                         />
                       ))}
                     </ul>
-                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:col-span-2">
+                    <div className="flex flex-col gap-2 md:col-span-2">
                       <PreviewCard
                         href="/download"
                         title="Desktop apps"
